@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sdf version="1.6">
+    <world name="empty2">
+        <gravity>0.000000 0.000000 -9.8000</gravity>
+        <physics type="ode">
+            <max_step_size>0.001000</max_step_size>
+            <real_time_factor>1</real_time_factor>
+            <real_time_update_rate>1000</real_time_update_rate>
+        </physics>
+        <plugin name="gazebo_tutorials" filename="libgazebo_ros_world_plugin.so"/>
+        <include>
+            <uri>model://ground_plane</uri>
+        </include>
+        <include>
+            <uri>model://sun</uri>
+        </include>
+        <include>
+            <uri>model://vant_2comcarga</uri>
+            <name>teste</name>
+            <pose>0 0 1 0 0 0</pose>
+        </include>
+    </world>
+</sdf>

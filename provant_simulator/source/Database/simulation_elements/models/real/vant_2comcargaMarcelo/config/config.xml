@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <topicdata>data</topicdata>
+    <TopicoStep>Step</TopicoStep>
+    <Sampletime>12</Sampletime>
+    <!--<Strategy>libvant2load_hinfinity.so</Strategy>-->
+    <Strategy>libHIL_vant2.so</Strategy>
+    <RefPath>ref.txt</RefPath>
+    <Outputfile>out.txt</Outputfile>
+    <InputPath>in.txt</InputPath>
+    <ErroPath>erro.txt</ErroPath>
+    <Sensors>
+        <Device>loadperspective_states</Device>
+    </Sensors>
+    <Actuators>
+        <Device>Thrustdir</Device>
+        <Device>Thrustesq</Device>
+        <Device>RefaR</Device>
+        <Device>RefaL</Device>
+    </Actuators>
+</config>

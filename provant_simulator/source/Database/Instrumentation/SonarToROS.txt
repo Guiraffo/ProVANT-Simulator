@@ -1,0 +1,5 @@
+<tag> plugin
+name=sonar2ros
+filename=libgazebo_ros_sonar.so
+<subtag> parameters gazebotopic rostopic link
+<tag> end

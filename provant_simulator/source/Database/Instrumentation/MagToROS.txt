@@ -1,0 +1,5 @@
+<tag> plugin
+name=mag2ros
+filename=libgazebo_ros_magnetometer.so
+<subtag> parameters gazebotopic rostopic link
+<tag> end

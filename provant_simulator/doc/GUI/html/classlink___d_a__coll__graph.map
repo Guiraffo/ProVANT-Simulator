@@ -1,0 +1,7 @@
+<map id="link_DA" name="link_DA">
+<area shape="rect" id="node2" href="$class_collision.html" title="Collision" alt="" coords="5,95,77,121"/>
+<area shape="rect" id="node3" href="$class_geometry.html" title="Geometry" alt="" coords="43,5,122,32"/>
+<area shape="rect" id="node5" href="$class_visual.html" title="Visual" alt="" coords="101,95,160,121"/>
+<area shape="rect" id="node4" href="$class_inertial.html" title="Inertial" alt="" coords="184,95,245,121"/>
+<area shape="rect" id="node6" href="$class_material.html" title="Material" alt="" coords="186,5,254,32"/>
+</map>

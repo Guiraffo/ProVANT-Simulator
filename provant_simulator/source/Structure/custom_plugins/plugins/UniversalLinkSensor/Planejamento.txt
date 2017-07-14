@@ -1,0 +1,42 @@
+
+math::Vector3 	GetRelativeAngularAccel () const
+ 	Get the angular acceleration of the body.
+ 
+math::Vector3 	GetRelativeAngularVel () const
+ 	Get the angular velocity of the body.
+ 
+math::Vector3 	GetRelativeForce () const
+ 	Get the force applied to the body.
+ 
+math::Vector3 	GetRelativeLinearAccel () const
+ 	Get the linear acceleration of the body.
+ 
+math::Vector3 	GetRelativeLinearVel () const
+ 	Get the linear velocity of the body.
+ 
+math::Vector3 	GetRelativeTorque () const
+ 	Get the torque applied to the body. 
+
+math::Vector3 	GetWorldAngularAccel () const
+ 	Get the angular acceleration of the body in the world frame.
+ 
+virtual math::Vector3 	GetWorldCoGLinearVel () const =0
+ 	Get the linear velocity at the body's center of gravity in the world frame.
+ 
+math::Pose 	GetWorldCoGPose () const
+ 	Get the pose of the body's center of gravity in the world coordinate frame.
+ 
+virtual math::Vector3 	GetWorldForce () const =0
+ 	Get the force applied to the body in the world frame.
+ 
+math::Vector3 	GetWorldLinearAccel () const
+ 	Get the linear acceleration of the body in the world frame.
+ 
+virtual math::Vector3 	GetWorldLinearVel (const math::Vector3 &_offset=math::Vector3(0, 0, 0)) const =0
+ 	Get the linear velocity of a point on the body in the world frame, using an offset expressed in a body-fixed frame.
+ 
+virtual math::Vector3 	GetWorldLinearVel (const math::Vector3 &_offset, const math::Quaternion &_q) const =0
+ 	Get the linear velocity of a point on the body in the world frame, using an offset expressed in an arbitrary frame.
+ 
+virtual math::Vector3 	GetWorldTorque () const =0
+ 	Get the torque applied to the body in the world frame. 

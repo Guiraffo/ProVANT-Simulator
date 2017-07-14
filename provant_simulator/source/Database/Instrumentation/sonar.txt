@@ -1,0 +1,7 @@
+<tag> sensor
+name=sonar
+type=sonar
+topic
+<tag> sonar
+<subtag> itens max min radius
+<tag> end

@@ -1,0 +1,6 @@
+<tag>plugin
+name=VetorEstados 
+filename=libgazebo_ros_AllData_plugin.so
+<subtag> parameters NameOfNode NameOfJointR NameOfJointL bodyName
+<tag> end		
+

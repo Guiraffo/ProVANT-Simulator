@@ -1,0 +1,12 @@
+name = "imu"
+header (timestamp)
+values(array):
+	1- roll
+	2- pitch
+	3- yaw
+	4- velocidade angular em x
+	5- velocidade angular em y
+	6- velocidade angular em z
+	7- aceleração linear em x
+	8- aceleração linear em y
+	9- aceleração linear z

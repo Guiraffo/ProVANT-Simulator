@@ -1,0 +1,9 @@
+<tag> sensor
+name=magnetometer
+type=magnetometer
+topic
+<tag> magnetometer
+<subtag> x_noise pos_hor_noise mean stddev bias_mean bias_stddev precision
+<subtag> y_noise pos_hor_noise mean stddev bias_mean bias_stddev precision
+<subtag> z_noise pos_hor_noise mean stddev bias_mean bias_stddev precision
+<tag> end

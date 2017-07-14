@@ -1,0 +1,5 @@
+<tag> plugin
+name=servo 
+filename=libgazebo_ros_servo_motor_plugin.so
+<subtag> parameters NameOfJoint TopicSubscriber TopicPublisher Modo
+<tag> end

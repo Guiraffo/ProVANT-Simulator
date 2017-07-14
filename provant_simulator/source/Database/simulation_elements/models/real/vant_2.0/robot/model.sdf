@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sdf version="1.4">
+    <model name="modelo">
+        <link name="servodir">
+            <pose>0.02E-3 -277.61E-3 56.21E-3 -0.0872665 0 0</pose>
+            <inertial>
+                <mass>0.0809439719362664</mass>
+                <pose>-3.60859273452335E-10 -0.000226380714807978 0.0594780519701684 0 0 0</pose>
+                <inertia>
+                    <ixx>3.88267747087835E-06</ixx>
+                    <ixy>6.03219085082653E-06</ixy>
+                    <ixz>-2.78471406661236E-12</ixz>
+                    <iyy>0.000104858690365283</iyy>
+                    <iyz>7.0486590219062E-07</iyz>
+                    <izz>8.31755564684115E-05</izz>
+                </inertia>
+            </inertial>
+            <collision name="corpocollision">
+                <pose>0 0 0 0 0 0</pose>
+                <geometry>
+                    <mesh>
+                        <uri>model://vant_2.0/meshes/servodir.STL</uri>
+                    </mesh>
+                </geometry>
+            </collision>
+            <visual name="corpovisual">
+                <pose>0 0 0 0 0 0</pose>
+                <geometry>
+                    <mesh>
+                        <uri>model://vant_2.0/meshes/servodir.STL</uri>
+                    </mesh>
+                </geometry>
+                <material>
+                    <ambient>1 0 0 1</ambient>
+                    <diffuse>1 0 0 1</diffuse>
+                    <specular>0.1 0.1 0.1 1</specular>
+                    <emissive>0 0 0 0</emissive>
+                </material>
+            </visual>
+        </link>
+        <link name="servoesq">
+            <pose>0.02E-3 277.61E-3 56.21E-3 0.0872665 0 0</pose>
+            <inertial>
+                <mass>0.080943968597</mass>
+                <pose>-1.42036961055594E-09 0.000226379941183831 0.059478050752241 0 0 0</pose>
+                <inertia>
+                    <ixx>3.83153585987037E-05</ixx>
+                    <ixy>1.31505388597772E-06</ixy>
+                    <ixz>5.68869331986483E-13</ixz>
+                    <iyy>0.000105370094312002</iyy>
+                    <iyz>-7.048667055410379E-07</iyz>
+                    <izz>8.31755504678384E-05</izz>
+                </inertia>
+            </inertial>
+            <collision name="corpocollision">
+                <pose>0 0 0 0 0 0</pose>
+                <geometry>
+                    <mesh>
+                        <uri>model://vant_2.0/meshes/servoesq.STL</uri>
+                    </mesh>
+                </geometry>
+            </collision>
+            <visual name="corpovisual">
+                <pose>0 0 0 0 0 0</pose>
+                <geometry>
+                    <mesh>
+                        <uri>model://vant_2.0/meshes/servoesq.STL</uri>
+                    </mesh>
+                </geometry>
+                <material>
+                    <ambient>1 0 0 1</ambient>
+                    <diffuse>1 0 0 1</diffuse>
+                    <specular>0.1 0.1 0.1 1</specular>
+                    <emissive>0 0 0 0</emissive>
+                </material>
+            </visual>
+        </link>
+        <link name="corpo">
+            <pose>0 0 0 0 0 0</pose>
+            <inertial>
+                <mass>1.92509767079622</mass>
+                <pose>-0.00254692194194197639 0.000137734082827298 -0.0181900814143879 0 0 0</pose>
+                <inertia>
+                    <ixx>0.0697552757250878</ixx>
+                    <ixy>4.77417385357503E-05</ixy>
+                    <ixz>0.000362780890165671</ixz>
+                    <iyy>0.00792827006001647</iyy>
+                    <iyz>-1.07360516340487E-05</iyz>
+                    <izz>0.0664000187819483</izz>
+                </inertia>
+            </inertial>
+            <collision name="corpocollision">
+                <pose>0 0 0 0 0 0</pose>
+                <geometry>
+                    <mesh>
+                        <uri>model://vant_2.0/meshes/corpo.STL</uri>
+                    </mesh>
+                </geometry>
+            </collision>
+            <visual name="corpovisual">
+                <pose>0 0 0 0 0 0</pose>
+                <geometry>
+                    <mesh>
+                        <uri>model://vant_2.0/meshes/corpo.STL</uri>
+                    </mesh>
+                </geometry>
+                <material>
+                    <ambient>1 0 0 1</ambient>
+                    <diffuse>1 0 0 1</diffuse>
+                    <specular>0.1 0.1 0.1 1</specular>
+                    <emissive>0 0 0 0</emissive>
+                </material>
+            </visual>
+        </link>
+        <joint name="aR" type="revolute">
+            <pose>0 0 0 0 0 0</pose>
+            <parent>corpo</parent>
+            <child>servodir</child>
+            <axis>
+                <xyz>0 1 0</xyz>
+                <limit>
+                    <lower>-1.5</lower>
+                    <upper>1.5</upper>
+                    <effort>2</effort>
+                    <velocity>0.5</velocity>
+                </limit>
+                <dynamics>
+                    <damping>0</damping>
+                    <friction>0</friction>
+                </dynamics>
+            </axis>
+        </joint>
+        <joint name="aL" type="revolute">
+            <pose>0 0 0 0 0 0</pose>
+            <parent>corpo</parent>
+            <child>servoesq</child>
+            <axis>
+                <xyz>0 1 0</xyz>
+                <limit>
+                    <lower>-1.5</lower>
+                    <upper>1.5</upper>
+                    <effort>2</effort>
+                    <velocity>0.5</velocity>
+                </limit>
+                <dynamics>
+                    <damping>0</damping>
+                    <friction>0</friction>
+                </dynamics>
+            </axis>
+        </joint>
+        <plugin name="empuxo" filename="libgazebo_ros_aerodinamica_plugin.so">
+            <topic_FR>Thrustdir</topic_FR>
+            <LinkDir>servodir</LinkDir>
+            <topic_FL>Thrustesq</topic_FL>
+            <LinkEsq>servoesq</LinkEsq>
+        </plugin>
+        <plugin name="aRteste" filename="libgazebo_ros_servo_motor_plugin.so">
+            <NameOfJoint>aR</NameOfJoint>
+            <TopicPublisher>SensoraR</TopicPublisher>
+            <TopicSubscriber>RefaR</TopicSubscriber>
+            <Modo>Torque</Modo>
+        </plugin>
+        <plugin name="VetorEstados" filename="libgazebo_ros_AllData_plugin.so">
+            <NameOfJointR>aR</NameOfJointR>
+            <NameOfNode>Estados</NameOfNode>
+            <bodyName>corpo</bodyName>
+            <NameOfJointL>aL</NameOfJointL>
+        </plugin>
+        <plugin name="aLteste" filename="libgazebo_ros_servo_motor_plugin.so">
+            <NameOfJoint>aL</NameOfJoint>
+            <TopicPublisher>SensoraL</TopicPublisher>
+            <TopicSubscriber>RefaL</TopicSubscriber>
+            <Modo>Torque</Modo>
+        </plugin>
+    </model>
+</sdf>

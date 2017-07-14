@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <topicdata>data</topicdata>
+    <TopicoStep>Step</TopicoStep>
+    <Sampletime>12</Sampletime>
+    <Strategy>libvant2_lqr.so</Strategy>
+    <RefPath>ref.txt</RefPath>
+    <Outputfile>out.txt</Outputfile>
+    <InputPath>in.txt</InputPath>
+    <ErroPath>erro.txt</ErroPath>
+    <Sensors>
+        <Device>Estados</Device>
+    </Sensors>
+    <Actuators>
+        <Device>Thrustdir</Device>
+        <Device>Thrustesq</Device>
+        <Device>RefaR</Device>
+        <Device>RefaL</Device>
+    </Actuators>
+</config>
