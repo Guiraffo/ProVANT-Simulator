@@ -13,6 +13,7 @@ include_directories(plugins/imu)
 include_directories(plugins/gps)
 include_directories(plugins/magnetometer)
 include_directories(plugins/servo)
+include_directories(plugins/servo3)
 include_directories(plugins/brushless)
 include_directories(plugins/reset)
 include_directories(plugins/temperature)
@@ -76,6 +77,9 @@ target_link_libraries(gazebo_ros_sonar ${GAZEBO_LIBRARIES} ${catkin_LIBRARIES})
 add_library(gazebo_ros_servo_motor_plugin plugins/servo/servo_motor_plug.cpp)
 target_link_libraries(gazebo_ros_servo_motor_plugin ${catkin_LIBRARIES} ${GAZEBO_LIBRARIES})
 
+add_library(gazebo_ros_servo3_motor_plugin plugins/servo3/servo3_motor_plug.cpp)
+target_link_libraries(gazebo_ros_servo3_motor_plugin ${catkin_LIBRARIES} ${GAZEBO_LIBRARIES})
+
 add_library(gazebo_ros_brushless_plugin plugins/brushless/aerodinamica.cpp)
 target_link_libraries(gazebo_ros_brushless_plugin ${catkin_LIBRARIES} ${GAZEBO_LIBRARIES})
 
@@ -124,6 +128,7 @@ install(DIRECTORY include/${PROJECT_NAME}/
 )
 
 install(TARGETS
+  gazebo_ros_servo3_motor_plugin
   gazebo_ros_aerodinamica2_plugin
   gazebo_ros_AllData3_plugin
   gazebo_ros_servo2_motor_plugin

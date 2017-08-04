@@ -3,8 +3,7 @@
     <topicdata>data</topicdata>
     <TopicoStep>Step</TopicoStep>
     <Sampletime>12</Sampletime>
-    <!--<Strategy>libvant2load_hinfinity.so</Strategy>-->
-    <Strategy>libHIL_vant2.so</Strategy>
+    <Strategy>libvant2load_hinfinity.so</Strategy>
     <RefPath>ref.txt</RefPath>
     <Outputfile>out.txt</Outputfile>
     <InputPath>in.txt</InputPath>
