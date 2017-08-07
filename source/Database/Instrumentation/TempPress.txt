@@ -1,8 +1,0 @@
-<tag> sensor 
-type=altimeter 
-name=temperature
-<tag> plugin 
-name=temperature 
-filename=libgazebo_ros_temperature.so
-<subtag> parameters Topic TempOffset TempStandardDeviation BaroOffset BaroStandardDeviation maxtemp mintemp maxbaro minbaro Nbits				
-<tag> end				

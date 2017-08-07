@@ -1,5 +1,0 @@
-<tag> plugin
-name=imu 
-filename=libgazebo_ros_imu.so
-<subtag> parameters Topic rpyOffset rpySD accelOffset accelSD maxrpy minrpy maxaccel minaccel Nbits maxangvel minangvel angvelSD angvelOffset corpo
-<tag> end

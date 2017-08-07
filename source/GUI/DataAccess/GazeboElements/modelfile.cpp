@@ -22,7 +22,7 @@ void ModelFile::Read()
             QDomNode itens = doc.firstChildElement("sdf");
 
             model.Read(itens);
-            model.print();
+            //model.print();
         }
         else
         {

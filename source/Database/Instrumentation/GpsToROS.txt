@@ -1,5 +1,0 @@
-<tag> plugin
-name=gps2ros
-filename=libgazebo_ros_gps.so
-<subtag> parameters gazebotopic rostopic link
-<tag> end

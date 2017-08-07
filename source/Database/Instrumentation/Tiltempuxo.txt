@@ -1,5 +1,0 @@
-<tag> plugin 
-name=empuxo 
-filename=libgazebo_ros_aerodinamica_plugin.so
-<subtag> parameters topic_FR topic_FL LinkDir LinkEsq 				
-<tag> end

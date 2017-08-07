@@ -85,58 +85,64 @@ void MainWindow::on_pushButton_clicked()
 
 void MainWindow::on_actionNew_triggered()
 {
-    // Abertura de caixa de diálogo para selecionar arquivo template
-    QString filename = QFileDialog::getOpenFileName(this
-                                                    ,tr("New World")
-                                                    , "/home"
-                                                    , tr("Template Files (*.tpl)"));
-    if(filename.isEmpty()) return;
+    char const* tmp = getenv( "PROVANT_DATABASE" );
+    if ( tmp == NULL ) {
+        qDebug() << "Problemas com variavel de ambiente ";
+    } else {
+        std::string env(tmp);
+        // Abertura de caixa de diálogo para selecionar arquivo template
+        QString filename = QFileDialog::getOpenFileName(this
+                                                        ,tr("New World")
+                                                        , env.c_str()
+                                                        , tr("Template Files (*.tpl)"));
+        if(filename.isEmpty()) return;
 
-    // filtrando string obtida
-    QString dir;
-    QStringList splitvector;
-    QRegExp rx("\\/");
-    splitvector = filename.split(rx);
-    splitvector.removeLast();
-    foreach (const QString &str, splitvector)
-    {
-        if (str.contains(" ")||str.size()==0)
+        // filtrando string obtida
+        QString dir;
+        QStringList splitvector;
+        QRegExp rx("\\/");
+        splitvector = filename.split(rx);
+        splitvector.removeLast();
+        foreach (const QString &str, splitvector)
         {
-            //faz nada
+            if (str.contains(" ")||str.size()==0)
+            {
+                //faz nada
+            }
+            else
+            {
+                dir = dir+"/"+str;
+            }
         }
-        else
+
+        // colocando imagem do mundo fornecida pelo usuário  na interface gráfica
+        QString imagefile(dir+"/imagem.gif");
+        QFile ff(imagefile);
+        QFileInfo fileInfo(ff);
+        if (fileInfo.exists())
         {
-            dir = dir+"/"+str;
+            QGraphicsScene * scene = new QGraphicsScene(ui->graphicsView_2);
+            QImage image(imagefile);
+            scene->addPixmap(QPixmap::fromImage(image));
+            ui->graphicsView_2->setScene(scene);
+            ui->graphicsView_2->show();
         }
+
+        ui->treeWidget->clear();
+        // lê dados do arquivo .tpl informado anteriormnete
+        mundo.getFirst(filename.toStdString(),ui->treeWidget);
+
+        // habilitando funções de menuu e inicialização da interface
+        ui->actionSave->setEnabled(true);
+        ui->menuEdit->setEnabled(true);
+        ui->actionSave->setEnabled(true);
+        ui->menuEdit->setEnabled(true);
+        ui->pushButton->setEnabled(true);
+
+        // informa que o arquivo ainda é template, então usuário
+        // deve salvar os dados em outro arquivo com formato .world
+        istemplate = true;
     }
-
-    // colocando imagem do mundo fornecida pelo usuário  na interface gráfica
-    QString imagefile(dir+"/imagem.gif");
-    QFile ff(imagefile);
-    QFileInfo fileInfo(ff);
-    if (fileInfo.exists())
-    {
-        QGraphicsScene * scene = new QGraphicsScene(ui->graphicsView_2);
-        QImage image(imagefile);
-        scene->addPixmap(QPixmap::fromImage(image));
-        ui->graphicsView_2->setScene(scene);
-        ui->graphicsView_2->show();
-    }
-
-    ui->treeWidget->clear();
-    // lê dados do arquivo .tpl informado anteriormnete
-    mundo.getFirst(filename.toStdString(),ui->treeWidget);
-
-    // habilitando funções de menuu e inicialização da interface
-    ui->actionSave->setEnabled(true);
-    ui->menuEdit->setEnabled(true);
-    ui->actionSave->setEnabled(true);
-    ui->menuEdit->setEnabled(true);
-    ui->pushButton->setEnabled(true);
-
-    // informa que o arquivo ainda é template, então usuário
-    // deve salvar os dados em outro arquivo com formato .world
-    istemplate = true;
 }
 
 
@@ -220,54 +226,60 @@ void MainWindow::on_treeWidget_itemClicked(QTreeWidgetItem *item, int column)
 
 void MainWindow::on_actionOpen_triggered()
 {
-    // escolhe do arquivo .world
-    QString filename = QFileDialog::getOpenFileName(this
-                                                    ,tr("Open World")
-                                                    , "/home/macro/catkin_ws/src/provant_simulator/source/Database"
-                                                    , tr("World Files (*.world)"));
-    if(filename.isEmpty()) return;
-    // tratando nome do arquivo
-    QString dir;
-    QStringList splitvector;
-    QRegExp rx("\\/");
-    splitvector = filename.split(rx);
-    splitvector.removeLast();
-    // filter
-    foreach (const QString &str, splitvector)
-    {
-        if (str.contains(" ")||str.size()==0)
+    char const* tmp = getenv( "PROVANT_DATABASE" );
+    if ( tmp == NULL ) {
+        qDebug() << "Problemas com variavel de ambiente ";
+    } else {
+        std::string env(tmp);
+        // escolhe do arquivo .world
+        QString filename = QFileDialog::getOpenFileName(this
+                                                        ,tr("Open World")
+                                                        , env.c_str()
+                                                        , tr("World Files (*.world)"));
+        if(filename.isEmpty()) return;
+        // tratando nome do arquivo
+        QString dir;
+        QStringList splitvector;
+        QRegExp rx("\\/");
+        splitvector = filename.split(rx);
+        splitvector.removeLast();
+        // filter
+        foreach (const QString &str, splitvector)
         {
-            //faz nada
+            if (str.contains(" ")||str.size()==0)
+            {
+                //faz nada
+            }
+            else
+            {
+                dir = dir+"/"+str;
+            }
         }
-        else
-        {
-            dir = dir+"/"+str;
-        }
-    }
 
-    // iamgem do cenário
-    QString imagefile(dir+"/imagem.gif");
-    QFile ff(imagefile);
-    QFileInfo fileInfo(ff);
-    if (fileInfo.exists())
-    {
-        QGraphicsScene * scene = new QGraphicsScene(ui->graphicsView_2);
-        QImage image(imagefile);
-        scene->addPixmap(QPixmap::fromImage(image));
-        ui->graphicsView_2->setScene(scene);
-        ui->graphicsView_2->show();
+        // iamgem do cenário
+        QString imagefile(dir+"/imagem.gif");
+        QFile ff(imagefile);
+        QFileInfo fileInfo(ff);
+        if (fileInfo.exists())
+        {
+            QGraphicsScene * scene = new QGraphicsScene(ui->graphicsView_2);
+            QImage image(imagefile);
+            scene->addPixmap(QPixmap::fromImage(image));
+            ui->graphicsView_2->setScene(scene);
+            ui->graphicsView_2->show();
+        }
+        // limpando árvore para adicionar novos dados
+        ui->treeWidget->clear();
+        // adicionando dados na árvore de dados
+        mundo.getFirst(filename.toStdString(),ui->treeWidget);
+        // habilitando funções de menuu e inicialização da interface
+        ui->actionSave->setEnabled(true);
+        ui->menuEdit->setEnabled(true);
+        ui->actionSave->setEnabled(true);
+        ui->menuEdit->setEnabled(true);
+        ui->pushButton->setEnabled(true);
+        istemplate = false; // não é template
     }
-    // limpando árvore para adicionar novos dados
-    ui->treeWidget->clear();
-    // adicionando dados na árvore de dados
-    mundo.getFirst(filename.toStdString(),ui->treeWidget);
-    // habilitando funções de menuu e inicialização da interface
-    ui->actionSave->setEnabled(true);
-    ui->menuEdit->setEnabled(true);
-    ui->actionSave->setEnabled(true);
-    ui->menuEdit->setEnabled(true);
-    ui->pushButton->setEnabled(true);
-    istemplate = false; // não é template
 }
 
 

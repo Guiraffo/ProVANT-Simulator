@@ -1,6 +1,0 @@
-<tag>plugin
-name=VetorEstadosCarga 
-filename=libgazebo_ros_AllData_plugin2.so
-<subtag> parameters NameOfNode NameOfJointR NameOfJointL bodyName NameOfJointLoad_X NameOfJointLoad_Y
-<tag> end		
-

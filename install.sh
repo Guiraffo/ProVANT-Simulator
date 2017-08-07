@@ -11,8 +11,8 @@ export TILT_MATLAB=${TILT_PROJECT}/source/Structure/Matlab/
 echo "export TILT_MATLAB=${TILT_PROJECT}/source/Structure/Matlab/" >> ${HOME}/.bashrc
 export PROVANT_DATABASE=${TILT_PROJECT}/source/Database
 echo "export PROVANT_DATABASE=${TILT_PROJECT}/source/Database" >> ${HOME}/.bashrc
-export GAZEBO_MODEL_PATH=${PROVANT_DATABASE}/simulation_elements/models/real
-echo "export GAZEBO_MODEL_PATH=${PROVANT_DATABASE}/simulation_elements/models/real" >> ${HOME}/.bashrc
+export GAZEBO_MODEL_PATH=${PROVANT_DATABASE}/models/
+echo "export GAZEBO_MODEL_PATH=${PROVANT_DATABASE}/models" >> ${HOME}/.bashrc
 export DIR_ROS=${HOME}/catkin_ws
 echo "export DIR_ROS=${HOME}/catkin_ws" >> ${HOME}/.bashrc
 
