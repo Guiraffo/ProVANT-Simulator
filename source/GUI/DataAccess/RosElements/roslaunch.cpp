@@ -23,7 +23,7 @@ void roslaunch::WriteNew(QString worldname)
                    << "\t<arg name=\"gui\" default=\"true\"/>" << endl
                    << "\t<arg name=\"headless\" default=\"false\"/>" << endl
                    << "\t<arg name=\"debug\" default=\"false\"/>" << endl << endl
-                   << "\t<include file=\"$(find gazebo_ros)/launch/empty_world.launch\">" << endl
+                   << "\t<include file=\"$(find Database)/launch/empty_world.launch\">" << endl
                    << "\t\t<arg name=\"world_name\" value=\""+worldname+"\"/>" << endl
                    << "\t\t<arg name=\"debug\" value=\"$(arg debug)\" />" << endl
                    << "\t\t<arg name=\"gui\" value=\"$(arg gui)\" />" << endl

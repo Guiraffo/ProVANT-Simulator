@@ -38,5 +38,9 @@
                 </material>
             </visual>
         </link>
+        <plugin name="dados" filename="libgazebo_ros_universallink.so">
+            <NameOfTopic>dados</NameOfTopic>
+            <NameOfLink>main_body</NameOfLink>
+        </plugin>
     </model>
 </sdf>

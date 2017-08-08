@@ -5,7 +5,7 @@
 	<arg name="headless" default="false"/>
 	<arg name="debug" default="false"/>
 
-	<include file="$(find gazebo_ros)/launch/empty_world.launch">
+	<include file="$(find Database)/launch/empty_world.launch">
 		<arg name="world_name" value="/home/macro/catkin_ws/src/ProVANT-Simulator/source/Database/worlds/real/empty/box.world"/>
 		<arg name="debug" value="$(arg debug)" />
 		<arg name="gui" value="$(arg gui)" />

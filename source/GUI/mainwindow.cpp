@@ -72,14 +72,14 @@ void MainWindow::on_pushButton_clicked()
         if(SaveAs())
         {
             roslaunch::WriteNew(QString::fromStdString(mundo.actualword->Filename)); // configurando rotina de inicilização do simulador
-            std::system("roslaunch simulation_elements gazebo.launch"); // comando de inicializar simulação
+            std::system("roslaunch Database gazebo.launch"); // comando de inicializar simulação
         }
     }
     else
     {
         mundo.Write(ui->treeWidget); // salvar modificações no mesmo arquivo de destino
         roslaunch::WriteNew(QString::fromStdString(mundo.actualword->Filename)); // configurando rotina de inicilização do simulador
-        std::system("roslaunch simulation_elements gazebo.launch"); // comando de inicializar simulação
+        std::system("roslaunch Database gazebo.launch"); // comando de inicializar simulação
     }
 }
 

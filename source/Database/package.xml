@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <package>
-  <name>simulation_elements</name>
+  <name>Database</name>
   <version>0.0.0</version>
   <description>The tilt package</description>
 
