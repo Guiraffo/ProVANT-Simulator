@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <topicdata>data</topicdata>
+    <TopicoStep>Step</TopicoStep>
+    <Sampletime>12</Sampletime>
+    <Strategy>libempty.so</Strategy>
+    <RefPath>ref.txt</RefPath>
+    <Outputfile>out.txt</Outputfile>
+    <InputPath>in.txt</InputPath>
+    <ErroPath>erro.txt</ErroPath>
+    <Sensors/>
+    <Actuators/>
+</config>

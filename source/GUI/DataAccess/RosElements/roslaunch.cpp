@@ -12,7 +12,7 @@ void roslaunch::WriteNew(QString worldname)
         qDebug() << "Problemas com variavel de ambiente ";
     } else {
         std::string env(tmp);
-        QFile file(QString::fromStdString(env)+"/source/Database/simulation_elements/launch/"+"gazebo.launch");
+        QFile file(QString::fromStdString(env)+"/source/Database/launch/"+"gazebo.launch");
         if(file.exists())file.remove();
         if(file.open(QFile::ReadWrite))
         {
