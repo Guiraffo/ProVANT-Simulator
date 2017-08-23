@@ -8,6 +8,15 @@
     <Outputfile>out.txt</Outputfile>
     <InputPath>in.txt</InputPath>
     <ErroPath>erro.txt</ErroPath>
-    <Sensors/>
-    <Actuators/>
+    <Sensors>
+        <Device>dados</Device>
+    </Sensors>
+    <Actuators>
+        <Device>fx</Device>
+        <Device>fy</Device>
+        <Device>fz</Device>
+        <Device>tx</Device>
+        <Device>ty</Device>
+        <Device>tz</Device>
+    </Actuators>
 </config>

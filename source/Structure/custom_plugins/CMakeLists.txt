@@ -9,6 +9,8 @@ find_package(catkin REQUIRED COMPONENTS
 		simulator_msgs)
 include_directories(include ${catkin_INCLUDE_DIRS})
 
+include_directories(plugins/force)
+include_directories(plugins/torque)
 include_directories(plugins/imu)
 include_directories(plugins/gps)
 include_directories(plugins/magnetometer)
@@ -58,6 +60,12 @@ catkin_package(
     #INCLUDE_DIRS include
     #LIBRARIES
 )
+
+add_library(gazebo_ros_force plugins/force/force.cpp)
+target_link_libraries(gazebo_ros_force ${GAZEBO_LIBRARIES} ${catkin_LIBRARIES})
+
+add_library(gazebo_ros_torque plugins/torque/torque.cpp)
+target_link_libraries(gazebo_ros_torque ${GAZEBO_LIBRARIES} ${catkin_LIBRARIES})
 
 add_library(gazebo_ros_reset_plugin plugins/reset/reset_plugin.cpp)
 target_link_libraries(gazebo_ros_reset_plugin ${GAZEBO_LIBRARIES} ${catkin_LIBRARIES})
@@ -128,6 +136,8 @@ install(DIRECTORY include/${PROJECT_NAME}/
 )
 
 install(TARGETS
+  gazebo_ros_force
+  gazebo_ros_torque
   gazebo_ros_servo3_motor_plugin
   gazebo_ros_aerodinamica2_plugin
   gazebo_ros_AllData3_plugin

@@ -7,22 +7,28 @@
                 <mass>1.49981</mass>
                 <pose>0 0 0 0 -0 0</pose>
                 <inertia>
-                    <ixx>0.0478834</ixx>
+                    <!--<ixx>0.0478834</ixx>
                     <ixy>-1.54722e-05</ixy>
                     <ixz>-0.00363249</ixz>
                     <iyy>0.0227521</iyy>
                     <iyz>8.22828e-06</iyz>
+                    <izz>0.0606231</izz>-->
+                    <ixx>0.0478834</ixx>
+                    <ixy>0</ixy>
+                    <ixz>0</ixz>
+                    <iyy>0.0227521</iyy>
+                    <iyz>0</iyz>
                     <izz>0.0606231</izz>
                 </inertia>
             </inertial>
-            <collision name="main_body_collision">
+            <!--<collision name="main_body_collision">
                 <pose>0 0 0 0 -0 0</pose>
                 <geometry>
                     <box>
                         <size>1 1 1</size>
                     </box>>
                 </geometry>
-            </collision>
+            </collision>-->
             <visual name="main_body_visual">
                 <pose>0 0 0 0 -0 0</pose>
                 <geometry>
@@ -41,6 +47,18 @@
         <plugin name="dados" filename="libgazebo_ros_universallink.so">
             <NameOfTopic>dados</NameOfTopic>
             <NameOfLink>main_body</NameOfLink>
+        </plugin>
+        <plugin name="force" filename="libgazebo_ros_force.so">
+            <topicX>fx</topicX>
+            <topicY>fy</topicY>
+            <topicZ>fz</topicZ>
+            <Link>main_body</Link>
+        </plugin>
+        <plugin name="torque" filename="libgazebo_ros_torque.so">
+            <topicX>tx</topicX>
+            <topicY>ty</topicY>
+            <topicZ>tz</topicZ>
+            <Link>main_body</Link>
         </plugin>
     </model>
 </sdf>

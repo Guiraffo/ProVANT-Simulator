@@ -24,7 +24,11 @@ catkin_package(
 )
 
 add_executable(controller src/tilt_controller2.cpp )
+add_executable(controller2 src/tilt_controller.cpp )
+add_executable(server src/server.cpp )
 target_link_libraries(controller ${catkin_LIBRARIES} ${TinyXML_LIBRARIES} ${CMAKE_DL_LIBS})
+target_link_libraries(controller2 ${catkin_LIBRARIES} ${TinyXML_LIBRARIES} ${CMAKE_DL_LIBS})
+target_link_libraries(server ${catkin_LIBRARIES} ${TinyXML_LIBRARIES} ${CMAKE_DL_LIBS})
 
 
 
