@@ -92,11 +92,19 @@
             <NameOfJoint>aL</NameOfJoint>
             <Axis>axis</Axis>
         </plugin>
-        <plugin name="elevplugin" filename="libgazebo_ros_servo2_motor_plugin.so">
+        <!--<plugin name="elevplugin" filename="libgazebo_ros_servo2_motor_plugin.so">
             <NameOfJoint>aL</NameOfJoint>
             <Modo>Torque</Modo>
             <TopicSubscriber>juntasub</TopicSubscriber>
             <TopicPublisher>juntapub</TopicPublisher>
+        </plugin>-->
+        <plugin name="elevplugin" filename="libgazebo_servo_teste.so">
+            <NameOfJoint>aL</NameOfJoint>
+            <Modo>Torque</Modo>
+            <TopicSubscriber>juntasub</TopicSubscriber>
+            <TopicPublisher>juntapub</TopicPublisher>
+            <NameOflinkchild>main_body2</NameOflinkchild>
+            <NameOflinkparent>main_body</NameOflinkparent>
         </plugin>
     </model>
 </sdf>

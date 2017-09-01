@@ -1,13 +1,30 @@
-#include <servo_motor_plug.h>
+#include <servo.h>
 
 namespace gazebo
 {
-        void ServoMotorPlugin::CallbackReferencias(std_msgs::Float64 msg)
+        void Servo3MotorPlugin::CallbackReferencias(std_msgs::Float64 msg)
 	{
 		try
 		{	bool result = false;
+		
+		    double tau = msg.data;
+			math::Vector3 input(0,tau,0);
 			boost::mutex::scoped_lock scoped_lock(lock);
-			if(Modo_ == "Torque")	junta->SetForce(0,msg.data);
+			if(Modo_ == "Torque")	
+			{
+				math::Pose childpose = linkchild->GetWorldPose();
+				linkchild->AddRelativeTorque(input);
+				
+				double phi    = childpose.rot.GetAsEuler().x;
+				double theta  = childpose.rot.GetAsEuler().y;
+				double psii   = childpose.rot.GetAsEuler().z;
+
+				math::Vector3 reactiontorqueatWorld(   tau*(cos(phi)*sin(psii) - cos(psii)*sin(phi)*sin(theta)),
+                         				              -tau*(cos(phi)*cos(psii) + sin(phi)*sin(psii)*sin(theta)),
+                             				          -tau*cos(theta)*sin(phi));
+				
+				linkparent->AddTorque(reactiontorqueatWorld);
+			}
 			if(Modo_ == "Posição")	result = junta->SetPosition(0,msg.data);
 			//if(Modo_ == "Velocidade")  result = junta->SetPosition(0,msg.data);
 		}
@@ -19,12 +36,12 @@ namespace gazebo
 
 	
 	
-	ServoMotorPlugin::ServoMotorPlugin()
+	Servo3MotorPlugin::Servo3MotorPlugin()
 	{ 
 		torque = 0;
 	}
 
-	ServoMotorPlugin::~ServoMotorPlugin()
+	Servo3MotorPlugin::~Servo3MotorPlugin()
 	{	
 		try
 		{
@@ -36,7 +53,7 @@ namespace gazebo
 		} 
 	}
 
-	void ServoMotorPlugin::Load(physics::ModelPtr _model, sdf::ElementPtr _sdf)
+	void Servo3MotorPlugin::Load(physics::ModelPtr _model, sdf::ElementPtr _sdf)
 	{	
 		try
 		{
@@ -47,6 +64,8 @@ namespace gazebo
 	    		}
 
 			NameOfJoint_ = XMLRead::ReadXMLString("NameOfJoint",_sdf);
+			NameOflinkchild_ = XMLRead::ReadXMLString("NameOflinkchild",_sdf);
+			NameOflinkparent_ = XMLRead::ReadXMLString("NameOflinkparent",_sdf);
 			TopicSubscriber_ = XMLRead::ReadXMLString("TopicSubscriber",_sdf);
 			TopicPublisher_ = XMLRead::ReadXMLString("TopicPublisher",_sdf);
 			Modo_ = XMLRead::ReadXMLString("Modo",_sdf);
@@ -54,13 +73,15 @@ namespace gazebo
 			
 			world = _model->GetWorld();	
 			junta = _model->GetJoint(NameOfJoint_);
+			linkchild = _model->GetLink(NameOflinkchild_);
+			linkparent = _model->GetLink(NameOflinkparent_);
 
-			motor_subscriber_ = node_handle_.subscribe(TopicSubscriber_, 1, &gazebo::ServoMotorPlugin::CallbackReferencias, this);
+			motor_subscriber_ = node_handle_.subscribe(TopicSubscriber_, 1, &gazebo::Servo3MotorPlugin::CallbackReferencias, this);
 			motor_publisher_ = node_handle_.advertise<simulator_msgs::Sensor>(TopicPublisher_, 5);
 
 	  		Reset();
 			updateTimer.Load(world, _sdf);
-	  		updateConnection = updateTimer.Connect(boost::bind(&ServoMotorPlugin::Update, this));
+	  		updateConnection = updateTimer.Connect(boost::bind(&Servo3MotorPlugin::Update, this));
 		}
 		catch(std::exception& e)
 		{
@@ -68,7 +89,7 @@ namespace gazebo
 		}
 	}
 
-	void ServoMotorPlugin::Reset()
+	void Servo3MotorPlugin::Reset()
 	{
 		try
 		{
@@ -80,7 +101,7 @@ namespace gazebo
 		}
 	}
 
-	void ServoMotorPlugin::Update()
+	void Servo3MotorPlugin::Update()
 	{
 		try
 		{
@@ -99,5 +120,5 @@ namespace gazebo
 		}
 	}
 	
-	GZ_REGISTER_MODEL_PLUGIN(ServoMotorPlugin)
+	GZ_REGISTER_MODEL_PLUGIN(Servo3MotorPlugin)
 }

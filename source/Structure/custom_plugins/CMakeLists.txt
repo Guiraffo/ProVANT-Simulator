@@ -34,6 +34,11 @@ include_directories(plugins/state_space3)
 include_directories(plugins/servo2)
 include_directories(plugins/aerodinamica)
 
+include_directories(plugins/HIL_server)
+
+
+include_directories(plugins/servo_teste)
+
 
 find_package(gazebo REQUIRED)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${GAZEBO_CXX_FLAGS}")
@@ -127,6 +132,12 @@ add_library(gazebo_ros_servo2_motor_plugin plugins/servo2/servo2_motor_plug.cpp)
 target_link_libraries(gazebo_ros_servo2_motor_plugin ${catkin_LIBRARIES} ${GAZEBO_LIBRARIES})
 
 
+add_library(gazebo_server_hil_plugin plugins/HIL_server/server.cpp)
+target_link_libraries(gazebo_server_hil_plugin ${catkin_LIBRARIES} ${GAZEBO_LIBRARIES})
+
+add_library(gazebo_servo_teste plugins/servo_teste/servo.cpp)
+target_link_libraries(gazebo_servo_teste ${catkin_LIBRARIES} ${GAZEBO_LIBRARIES})
+
 
 
 install(DIRECTORY include/${PROJECT_NAME}/
@@ -136,6 +147,8 @@ install(DIRECTORY include/${PROJECT_NAME}/
 )
 
 install(TARGETS
+  gazebo_servo_teste
+  gazebo_server_hil_plugin
   gazebo_ros_force
   gazebo_ros_torque
   gazebo_ros_servo3_motor_plugin

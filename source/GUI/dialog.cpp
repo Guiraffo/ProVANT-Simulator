@@ -127,11 +127,15 @@ void Dialog::on_pushButton_7_clicked()
 
 void Dialog::on_pushButton_6_clicked()
 {
-    // abrindo janela para abrir controaldor já existente
-    DialogOpenController window;
-    window.GetControllers();
-    window.setModal(true);
-    window.exec();
+    char const* tmp = getenv( "TILT_PROJECT" );
+    if ( tmp == NULL ) {
+        qDebug() << "Problemas com variavel de ambiente ";
+    } else {
+        std::string env(tmp);
+        env = env + "/source/Structure/control_strategies";
+        std::string command("nautilus "+env+"/"+ui->comboBox->currentText().toStdString());
+        std::system(command.c_str());
+    }
 }
 
 void Dialog::on_pushButton_3_clicked()
