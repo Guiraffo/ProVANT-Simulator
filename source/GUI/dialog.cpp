@@ -120,7 +120,7 @@ void Dialog::on_pushButton_7_clicked()
     {
         // comando para compilação e armazenamento da saída de erro em arquivo texto
         std::string env(tmp);
-        env = "cd "+env+"; catkin_make --pkg "+ ui->comboBox->currentText().toStdString() + " 2> OutCompile.txt; gedit OutCompile.txt";
+        env = "cd "+env+"; catkin_make --pkg "+ ui->comboBox->currentText().toStdString() + " 2> OutCompile.txt; xdg-open OutCompile.txt";
         std::system(env.c_str());
     }
 }
@@ -133,7 +133,7 @@ void Dialog::on_pushButton_6_clicked()
     } else {
         std::string env(tmp);
         env = env + "/source/Structure/control_strategies";
-        std::string command("nautilus "+env+"/"+ui->comboBox->currentText().toStdString());
+        std::string command("xdg-open "+env+"/"+ui->comboBox->currentText().toStdString());
         std::system(command.c_str());
     }
 }

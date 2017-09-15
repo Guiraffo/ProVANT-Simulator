@@ -90,6 +90,8 @@ void MainWindow::on_actionNew_triggered()
         qDebug() << "Problemas com variavel de ambiente ";
     } else {
         std::string env(tmp);
+        env = env + "/worlds/templates";
+
         // Abertura de caixa de diálogo para selecionar arquivo template
         QString filename = QFileDialog::getOpenFileName(this
                                                         ,tr("New World")
@@ -231,6 +233,7 @@ void MainWindow::on_actionOpen_triggered()
         qDebug() << "Problemas com variavel de ambiente ";
     } else {
         std::string env(tmp);
+        env = env + "/worlds/worlds";
         // escolhe do arquivo .world
         QString filename = QFileDialog::getOpenFileName(this
                                                         ,tr("Open World")
