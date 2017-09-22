@@ -28,12 +28,10 @@ include_directories(plugins/state_space_load2)
 include_directories(plugins/UniversalLinkSensor)
 include_directories(plugins/UniversalJointSensor)
 include_directories(plugins/pertubation)
-
-
 include_directories(plugins/state_space3)
 include_directories(plugins/servo2)
 include_directories(plugins/aerodinamica)
-
+include_directories(plugins/HIL_server)
 
 
 include_directories(plugins/servo_teste)
@@ -119,8 +117,6 @@ target_link_libraries(gazebo_ros_universaljoint ${catkin_LIBRARIES} ${GAZEBO_LIB
 add_library(gazebo_ros_pertubation plugins/pertubation/pertubation.cpp)
 target_link_libraries(gazebo_ros_pertubation ${catkin_LIBRARIES} ${GAZEBO_LIBRARIES})
 
-
-
 add_library(gazebo_ros_aerodinamica2_plugin plugins/aerodinamica/aerodinamica2.cpp)
 target_link_libraries(gazebo_ros_aerodinamica2_plugin ${catkin_LIBRARIES} ${GAZEBO_LIBRARIES})
 
@@ -133,6 +129,8 @@ target_link_libraries(gazebo_ros_servo2_motor_plugin ${catkin_LIBRARIES} ${GAZEB
 add_library(gazebo_servo_teste plugins/servo_teste/servo.cpp)
 target_link_libraries(gazebo_servo_teste ${catkin_LIBRARIES} ${GAZEBO_LIBRARIES})
 
+add_library(gazebo_hil_server3 plugins/HIL_server/server.cpp) # problemas quando se adicionar arquivos ".cpp" de bibliotecas externas
+target_link_libraries(gazebo_hil_server3 ${catkin_LIBRARIES} ${GAZEBO_LIBRARIES})
 
 
 install(DIRECTORY include/${PROJECT_NAME}/
@@ -142,6 +140,7 @@ install(DIRECTORY include/${PROJECT_NAME}/
 )
 
 install(TARGETS
+  gazebo_hil_server3
   gazebo_servo_teste
   gazebo_ros_force
   gazebo_ros_torque

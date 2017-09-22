@@ -2,7 +2,7 @@
 <config>
     <topicdata>data</topicdata>
     <TopicoStep>Step</TopicoStep>
-    <Sampletime>120</Sampletime>
+    <Sampletime>12</Sampletime>
     <Strategy>libvant2load_hinfinity.so</Strategy>
     <RefPath>ref.txt</RefPath>
     <Outputfile>out.txt</Outputfile>
