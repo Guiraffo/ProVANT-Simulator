@@ -129,8 +129,8 @@ target_link_libraries(gazebo_ros_servo2_motor_plugin ${catkin_LIBRARIES} ${GAZEB
 add_library(gazebo_servo_teste plugins/servo_teste/servo.cpp)
 target_link_libraries(gazebo_servo_teste ${catkin_LIBRARIES} ${GAZEBO_LIBRARIES})
 
-add_library(gazebo_hil_server3 plugins/HIL_server/server.cpp) # problemas quando se adicionar arquivos ".cpp" de bibliotecas externas
-target_link_libraries(gazebo_hil_server3 ${catkin_LIBRARIES} ${GAZEBO_LIBRARIES})
+#add_library(gazebo_hil_server3 plugins/HIL_server/server.cpp) # problemas quando se adicionar arquivos ".cpp" de bibliotecas externas
+#target_link_libraries(gazebo_hil_server3 ${catkin_LIBRARIES} ${GAZEBO_LIBRARIES})
 
 
 install(DIRECTORY include/${PROJECT_NAME}/
@@ -140,7 +140,7 @@ install(DIRECTORY include/${PROJECT_NAME}/
 )
 
 install(TARGETS
-  gazebo_hil_server3
+  #gazebo_hil_server3
   gazebo_servo_teste
   gazebo_ros_force
   gazebo_ros_torque
