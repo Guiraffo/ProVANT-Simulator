@@ -85,6 +85,8 @@ private slots:
      */
     void on_actionNew_2_triggered();
 
+    void on_actionAbout_ProVANT_Simulator_triggered();
+
 protected:
     Ui::MainWindow *ui;
 

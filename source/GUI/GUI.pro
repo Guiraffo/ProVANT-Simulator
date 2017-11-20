@@ -49,7 +49,9 @@ SOURCES += main.cpp\
     DataAccess/GazeboElements/Items/Instruments/sonar.cpp \
     DataAccess/GazeboElements/Items/Instruments/gps.cpp \
     DataAccess/GazeboElements/Items/Instruments/imu.cpp \
-    DataAccess/GazeboElements/Items/Instruments/magnetometer.cpp
+    DataAccess/GazeboElements/Items/Instruments/magnetometer.cpp \
+    aboutform.cpp \
+    aboutdialog.cpp
 
 HEADERS  += mainwindow.h \
     DataAccess/ControllerElements/configfile.h \
@@ -83,10 +85,15 @@ HEADERS  += mainwindow.h \
     DataAccess/RosElements/roslaunch.h \
     dialognewmodel.h \
     DataAccess/GazeboElements/Items/scene.h \
-    DataAccess/GazeboElements/Items/Instruments/sensor.h
+    DataAccess/GazeboElements/Items/Instruments/sensor.h \
+    aboutform.h \
+    aboutdialog.h
 
 FORMS    += mainwindow.ui \
     dialog.ui \
     dialognewcontroller.ui \
     dialogopencontroller.ui \
-    dialognewmodel.ui
+    dialognewmodel.ui \
+    aboutform.ui \
+    aboutform.ui \
+    aboutdialog.ui

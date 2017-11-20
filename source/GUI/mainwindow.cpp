@@ -3,12 +3,25 @@
 #include "dialog.h"
 #include "dialognewmodel.h"
 #include "DataAccess/RosElements/roslaunch.h"
+#include "aboutdialog.h".h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+
+    char* tmp = getenv( "TILT_PROJECT" );
+
+    QString env(tmp);
+    QString path("/source/GUI/logos/");
+    QString fullpath = env+path;
+
+    QPixmap provant(fullpath+"provant_ufmg_ufsc.jpg");
+    int w = ui->label_3->width();
+    int h = ui->label_3->height();
+    ui->label_3->setPixmap(provant.scaled(w,h,Qt::KeepAspectRatio));
+
     ui->treeWidget->setColumnCount(2); // arvore de dados terá duas colunas
     // inicialmente não se pode editar árvore de dados
     ui->treeWidget->setEditTriggers(QTreeWidget::NoEditTriggers);
@@ -19,7 +32,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->menuEdit->setDisabled(true);
     ui->pushButton->setDisabled(true);
     // nome que será observado na parte superior da janela
-    const QString name("Provant Simulator");
+    const QString name("ProVANT Simulator");
     setWindowTitle(name);
 }
 
@@ -333,4 +346,11 @@ void MainWindow::on_actionNew_2_triggered()
 void MainWindow::on_actionSave_triggered()
 {
     SaveAs();
+}
+
+void MainWindow::on_actionAbout_ProVANT_Simulator_triggered()
+{
+    AboutDialog newform(this);
+    newform.setModal(true);
+    newform.exec();
 }

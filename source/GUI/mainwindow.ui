@@ -93,6 +93,19 @@
      </rect>
     </property>
    </widget>
+   <widget class="QLabel" name="label_3">
+    <property name="geometry">
+     <rect>
+      <x>400</x>
+      <y>306</y>
+      <width>291</width>
+      <height>121</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
@@ -100,7 +113,7 @@
      <x>0</x>
      <y>0</y>
      <width>939</width>
-     <height>25</height>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuSimulation">
@@ -124,8 +137,15 @@
     </widget>
     <addaction name="menuModel"/>
    </widget>
+   <widget class="QMenu" name="menuAbout">
+    <property name="title">
+     <string>About</string>
+    </property>
+    <addaction name="actionAbout_ProVANT_Simulator"/>
+   </widget>
    <addaction name="menuSimulation"/>
    <addaction name="menuEdit"/>
+   <addaction name="menuAbout"/>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
    <attribute name="toolBarArea">
@@ -279,6 +299,11 @@
   <action name="actionOpen">
    <property name="text">
     <string>Open</string>
+   </property>
+  </action>
+  <action name="actionAbout_ProVANT_Simulator">
+   <property name="text">
+    <string>About ProVANT Simulator</string>
    </property>
   </action>
  </widget>
