@@ -1,0 +1,10 @@
+
+name = "gps"
+header (timestamp)
+values(array):
+	1- latitude
+	2- longitude
+	3- altitude
+	4- velocidade oeste
+	5- velocidade norte
+	6- velocidade de subida

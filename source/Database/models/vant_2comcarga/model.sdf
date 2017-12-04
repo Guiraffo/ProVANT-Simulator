@@ -1,0 +1,292 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sdf version="1.6">
+    <model name="tilt2">
+        <link name="corpo">
+            <pose>0 0 0 0 0 0</pose>
+            <inertial>
+                <mass>1.92509767079622</mass>
+                <pose>-0.00254692194194197639 0.000137734082827298
+        -0.0181900814143879 0 0 0</pose>
+                <inertia>
+                    <ixx>0.0697552757250878</ixx>
+                    <ixy>4.77417385357503E-05</ixy>
+                    <ixz>0.000362780890165671</ixz>
+                    <iyy>0.00792827006001647</iyy>
+                    <iyz>-1.07360516340487E-05</iyz>
+                    <izz>0.0664000187819483</izz>
+                </inertia>
+            </inertial>
+            <collision name="corpocollision">
+                <pose>0 0 0 0 0 0</pose>
+                <geometry>
+                    <mesh>
+                        <uri>model://vant_2comcarga/meshes/corpo.STL</uri>
+                    </mesh>
+                </geometry>
+            </collision>
+            <visual name="corpovisual">
+                <pose>0 0 0 0 0 0</pose>
+                <geometry>
+                    <mesh>
+                        <uri>model://vant_2comcarga/meshes/corpo.STL</uri>
+                    </mesh>
+                </geometry>
+                <material>
+                    <ambient>1 0 0 1</ambient>
+                    <diffuse>1 0 0 1</diffuse>
+                    <specular>0.1 0.1 0.1 1</specular>
+                    <emissive>0 0 0 0</emissive>
+                </material>
+            </visual>
+        </link>
+        <link name="carga">
+            <pose>0 0 -0.5 0 0 0</pose>
+            <inertial>
+                <mass>0.50</mass>
+                <pose>0 0 0 0 0 0</pose>
+                <inertia>
+                    <ixx>0.00000833333</ixx>
+                    <ixy>0</ixy>
+                    <ixz>0</ixz>
+                    <iyy>0.00000833333</iyy>
+                    <iyz>0</iyz>
+                    <izz>0.00000833333</izz>
+                </inertia>
+            </inertial>
+            <collision name="carga">
+                <pose>0 0 -0.05 0 0 0</pose>
+                <geometry>
+                    <mesh>
+                        <uri>model://vant_2comcarga/meshes/carga.stl</uri>
+                    </mesh>
+                </geometry>
+            </collision>
+            <visual name="carga">
+                <pose>0 0 -0.05 0 0 0</pose>
+                <geometry>
+                    <mesh>
+                        <uri>model://vant_2comcarga/meshes/carga.stl</uri>
+                    </mesh>
+                </geometry>
+                <material>
+                    <ambient>1 0 0 1</ambient>
+                    <diffuse>1 0 0 1</diffuse>
+                    <specular>0.1 0.1 0.1 1</specular>
+                    <emissive>0 0 0 0</emissive>
+                </material>
+            </visual>
+        </link>
+        <link name="servodir">
+            <pose>0.02E-3 -277.61E-3 56.21E-3 -0.0872665 0 0</pose>
+            <inertial>
+                <mass>0.0809439719362664</mass>
+                <pose>-3.60859273452335E-10 -0.000226380714807978
+        0.0594780519701684 0 0 0</pose>
+                <inertia>
+                    <ixx>3.88267747087835E-06</ixx>
+                    <ixy>6.03219085082653E-06</ixy>
+                    <ixz>-2.78471406661236E-12</ixz>
+                    <iyy>0.000104858690365283</iyy>
+                    <iyz>7.0486590219062E-07</iyz>
+                    <izz>8.31755564684115E-05</izz>
+                </inertia>
+            </inertial>
+            <collision name="servodircollision">
+                <pose>0 0 0 0 0 0</pose>
+                <geometry>
+                    <mesh>
+                        <uri>model://vant_2comcarga/meshes/servodir.STL</uri>
+                    </mesh>
+                </geometry>
+            </collision>
+            <visual name="servodirvisual">
+                <pose>0 0 0 0 0 0</pose>
+                <geometry>
+                    <mesh>
+                        <uri>model://vant_2comcarga/meshes/servodir.STL</uri>
+                    </mesh>
+                </geometry>
+                <material>
+                    <ambient>1 0 0 1</ambient>
+                    <diffuse>1 0 0 1</diffuse>
+                    <specular>0.1 0.1 0.1 1</specular>
+                    <emissive>0 0 0 0</emissive>
+                </material>
+            </visual>
+        </link>
+        <link name="servoesq">
+            <pose>0.02E-3 277.61E-3 56.21E-3 0.0872665 0 0</pose>
+            <inertial>
+                <mass>0.080943968597</mass>
+                <pose>-1.42036961055594E-09 0.000226379941183831
+        0.059478050752241 0 0 0</pose>
+                <inertia>
+                    <ixx>3.83153585987037E-05</ixx>
+                    <ixy>1.31505388597772E-06</ixy>
+                    <ixz>5.68869331986483E-13</ixz>
+                    <iyy>0.000105370094312002</iyy>
+                    <iyz>-7.048667055410379E-07</iyz>
+                    <izz>8.31755504678384E-05</izz>
+                </inertia>
+            </inertial>
+            <collision name="servoesqcollision">
+                <pose>0 0 0 0 0 0</pose>
+                <geometry>
+                    <mesh>
+                        <uri>model://vant_2comcarga/meshes/servoesq.STL</uri>
+                    </mesh>
+                </geometry>
+            </collision>
+            <visual name="servoesqvisual">
+                <pose>0 0 0 0 0 0</pose>
+                <geometry>
+                    <mesh>
+                        <uri>model://vant_2comcarga/meshes/servoesq.STL</uri>
+                    </mesh>
+                </geometry>
+                <material>
+                    <ambient>1 0 0 1</ambient>
+                    <diffuse>1 0 0 1</diffuse>
+                    <specular>0.1 0.1 0.1 1</specular>
+                    <emissive>0 0 0 0</emissive>
+                </material>
+            </visual>
+        </link>
+        <joint name="aR" type="revolute">
+	    <parent>corpo</parent>
+	    <child>servodir</child>
+            <pose>0 0 0 0 0 0</pose>
+            <axis>
+                <xyz>0 1 0</xyz>
+                <limit>
+                    <lower>-1.5</lower>
+                    <upper>1.5</upper>
+                    <effort>2</effort>
+                    <velocity>0.5</velocity>
+                </limit>
+                <dynamics>
+                    <damping>0</damping>
+                    <friction>0</friction>
+                </dynamics>
+            </axis>
+        </joint>
+        <joint name="fixo" type="revolute2">
+	    <parent>corpo</parent>
+	    <child>carga</child>
+            <pose>0 0 0 0 0 0</pose>
+            <axis>
+                <xyz>0 1 0</xyz>
+                <limit>
+                    <lower>-1.05</lower>
+                    <upper>1.05</upper>
+                    <effort>10</effort>
+                    <velocity>50</velocity>
+                </limit>
+                <dynamics>
+                    <damping>0.05</damping>
+                    <friction>0.05</friction>
+                </dynamics>
+            </axis>
+            <axis2>
+                <xyz>1 0 0</xyz>
+                <limit>
+                    <lower>-1.05</lower>
+                    <upper>1.05</upper>
+                    <effort>10</effort>
+                    <velocity>50</velocity>
+                </limit>
+                <dynamics>
+                    <damping>0.05</damping>
+                    <friction>0.05</friction>
+                </dynamics>
+            </axis2>
+        </joint>
+        <joint name="aL" type="revolute">
+	    <parent>corpo</parent>
+	    <child>servoesq</child>
+            <pose>0 0 0 0 0 0</pose>
+            <axis>
+                <xyz>0 1 0</xyz>
+                <limit>
+                    <lower>-1.5</lower>
+                    <upper>1.5</upper>
+                    <effort>2</effort>
+                    <velocity>0.5</velocity>
+                </limit>
+                <dynamics>
+                    <damping>0</damping>
+                    <friction>0</friction>
+                </dynamics>
+            </axis>
+        </joint>
+	<plugin filename="libgazebo_ros_aerodinamica_plugin.so"
+    name="empuxo">
+      <LinkEsq>servoesq</LinkEsq>
+      <LinkDir>servodir</LinkDir>
+      <topic_FL>Thrustesq</topic_FL>
+      <topic_FR>Thrustdir</topic_FR>
+    </plugin>
+    <plugin filename="libgazebo_ros_servo_motor_plugin.so"
+    name="servoR">
+      <TopicSubscriber>RefaR</TopicSubscriber>
+      <NameOfJoint>aR</NameOfJoint>
+      <Modo>Torque</Modo>
+      <TopicPublisher>servoaR</TopicPublisher>
+    </plugin>
+    <plugin filename="libgazebo_ros_servo_motor_plugin.so"
+    name="servoL">
+      <TopicSubscriber>RefaL</TopicSubscriber>
+      <NameOfJoint>aL</NameOfJoint>
+      <Modo>Torque</Modo>
+      <TopicPublisher>servoaL</TopicPublisher>
+    </plugin>
+    <plugin filename="libgazebo_ros_AllData_plugin3.so"
+    name="VetorEstados">
+      <NameOfJointL>aL</NameOfJointL>
+      <bodyName>carga</bodyName>
+      <NameOfJointLoad>fixo</NameOfJointLoad>
+      <NameOfNode>loadperspective_states</NameOfNode>
+      <NameOfJointR>aR</NameOfJointR>
+    </plugin>
+    <!--<plugin filename="libgazebo_ros_universallink.so"
+    name="link_universal">
+      <NameOfNode>corpo</NameOfNode>
+      <NameofLink>corpo</NameofLink>
+    </plugin>
+    <plugin filename="libgazebo_ros_universallink.so"
+    name="link_universal">
+      <NameOfNode>carga</NameOfNode>
+      <NameofLink>carga</NameofLink>
+    </plugin>
+    <plugin filename="libgazebo_ros_universallink.so"
+    name="link_universal">
+      <NameOfNode>servodir</NameOfNode>
+      <NameofLink>servodir</NameofLink>
+    </plugin>
+    <plugin filename="libgazebo_ros_universallink.so"
+    name="link_universal">
+      <NameOfNode>servoesq</NameOfNode>
+      <NameofLink>servoesq</NameofLink>
+    </plugin>
+    <plugin filename="libgazebo_ros_universaljoint.so"
+    name="joint_universal">
+      <NameOfNode>aR</NameOfNode>
+      <NameOfJoint>aR</NameOfJoint>
+    </plugin>
+    <plugin filename="libgazebo_ros_universaljoint.so"
+    name="joint_universal">
+      <NameOfNode>aL</NameOfNode>
+      <NameOfJoint>aL</NameOfJoint>
+    </plugin>
+    <plugin filename="libgazebo_ros_universaljoint.so"
+    name="joint_universal">
+      <NameOfNode>fixo</NameOfNode>
+      <NameOfJoint>fixo</NameOfJoint>
+    </plugin>
+    <plugin filename="libgazebo_ros_universaljoint.so"
+    name="joint_universal">
+      <NameOfNode>fixo2</NameOfNode>
+      <NameOfJoint>fixo2</NameOfJoint>
+    </plugin>-->
+    </model>
+</sdf>

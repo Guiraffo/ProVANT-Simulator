@@ -1,0 +1,10 @@
+math::Angle 	GetAngle (unsigned int _index) const
+ 	Get the angle of rotation of an axis(index) More...
+
+virtual double 	GetForce (unsigned int _index)
+
+virtual JointWrench 	GetForceTorque (unsigned int _index)=0
+ 	get internal force and torque values at a joint. More...
+
+virtual double 	GetVelocity (unsigned int _index) const =0
+ 	Get the rotation rate of an axis(index) More...
