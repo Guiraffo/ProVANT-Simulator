@@ -1,15 +1,25 @@
+/*
+* File: servo_motor_plug.cpp
+* Author: Arthur Viana Lara
+* Project: ProVANT
+* Company: Federal University of Minas Gerais
+* Version: 1.0
+* Date: 29/01/18
+* Description:  This library is responsable to implement a servo motor. It works in Torque mode or Position mode and returns values of angular position and angular velocity
+*/
+
 #include <servo_motor_plug.h>
 
 namespace gazebo
 {
+	// Callback for references
         void ServoMotorPlugin::CallbackReferencias(std_msgs::Float64 msg)
 	{
 		try
 		{	bool result = false;
 			boost::mutex::scoped_lock scoped_lock(lock);
 			if(Modo_ == "Torque")	junta->SetForce(0,msg.data);
-			if(Modo_ == "Posição")	result = junta->SetPosition(0,msg.data);
-			//if(Modo_ == "Velocidade")  result = junta->SetPosition(0,msg.data);
+			if(Modo_ == "Posição")	result = junta->SetPosition(0,msg.data); // TO FIX
 		}
 		catch(std::exception& e)
 		{
@@ -17,13 +27,13 @@ namespace gazebo
 		}
 	}
 
-	
-	
+	// constructor
 	ServoMotorPlugin::ServoMotorPlugin()
 	{ 
-		torque = 0;
+
 	}
 
+	// destructor
 	ServoMotorPlugin::~ServoMotorPlugin()
 	{	
 		try
@@ -36,29 +46,31 @@ namespace gazebo
 		} 
 	}
 
+	// initial setup
 	void ServoMotorPlugin::Load(physics::ModelPtr _model, sdf::ElementPtr _sdf)
 	{	
 		try
 		{
 	    		if (!ros::isInitialized())
 	    		{
-				LOG4CXX_ERROR (loggerMyMain, "Nao inicializado!");
+				std::cout << "Nao inicializado!" << std::endl;
 	      		        return;
 	    		}
 
-			NameOfJoint_ = XMLRead::ReadXMLString("NameOfJoint",_sdf);
-			TopicSubscriber_ = XMLRead::ReadXMLString("TopicSubscriber",_sdf);
-			TopicPublisher_ = XMLRead::ReadXMLString("TopicPublisher",_sdf);
-			Modo_ = XMLRead::ReadXMLString("Modo",_sdf);
-			
-			
-			world = _model->GetWorld();	
-			junta = _model->GetJoint(NameOfJoint_);
+			NameOfJoint_ = XMLRead::ReadXMLString("NameOfJoint",_sdf); // Get name of the joint
+			TopicSubscriber_ = XMLRead::ReadXMLString("TopicSubscriber",_sdf); // Name of topic for receiving reference
+			TopicPublisher_ = XMLRead::ReadXMLString("TopicPublisher",_sdf); // Name of topic for sending data
+			Modo_ = XMLRead::ReadXMLString("Modo",_sdf); // mode of working
+			world = _model->GetWorld(); // get World's pointer	
+			junta = _model->GetJoint(NameOfJoint_); // get joint's pointer
 
+			// subscriber
 			motor_subscriber_ = node_handle_.subscribe(TopicSubscriber_, 1, &gazebo::ServoMotorPlugin::CallbackReferencias, this);
+			// publisher
 			motor_publisher_ = node_handle_.advertise<simulator_msgs::Sensor>(TopicPublisher_, 5);
 
 	  		Reset();
+			// starts connection
 			updateTimer.Load(world, _sdf);
 	  		updateConnection = updateTimer.Connect(boost::bind(&ServoMotorPlugin::Update, this));
 		}
@@ -67,7 +79,8 @@ namespace gazebo
 			std::cout << e.what() << std::endl;
 		}
 	}
-
+	
+	// reset
 	void ServoMotorPlugin::Reset()
 	{
 		try
@@ -80,16 +93,18 @@ namespace gazebo
 		}
 	}
 
+	// for each ste time
 	void ServoMotorPlugin::Update()
 	{
 		try
 		{
 			simulator_msgs::Sensor newmsg;
 			newmsg.name = TopicPublisher_;
-			newmsg.header.stamp = ros::Time::now();
+			newmsg.header.stamp = ros::Time::now(); // time stamp
 			newmsg.header.frame_id = "1";
-			newmsg.values.push_back(junta->GetAngle(0).Radian());
-			newmsg.values.push_back(junta->GetVelocity(0));
+			newmsg.values.push_back(junta->GetAngle(0).Radian()); // angular position
+			newmsg.values.push_back(junta->GetVelocity(0)); // angular velocity
+			// publish data
 			motor_publisher_.publish(newmsg);
 
 		}

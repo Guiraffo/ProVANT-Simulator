@@ -148,7 +148,7 @@
                 </dynamics>
             </axis>
         </joint>
-        <!--<plugin name="empuxo" filename="libgazebo_ros_aerodinamica_plugin.so">
+        <plugin name="empuxo" filename="libgazebo_ros_brushless_plugin.so">
             <topic_FR>Thrustdir</topic_FR>
             <LinkDir>servodir</LinkDir>
             <topic_FL>Thrustesq</topic_FL>
@@ -162,7 +162,7 @@
         </plugin>
         <plugin name="VetorEstados" filename="libgazebo_ros_AllData_plugin.so">
             <NameOfJointR>aR</NameOfJointR>
-            <NameOfNode>Estados</NameOfNode>
+            <NameOfTopic>Estados</NameOfTopic>
             <bodyName>corpo</bodyName>
             <NameOfJointL>aL</NameOfJointL>
         </plugin>
@@ -171,13 +171,6 @@
             <TopicPublisher>SensoraL</TopicPublisher>
             <TopicSubscriber>RefaL</TopicSubscriber>
             <Modo>Torque</Modo>
-        </plugin>-->
-        <plugin name="hil" filename="libgazebo_hil_server3.so">
-            <NameOfJointR>aR</NameOfJointR>
-            <NameOfJointL>aL</NameOfJointL>
-            <bodyName>corpo</bodyName>
-            <BrushlessR>servodir</BrushlessR>
-            <BrushlessL>servoesq</BrushlessL>
         </plugin>
     </model>
 </sdf>

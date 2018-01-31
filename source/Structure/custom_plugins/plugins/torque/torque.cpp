@@ -1,20 +1,31 @@
-#include <torque.h>
+/*
+* File: torque.cpp
+* Author: Arthur Viana Lara
+* Project: ProVANT
+* Company: Federal University of Minas Gerais
+* Version: 1.0
+* Date: 29/01/18
+* Description:  This library is responsable to implement torque actuator with one step time duration
+*/
 
-//using namespace gazebo::math;
+#include <torque.h>
 
 namespace gazebo
 {
 
+	// constructor
 	torque::torque()
 	{
 		
 	}
 
+	// destructor
 	torque::~torque()
 	{	
 		
 	}
 
+	// initial setup
 	void torque::Load(physics::ModelPtr _model, sdf::ElementPtr _sdf)
 	{	
 		try
@@ -25,15 +36,15 @@ namespace gazebo
 	      		        return;
 	    		}
 			
-			topicX = XMLRead::ReadXMLString("topicX",_sdf);
-			topicY = XMLRead::ReadXMLString("topicY",_sdf);
-			topicZ = XMLRead::ReadXMLString("topicZ",_sdf);
-			NameOfLink = XMLRead::ReadXMLString("Link",_sdf);
+			topicX = XMLRead::ReadXMLString("topicX",_sdf); // get the name of topic of torque's value to be applied in x
+			topicY = XMLRead::ReadXMLString("topicY",_sdf); // get the name of topic of torque's value to be applied in y
+			topicZ = XMLRead::ReadXMLString("topicZ",_sdf); // get the name of topic of torque's value to be applied in z
+			NameOfLink = XMLRead::ReadXMLString("Link",_sdf); // get the name of link to be applied the torque
 
-			// capitular elementos da simulação
+			// get link
 			link = _model->GetLink(NameOfLink);	
 
-			// update timer
+			// reset
 	  		Reset();
 
 			// subscribers			
@@ -48,6 +59,7 @@ namespace gazebo
 		}
 	}
 
+	// reset
 	void torque::Reset()
 	{
 		try
@@ -59,6 +71,7 @@ namespace gazebo
 		}
 	}
 
+	// receive data of torque in x
 	void torque::CallbackX(std_msgs::Float64 msg)
 	{
 		try
@@ -73,6 +86,7 @@ namespace gazebo
 		}
 	}
 
+	// receive data of torque in y
 	void torque::CallbackY(std_msgs::Float64 msg)
 	{
 		try
@@ -87,6 +101,7 @@ namespace gazebo
 		}
 	}
 
+	// receive data of torque in z
 	void torque::CallbackZ(std_msgs::Float64 msg)
 	{
 		try

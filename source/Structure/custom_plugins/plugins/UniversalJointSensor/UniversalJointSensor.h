@@ -1,3 +1,13 @@
+/*
+* File: UniversalJointSensor.h
+* Author: Arthur Viana Lara
+* Project: ProVANT
+* Company: Federal University of Minas Gerais
+* Version: 1.0
+* Date: 29/01/18
+* Description:  This library is responsable to implement a sensor the returns all kind of data enabled in the simulation of a specific joint
+*/
+
 #include <ros/ros.h>
 #include <gazebo/physics/physics.hh>
 #include <gazebo/transport/TransportTypes.hh>
@@ -12,45 +22,34 @@
 #include "XMLRead.h"
 #include "simulator_msgs/Sensor.h"
 
-// testes
-#include <boost/date_time.hpp>
-#include "std_msgs/String.h"
-
-#include <ros/package.h>
-#include <log4cxx/logger.h>
-#include <log4cxx/xml/domconfigurator.h>
-
-using namespace log4cxx;
-using namespace log4cxx::xml;
-using namespace log4cxx::helpers;
-
 namespace gazebo
 {
 
 	
 	class UniversalJointSensor : public ModelPlugin
 	{
-
-		std::fstream out;
+		// constructor
 		public: UniversalJointSensor(); 
+		// destructor
   		public:virtual ~UniversalJointSensor(); 
+		// initial setup
 		public:virtual void Load(physics::ModelPtr _model, sdf::ElementPtr _sdf); 
+		// reset
   		public: virtual void Reset();  
+		// for each step time
   		protected: virtual void Update(); 
 		
 
 		private:  
-			std::string axis;
-			std::string NameOfJoint_;
-			std::string NameOfNode_;
-			physics::WorldPtr world; 
-			physics::JointPtr junta;   
-			UpdateTimer updateTimer;
-  			event::ConnectionPtr updateConnection;
-			ros::NodeHandle node_handle_;
-			boost::mutex lock;
-			ros::Publisher publisher_;	
-			
-
+			std::string axis; // kind of axis
+			std::string NameOfJoint_; // name of joint
+			std::string NameOfNode_; // name of node
+			physics::WorldPtr world; // pointer to the world
+			physics::JointPtr junta; // pointer the joint  
+			UpdateTimer updateTimer; 
+  			event::ConnectionPtr updateConnection; 
+			ros::NodeHandle node_handle_; // ROS's node handle
+			boost::mutex lock; // mutex
+			ros::Publisher publisher_; // publisher	
 	};
 }

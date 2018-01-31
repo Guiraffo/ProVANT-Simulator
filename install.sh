@@ -26,3 +26,5 @@ qmake ${TILT_PROJECT}/source/GUI/GUI.pro -r -spec linux-g++ CONFIG+=debug CONFIG
 make 
 sudo ln -s ${TILT_PROJECT}/source/build/GUI /usr/local/bin/provant_gui
 
+
+# Change the name of directory from ProVANT-Simulator_Developer to ProVANT-Simulator before compiling

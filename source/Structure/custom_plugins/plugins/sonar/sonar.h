@@ -1,3 +1,13 @@
+/*
+* File: sonar.h
+* Author: Arthur Viana Lara
+* Project: ProVANT
+* Company: Federal University of Minas Gerais
+* Version: 1.0
+* Date: 29/01/18
+* Description:  This library is responsable to implement a sonar
+*/
+
 #ifndef _GAZEBO_SONAR_PLUGIN_HH_
 #define _GAZEBO_SONAR_PLUGIN_HH_
 
@@ -14,39 +24,26 @@
 
 namespace gazebo
 {
-  /// \brief An example plugin for a contact sensor.
   class sonar : public ModelPlugin
   {
-    /// \brief Constructor.
+    ///  Constructor.
     public: sonar();
-
-    /// \brief Destructor.
+    ///  Destructor.
     public: virtual ~sonar();
-
-    /// \brief Load the sensor plugin.
-    /// \param[in] _sensor Pointer to the sensor that loaded this plugin.
-    /// \param[in] _sdf SDF element that describes the plugin.
+    /// initial setup
     public: virtual void Load(physics::ModelPtr _model, sdf::ElementPtr _sdf);
-
-    /// \brief Callback that receives the contact sensor's update signal.
+    /// Callback that receives the sonar's update signal.
     private: virtual void OnUpdate(ConstSonarPtr&);
+    // world's pointer
+    physics::WorldPtr world;
 
-     physics::WorldPtr world;
-
-    //private: ros::NodeHandle n;
-
-    //private: ros::Publisher gps_pub;
-
-    private: std::string gazebotopic;
-    private: std::string rostopic;
-    private: transport::SubscriberPtr sub;
-    private: transport::NodePtr node;
-    physics::ModelPtr model;
-
-    ros::NodeHandle n;
-    ros::Publisher publisher_;
-
-	double mm2uS;
+    private: std::string gazebotopic;// Gazebo's topic
+    private: std::string rostopic; // ROS's topic
+    private: transport::SubscriberPtr sub; // Gazebo's subscriber
+    private: transport::NodePtr node; // Gazebo's node
+    physics::ModelPtr model; // pointer of model
+    ros::NodeHandle n; // ROS node handle
+    ros::Publisher publisher_; // ROS's publisher
 
   };
 }
