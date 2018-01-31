@@ -1,3 +1,13 @@
+/*
+* File: imu.h
+* Author: Arthur Viana Lara
+* Project: ProVANT
+* Company: Federal University of Minas Gerais
+* Version: 1.0
+* Date: 29/01/18
+* Description:  This library is responsable to implement IMU. It gets information from Gazebo and quantizes the data.
+*/
+
 #include <ros/ros.h>
 #include <gazebo/physics/physics.hh>
 #include <gazebo/transport/TransportTypes.hh>
@@ -23,31 +33,31 @@
 #include <log4cxx/logger.h>
 #include <log4cxx/xml/domconfigurator.h>
 
-using namespace log4cxx;
-using namespace log4cxx::xml;
-using namespace log4cxx::helpers;
 
 namespace gazebo
 {
 	class imu : public ModelPlugin
 	{
-		std::fstream out;
-		time_t  timev;
-		public: imu(); 
-  		public:virtual ~imu(); 
+		// constructor
+		public: imu();
+		// destructor 
+  		public:virtual ~imu();
+		// initial setup 
 		public:virtual void Load(physics::ModelPtr _model, sdf::ElementPtr _sdf); 
-  		public: virtual void Reset();  
-  		protected: virtual void Update(); 
+		// reset  		
+		public: virtual void Reset();  
+		// callback for each time step  		
+		protected: virtual void Update(); 
 		private:  
-			std::string link_name_;
-			physics::LinkPtr link;
-			physics::WorldPtr world; 
-			UpdateTimer updateTimer;
-  			event::ConnectionPtr updateConnection;
-			private: ros::NodeHandle n;
-    			private: ros::Publisher imu_pub;
-		        private: std::string Topic_;  
-		        private: double rpyOffset;
+			std::string link_name_; // link name
+			physics::LinkPtr link; // link
+			physics::WorldPtr world; // world pointer
+			UpdateTimer updateTimer; // pointer to update time
+  			event::ConnectionPtr updateConnection; // pointer to update connection
+			private: ros::NodeHandle n; // ROS node handle
+    			private: ros::Publisher imu_pub; // ROS publisher
+		        private: std::string Topic_;  // ROS topic
+		        /*private: double rpyOffset;
 		    	private: double rpyStandardDeviation;
 		    	private: double accelOffset;
 		    	private: double accelStandardDeviation;
@@ -63,7 +73,6 @@ namespace gazebo
 			std::default_random_engine generator;
     			std::normal_distribution<double> distributionRPY;
     			std::normal_distribution<double> distributionACCEL;
-    			std::normal_distribution<double> distributionANGVEL;
-			boost::mutex lock;
+    			std::normal_distribution<double> distributionANGVEL;*/
 	};
 }

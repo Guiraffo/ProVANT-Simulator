@@ -1,8 +1,12 @@
-/*! \brief Brief description.
- *         Brief description continued.
- *
- *  Detailed description starts here.
- */
+/*
+* File: aerodinamica2.cpp
+* Author: Arthur Viana Lara
+* Project: ProVANT
+* Company: Federal University of Minas Gerais
+* Version: 1.0
+* Date: 29/01/18
+* Description:  This library is responsable to implement aerodynamics forces in a UAV
+*/
 
 #include <aerodinamica2.h>
 

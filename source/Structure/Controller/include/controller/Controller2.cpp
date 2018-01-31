@@ -1,9 +1,12 @@
 /*
- * Discovery.h
- *
- *  Created on: Jul 12, 2016
- *      Author: arthur
- */
+* File: Controller2.cpp
+* Author: Arthur Viana Lara
+* Project: ProVANT
+* Company: Federal University of Minas Gerais
+* Version: 1.0
+* Date: 29/01/18
+* Description: This file is the UAV's control code. It has been designed in order to load the XML configurations, including a header with control law 
+*/
 
 #include <iostream>
 #include "ros/ros.h"
@@ -13,8 +16,6 @@
 #include <boost/chrono.hpp>
 #include "simulator_msgs/Sensor.h"
 #include "simulator_msgs/SensorArray.h"
-
-
 #include <fstream>
 #include <string>
 #include <dlfcn.h>
@@ -29,9 +30,7 @@
 class Controller2
 {
 	private: std::map<std::string, int> mapOfWords;
-
-
-	boost::mutex mtx;
+	private: boost::mutex mtx;
 	private: ros::NodeHandle nh;
 	private: std::vector<ros::Subscriber> subarray;
 	private: int cont;
@@ -52,11 +51,13 @@ class Controller2
 	private: XMLRead docmem;
 	
 
+	// Static initializer
 	public: static void init(int argc, char** argv)
 	{
-		ros::init(argc, argv, "discovery");
+		ros::init(argc, argv, "controller");
 	}
 
+	// Constructor
 	public: Controller2()
 	{
 		cont = 0;
@@ -64,58 +65,62 @@ class Controller2
 		simulator_msgs::Sensor t;
 		for(int i=0;i<20;i++) data.values.push_back(t);
 	}
+
+	// Initial setup Function
 	public: void Start()
 	{
-		// FILE
+		// XML FILE with the control configurations
 		if(std::getenv("TILT_CONFIG")==NULL) exit(1); 
-		XMLRead doc(std::getenv("TILT_CONFIG"));
+		XMLRead doc(std::getenv("TILT_CONFIG")); // start read XML data at the address placed in an environment variable
 		docmem = doc;
-        	std::vector<std::string>  array_sensors = doc.GetAllItems("Sensors");
+        	std::vector<std::string>  array_sensors = doc.GetAllItems("Sensors");  // read all XML data of sensors
 		
-		//SENSORS
+		//Receive Sensors order and create callback for new data
 		int i = 0;
-		std::cout << array_sensors.size() << std::endl;		
 		while(i<array_sensors.size())
 		{
-			mapOfWords.insert(std::make_pair(array_sensors.at(i), i));
-			ros::Subscriber sub  = nh.subscribe(array_sensors.at(i), 1, &Controller2::Sensor, this);
-			subarray.push_back(sub);	
+			mapOfWords.insert(std::make_pair(array_sensors.at(i), i)); // save order
+			ros::Subscriber sub  = nh.subscribe(array_sensors.at(i), 1, &Controller2::Sensor, this); // create callback
+			subarray.push_back(sub); // save callback	
 			i++;
 		}
 
-		//ACTUATORS
-		std::vector<std::string>  array_actuators = doc.GetAllItems("Actuators");
-		std::cout << array_actuators.size() << std::endl;
+		
+		//Receive Actuators
+		std::vector<std::string>  array_actuators = doc.GetAllItems("Actuators"); // read all XML data of sensors
 		i = 0;		
-		while(i<array_actuators.size())
+		while(i<array_actuators.size()) 
 		{
-			ros::Publisher pub  = nh.advertise<std_msgs::Float64>(array_actuators.at(i), 1);
-			pubarray.push_back(pub);	
+			ros::Publisher pub  = nh.advertise<std_msgs::Float64>(array_actuators.at(i), 1); // create puclisher
+			pubarray.push_back(pub); // save publisher	
 			i++;
 		}
 			
 
 		// Sensor Reader
-		data.name = "allsensors";
-		data.header.stamp = ros::Time::now();
-		data.header.frame_id = "1";
+		data.name = "allsensors"; // any name
+		data.header.stamp = ros::Time::now(); // insert Date time
+		data.header.frame_id = "1"; // any data
 		
 		// Control
-		Step_pub = nh.advertise<std_msgs::String>(doc.GetItem("TopicoStep"), 1);
-		Step();
-		configPlugin();
-		configPrint();
-		T = atoi(doc.GetItem("Sampletime").c_str());
+		Step_pub = nh.advertise<std_msgs::String>(doc.GetItem("TopicoStep"), 1); // name of Topic to inform Simulator run one more step time
+		Step(); // Step command
+		configPlugin(); // setup of dynamic library with control law
+		configPrint(); // setup of print the information of simulation
+		T = atoi(doc.GetItem("Sampletime").c_str()); // Save value of sampled time
 		
-		ros::spin();
+		ros::spin(); // put node in wait
 	}
+
+	// Sensor Callback
 	private: void Sensor(simulator_msgs::Sensor msg)
 	{
-		mtx.lock();
+		mtx.lock(); // lock mutex
 		cont++;
-		data.values[mapOfWords[msg.name]]=msg;
+		data.values[mapOfWords[msg.name]]=msg; // put the received data in exactly order
 		if(cont == subarray.size())
 		{
+			// if all received all sensors of one steptime, call control function
 			data.header.stamp = ros::Time::now();
 			control_law(data);
 			cont = 0;
@@ -123,13 +128,17 @@ class Controller2
 		mtx.unlock();	
 	}
 
+	// Printing setup
 	void configPrint()
 	{
+		// get localization of output file
 		if(std::getenv("TILT_MATLAB")==NULL) 
 		{
 			std::cout << "Problemas com TILT_MATLAB" << std::endl;
 			exit(1);
 		}
+		
+		// start files with input, output, error and reference data of simulation
 		std::string OutputPath = docmem.GetItem("Outputfile");
 		OutputPath = std::getenv("TILT_MATLAB") + OutputPath;
 		std::string InputPath = docmem.GetItem("InputPath");
@@ -144,40 +153,37 @@ class Controller2
 		erfile.startFile(ErroPath,"Erro");
 	}
 
-	
+	// control function
 	void control_law(simulator_msgs::SensorArray msg)
 	{
 		try
 		{
-			// Amostrando
+			// Sampling - each T step times is a new sampled time 
 			if (decimador % T == 0)
 			{
-				// se HIL
-					// enviar dados via uart (se ainda n enviou resposta, cancelar resposta)
-					// ativar thread para ler dados serial
-					// se voltou e reenviou novos dados, otimo
-					// se não enviar dados anteriores
 				out.clear();
-				out = controller->execute(msg);
+				out = controller->execute(msg); // run control law
 				outfile.printFile(out);
-				std::vector<double> ref = controller->Reference();
-				reffile.printFile(ref);
-				std::vector<double> err = controller->Error();
-				erfile.printFile(err);
-				std::vector<double> x = controller->State();
-				infile.printFile(x);
+				std::vector<double> ref = controller->Reference(); // read current reference
+				reffile.printFile(ref); // printing current reference
+				std::vector<double> err = controller->Error(); // read current error
+				erfile.printFile(err); // printing currente error
+				std::vector<double> x = controller->State(); // read curretn State
+				infile.printFile(x); // printing current state
 				decimador = 0;
 			}
 			decimador++;
-			//Segurador de Ordem Zero
+			//Zero order hold
 			if(pubarray.size() != out.size())
-			{
-				std::cout << "Valor de sinais de controle diferente do arquivo xml" << std::endl;
+			{ 
+				// checking if number of sensors received is the same configured in XML file 
+				std::cout << "Value of control signals other than the xml file" << std::endl;
 				exit(1);
 			}
 			else
 			{
 				int i = 0;
+				// send all actuators data to simulator
 				while(i < out.size())
 				{
 					std_msgs::Float64 msgout;
@@ -195,9 +201,9 @@ class Controller2
 		}
 	}
 
+	// Command to simulation step
 	void Step()
 	{
-		// Comando para passo de simulação
 		std_msgs::String msgpub;
 		std::stringstream ss;
 		ss << "GO" ;
@@ -205,6 +211,7 @@ class Controller2
 		Step_pub.publish(msgpub);
 	}
 
+	// insert control plugin with some control law	
 	void configPlugin()
 	{
 		destroy_t* destroy_obj = NULL;
@@ -233,6 +240,7 @@ class Controller2
 		controller->config();
 	}
 
+	// destructor
 	public:~Controller2()
 	{
 		outfile.endFile();

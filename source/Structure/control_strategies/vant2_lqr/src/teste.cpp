@@ -1,3 +1,13 @@
+/*
+* File: teste.cpp
+* Author: Arthur Viana Lara
+* Project: ProVANT
+* Company: Federal University of Minas Gerais
+* Version: 1.0
+* Date: 29/01/18
+* Description: This file is responsable to implement LQR control law to VANT2.0
+*/
+
 #include "Icontroller.hpp"
 #include<iostream>
 #include <Eigen/Eigen>
@@ -10,19 +20,25 @@ class teste : public Icontroller
 	private: Eigen::VectorXd Input;
 	private: Eigen::MatrixXd K;
 	private: Eigen::VectorXd X;
-	private: double T;
+	private: double T; // Sampled timr
 
+	// constructor
 	public: teste(): Xref(20), K(4,20), X(20), Erro(20), Input(4)
 	{ 
 		T = 0.012;
 	}
+	
+	// destructor
 	public: ~teste()
 	{
 		
 	}
+	
+	// initial configuration
 	public: void config()
 	{
 		
+		// control matrix
 		K << -0.000509474023994 ,  1.381002006541810 ,  2.044930990723325 , -4.098388643419657 ,  0.002544968427177 ,  0.065243786421189, -0.011997162152724 ,  0.012231188237446 , -0.000191109567030 ,  0.977046060078436  , 2.067519443836474 , -1.069820095142832,
 0.003981280957280 ,  0.048837474399233 , -0.000157117358773  , 0.000160465562387 , -0.000324184653490 ,  0.932396154093819,
 0.987708499654750 ,  0.029590812630684,
@@ -42,16 +58,18 @@ class teste : public Icontroller
 0.025908596148404,  -0.030981560936545  , 0.000723658016145  , 0.007155720063258  , 0.140489293081162 ,  0.032562443693621,
 0.000009316184096 , -0.021344301330953;
 
+		// reference
 		Xref << 0,0,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0;
 	}
 	public: std::vector<double> execute(simulator_msgs::SensorArray arraymsg)
 	{
+		// integrators variables
 		static double xint, x_ant = 0;
 		static double yint, y_ant = 0;
 		static double zint, z_ant = 0;
 		static double yawint, yaw_ant = 0;
 	
-		// selecionando dados
+		// get data
 		int i = 0;
 		simulator_msgs::Sensor msg;
 		while(true)
@@ -63,7 +81,7 @@ class teste : public Icontroller
 			i++;
 		}
 	
-		// Integrador Trapezoidal
+		// Trapezoidal Integrator
 		double x_atual = msg.values.at(0) - Xref(0);
 		xint = xint + (T/2)*(x_atual + x_ant);
 		x_ant = x_atual;
@@ -77,31 +95,56 @@ class teste : public Icontroller
 		yawint = yawint + (T/2)*(yaw_atual + yaw_ant);
 		yaw_ant = yaw_atual;
 		
-		X << msg.values.at(0), msg.values.at(1), msg.values.at(2), msg.values.at(3), msg.values.at(4), msg.values.at(5), msg.values.at(6), msg.values.at(7), msg.values.at(8), msg.values.at(9), msg.values.at(10), msg.values.at(11), msg.values.at(12), msg.values.at(13), msg.values.at(14), msg.values.at(15),xint,yint,zint,yawint;
+		// state vector
+		X << msg.values.at(0), // x
+		    msg.values.at(1), // y
+                    msg.values.at(2), // z
+		    msg.values.at(3), // roll
+		    msg.values.at(4), // pitch
+		    msg.values.at(5), // yaw
+		    msg.values.at(6), // aR
+		    msg.values.at(7), // aL
+		    msg.values.at(8), // dx
+		    msg.values.at(9), // dy
+		    msg.values.at(10),// dz 
+		    msg.values.at(11),// droll 
+		    msg.values.at(12),// dpitch 
+		    msg.values.at(13),// dyaw 
+		    msg.values.at(14),// daR 
+		    msg.values.at(15),// daL
+		    xint, // x integrator
+		    yint, // y integrator
+		    zint, // z integrator
+		    yawint; // yaw integrator
 
+		// control law
 		Erro = X-Xref;
 		Input = -K*Erro;
 
 		// Feedforward
 		Input(0) = Input(0) + 10.2751;
 		Input(1) = Input(1) + 10.2799;
-
+		
+		// output
 		std::vector<double> out(Input.data(), Input.data() + Input.rows() * Input.cols());
 		return out;
 	}
 
+	// reference data
 	public: std::vector<double> Reference()
 	{
 		std::vector<double> out(Xref.data(), Xref.data() + Xref.rows() * Xref.cols());
 		return out;
 	}
 
+	// error data
 	public: std::vector<double> Error()
 	{
 		std::vector<double> out(Erro.data(), Erro.data() + Erro.rows() * Erro.cols());
 		return out;
 	}	
 
+	// state data
 	public: std::vector<double> State()
 	{
 		std::vector<double> out(X.data(), X.data() + X.rows() * X.cols());
@@ -110,6 +153,7 @@ class teste : public Icontroller
 		
 };
 
+// to implement plugin
 extern "C"
 { 
 	Icontroller *create(void) {

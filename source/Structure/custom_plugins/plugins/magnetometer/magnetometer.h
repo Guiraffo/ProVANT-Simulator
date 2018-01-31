@@ -1,3 +1,14 @@
+/*
+* File: magnetometer.h
+* Author: Arthur Viana Lara
+* Project: ProVANT
+* Company: Federal University of Minas Gerais
+* Version: 1.0
+* Date: 29/01/18
+* Description:  This library is responsable to implement magnetometer. It gets information from Gazebo and quantizes the data.
+*/
+
+
 #ifndef _GAZEBO_GPS_PLUGIN_HH_
 #define _GAZEBO_GPS_PLUGIN_HH_
 
@@ -12,41 +23,27 @@
 #include "XMLRead.h"
 
 
-
-
 namespace gazebo
 {
-  /// \brief An example plugin for a contact sensor.
   class magnetometer : public ModelPlugin
   {
-    /// \brief Constructor.
+    // constructor
     public: magnetometer();
-
-    /// \brief Destructor.
+    /// destructor.
     public: virtual ~magnetometer();
-
-    /// \brief Load the sensor plugin.
-    /// \param[in] _sensor Pointer to the sensor that loaded this plugin.
-    /// \param[in] _sdf SDF element that describes the plugin.
+    // initial setup 
     public: virtual void Load(physics::ModelPtr _model, sdf::ElementPtr _sdf);
-
-    /// \brief Callback that receives the contact sensor's update signal.
+    // Callback that receives the magnetometer sensor's update signal.
     private: void OnUpdate(ConstMagnetometerPtr&);
-
-
+    //pointer to the world 
     physics::WorldPtr world;
-
-
-    private: std::string gazebotopic;
-    private: std::string rostopic;
-    private: double Nbits;
-    private: transport::SubscriberPtr sub;
-    private: transport::NodePtr node;
-    physics::ModelPtr model;
-
-    ros::NodeHandle n;
-    ros::Publisher publisher_;
-
+    private: std::string gazebotopic; // name of Gazebo's topic
+    private: std::string rostopic; // name of ROS's topic
+    private: transport::SubscriberPtr sub; // ROS subscriber
+    private: transport::NodePtr node; // Gazebo's node handle
+    physics::ModelPtr model; // pounter to the model
+    ros::NodeHandle n; // ROS's node handle
+    ros::Publisher publisher_; // publisher
   };
 }
 #endif
