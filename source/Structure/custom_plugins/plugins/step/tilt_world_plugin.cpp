@@ -15,6 +15,7 @@
 #include "gazebo/msgs/msgs.hh"
 #include <gazebo/physics/World.hh>
 #include "std_msgs/String.h"
+#include "XMLRead.h"
 
 namespace gazebo
 {
@@ -40,18 +41,24 @@ class WorldPluginTutorial : public WorldPlugin
 
   	void Load(physics::WorldPtr _world, sdf::ElementPtr _sdf)
   	{
-                // the world starts paused  
-		_world->SetPaused(true);                                                              
-    		if (!ros::isInitialized())
-    		{
-      			ROS_FATAL_STREAM("A ROS node for Gazebo has not been initialized, unable to load plugin. "
-        			<< "Load the Gazebo system plugin 'libgazebo_ros_api_plugin.so' in the gazebo_ros package)");
-      			return;
-    		}	
-
+                                                                             
+    	if (!ros::isInitialized())
+    	{
+      		ROS_FATAL_STREAM("A ROS node for Gazebo has not been initialized, unable to load plugin. "
+        		<< "Load the Gazebo system plugin 'libgazebo_ros_api_plugin.so' in the gazebo_ros package)");
+      		return;
+    	}
+    	std::string s = "hil"; 	
+    	_world->SetPaused(true); // Get name of the joint
+		if(XMLRead::ReadXMLString("ok",_sdf) != "hil")
+		{
 		// subscriber to receive signals of steptime
 		sub = n.subscribe("Step", 1, &gazebo::WorldPluginTutorial::chatterCallback,this);
+		// the world starts paused  
+		}
+		
 		objeto = _world; // save world's pointer
+		
   	}
 };
 GZ_REGISTER_WORLD_PLUGIN(WorldPluginTutorial)

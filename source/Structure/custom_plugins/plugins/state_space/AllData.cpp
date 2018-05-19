@@ -41,6 +41,7 @@ namespace gazebo
 	{	
 		try
 		{
+			std::cout << "entrei";
 	    		if (!ros::isInitialized())
 	    		{
 				ROS_INFO("Nao inicializado!");

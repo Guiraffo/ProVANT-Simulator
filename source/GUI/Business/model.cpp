@@ -8,32 +8,32 @@ Model::Model()
 
 void Model::getTemplate(std::string template_filename,QTreeWidget* root)
 {
-    lastmodel = actualmodel;
-    templatemodel = new ModelFile(template_filename);
-    actualmodel = templatemodel;
-    actualmodel->Read();
-    ToTreeWidget(root);
+    //lastmodel = actualmodel;
+    //templatemodel = new ModelFile(template_filename);
+    //actualmodel = templatemodel;
+    //actualmodel->Read();
+    //ToTreeWidget(root);
 }
 void Model::getLast(QTreeWidget* root)
 {
-    actualmodel = lastmodel;
-    ToTreeWidget(root);
+    //actualmodel = lastmodel;
+    //ToTreeWidget(root);
 }
 void Model::getFirst(std::string first_filename,QTreeWidget*root)
 {
-    lastmodel = actualmodel;
-    firstmodel = new ModelFile(first_filename);
-    actualmodel = firstmodel;
-    actualmodel->Read();
+    //lastmodel = actualmodel;
+    model = new ModelFile(first_filename);
+    //actualmodel = firstmodel;
+    model->Read();
     ToTreeWidget(root);
 }
 void Model::getActual(QTreeWidget* root)
 {
-    ToTreeWidget(root);
+    //ToTreeWidget(root);
 }
 void Model::Write(QTreeWidget* root)
 {
-    ModelFile* newModel;
+    /*ModelFile* newModel;
     std::vector<link_DA> newListlink;
     std::vector<joint_DA> newListjoint;
     std::vector<ModelPlugin> newListplugin;
@@ -300,7 +300,7 @@ void Model::Write(QTreeWidget* root)
     }
 
     actualmodel = newModel;
-    //actualmodel->print();
+    //actualmodel->print();*/
 
 }
 void Model::ToTreeWidget(QTreeWidget* root)
@@ -310,8 +310,8 @@ void Model::ToTreeWidget(QTreeWidget* root)
     QTreeWidgetItem* element;
     QTreeWidgetItem* poseElement;
 
-    element = TreeItens::AddRoot("Filename",actualmodel->filename.c_str(),root);
-    std::vector<link_DA> links = actualmodel->model.GetListsLinks();
+    element = TreeItens::AddRoot("Filename",model->filename.c_str(),root);
+    std::vector<link_DA> links = model->model.GetListsLinks();
     for(uint i = 0; i < links.size(); i++)
     {
         QTreeWidgetItem* elementLink = TreeItens::AddRoot("Link","",root);
@@ -348,7 +348,7 @@ void Model::ToTreeWidget(QTreeWidget* root)
         TreeItens::AddChild(element,"Specular",links.at(i).visual.material.GetSpecular().c_str());
     }
 
-    std::vector<joint_DA> joints = actualmodel->model.GetListsJoints();
+    std::vector<joint_DA> joints = model->model.GetListsJoints();
     for(uint i = 0; i < joints.size(); i++)
     {
          element = TreeItens::AddRoot("Joint","",root);
@@ -382,7 +382,7 @@ void Model::ToTreeWidget(QTreeWidget* root)
              TreeItens::AddChild(Axis2Element,"Limit velocity",joints.at(i).two->velocity);
          }
     }
-    std::vector<ModelPlugin> plugins = actualmodel->model.GetListsPlugins();
+    std::vector<ModelPlugin> plugins = model->model.GetListsPlugins();
     for(uint i = 0; i < plugins.size(); i++)
     {
         element = TreeItens::AddRoot("Plugin","",root);
@@ -393,7 +393,7 @@ void Model::ToTreeWidget(QTreeWidget* root)
             TreeItens::AddChild(element,plugins.at(i).parameters.at(j),plugins.at(i).values.at(j));
         }
     }
-    std::vector<sensor> sensors = actualmodel->model.ListsSensors;
+    std::vector<sensor> sensors = model->model.ListsSensors;
     for(uint i = 0; i < sensors.size(); i++)
     {
         element = TreeItens::AddRoot("Sensor","",root);

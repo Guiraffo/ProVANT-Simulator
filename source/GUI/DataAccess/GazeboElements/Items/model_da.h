@@ -24,7 +24,7 @@ public:
     void AddJoint(joint_DA data);
     void DeletePlugin(int);
 
-    void Write(QXmlStreamWriter*);
+    void Write(QXmlStreamWriter);
     void Read(QDomNode);
     void print();
 

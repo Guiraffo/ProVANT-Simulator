@@ -59,7 +59,7 @@ class teste : public Icontroller
 0.000009316184096 , -0.021344301330953;
 
 		// reference
-		Xref << 0,0,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0;
+		Xref << 2,0,1.7,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0;
 	}
 	public: std::vector<double> execute(simulator_msgs::SensorArray arraymsg)
 	{

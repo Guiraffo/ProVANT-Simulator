@@ -6,7 +6,9 @@
             <max_step_size>0.0001000</max_step_size>
             <real_time_factor>0</real_time_factor>
         </physics>
-        <plugin name="gazebo_tutorials" filename="libgazebo_ros_world_plugin.so"/>
+        <plugin name="gazebo_tutorials" filename="libgazebo_ros_world_plugin.so">
+            <ok>nothil</ok>
+        </plugin>
         <include>
             <uri>model://ground_plane</uri>
             <static>false</static>

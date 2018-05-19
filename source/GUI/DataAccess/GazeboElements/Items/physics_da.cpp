@@ -15,14 +15,14 @@ std::string physics_DA::GetRealTimeUpdaterate(){return real_time_update_rate;}
 void physics_DA::SetRealTimeUpdaterate(std::string value){real_time_update_rate = value;}
 
 
-void physics_DA::Write(QXmlStreamWriter* xml)
+void physics_DA::Write(QXmlStreamWriter xml)
 {
-    xml->writeStartElement("physics");
-    xml->writeAttribute("type",type.c_str());
-    xml->writeTextElement("max_step_size",step.c_str());
-    xml->writeTextElement("real_time_factor",real_time_factor.c_str());
-    if(real_time_update_rate.size()!=0)xml->writeTextElement("real_time_update_rate",real_time_update_rate.c_str());
-    xml->writeEndElement();
+    xml.writeStartElement("physics");
+    xml.writeAttribute("type",type.c_str());
+    xml.writeTextElement("max_step_size",step.c_str());
+    xml.writeTextElement("real_time_factor",real_time_factor.c_str());
+    if(real_time_update_rate.size()!=0)xml.writeTextElement("real_time_update_rate",real_time_update_rate.c_str());
+    xml.writeEndElement();
 }
 
 void physics_DA::Read(QDomNode document)

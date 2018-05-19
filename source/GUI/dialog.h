@@ -33,6 +33,8 @@ public:
     void setModel(std::string,std::string); //! método que adquire os nomes e caminhos dos arquivos de descrção física e do controlador
     ~Dialog();
 
+    bool hil = false;
+
 private slots:
 
     void on_pushButton_5_clicked(); // criando novo projeto de estratégia de controle
@@ -52,6 +54,9 @@ private slots:
     void on_buttonBox_accepted(); // botão de ok
 
     void SaveConfig(); // salvando dados no arquivo de configuração
+
+    void on_checkBox_clicked(bool checked);
+
 
 protected:
     Ui::Dialog *ui;

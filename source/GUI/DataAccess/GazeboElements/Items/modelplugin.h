@@ -6,12 +6,11 @@ class ModelPlugin: public plugin_DA
 {
 public:
     ModelPlugin();
-    bool Read(QDomNode*);
-    void Write(QXmlStreamWriter*);
+    QDomNode Read(QDomNode);
+    void Write(QXmlStreamWriter);
     void print();
 
-    std::vector<std::string> parameters;
-    std::vector<std::string> values;
+
 };
 
 #endif // MODELPLUGIN_H

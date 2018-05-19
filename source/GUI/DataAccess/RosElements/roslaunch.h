@@ -9,7 +9,7 @@ class roslaunch
 {
 public:
     roslaunch();
-    static void WriteNew(QString);
+    static void WriteNew(QString,QString,bool);
 };
 
 #endif // ROSLAUNCH_H

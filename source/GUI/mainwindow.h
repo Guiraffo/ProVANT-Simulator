@@ -9,6 +9,14 @@
 #include "qdebug.h"
 #include "Business/world.h"
 #include "Business/model.h"
+#include "DataAccess/RosElements/roslaunch.h"
+#include "dialog.h"
+#include "dialognewmodel.h"
+#include "aboutdialog.h"
+//#include "qdebug.h"
+
+#include "Utils/tools.h"
+
 
 namespace Ui {
 class MainWindow;
@@ -33,6 +41,7 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
+    bool hil = false;
 
 private slots:
     /*
@@ -85,6 +94,9 @@ private slots:
      */
     void on_actionNew_2_triggered();
 
+    /*
+     *       Mais informações sobre ProVANT
+     */
     void on_actionAbout_ProVANT_Simulator_triggered();
 
 protected:
@@ -93,7 +105,6 @@ protected:
 private:
     world mundo; // classe para leitura e escrita de dados do cenário
     Model model; // classe para leitura e escrita de dados do cenário
-
     bool istemplate; // variável que armazena a informação sobre o cenário aberto é um template
 };
 

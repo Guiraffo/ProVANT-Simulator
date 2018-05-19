@@ -14,7 +14,7 @@ public:
     void SetRealTimeFactor(std::string);
     std::string GetRealTimeUpdaterate();
     void SetRealTimeUpdaterate(std::string);
-    void Write(QXmlStreamWriter*);
+    void Write(QXmlStreamWriter);
     void Read(QDomNode);
     void print();
 private:

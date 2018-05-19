@@ -11,7 +11,7 @@ class link_DA
 public:
     link_DA();
     bool Read(QDomNode*);
-    void Write(QXmlStreamWriter*,int,std::vector<sensor>);
+    void Write(QXmlStreamWriter,int,std::vector<sensor>);
     void print();
 
     std::string name;

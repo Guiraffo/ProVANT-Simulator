@@ -21,12 +21,10 @@ catkin_make --pkg simulator_msgs
 catkin_make
 
 mkdir -p ${TILT_PROJECT}/source/build
-cd ${TILT_PROJECT}/source/build
+cd ${TILT_PROJECT}/source/build 
 qmake ${TILT_PROJECT}/source/GUI/GUI.pro -r -spec linux-g++ CONFIG+=debug CONFIG+=qml_debug
-if sudo ln -s ${TILT_PROJECT}/source/build/GUI /usr/local/bin/provant_gui
-then
-	rm  /usr/local/bin/provant_gui
-	sudo ln -s ${TILT_PROJECT}/source/build/GUI /usr/local/bin/provant_gui
-fi
+make
+
+sudo ln -s ${TILT_PROJECT}/source/build/GUI /usr/local/bin/provant_gui
 
 # Change the name of directory from ProVANT-Simulator_Developer to ProVANT-Simulator before compiling
