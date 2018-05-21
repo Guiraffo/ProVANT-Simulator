@@ -12,7 +12,6 @@ void multipleplugins::NewPlugin(plugin_DA item){
 
 void multipleplugins::Read(QDomNode document){
 
-    qDebug() << "multipleplugins::Read";
 
     Clear();
 
@@ -34,7 +33,6 @@ void multipleplugins::Read(QDomNode document){
                 item.values.push_back(list.at(i).toElement().text().toStdString());
             }
             NewPlugin(item);
-            qDebug() << "MultipleIncludes::nextSiblingElement";
             document = document.nextSiblingElement("plugin");
         }else break;
 

@@ -34,14 +34,14 @@ bool WorldFile::Read()
                                 .toStdString();
                 QDomNode itens = doc.firstChildElement("sdf")
                                     .firstChildElement("world");
-                qDebug() << "worlfile1";
+
 
                 g.Read(itens);
                 physics.Read(itens);
                 listIncludes.Read(itens);
                 listPlugins.Read(itens);
                 sceneObj.Read(itens);
-                qDebug() << "worlfile5";
+
 
             }
             else
@@ -76,8 +76,6 @@ bool WorldFile::Read()
 void WorldFile::Write()
 {
 
-    print();
-    qDebug() << "ok";
     if(file.open(QIODevice::ReadWrite|QIODevice::Truncate))
     {
         QXmlStreamWriter xml;

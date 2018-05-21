@@ -30,22 +30,18 @@ void world::getActual(QTreeWidget* root)
 void world::Write(QTreeWidget* root)
 {
 
-    qDebug() << "world::Write";
 
     Include_DA* include;
     plugin_DA* plugin;
-    qDebug() << "world::Write";
     WorldFile* newMundo;
     newMundo = new WorldFile(this->word->Filename);
     newMundo->sdfVersion = word->sdfVersion;
-    qDebug() << "world::Write";
     for(int i = 0; i< root->topLevelItemCount();i++)
     {
         QTreeWidgetItem* item = root->topLevelItem(i);
         if(item->text(0)=="Physics")
         {
-             qDebug() << "world::Write";
-            physics_DA physics;
+             physics_DA physics;
             if (item->child(0)->text(1).toStdString()!="ode"
                 &&item->child(0)->text(1).toStdString()!="bullet"
                 &&item->child(0)->text(1).toStdString()!="simbody"
@@ -73,7 +69,6 @@ void world::Write(QTreeWidget* root)
         }
         if(item->text(0)=="Gravity")
         {
-             qDebug() << "world::Write";
             gravity_DA gravity;
             bool ok,ok2,ok3;
             std::string gravString = item->child(0)->text(1).toStdString()
@@ -96,20 +91,16 @@ void world::Write(QTreeWidget* root)
         }
         if(item->text(0)=="Plugin")
         {
-             qDebug() << "world::Write";
-            plugin = new plugin_DA();
+             plugin = new plugin_DA();
             plugin->SetFilename(item->child(1)->text(1).toStdString());
             plugin->SetName(item->child(0)->text(1).toStdString());
             plugin->parameters.push_back(item->child(2)->text(0).toStdString());
             plugin->values.push_back(item->child(2)->text(1).toStdString());
             newMundo->listPlugins.multipleItens.push_back(*plugin);
-            qDebug() << "TESTE -------------------------------";
-            plugin->print();
         }
 
         if(item->text(0)=="Include")
         {
-            qDebug() << "entrei 2";
             include = new Include_DA;
             include->SetName(item->child(0)->text(1).toStdString());
             if(item->child(1)->childCount()!=0)
@@ -143,7 +134,6 @@ void world::Write(QTreeWidget* root)
             include->SetUri(item->child(3)->text(1).toStdString());
 
             newMundo->listIncludes.NewInclude(*include);
-            qDebug() << "entrei 2 fim";
         }
     }
     newMundo->Filename = this->word->Filename;
@@ -152,7 +142,6 @@ void world::Write(QTreeWidget* root)
 }
 void world::ToTreeWidget(QTreeWidget* root)
 {
-    qDebug() << "world::ToTreeWidget";
     QTreeWidgetItem* elementPose;
     QTreeWidgetItem* edit;
 
@@ -177,7 +166,6 @@ void world::ToTreeWidget(QTreeWidget* root)
             result += str;
         }
     }
-    qDebug() << "aqui 1 ";
     edit = TreeItens::AddChild(element,"X",result.at(0).toStdString());
     edit->setFlags(Qt::ItemIsEditable|Qt::ItemIsEnabled);
     edit = TreeItens::AddChild(element,"Y",result.at(1).toStdString());
@@ -190,11 +178,9 @@ void world::ToTreeWidget(QTreeWidget* root)
     edit->setFlags(Qt::ItemIsEditable|Qt::ItemIsEnabled);
     TreeItens::AddChild(element,"Step time",word->GetPhysics().GetStep());
     edit = TreeItens::AddChild(element,"Real time factor",word->GetPhysics().GetRealTimeFactor());
-    //edit->setFlags(Qt::ItemIsEditable|Qt::ItemIsEnabled);
     edit = TreeItens::AddChild(element,"Real time update rate",word->GetPhysics().GetRealTimeUpdaterate());
-    //edit->setFlags(Qt::ItemIsEditable|Qt::ItemIsEnabled);
     //
-     qDebug() << "aqui 2";
+
 
 
     std::vector<plugin_DA> listplugins = word->listPlugins.multipleItens;
@@ -252,7 +238,6 @@ void world::ToTreeWidget(QTreeWidget* root)
 
           }
     }
-     qDebug() << "world::ToTreeWidget";
 }
 
 void world::splitvector(std::string data,QTreeWidgetItem* Element)

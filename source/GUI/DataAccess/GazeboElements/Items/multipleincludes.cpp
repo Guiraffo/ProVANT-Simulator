@@ -28,7 +28,6 @@ void MultipleIncludes::Read(QDomNode document)
                                .text().toStdString());
 
                 NewInclude(item);
-                qDebug() << "MultipleIncludes::nextSiblingElement";
                 document = document.nextSiblingElement("include");
             }else break;
 

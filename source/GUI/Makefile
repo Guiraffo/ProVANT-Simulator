@@ -14,7 +14,7 @@ CC            = gcc
 CXX           = g++
 DEFINES       = -DQT_QML_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_CORE_LIB
 CFLAGS        = -pipe -g -Wall -W -D_REENTRANT -fPIC $(DEFINES)
-CXXFLAGS      = -pipe -g -Wall -W -D_REENTRANT -fPIC $(DEFINES)
+CXXFLAGS      = -pipe -g -std=c++0x -Wall -W -D_REENTRANT -fPIC $(DEFINES)
 INCPATH       = -I. -isystem /usr/include/x86_64-linux-gnu/qt5 -isystem /usr/include/x86_64-linux-gnu/qt5/QtWidgets -isystem /usr/include/x86_64-linux-gnu/qt5/QtGui -isystem /usr/include/x86_64-linux-gnu/qt5/QtXml -isystem /usr/include/x86_64-linux-gnu/qt5/QtCore -I. -I. -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++
 QMAKE         = /usr/lib/x86_64-linux-gnu/qt5/bin/qmake
 DEL_FILE      = rm -f
@@ -205,6 +205,7 @@ DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/default_pre.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/resolve_config.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/default_post.prf \
+		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/c++11.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/qml_debug.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/warn_on.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/qt.prf \
@@ -394,6 +395,7 @@ Makefile: GUI.pro /usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++/qmake.conf /us
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/default_pre.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/resolve_config.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/default_post.prf \
+		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/c++11.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/qml_debug.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/warn_on.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/qt.prf \
@@ -490,6 +492,7 @@ Makefile: GUI.pro /usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++/qmake.conf /us
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/default_pre.prf:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/resolve_config.prf:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/default_post.prf:
+/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/c++11.prf:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/qml_debug.prf:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/warn_on.prf:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/qt.prf:
@@ -582,6 +585,9 @@ moc_mainwindow.cpp: ui_mainwindow.h \
 		dialognewcontroller.h \
 		DataAccess/ControllerElements/newstrategy.h \
 		dialogopencontroller.h \
+		dialognewmodel.h \
+		mainwindow.h \
+		aboutdialog.h \
 		Utils/tools.h \
 		Utils/environmentexception.h \
 		mainwindow.h
@@ -652,6 +658,8 @@ moc_dialognewmodel.cpp: mainwindow.h \
 		dialognewcontroller.h \
 		DataAccess/ControllerElements/newstrategy.h \
 		dialogopencontroller.h \
+		dialognewmodel.h \
+		aboutdialog.h \
 		Utils/tools.h \
 		Utils/environmentexception.h \
 		dialognewmodel.h
@@ -727,6 +735,8 @@ main.o: main.cpp mainwindow.h \
 		dialognewcontroller.h \
 		DataAccess/ControllerElements/newstrategy.h \
 		dialogopencontroller.h \
+		dialognewmodel.h \
+		aboutdialog.h \
 		Utils/tools.h \
 		Utils/environmentexception.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o main.cpp
@@ -765,6 +775,8 @@ mainwindow.o: mainwindow.cpp mainwindow.h \
 		dialognewcontroller.h \
 		DataAccess/ControllerElements/newstrategy.h \
 		dialogopencontroller.h \
+		dialognewmodel.h \
+		aboutdialog.h \
 		Utils/tools.h \
 		Utils/environmentexception.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mainwindow.o mainwindow.cpp
@@ -988,6 +1000,7 @@ dialognewmodel.o: dialognewmodel.cpp dialognewmodel.h \
 		dialognewcontroller.h \
 		DataAccess/ControllerElements/newstrategy.h \
 		dialogopencontroller.h \
+		aboutdialog.h \
 		Utils/tools.h \
 		Utils/environmentexception.h \
 		ui_dialognewmodel.h

@@ -13,6 +13,7 @@
 #include "dialog.h"
 #include "dialognewmodel.h"
 #include "aboutdialog.h"
+#include <libusb-1.0/libusb.h>
 //#include "qdebug.h"
 
 #include "Utils/tools.h"

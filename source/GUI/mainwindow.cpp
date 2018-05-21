@@ -3,6 +3,7 @@
 // Data: 18/05/2018
 
 #include "mainwindow.h"
+#include <fcntl.h>
 
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow)
@@ -92,8 +93,21 @@ void MainWindow::on_pushButton_clicked()
         {
             std::system("kill `pgrep gzclient`");
             std::system("kill  `pgrep gzserver`");
-            //std::system("setserial /dev/ttyUSB0 low_latency");
-            //std::system("setserial /dev/ttyUSB1 low_latency");
+
+            // verificar se o dispositivo está conectado em /dev/ttyUSB0
+            int open_result = open("/dev/ttyUSB0", O_RDWR | O_NOCTTY);
+            if(open_result == -1)
+            {
+                qDebug() << "Port Failed to Open";
+                exit(EXIT_FAILURE);
+            }
+            else
+            {
+                std::system("setserial /dev/ttyUSB0 low_latency");
+            }
+
+
+
 
             base = QString("hil.launch");
         }
@@ -237,7 +251,6 @@ void MainWindow::on_treeWidget_itemDoubleClicked(QTreeWidgetItem *item, int colu
                 modelsetup.exec();
                 hil = modelsetup.hil;
                 QString s = QString::number(hil);
-                qDebug() << s.toLatin1();
 
                 if(hil)
                 {
@@ -254,9 +267,7 @@ void MainWindow::on_treeWidget_itemDoubleClicked(QTreeWidgetItem *item, int colu
                             item->child(2)->setText(1, QString::fromStdString(description2));
                             std::string description3 = "250"; // update
                             item->child(3)->setText(1, QString::fromStdString(description3));
-                            qDebug() << item->child(1)->text(1);
-                            qDebug() << item->child(2)->text(1);
-                            qDebug() << item->child(3)->text(1);
+
                         }
                         if(item->text(0)=="Plugin")
                         {
@@ -331,7 +342,6 @@ void MainWindow::on_actionOpen_triggered()
 {
     try
     {
-        qDebug() << "MainWindow::on_actionOpen_triggered ---------------------------------------------";
         hil = false;
         QString env(getenv( "PROVANT_DATABASE" ));
         env = env + "/worlds/worlds";
