@@ -276,6 +276,29 @@ void MainWindow::on_treeWidget_itemDoubleClicked(QTreeWidgetItem *item, int colu
                     }
 
                 }
+                else
+                {
+                    // Setando valores padronizados da simumlação para permitir bom
+                    // funcionamento do HIL
+                    for(int i = 0; i< ui->treeWidget->topLevelItemCount();i++)
+                    {
+                        QTreeWidgetItem* item = ui->treeWidget->topLevelItem(i);
+                        /*if(item->text(0)=="Physics")
+                        {
+                            std::string description = "0.004"; // step time
+                            item->child(1)->setText(1, QString::fromStdString(description));
+                            std::string description2 = "1"; // fator de tempo real
+                            item->child(2)->setText(1, QString::fromStdString(description2));
+                            std::string description3 = "250"; // update
+                            item->child(3)->setText(1, QString::fromStdString(description3));
+
+                        }*/
+                        if(item->text(0)=="Plugin")
+                        {
+                            item->child(2)->setText(1, QString("hil"));
+                        }
+                    }
+                }
 
             }
         }
