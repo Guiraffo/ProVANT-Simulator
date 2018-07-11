@@ -2,7 +2,7 @@
 <config>
     <topicdata>data</topicdata>
     <TopicoStep>Step</TopicoStep>
-    <Sampletime>12</Sampletime>
+    <Sampletime>3</Sampletime>
     <Strategy>libvant2_lqr.so</Strategy>
     <RefPath>ref.txt</RefPath>
     <Outputfile>out.txt</Outputfile>

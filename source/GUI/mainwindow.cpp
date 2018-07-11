@@ -105,10 +105,6 @@ void MainWindow::on_pushButton_clicked()
             {
                 std::system("setserial /dev/ttyUSB0 low_latency");
             }
-
-
-
-
             base = QString("hil.launch");
         }
         else base = QString ("gazebo.launch");
@@ -295,7 +291,7 @@ void MainWindow::on_treeWidget_itemDoubleClicked(QTreeWidgetItem *item, int colu
                         }*/
                         if(item->text(0)=="Plugin")
                         {
-                            item->child(2)->setText(1, QString("hil"));
+                            item->child(2)->setText(1, QString("nothil"));
                         }
                     }
                 }
@@ -365,7 +361,6 @@ void MainWindow::on_actionOpen_triggered()
 {
     try
     {
-        hil = false;
         QString env(getenv( "PROVANT_DATABASE" ));
         env = env + "/worlds/worlds";
         // escolhe do arquivo .world
@@ -410,6 +405,9 @@ void MainWindow::on_actionOpen_triggered()
         // adicionando dados na árvore de dados
         mundo.getFirst(filename.toStdString(),ui->treeWidget);
         // habilitando funções de menuu e inicialização da interface
+
+        hil = false;
+
         ui->actionSave->setEnabled(true);
         ui->menuEdit->setEnabled(true);
         ui->actionSave->setEnabled(true);

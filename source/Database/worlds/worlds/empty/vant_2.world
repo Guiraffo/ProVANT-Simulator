@@ -8,7 +8,7 @@
             <real_time_update_rate>250</real_time_update_rate>
         </physics>
         <plugin name="gazebo_tutorials" filename="libgazebo_ros_world_plugin.so">
-            <ok>hil</ok>
+            <ok>nothil</ok>
         </plugin>
         <include>
             <uri>model://ground_plane</uri>
