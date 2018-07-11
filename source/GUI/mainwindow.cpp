@@ -119,7 +119,7 @@ void MainWindow::on_pushButton_clicked()
             {
                 mundo.Write(ui->treeWidget); // salvar modificações no mesmo arquivo de destino
                 roslaunch::WriteNew(QString::fromStdString(mundo.word->Filename),base,hil); // configurando rotina de inicilização do simulador
-                base = "roslaunch Database " + base;
+                base = "xterm -e roslaunch Database " + base + " &";
                 std::system(base.toStdString().c_str()); // comando de inicializar simulação
             }
         }
@@ -127,7 +127,7 @@ void MainWindow::on_pushButton_clicked()
         {
             mundo.Write(ui->treeWidget); // salvar modificações no mesmo arquivo de destino
             roslaunch::WriteNew(QString::fromStdString(mundo.word->Filename),base,hil); // configurando rotina de inicilização do simulador
-            base = "roslaunch Database " + base;
+            base = "xterm -e roslaunch Database " + base + " &";
             std::system(base.toStdString().c_str()); // comando de inicializar simulação
         }
     }

@@ -19,7 +19,7 @@
                 <pose>0 0 0 0 0 0</pose>
                 <geometry>
                     <mesh>
-                        <uri>model://vant_2.0/meshes/servodir.STL</uri>
+                        <uri>model://vant_2/meshes/servodir.STL</uri>
                     </mesh>
                 </geometry>
             </collision>
@@ -27,7 +27,7 @@
                 <pose>0 0 0 0 0 0</pose>
                 <geometry>
                     <mesh>
-                        <uri>model://vant_2.0/meshes/servodir.STL</uri>
+                        <uri>model://vant_2/meshes/servodir.STL</uri>
                     </mesh>
                 </geometry>
                 <material>
@@ -56,7 +56,7 @@
                 <pose>0 0 0 0 0 0</pose>
                 <geometry>
                     <mesh>
-                        <uri>model://vant_2.0/meshes/servoesq.STL</uri>
+                        <uri>model://vant_2/meshes/servoesq.STL</uri>
                     </mesh>
                 </geometry>
             </collision>
@@ -64,7 +64,7 @@
                 <pose>0 0 0 0 0 0</pose>
                 <geometry>
                     <mesh>
-                        <uri>model://vant_2.0/meshes/servoesq.STL</uri>
+                        <uri>model://vant_2/meshes/servoesq.STL</uri>
                     </mesh>
                 </geometry>
                 <material>
@@ -93,7 +93,7 @@
                 <pose>0 0 0 0 0 0</pose>
                 <geometry>
                     <mesh>
-                        <uri>model://vant_2.0/meshes/corpo.STL</uri>
+                        <uri>model://vant_2/meshes/corpo.STL</uri>
                     </mesh>
                 </geometry>
             </collision>
@@ -101,7 +101,7 @@
                 <pose>0 0 0 0 0 0</pose>
                 <geometry>
                     <mesh>
-                        <uri>model://vant_2.0/meshes/corpo.STL</uri>
+                        <uri>model://vant_2/meshes/corpo.STL</uri>
                     </mesh>
                 </geometry>
                 <material>

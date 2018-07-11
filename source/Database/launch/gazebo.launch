@@ -6,7 +6,7 @@
 	<arg name="debug" default="false"/>
 
 	<include file="$(find Database)/launch/empty_world.launch">
-		<arg name="world_name" value="/home/macro/catkin_ws/src/ProVANT-Simulator_Developer/source/Database/worlds/worlds/empty/vant2.world"/>
+		<arg name="world_name" value="/home/arthur/catkin_ws/src/ProVANT-Simulator_Developer/source/Database/worlds/worlds/empty/vant_2.world"/>
 		<arg name="debug" value="$(arg debug)" />
 		<arg name="gui" value="$(arg gui)" />
 		<arg name="paused" value="$(arg paused)"/>

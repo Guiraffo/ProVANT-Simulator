@@ -55,7 +55,7 @@ SOURCES += main.cpp\
     aboutdialog.cpp \
     DataAccess/GazeboElements/Items/multipleincludes.cpp \
     DataAccess/GazeboElements/Items/multipleplugins.cpp
-    Utils/tools.cpp
+    #Utils/tools.cpp
 
 HEADERS  += mainwindow.h \
     DataAccess/ControllerElements/configfile.h \
