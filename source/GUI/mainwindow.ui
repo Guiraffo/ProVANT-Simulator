@@ -37,9 +37,9 @@
    <widget class="QPushButton" name="pushButton">
     <property name="geometry">
      <rect>
-      <x>720</x>
-      <y>390</y>
-      <width>121</width>
+      <x>730</x>
+      <y>340</y>
+      <width>181</width>
       <height>41</height>
      </rect>
     </property>
@@ -106,6 +106,19 @@
      <string/>
     </property>
    </widget>
+   <widget class="QPushButton" name="pushButton_2">
+    <property name="geometry">
+     <rect>
+      <x>730</x>
+      <y>390</y>
+      <width>181</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Initial values of joints</string>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
@@ -113,7 +126,7 @@
      <x>0</x>
      <y>0</y>
      <width>939</width>
-     <height>25</height>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuSimulation">

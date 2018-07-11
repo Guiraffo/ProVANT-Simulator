@@ -20,6 +20,8 @@ cd catkin_ws
 catkin_make --pkg simulator_msgs
 catkin_make
 
+export QTDIR=/usr/share/qt5
+
 mkdir -p ${TILT_PROJECT}/source/build
 cd ${TILT_PROJECT}/source/build 
 qmake ${TILT_PROJECT}/source/GUI/GUI.pro -r -spec linux-g++ CONFIG+=debug CONFIG+=qml_debug

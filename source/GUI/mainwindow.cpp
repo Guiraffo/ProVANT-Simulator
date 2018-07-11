@@ -30,6 +30,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
         ui->actionSave->setDisabled(true);
         ui->menuEdit->setDisabled(true);
         ui->pushButton->setDisabled(true);
+        ui->pushButton_2->setDisabled(true);
 
         // nome que será observado na parte superior da janela
         const QString name("ProVANT Simulator");
@@ -126,6 +127,9 @@ void MainWindow::on_pushButton_clicked()
             base = "xterm -e roslaunch Database " + base + " &";
             std::system(base.toStdString().c_str()); // comando de inicializar simulação
         }
+
+        ui->pushButton_2->setDisabled(false);
+
     }
     catch(const CustomException& ex)
     {
@@ -480,6 +484,13 @@ void MainWindow::on_actionSave_triggered()
 void MainWindow::on_actionAbout_ProVANT_Simulator_triggered()
 {
     AboutDialog newform(this);
+    newform.setModal(true);
+    newform.exec();
+}
+
+void MainWindow::on_pushButton_2_clicked()
+{
+    JointsDialog newform(this);
     newform.setModal(true);
     newform.exec();
 }

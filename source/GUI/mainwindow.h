@@ -15,6 +15,7 @@
 #include "aboutdialog.h"
 #include <libusb-1.0/libusb.h>
 //#include "qdebug.h"
+#include "jointsdialog.h"
 
 #include "Utils/tools.h"
 
@@ -99,6 +100,8 @@ private slots:
      *       Mais informações sobre ProVANT
      */
     void on_actionAbout_ProVANT_Simulator_triggered();
+
+    void on_pushButton_2_clicked();
 
 protected:
     Ui::MainWindow *ui;

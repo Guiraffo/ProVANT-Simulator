@@ -4,8 +4,10 @@
 #
 #-------------------------------------------------
 
-QT       += core gui
-QT       += xml
+CONFIG += qt
+QT += gui
+QT += core
+QT += xml
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -54,7 +56,8 @@ SOURCES += main.cpp\
 #    aboutform.cpp \
     aboutdialog.cpp \
     DataAccess/GazeboElements/Items/multipleincludes.cpp \
-    DataAccess/GazeboElements/Items/multipleplugins.cpp
+    DataAccess/GazeboElements/Items/multipleplugins.cpp \
+    jointsdialog.cpp
     #Utils/tools.cpp
 
 HEADERS  += mainwindow.h \
@@ -95,7 +98,8 @@ HEADERS  += mainwindow.h \
     DataAccess/GazeboElements/Items/multipleincludes.h \
     Utils/tools.h \
     Utils/environmentexception.h \
-    DataAccess/GazeboElements/Items/multipleplugins.h
+    DataAccess/GazeboElements/Items/multipleplugins.h \
+    jointsdialog.h
 
 FORMS    += mainwindow.ui \
     dialog.ui \
@@ -103,4 +107,6 @@ FORMS    += mainwindow.ui \
     dialogopencontroller.ui \
     dialognewmodel.ui \
 #    aboutform.ui \
-    aboutdialog.ui
+    aboutdialog.ui \
+    jointsdialog.ui \
+    jointsdialog.ui
