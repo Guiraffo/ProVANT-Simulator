@@ -493,4 +493,5 @@ void MainWindow::on_pushButton_2_clicked()
     JointsDialog newform(this);
     newform.setModal(true);
     newform.exec();
+    ui->pushButton_2->setDisabled(true);
 }
