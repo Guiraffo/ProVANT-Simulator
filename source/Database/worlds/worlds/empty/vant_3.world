@@ -19,7 +19,7 @@
         </include>
         <include>
             <uri>model://vant_3</uri>
-            <name>myModel</name>
+            <name>mymodel</name>
             <static>false</static>
             <pose>0 0 1 0 0 0</pose>
         </include>
