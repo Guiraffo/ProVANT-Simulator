@@ -9,7 +9,7 @@
     <InputPath>in.txt</InputPath>
     <ErroPath>erro.txt</ErroPath>
     <Sensors>
-        <Device>vant4/sensors/estados</Device>
+        <Device>vant4/sensors/states</Device>
         <Device>vant4/sensors/rotor_R</Device>
         <Device>vant4/sensors/rotor_L</Device>
         <Device>vant4/sensors/rudder_R</Device>
