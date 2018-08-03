@@ -1,44 +1,52 @@
-#include <aerodinamica.h>
 
-//using namespace gazebo::math;
+/*
+* File: aerodinamica.cpp
+* Author: Arthur Viana Lara
+* Project: ProVANT
+* Company: Federal University of Minas Gerais
+* Version: 1.0
+* Date: 29/01/18
+* Description:  This library is responsable to implement aerodynamics forces in a UAV
+*/
+
+#include <aerodinamica.h>
 
 namespace gazebo
 {
-
+	// constructor
 	Aerodinamica::Aerodinamica()
 	{
 		
 	}
-
+	// destructor
 	Aerodinamica::~Aerodinamica()
 	{	
 		
 	}
-
+	// to load initial setup
 	void Aerodinamica::Load(physics::ModelPtr _model, sdf::ElementPtr _sdf)
 	{	
 		try
 		{
 	    		if (!ros::isInitialized())
 	    		{
-	      			std::cout << "Aerodinamica nao inicializado!" << std::endl;
+	      			std::cout << "Aerodynamics not initialized!" << std::endl;
 	      		        return;
 	    		}
 			
-			topic_FR = XMLRead::ReadXMLString("topic_FR",_sdf);
-			topic_FL = XMLRead::ReadXMLString("topic_FL",_sdf);
-			NameOfLinkDir_ = XMLRead::ReadXMLString("LinkDir",_sdf);
-			NameOfLinkEsq_ = XMLRead::ReadXMLString("LinkEsq",_sdf);
+			topic_FR = XMLRead::ReadXMLString("topic_FR",_sdf); // name of right brushless's topic 
+			topic_FL = XMLRead::ReadXMLString("topic_FL",_sdf); // name of left brushless's topic
+			NameOfLinkDir_ = XMLRead::ReadXMLString("LinkDir",_sdf); // name of right brushless's link
+			NameOfLinkEsq_ = XMLRead::ReadXMLString("LinkEsq",_sdf); // name of left brushless's link
 
-			// capitular elementos da simulação
-		
+			// get elements of the simulation
 			linkR = _model->GetLink(NameOfLinkDir_);
 			linkL = _model->GetLink(NameOfLinkEsq_);	
 
 			// update timer
 	  		Reset();
 
-			// subscribers			
+			// subscribers of data to apply in simulator			
 			motor_subscriberFR_ = node_handle_.subscribe(topic_FR, 1, &gazebo::Aerodinamica::CallbackFR, this);
 			motor_subscriberFL_ = node_handle_.subscribe(topic_FL, 1, &gazebo::Aerodinamica::CallbackFL, this);
 		
@@ -49,6 +57,7 @@ namespace gazebo
 		}
 	}
 
+	// when reset simulator
 	void Aerodinamica::Reset()
 	{
 		try
@@ -59,14 +68,15 @@ namespace gazebo
 			std::cout << e.what() << std::endl;
 		}
 	}
-
+	// callback to apply forces at right brushless
 	void Aerodinamica::CallbackFR(std_msgs::Float64 msg)
 	{
 		try
 		{
 			Fr = msg.data;
-			math::Vector3 forceR(0,0,Fr);
-			math::Vector3 torqueR(0,0,0.0178947368*Fr);
+			math::Vector3 forceR(0,0,Fr); // Right force in the left brushless
+			math::Vector3 torqueR(0,0,0.0178947368*Fr); // drag torque
+			// Applying			
 			linkR->AddRelativeForce(forceR);
 			linkR->AddRelativeTorque(torqueR);
 		}
@@ -75,13 +85,15 @@ namespace gazebo
 			std::cout << e.what() << std::endl;
 		}
 	}
+	// callback to apply forces at left brushless
 	void Aerodinamica::CallbackFL(std_msgs::Float64 msg)
 	{
 		try
 		{	
 			Fl = msg.data;
-			math::Vector3 forceL(0,0,Fl);
-			math::Vector3 torqueL(0,0,-0.0178947368*Fl);
+			math::Vector3 forceL(0,0,Fl); // Lift force in the left brushless
+			math::Vector3 torqueL(0,0,-0.0178947368*Fl); // drag torque
+			// Applying			
 			linkL->AddRelativeForce(forceL);
 			linkL->AddRelativeTorque(torqueL);
 		}

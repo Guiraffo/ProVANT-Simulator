@@ -1,19 +1,32 @@
+/*
+* File: XMLRead.h
+* Author: Arthur Viana Lara
+* Project: ProVANT
+* Company: Federal University of Minas Gerais
+* Version: 1.0
+* Date: 29/01/18
+* Description: This library is responsable to implement code to read some data from XML file
+*/
+
 #include <tinyxml.h>
 
 class XMLRead
 {
 	private: TiXmlDocument doc;
-
+	
+	// constructor
 	public: XMLRead()
 	{
 
 	}
 
+	// destructor
 	public: XMLRead(std::string pathFile): doc(pathFile)
 	{
 
 	}
 
+	// get one item of XML file (here, it isn't used itens in hierarchy)	
 	public: std::string GetItem (std::string itemname )
 	{
 		std::string buff = "";
@@ -36,6 +49,7 @@ class XMLRead
 			return buff;
 		}
 	}
+	// get all item of XML file (here, it isn't used itens in hierarchy)
 	public: std::vector<std::string> GetAllItems (std::string itemname)
 	{
 		std::vector<std::string> output;

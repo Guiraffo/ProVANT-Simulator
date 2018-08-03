@@ -10,9 +10,9 @@ void gravity_DA::Read(QDomNode document)
     gravity = document.firstChildElement("gravity").text().toStdString();
 }
 
-void gravity_DA::Write(QXmlStreamWriter* xml)
+void gravity_DA::Write(QXmlStreamWriter xml)
 {
-    xml->writeTextElement("gravity",gravity.c_str());
+    xml.writeTextElement("gravity",gravity.c_str());
 }
 
 std::string gravity_DA::GetGravity(){return gravity;}

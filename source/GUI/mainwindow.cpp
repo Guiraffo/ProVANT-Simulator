@@ -1,39 +1,50 @@
+// Autor: Arthur Viana Lara
+// Projeto: ProVANT
+// Data: 18/05/2018
 
 #include "mainwindow.h"
-#include "dialog.h"
-#include "dialognewmodel.h"
-#include "DataAccess/RosElements/roslaunch.h"
-#include "aboutdialog.h".h"
+#include <fcntl.h>
 
-MainWindow::MainWindow(QWidget *parent) :
-    QMainWindow(parent),
-    ui(new Ui::MainWindow)
+
+MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
 
-    char* tmp = getenv( "TILT_PROJECT" );
+    try
+    {
+        // Inserindo Logo
+        QString env(getenv( "TILT_PROJECT" ));
+        QString fullpath(env+"/source/GUI/logos/");
+        QPixmap provantLogo(fullpath+"provant_ufmg_ufsc.jpg");
+        int w = ui->label_3->width();
+        int h = ui->label_3->height();
+        ui->label_3->setPixmap(provantLogo.scaled(w,h,Qt::KeepAspectRatio));
 
-    QString env(tmp);
-    QString path("/source/GUI/logos/");
-    QString fullpath = env+path;
+        // COnfigurando árvore de dados
+        ui->treeWidget->setColumnCount(2); // arvore de dados terá duas colunas
+        ui->treeWidget->setEditTriggers(QTreeWidget::NoEditTriggers); // inicialmente não se pode editar árvore de dados
 
-    QPixmap provant(fullpath+"provant_ufmg_ufsc.jpg");
-    int w = ui->label_3->width();
-    int h = ui->label_3->height();
-    ui->label_3->setPixmap(provant.scaled(w,h,Qt::KeepAspectRatio));
+        // quando a interface é aberta, não há cenário selecionado
+        // então não é permitido adicionar modelo, salvar cenário e nem
+        // inicioalizar uma simulação
+        ui->actionSave->setDisabled(true);
+        ui->menuEdit->setDisabled(true);
+        ui->pushButton->setDisabled(true);
+        ui->pushButton_2->setDisabled(true);
 
-    ui->treeWidget->setColumnCount(2); // arvore de dados terá duas colunas
-    // inicialmente não se pode editar árvore de dados
-    ui->treeWidget->setEditTriggers(QTreeWidget::NoEditTriggers);
-    // quando a interface é aberta, não há cenário selecionado
-    // então não é permitido adicionar modelo, salvar cenário e nem
-    // inicioalizar uma simulação
-    ui->actionSave->setDisabled(true);
-    ui->menuEdit->setDisabled(true);
-    ui->pushButton->setDisabled(true);
-    // nome que será observado na parte superior da janela
-    const QString name("ProVANT Simulator");
-    setWindowTitle(name);
+        // nome que será observado na parte superior da janela
+        const QString name("ProVANT Simulator");
+        setWindowTitle(name);
+    }
+    catch(const CustomException& ex)
+    {
+        qDebug() << ex.get_info();
+        qDebug() << "Linha ";
+        qDebug() << ex.get_line();
+        qDebug() << "arquivo ";
+        qDebug() << ex.get_file();
+        exit(EXIT_FAILURE);
+    }
 }
 
 MainWindow::~MainWindow()
@@ -43,21 +54,19 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_pushButton_clicked()
 {
-    for(int i=0;i<ui->treeWidget->topLevelItemCount();i++)
+    try
     {
-        // analisar todos os os modelos do gazebo existentes no mundo
-        if(ui->treeWidget->topLevelItem(i)->text(0)=="Include")
+        for(int i=0;i<ui->treeWidget->topLevelItemCount();i++)
         {
-            // adquire a URL onde estão armazenados todos os modelos de vant do ambiente de simulação
-                char const* tmp = getenv( "GAZEBO_MODEL_PATH" );
-                if ( tmp == NULL ) {
-                    qDebug() << "Problemas com variavel de ambiente ";
-                } else {
-                    std::string env(tmp);
-                    QDir dir(env.c_str());
-                    QFileInfoList files = dir.entryInfoList();
-            // -------------------------------------------------------------------------------------
+            // analisar todos os os modelos do gazebo existentes no mundo
+            if(ui->treeWidget->topLevelItem(i)->text(0)=="Include")
+            {
+                // adquire a URL onde estão armazenados todos os modelos de vant do ambiente de simulação
+                QString env(getenv( "TILT_PROJECT" ));
+                QDir dir(env.toStdString().c_str());
 
+                // Listando Modelos
+                QFileInfoList files = dir.entryInfoList();
                 foreach (QFileInfo file, files)
                 {
                     if (file.isDir())
@@ -65,50 +74,87 @@ void MainWindow::on_pushButton_clicked()
                         // determinou-se que o terceiro include, corresponde sempre ao modelo do vant
                         if(file.fileName() == ui->treeWidget->topLevelItem(i)->child(3)->text(1).replace("model://",""))
                         {
-                            QString qenv(env.c_str());
-                            qenv = qenv + "/" +  ui->treeWidget->topLevelItem(i)->child(3)->text(1).replace("model://","");
-                            qenv = qenv + "/config/config.xml";
-                            qDebug() << qenv;
-                            // informa o arquivo de configuração da malha de controle configurada na interface de simulação
-                            // para dado vant (arquivo se ecnontra dentro da pasta config com o nome config.xml)
-                            std::string command("export TILT_CONFIG="+qenv.toStdString());
-                            std::system(command.c_str());
+                             env = env +
+                                     "/" +
+                                     ui->treeWidget->topLevelItem(i)->child(3)->text(1).replace("model://","") +
+                                    "/config/config.xml";
+
+                             // informa o arquivo de configuração da malha de controle configurada na interface de simulação
+                             // para dado vant (arquivo se ecnontra dentro da pasta config com o nome config.xml)
+                             std::string command("export TILT_CONFIG="+env.toStdString());
+                             std::system(command.c_str());
                         }
                     }
                 }
             }
         }
-    }
 
-    if(istemplate) // caso seja template, o usuário é obrigado a adicionar informações em um arquivo .world
-    {
-        if(SaveAs())
+        QString base;
+        if(hil)
         {
-            roslaunch::WriteNew(QString::fromStdString(mundo.actualword->Filename)); // configurando rotina de inicilização do simulador
-            std::system("roslaunch Database gazebo.launch"); // comando de inicializar simulação
+            std::system("kill `pgrep gzclient`");
+            std::system("kill  `pgrep gzserver`");
+
+            // verificar se o dispositivo está conectado em /dev/ttyUSB0
+            int open_result = open("/dev/ttyUSB0", O_RDWR | O_NOCTTY);
+            if(open_result == -1)
+            {
+                qDebug() << "Port Failed to Open";
+                exit(EXIT_FAILURE);
+            }
+            else
+            {
+                std::system("setserial /dev/ttyUSB0 low_latency");
+            }
+            base = QString("hil.launch");
         }
+        else base = QString ("gazebo.launch");
+
+        if(istemplate) // caso seja template, o usuário é obrigado a adicionar informações em um arquivo .world
+        {
+            if(SaveAs())
+            {
+                mundo.Write(ui->treeWidget); // salvar modificações no mesmo arquivo de destino
+                roslaunch::WriteNew(QString::fromStdString(mundo.word->Filename),base,hil); // configurando rotina de inicilização do simulador
+                base = "xterm -e roslaunch Database " + base + " &";
+                std::system(base.toStdString().c_str()); // comando de inicializar simulação
+            }
+        }
+        else
+        {
+            mundo.Write(ui->treeWidget); // salvar modificações no mesmo arquivo de destino
+            roslaunch::WriteNew(QString::fromStdString(mundo.word->Filename),base,hil); // configurando rotina de inicilização do simulador
+            base = "xterm -e roslaunch Database " + base + " &";
+            std::system(base.toStdString().c_str()); // comando de inicializar simulação
+        }
+
+        ui->pushButton_2->setDisabled(false);
+
     }
-    else
+    catch(const CustomException& ex)
     {
-        mundo.Write(ui->treeWidget); // salvar modificações no mesmo arquivo de destino
-        roslaunch::WriteNew(QString::fromStdString(mundo.actualword->Filename)); // configurando rotina de inicilização do simulador
-        std::system("roslaunch Database gazebo.launch"); // comando de inicializar simulação
+        qDebug() << ex.get_info();
+        qDebug() << "Linha ";
+        qDebug() << ex.get_line();
+        qDebug() << "arquivo ";
+        qDebug() << ex.get_file();
+        exit(EXIT_FAILURE);
     }
 }
 
 void MainWindow::on_actionNew_triggered()
 {
-    char const* tmp = getenv( "PROVANT_DATABASE" );
-    if ( tmp == NULL ) {
-        qDebug() << "Problemas com variavel de ambiente ";
-    } else {
-        std::string env(tmp);
+    try
+    {
+        hil = false;
+        // Diretório onde está os templates
+        QString env(getenv( "TILT_PROJECT" ));
         env = env + "/worlds/templates";
 
         // Abertura de caixa de diálogo para selecionar arquivo template
         QString filename = QFileDialog::getOpenFileName(this
                                                         ,tr("New World")
-                                                        , env.c_str()
+                                                        , env.toStdString().c_str()
                                                         , tr("Template Files (*.tpl)"));
         if(filename.isEmpty()) return;
 
@@ -157,27 +203,35 @@ void MainWindow::on_actionNew_triggered()
         // informa que o arquivo ainda é template, então usuário
         // deve salvar os dados em outro arquivo com formato .world
         istemplate = true;
+
+
+    }
+    catch(const CustomException& ex)
+    {
+        qDebug() << ex.get_info();
+        qDebug() << "Linha ";
+        qDebug() << ex.get_line();
+        qDebug() << "arquivo ";
+        qDebug() << ex.get_file();
+        exit(EXIT_FAILURE);
     }
 }
 
-
 void MainWindow::on_treeWidget_itemDoubleClicked(QTreeWidgetItem *item, int column)
 {
-    // permite edição de dados na segunda coluna da árvore de dados
-    if (column == 1 && item->text(0) != "uri") {
-            ui->treeWidget->editItem(item, column);
-        }
-
-    // se campo for do tipo uri, abrir diálogo de configuração do modelo
-    if(item->text(0) == "uri")
+    try
     {
-        char const* tmp = getenv("GAZEBO_MODEL_PATH");
-        if ( tmp == NULL ) {
-            qDebug() << "Problemas com variavel de ambiente ";
-        } else {
-            // obter local com a url do modelo
-            std::string env(tmp);
-            QDir dir(env.c_str());
+        // permite edição de dados na segunda coluna da árvore de dados
+        if (column == 1 && item->text(0) != "uri") {
+                ui->treeWidget->editItem(item, column);
+            }
+
+        // se campo for do tipo uri, abrir diálogo de configuração do modelo
+        if(item->text(0) == "uri")
+        {
+            QString env(getenv( "GAZEBO_MODEL_PATH" ));
+
+            QDir dir(env.toStdString().c_str());
             QStringList list;
             list = item->text(1).split("//");
             if (!dir.cd(QString::fromStdString(list.at(1).toStdString()))) // "/tmp"
@@ -187,30 +241,88 @@ void MainWindow::on_treeWidget_itemDoubleClicked(QTreeWidgetItem *item, int colu
             else
             {
                 // arquivo de descrição física
-                std::string localmodel = env+"/"+list.at(1).toStdString()+"/robot/model.sdf";
-                // arquivo de configuração de controladoor
-                std::string localconfig = env+"/"+list.at(1).toStdString()+"/config/config.xml";
+                std::string localmodel = env.toStdString()+"/"+list.at(1).toStdString()+"/robot/model.sdf";
+                // arquivo de configuração de controlador
+                std::string localconfig = env.toStdString()+"/"+list.at(1).toStdString()+"/config/config.xml";
                 // abrir janela
                 Dialog modelsetup;
                 modelsetup.setModel(localmodel,localconfig);
                 modelsetup.setModal(true);
                 modelsetup.exec();
+                hil = modelsetup.hil;
+                QString s = QString::number(hil);
+
+                if(hil)
+                {
+                    // Setando valores padronizados da simumlação para permitir bom
+                    // funcionamento do HIL
+                    for(int i = 0; i< ui->treeWidget->topLevelItemCount();i++)
+                    {
+                        QTreeWidgetItem* item = ui->treeWidget->topLevelItem(i);
+                        if(item->text(0)=="Physics")
+                        {
+                            std::string description = "0.004"; // step time
+                            item->child(1)->setText(1, QString::fromStdString(description));
+                            std::string description2 = "1"; // fator de tempo real
+                            item->child(2)->setText(1, QString::fromStdString(description2));
+                            std::string description3 = "250"; // update
+                            item->child(3)->setText(1, QString::fromStdString(description3));
+
+                        }
+                        if(item->text(0)=="Plugin")
+                        {
+                            item->child(2)->setText(1, QString("hil"));
+                        }
+                    }
+
+                }
+                else
+                {
+                    // Setando valores padronizados da simumlação para permitir bom
+                    // funcionamento do HIL
+                    for(int i = 0; i< ui->treeWidget->topLevelItemCount();i++)
+                    {
+                        QTreeWidgetItem* item = ui->treeWidget->topLevelItem(i);
+                        /*if(item->text(0)=="Physics")
+                        {
+                            std::string description = "0.004"; // step time
+                            item->child(1)->setText(1, QString::fromStdString(description));
+                            std::string description2 = "1"; // fator de tempo real
+                            item->child(2)->setText(1, QString::fromStdString(description2));
+                            std::string description3 = "250"; // update
+                            item->child(3)->setText(1, QString::fromStdString(description3));
+
+                        }*/
+                        if(item->text(0)=="Plugin")
+                        {
+                            item->child(2)->setText(1, QString("nothil"));
+                        }
+                    }
+                }
+
             }
         }
+    }
+    catch(const CustomException& ex)
+    {
+        qDebug() << ex.get_info();
+        qDebug() << "Linha ";
+        qDebug() << ex.get_line();
+        qDebug() << "arquivo ";
+        qDebug() << ex.get_file();
+        exit(EXIT_FAILURE);
     }
 }
 
 
 void MainWindow::on_treeWidget_itemClicked(QTreeWidgetItem *item, int column)
 {
-    if(item->text(0) == "uri")
+    try
     {
-        char const* tmp = getenv( "GAZEBO_MODEL_PATH" );
-        if ( tmp == NULL ) {
-            qDebug() << "Problemas com variavel de ambiente ";
-        } else {
-            std::string env(tmp);
-            QDir dir(env.c_str());
+        if(item->text(0) == "uri")
+        {
+            QString env(getenv( "GAZEBO_MODEL_PATH" ));
+            QDir dir(env.toStdString().c_str());
             QStringList list;
             list = item->text(1).split("//");
             // não há arquivo
@@ -223,7 +335,7 @@ void MainWindow::on_treeWidget_itemClicked(QTreeWidgetItem *item, int column)
             else // há arquivo
             {
                 // plotando foto do vant
-                QString imagefile(QString::fromStdString(env)+"/"+list.at(1)+"/imagem.gif");
+                QString imagefile(env+"/"+list.at(1)+"/imagem.gif");
                 QFile ff(imagefile);
                 QFileInfo fileInfo(ff);
                 if (fileInfo.exists())
@@ -237,21 +349,29 @@ void MainWindow::on_treeWidget_itemClicked(QTreeWidgetItem *item, int column)
             }
         }
     }
+    catch(const CustomException& ex)
+    {
+        qDebug() << ex.get_info();
+        qDebug() << "Linha ";
+        qDebug() << ex.get_line();
+        qDebug() << "arquivo ";
+        qDebug() << ex.get_file();
+        exit(EXIT_FAILURE);
+    }
+
 }
 
 void MainWindow::on_actionOpen_triggered()
 {
-    char const* tmp = getenv( "PROVANT_DATABASE" );
-    if ( tmp == NULL ) {
-        qDebug() << "Problemas com variavel de ambiente ";
-    } else {
-        std::string env(tmp);
+    try
+    {
+        QString env(getenv( "PROVANT_DATABASE" ));
         env = env + "/worlds/worlds";
         // escolhe do arquivo .world
         QString filename = QFileDialog::getOpenFileName(this
-                                                        ,tr("Open World")
-                                                        , env.c_str()
-                                                        , tr("World Files (*.world)"));
+                                                            ,tr("Open World")
+                                                            , env.toStdString().c_str()
+                                                            , tr("World Files (*.world)"));
         if(filename.isEmpty()) return;
         // tratando nome do arquivo
         QString dir;
@@ -289,6 +409,9 @@ void MainWindow::on_actionOpen_triggered()
         // adicionando dados na árvore de dados
         mundo.getFirst(filename.toStdString(),ui->treeWidget);
         // habilitando funções de menuu e inicialização da interface
+
+        hil = false;
+
         ui->actionSave->setEnabled(true);
         ui->menuEdit->setEnabled(true);
         ui->actionSave->setEnabled(true);
@@ -296,6 +419,16 @@ void MainWindow::on_actionOpen_triggered()
         ui->pushButton->setEnabled(true);
         istemplate = false; // não é template
     }
+    catch(const CustomException& ex)
+    {
+        qDebug() << ex.get_info();
+        qDebug() << "Linha ";
+        qDebug() << ex.get_line();
+        qDebug() << "arquivo ";
+        qDebug() << ex.get_file();
+        exit(EXIT_FAILURE);
+    }
+
 }
 
 
@@ -322,7 +455,7 @@ bool MainWindow::SaveAs()
         if(f.suffix()!=".world")filename += ".world";
     }
 
-    mundo.actualword->Filename = filename.toStdString();
+    mundo.word->Filename = filename.toStdString();
     // atualizar arquivo
     mundo.Write(ui->treeWidget);
     // não é template
@@ -353,4 +486,12 @@ void MainWindow::on_actionAbout_ProVANT_Simulator_triggered()
     AboutDialog newform(this);
     newform.setModal(true);
     newform.exec();
+}
+
+void MainWindow::on_pushButton_2_clicked()
+{
+    JointsDialog newform(this);
+    newform.setModal(true);
+    newform.exec();
+    ui->pushButton_2->setDisabled(true);
 }

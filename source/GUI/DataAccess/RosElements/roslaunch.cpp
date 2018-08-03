@@ -5,14 +5,17 @@ roslaunch::roslaunch()
 
 }
 
-void roslaunch::WriteNew(QString worldname)
+void roslaunch::WriteNew(QString worldname,QString worldbase,bool hil)
 {
     char const* tmp = getenv( "TILT_PROJECT" );
     if ( tmp == NULL ) {
         qDebug() << "Problemas com variavel de ambiente ";
     } else {
         std::string env(tmp);
-        QFile file(QString::fromStdString(env)+"/source/Database/launch/"+"gazebo.launch");
+        qDebug() << worldbase;
+        qDebug() << hil;
+        //QFile file(QString::fromStdString(env)+"/source/Database/launch/"+"gazebo.launch");
+        QFile file(QString::fromStdString(env)+"/source/Database/launch/"+worldbase);
         if(file.exists())file.remove();
         if(file.open(QFile::ReadWrite))
         {
@@ -30,9 +33,16 @@ void roslaunch::WriteNew(QString worldname)
                    << "\t\t<arg name=\"paused\" value=\"$(arg paused)\"/>" << endl
                    << "\t\t<arg name=\"use_sim_time\" value=\"$(arg use_sim_time)\"/>" << endl
                    << "\t\t<arg name=\"headless\" value=\"$(arg headless)\"/>" << endl
-                   << "\t</include>"<< endl << endl
-                   << "\t<node name=\"controller\" pkg=\"controller\" type=\"controller\" />" << endl
+                   << "\t</include>"<< endl << endl;
+            if(!hil)
+            {
+                   stream << "\t<node name=\"controller\" pkg=\"controller\" type=\"controller\" />" << endl
                    << " </launch>" << endl;
+            }
+            else
+            {
+                stream << " </launch>" << endl;
+            }
             file.close();
         }
     }

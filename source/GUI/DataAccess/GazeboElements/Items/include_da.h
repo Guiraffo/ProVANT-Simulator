@@ -15,9 +15,7 @@ public:
     void SetIsStatic(std::string);
     std::string GetPose();
     void SetPose(std::string);
-
-    void Write(QXmlStreamWriter*);
-    bool Read(QDomNode*);
+    void Write(QXmlStreamWriter);
     void print();
 
 private:

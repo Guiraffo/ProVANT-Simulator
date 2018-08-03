@@ -60,7 +60,7 @@ void ModelFile::Write()
         xml.writeStartDocument();
         xml.writeStartElement("sdf");
         xml.writeAttribute("version",sdfVersion.c_str());
-        model.Write(&xml);
+        //model.Write(&xml);
         xml.writeEndDocument();
     }
     else

@@ -1,20 +1,29 @@
+/*
+* File: pertubation.cpp
+* Author: Arthur Viana Lara
+* Project: ProVANT
+* Company: Federal University of Minas Gerais
+* Version: 1.0
+* Date: 29/01/18
+* Description:  This library is responsable to implement a plugin to simulate a force pertubation.
+*/
+
 #include <pertubation.h>
 
-//using namespace gazebo::math;
 
 namespace gazebo
 {
-
+	// constructor
 	pertubation::pertubation()
 	{
 		
 	}
-
+	// destructor
 	pertubation::~pertubation()
 	{	
 		
 	}
-
+	// initial setup
 	void pertubation::Load(physics::ModelPtr _model, sdf::ElementPtr _sdf)
 	{	
 		try
@@ -25,12 +34,14 @@ namespace gazebo
 	      		        return;
 	    		}
 			
+			// get ROS topics name
 			topicX = XMLRead::ReadXMLString("topicX",_sdf);
 			topicY = XMLRead::ReadXMLString("topicY",_sdf);
 			topicZ = XMLRead::ReadXMLString("topicZ",_sdf);
+			// get link name
 			NameOfLink = XMLRead::ReadXMLString("Link",_sdf);
 
-			// capitular elementos da simulação
+			// get simulation link
 			link = _model->GetLink(NameOfLink);	
 
 			// update timer
@@ -48,6 +59,7 @@ namespace gazebo
 		}
 	}
 
+	// reset
 	void pertubation::Reset()
 	{
 		try
@@ -59,12 +71,14 @@ namespace gazebo
 		}
 	}
 
+	// Callback to provide a pertubation in x direction
 	void pertubation::CallbackX(std_msgs::Float64 msg)
 	{
 		try
 		{
 			Fx = msg.data;
 			math::Vector3 force(Fx,0,0);
+			// applying
 			link->AddRelativeForce(force);
 		}
 		catch(std::exception& e)
@@ -73,12 +87,14 @@ namespace gazebo
 		}
 	}
 
+	// Callback to provide a pertubation in y direction
 	void pertubation::CallbackY(std_msgs::Float64 msg)
 	{
 		try
 		{
 			Fy = msg.data;
 			math::Vector3 force(0,Fy,0);
+			// applying
 			link->AddRelativeForce(force);
 		}
 		catch(std::exception& e)
@@ -87,12 +103,14 @@ namespace gazebo
 		}
 	}
 
+	// Callback to provide a pertubation in z direction
 	void pertubation::CallbackZ(std_msgs::Float64 msg)
 	{
 		try
 		{
 			Fz = msg.data;
 			math::Vector3 force(0,0,Fz);
+			// applying
 			link->AddRelativeForce(force);
 		}
 		catch(std::exception& e)

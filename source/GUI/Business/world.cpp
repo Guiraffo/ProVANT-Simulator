@@ -8,40 +8,40 @@ world::world()
 
 void world::getTemplate(std::string template_filename,QTreeWidget* root)
 {
-    lastword = actualword;
+    /*lastword = actualword;
     templateword = new WorldFile(template_filename);
     actualword = templateword;
-    if(actualword->Read())ToTreeWidget(root);
+    if(actualword->Read());//ToTreeWidget(root);*/
 }
 void world::getLast(QTreeWidget* root)
 {
-    actualword = lastword;
-    ToTreeWidget(root);
+    /*actualword = lastword;
+    ToTreeWidget(root);*/
 }
 void world::getFirst(std::string first_filename,QTreeWidget*root)
 {
-    lastword = actualword;
-    firstword = new WorldFile(first_filename);
-    actualword = firstword;
-    if(actualword->Read())ToTreeWidget(root);
+    word = new WorldFile(first_filename);
+    if(word->Read()) ToTreeWidget(root);
 }
 void world::getActual(QTreeWidget* root)
 {
-    ToTreeWidget(root);
+    //ToTreeWidget(root);
 }
 void world::Write(QTreeWidget* root)
 {
-    WorldFile* newMundo;
-    std::vector<Include_DA> newList;
+
+
     Include_DA* include;
-    newMundo = new WorldFile(this->actualword->Filename);
-    newMundo->sdfVersion = actualword->sdfVersion;
+    plugin_DA* plugin;
+    WorldFile* newMundo;
+    newMundo = new WorldFile(this->word->Filename);
+    newMundo->sdfVersion = word->sdfVersion;
     for(int i = 0; i< root->topLevelItemCount();i++)
     {
         QTreeWidgetItem* item = root->topLevelItem(i);
         if(item->text(0)=="Physics")
         {
-            physics_DA physics;
+             physics_DA physics;
             if (item->child(0)->text(1).toStdString()!="ode"
                 &&item->child(0)->text(1).toStdString()!="bullet"
                 &&item->child(0)->text(1).toStdString()!="simbody"
@@ -91,10 +91,12 @@ void world::Write(QTreeWidget* root)
         }
         if(item->text(0)=="Plugin")
         {
-            WorldPlugin plugin;
-            plugin.SetFilename(item->child(1)->text(1).toStdString());
-            plugin.SetName(item->child(0)->text(1).toStdString());
-            newMundo->SetPlugin(plugin);
+             plugin = new plugin_DA();
+            plugin->SetFilename(item->child(1)->text(1).toStdString());
+            plugin->SetName(item->child(0)->text(1).toStdString());
+            plugin->parameters.push_back(item->child(2)->text(0).toStdString());
+            plugin->values.push_back(item->child(2)->text(1).toStdString());
+            newMundo->listPlugins.multipleItens.push_back(*plugin);
         }
 
         if(item->text(0)=="Include")
@@ -126,16 +128,17 @@ void world::Write(QTreeWidget* root)
                                         item->child(1)->child(4)->text(1).toStdString()+" "+
                                         item->child(1)->child(5)->text(1).toStdString();
             include->SetPose(includeString);
+
             }
             include->SetIsStatic(item->child(2)->text(1).toStdString());
             include->SetUri(item->child(3)->text(1).toStdString());
-            newList.push_back(*include);
-            newMundo->AddInclude(newList);
+
+            newMundo->listIncludes.NewInclude(*include);
         }
     }
-    newMundo->Filename = this->actualword->Filename;
-    this->actualword = newMundo;
-    this->actualword->Write();
+    newMundo->Filename = this->word->Filename;
+    this->word = newMundo;
+    this->word->Write();
 }
 void world::ToTreeWidget(QTreeWidget* root)
 {
@@ -148,7 +151,7 @@ void world::ToTreeWidget(QTreeWidget* root)
     element = TreeItens::AddRoot("Gravity","",root);
     QStringList splitvector;
     QString vector;
-    vector = QString::fromStdString(actualword->GetGravity().GetGravity());
+    vector = QString::fromStdString(word->GetGravity().GetGravity());
     QRegExp rx("(\\ |\\  |\\   |\\    |\\     |\\        |\\         |\\          |\\           |\\n|\\t)");
     splitvector = vector.split(rx);
     QStringList result;
@@ -171,21 +174,39 @@ void world::ToTreeWidget(QTreeWidget* root)
     edit->setFlags(Qt::ItemIsEditable|Qt::ItemIsEnabled);
     //
     element = TreeItens::AddRoot("Physics","",root);
-    edit = TreeItens::AddChild(element,"Type",actualword->GetPhysics().GetType());
+    edit = TreeItens::AddChild(element,"Type",word->GetPhysics().GetType());
     edit->setFlags(Qt::ItemIsEditable|Qt::ItemIsEnabled);
-    TreeItens::AddChild(element,"Step time",actualword->GetPhysics().GetStep());
-    edit = TreeItens::AddChild(element,"Real time factor",actualword->GetPhysics().GetRealTimeFactor());
-    //edit->setFlags(Qt::ItemIsEditable|Qt::ItemIsEnabled);
-    edit = TreeItens::AddChild(element,"Real time update rate",actualword->GetPhysics().GetRealTimeUpdaterate());
-    //edit->setFlags(Qt::ItemIsEditable|Qt::ItemIsEnabled);
+    TreeItens::AddChild(element,"Step time",word->GetPhysics().GetStep());
+    edit = TreeItens::AddChild(element,"Real time factor",word->GetPhysics().GetRealTimeFactor());
+    edit = TreeItens::AddChild(element,"Real time update rate",word->GetPhysics().GetRealTimeUpdaterate());
     //
-    element = TreeItens::AddRoot("Plugin","",root);
-    TreeItens::AddChild(element,"name",actualword->GetPlugin().GetName());
-    TreeItens::AddChild(element,"filename",actualword->GetPlugin().GetFilename());
+
+
+
+    std::vector<plugin_DA> listplugins = word->listPlugins.multipleItens;
+    for(uint i = 0; i< listplugins.size();i++)
+    {
+
+        element = TreeItens::AddRoot("Plugin","",root);
+
+        for(uint i = 0; i< listplugins.size();i++)
+        {
+            TreeItens::AddChild(element,"name",listplugins.at(i).GetName());
+            TreeItens::AddChild(element,"filename",listplugins.at(i).GetFilename());
+            std::vector<std::string> listpluginsparameters = listplugins.at(i).parameters;
+            std::vector<std::string> listpluginsvalues = listplugins.at(i).values;
+            for(uint j = 0; j< listpluginsparameters.size();j++)
+            {
+                TreeItens::AddChild(element,listpluginsparameters.at(j),
+                                            listpluginsvalues.at(j));
+            }
+        }
+    }
     //
-    std::vector<Include_DA> list = actualword->GetListsInclude();
+    std::vector<Include_DA> list = word->listIncludes.multipleItens;
     for(uint i = 0; i< list.size();i++)
     {
+
         element = TreeItens::AddRoot("Include","",root);
         edit = TreeItens::AddChild(element,"name",list.at(i).GetName());
         edit->setFlags(Qt::ItemIsEditable|Qt::ItemIsEnabled);

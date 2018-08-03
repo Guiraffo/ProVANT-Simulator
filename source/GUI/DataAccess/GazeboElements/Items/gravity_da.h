@@ -9,7 +9,7 @@ public:
     void SetGravity(std::string);
     std::string GetGravity();
     void Read(QDomNode);
-    void Write(QXmlStreamWriter*);
+    void Write(QXmlStreamWriter);
     void print();
 private:
     std::string gravity;

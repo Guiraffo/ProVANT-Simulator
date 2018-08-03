@@ -121,6 +121,7 @@ void Dialog::on_pushButton_7_clicked()
         // comando para compilação e armazenamento da saída de erro em arquivo texto
         std::string env(tmp);
         env = "cd "+env+"; catkin_make --pkg "+ ui->comboBox->currentText().toStdString() + " 2> OutCompile.txt; xdg-open OutCompile.txt";
+        qDebug() << env.c_str();
         std::system(env.c_str());
     }
 }
@@ -196,4 +197,35 @@ void Dialog::SaveConfig()
     }
     // escrevendo em arquivo
     controller.config->WriteFile();
+}
+
+
+void Dialog::on_checkBox_clicked(bool checked)
+{
+    if(checked==true)
+    {
+        ui->SampleEdit->setEnabled(false);
+        ui->ErrorEdit->setEnabled(false);
+        ui->ActuatorEdit->setEnabled(false);
+        ui->SensorEdit->setEnabled(false);
+        ui->ReferenceEdit->setEnabled(false);
+        ui->pushButton_5->setEnabled(false);
+        ui->pushButton_6->setEnabled(false);
+        ui->pushButton_7->setEnabled(false);
+        ui->comboBox->setEnabled(false);
+        hil = true;
+    }
+    else
+    {
+        ui->SampleEdit->setEnabled(true);
+        ui->ErrorEdit->setEnabled(true);
+        ui->ActuatorEdit->setEnabled(true);
+        ui->SensorEdit->setEnabled(true);
+        ui->ReferenceEdit->setEnabled(true);
+        ui->pushButton_5->setEnabled(true);
+        ui->pushButton_6->setEnabled(true);
+        ui->pushButton_7->setEnabled(true);
+        ui->comboBox->setEnabled(true);
+        hil = false;
+    }
 }

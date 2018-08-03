@@ -6,8 +6,8 @@ class scene
 {
 public:
     scene();
-    void Write(QXmlStreamWriter*);
-    void Read(QDomNode*);
+    void Write(QXmlStreamWriter);
+    void Read(QDomNode);
     void print();
 };
 

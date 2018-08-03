@@ -1,3 +1,13 @@
+/*
+* File: force.h
+* Author: Arthur Viana Lara
+* Project: ProVANT
+* Company: Federal University of Minas Gerais
+* Version: 1.0
+* Date: 29/01/18
+* Description:  This library is responsable to implement a force in a speficific link of UAV
+*/
+
 //#ifndef AERO_H
 //#define AERO_H
 
@@ -15,39 +25,39 @@
 #include <log4cxx/xml/domconfigurator.h>
 #include "XMLRead.h"
 
-using namespace log4cxx;
-using namespace log4cxx::xml;
-using namespace log4cxx::helpers;
-
 namespace gazebo
 {
-	LoggerPtr loggerMyMain(Logger::getLogger( "main"));
 
 	class force : public ModelPlugin
 	{
 		
-		public: force(); 
+		// constructor
+		public: force();
+		// destructor 
   		public:virtual ~force(); 
+		// initial setup		
 		public:virtual void Load(physics::ModelPtr _model, sdf::ElementPtr _sdf); 
-  		public: virtual void Reset();  
+		// reset  		
+		public: virtual void Reset();
+		// callback for applying forces  
 		public: void CallbackX(std_msgs::Float64);
 		public: void CallbackY(std_msgs::Float64);
 		public: void CallbackZ(std_msgs::Float64);		
 
 		private: 
-			std::string path;
-			ros::NodeHandle node_handle_;
-			physics::WorldPtr world;
-			physics::LinkPtr link;
-			std::string topicX;
-			std::string topicY;
-			std::string topicZ;
-			std::string NameOfNode_;
-			ros::Subscriber pertubation_subscriberX;
+			ros::NodeHandle node_handle_; // node handle
+			physics::WorldPtr world; // pointer to world
+			physics::LinkPtr link; // pointer to link
+			std::string topicX; // name of topic
+			std::string topicY; // name of topic
+			std::string topicZ; // name of topic
+			std::string NameOfNode_; // name of node
+			// ROS subscribers
+			ros::Subscriber pertubation_subscriberX; 
 			ros::Subscriber pertubation_subscriberY;
 			ros::Subscriber pertubation_subscriberZ;
-			std::string NameOfLink;	
-			double Fx, Fy,Fz; 
+			std::string NameOfLink;	// name of link
+			double Fx, Fy,Fz; // value of forces
 	};
 }
 

@@ -73,8 +73,8 @@
     <widget class="QLabel" name="label">
      <property name="geometry">
       <rect>
-       <x>10</x>
-       <y>10</y>
+       <x>20</x>
+       <y>40</y>
        <width>71</width>
        <height>31</height>
       </rect>
@@ -86,9 +86,9 @@
     <widget class="QComboBox" name="comboBox">
      <property name="geometry">
       <rect>
-       <x>90</x>
-       <y>10</y>
-       <width>311</width>
+       <x>100</x>
+       <y>40</y>
+       <width>301</width>
        <height>27</height>
       </rect>
      </property>
@@ -97,7 +97,7 @@
      <property name="geometry">
       <rect>
        <x>10</x>
-       <y>70</y>
+       <y>80</y>
        <width>121</width>
        <height>27</height>
       </rect>
@@ -225,7 +225,7 @@
      <property name="geometry">
       <rect>
        <x>150</x>
-       <y>70</y>
+       <y>80</y>
        <width>121</width>
        <height>27</height>
       </rect>
@@ -238,13 +238,26 @@
      <property name="geometry">
       <rect>
        <x>290</x>
-       <y>70</y>
+       <y>80</y>
        <width>121</width>
        <height>27</height>
       </rect>
      </property>
      <property name="text">
       <string>Compile</string>
+     </property>
+    </widget>
+    <widget class="QCheckBox" name="checkBox">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>10</y>
+       <width>171</width>
+       <height>22</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Hardware-in-the-loop</string>
      </property>
     </widget>
    </widget>

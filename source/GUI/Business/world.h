@@ -17,9 +17,8 @@ public:
     void splitvector(std::string ,QTreeWidgetItem* );
 //private:
     WorldFile* templateword;
-    WorldFile* firstword;
-    WorldFile* lastword;
-    WorldFile* actualword;
+    WorldFile* word;
+
 
 };
 

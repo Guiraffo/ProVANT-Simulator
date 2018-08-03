@@ -17,10 +17,8 @@ public:
     void Write(QTreeWidget*);
     void ToTreeWidget(QTreeWidget*);
     void splitvector(std::string,QTreeWidgetItem*,bool);
-    ModelFile* templatemodel;
-    ModelFile* firstmodel;
-    ModelFile* lastmodel;
-    ModelFile* actualmodel;
+    ModelFile* model;
+
 
 
 };

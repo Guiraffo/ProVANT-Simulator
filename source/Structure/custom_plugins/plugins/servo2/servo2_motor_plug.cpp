@@ -69,7 +69,14 @@ namespace gazebo
 			if(Modo_ == "Posicao")
 			{
 		    	// Setup de um controlador proporcional (P) com um ganho de 0.1:
-  				this->pid = common::PID(0.010, 0.050, 0.0001);
+//  				this->pid = common::PID(0.010, 0.050, 0.0001);
+
+  				if(NameOfJoint_ == "elev"){
+  					this->pid = common::PID(0.010, 0.050, 0.0001);
+  				}
+  				else{
+  					this->pid = common::PID(0.001, 0.0050, 0.00001);
+  				}
   				
   				// Aplica o controlador na junta:
   				this->model->GetJointController()->SetPositionPID(this->junta->GetScopedName(),this->pid);

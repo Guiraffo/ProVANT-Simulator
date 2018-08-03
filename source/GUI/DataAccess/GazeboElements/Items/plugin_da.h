@@ -10,12 +10,13 @@ public:
     void SetName(std::string);
     std::string GetFilename();
     void SetFilename(std::string);
-    bool Read(QDomNode*);
     void Write(QXmlStreamWriter* );
     void print();
-protected:
+
     std::string name;
     std::string filename;
+    std::vector<std::string> parameters;
+    std::vector<std::string> values;
 };
 
 #endif // PLUGIN_DA_H

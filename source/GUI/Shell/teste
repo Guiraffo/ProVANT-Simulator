@@ -1,0 +1,60 @@
+#!/bin/bash
+
+teste2=`ps axu | grep rosmaster | grep -v grep`;
+
+## Testando se o IM gaim está rodando
+if [ "$teste2" ];
+then
+i=1;
+for element in `rosservice call /gazebo/get_model_properties "model_name: 'newmodel'" | sed -n '5p'`;
+	do	
+	if ((i > 1));
+	then
+		infor=`echo "$element" | sed 's/\[//g' | sed 's/,//g' | sed 's/]//g'`
+		arrar[$i]=$infor
+		echo ${arrar[$i]}
+	fi
+	i=$((i+1))
+done
+
+fi
+
+
+	#i=$((i-2))
+	#echo $i
+
+#	rosservice call /gazebo/set_model_configuration '{model_name: "newmodel", joint_names:['${arrar[$i]}'], joint_positions:[0]}'
+
+
+#teste=`ps axu | grep gzserver | grep -v grep`;
+
+# Testando se o IM gaim está rodando
+#if [ "$teste" ];
+#then
+#    echo "gzserver ON"
+#else
+#    echo "gzserver OFF"
+#fi
+
+#include <cstdlib>
+#include <fstream>
+#include <iostream>
+ 
+#int main()
+#{
+#    std::system("ls -l >test.txt"); // execute the UNIX command "ls -l >test.txt"
+#    std::cout << std::ifstream("test.txt").rdbuf();
+#}
+
+
+
+
+#while rosservice call /gazebo/get_model_properties "model_name: 'newmodel'" | sed -n '3p' ; 
+#do
+#      echo ${my_array[@]:CONTADOR}
+      #echo "$CONTADOR";
+#      let CONTADOR=CONTADOR+1; 
+#done
+#echo ${my_array[1]}
+#echo ${#my_array[@]}
+

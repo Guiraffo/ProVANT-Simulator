@@ -5,7 +5,10 @@
 #include"Items/include_da.h"
 #include"Items/physics_da.h"
 #include"Items/worldplugin.h"
+#include"Items/modelplugin.h"
 #include"Items/scene.h"
+#include"Items/multipleincludes.h"
+#include"Items/multipleplugins.h"
 
 
 class WorldFile
@@ -17,24 +20,25 @@ public:
     void SetGravity(gravity_DA);
     physics_DA GetPhysics();
     void SetPhysics(physics_DA);
-    WorldPlugin GetPlugin();
-    void SetPlugin(WorldPlugin);
-    std::vector<Include_DA>GetListsInclude();
-    void AddInclude(std::vector<Include_DA>);
-    void DeleteInclude(int i);
+    ModelPlugin GetPlugin();
+    void SetPlugin(ModelPlugin);
+
+
     bool Read();
     void Write();
     void print();
     std::string Filename;
     QFile file;
     std::string sdfVersion;
+    MultipleIncludes listIncludes;
+    multipleplugins listPlugins;
 private:
     QDomDocument doc;
     gravity_DA g;
     physics_DA physics;
-    WorldPlugin plugin;
     scene sceneObj;
-    std::vector<Include_DA> ListsInclude;
+
+
 };
 
 #endif // WORLDFILE_H

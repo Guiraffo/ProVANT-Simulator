@@ -7,7 +7,7 @@
 #include <gazebo/math/Vector3.hh>
 #include "XMLRead.h" // biblioteca para acesso a dados do xml
 #include <update_timer.h>
-#include "serial_asio.hpp"
+#include "protocol.hpp"
 
 
 
@@ -23,6 +23,9 @@ namespace gazebo
 			virtual void Load(physics::ModelPtr _model, sdf::ElementPtr _sdf); 
 	  	 	virtual void Reset();  
 
+
+			//boost::mutex mutex;
+			std::mutex mtx;
 					
 		protected: 
 			// função chamada a cada passo de simulação
@@ -36,8 +39,6 @@ namespace gazebo
 			void GetStatesVANT20();
 			// Método para escrever dados de simulação
 			void SetInputVANT20(double Fr,double Fl,double Tr,double Tl);
-			// Segurador de ordem zero
-			void Zoh();
 			// leitura de dados
 			void thread();
 			
@@ -56,7 +57,7 @@ namespace gazebo
 		physics::JointPtr juntaL;  // ponteiro para acesso a dados da junta esquerda
 		
 		// dados de simulação
-		double x,y,z,roll,pitch,yaw,alphar,alphal,vx,vy,vz,wx,wy,wz,dalphar,dalphal;
+		double x,y,z,roll,pitch,yaw,gama1,gama2,alphar,alphal,vx,vy,vz,wx,wy,wz,dalphar,dalphal,dgama1,dgama2;
 		// sinais de entrada
 		double Fr, Fl, Tr, Tl;
 		
@@ -65,10 +66,12 @@ namespace gazebo
   		event::ConnectionPtr updateConnection;
   		
   		// Classe de comunicação serial 
-  		SerialClass serial;	
+  		Serial serial;	
   		
   		// Thread
-  		boost::thread *t;				
+  		boost::thread *t;	
+  		
+  		physics::ModelPtr model;			
 
 	};
 }

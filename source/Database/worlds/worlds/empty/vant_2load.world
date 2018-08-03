@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sdf version="1.6">
+    <world name="/home/arthur/catkin_ws/src/ProVANT-Simulator_Developer/source/Database/worlds/worlds/empty/vant_2load.world">
+        <gravity>0 0 -9.8</gravity>
+        <physics type="simbody">
+            <max_step_size>0.001</max_step_size>
+            <real_time_factor>0</real_time_factor>
+        </physics>
+        <plugin name="gazebo_tutorials" filename="libgazebo_ros_world_plugin.so">
+            <ok>nothil</ok>
+        </plugin>
+        <include>
+            <uri>model://ground_plane</uri>
+            <static>false</static>
+        </include>
+        <include>
+            <uri>model://sun</uri>
+            <static>false</static>
+        </include>
+        <include>
+            <uri>model://vant_2load</uri>
+            <name>newmodel</name>
+            <static>false</static>
+            <pose>2 0 1.5 0 0 0</pose>
+        </include>
+        <scene>
+            <sky>
+                <time>18</time>
+                <clouds>
+                    <speed>0</speed>
+                </clouds>
+            </sky>
+        </scene>
+    </world>
+</sdf>

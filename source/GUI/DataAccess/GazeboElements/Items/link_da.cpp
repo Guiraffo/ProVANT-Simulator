@@ -35,22 +35,22 @@ bool link_DA::Read(QDomNode* document)
 
 }
 
-void link_DA::Write(QXmlStreamWriter* xml,int n,std::vector<sensor> sensors)
+void link_DA::Write(QXmlStreamWriter xml,int n,std::vector<sensor> sensors)
 {
-    xml->writeStartElement("link");
-    xml->writeAttribute("name",name.c_str());
-    xml->writeTextElement("pose",pose.c_str());
-    inertialValues.Write(xml);
-    collision.Write(xml);
-    visual.Write(xml);
-    for(uint i=0;i<sensors.size();i++)
-    {
+    xml.writeStartElement("link");
+    xml.writeAttribute("name",name.c_str());
+    xml.writeTextElement("pose",pose.c_str());
+    //inertialValues.Write(xml);
+    //collision.Write(xml);
+    //visual.Write(xml);
+    //for(uint i=0;i<sensors.size();i++)
+    /*{
         if(sensors.at(i).link == n)
         {
             sensors.at(i).Write(xml);
         }
     }
-    xml->writeEndElement();
+    xml.writeEndElement();*/
 }
 
 void link_DA::print()

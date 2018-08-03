@@ -1,3 +1,13 @@
+/*
+* File: gps.cpp
+* Author: Arthur Viana Lara
+* Project: ProVANT
+* Company: Federal University of Minas Gerais
+* Version: 1.0
+* Date: 29/01/18
+* Description:  This library is responsable to implement GPS. It gets information from Gazebo topics and publishes in Ros topic.
+*/
+
 #ifndef _GAZEBO_GPS_PLUGIN_HH_
 #define _GAZEBO_GPS_PLUGIN_HH_
 
@@ -16,41 +26,29 @@
 
 namespace gazebo
 {
-  /// \brief An example plugin for a contact sensor.
   class gps : public ModelPlugin
   {
-    /// \brief Constructor.
+    /// Constructor.
     public: gps();
-
-    /// \brief Destructor.
+    /// Destructor.
     public: virtual ~gps();
-
-    /// \brief Load the sensor plugin.
-    /// \param[in] _sensor Pointer to the sensor that loaded this plugin.
-    /// \param[in] _sdf SDF element that describes the plugin.
+    /// Load the sensor plugin.
     public: virtual void Load(physics::ModelPtr _model, sdf::ElementPtr _sdf);
-
-    /// \brief Callback that receives the contact sensor's update signal.
+    /// Callback that receives the gps's update signal.
     private: void OnUpdate(ConstGPSPtr&);
 
 
-    physics::WorldPtr world;
-    UpdateTimer updateTimer;
-    event::ConnectionPtr updateConnection;
+    physics::WorldPtr world; // pointer to the world
+    UpdateTimer updateTimer; // pointer to time
+    event::ConnectionPtr updateConnection; // pointer to connection
 
-    //private: ros::NodeHandle n;
-
-    //private: ros::Publisher gps_pub;
-
-    private: std::string gazebotopic;
-    private: std::string rostopic;
-    private: double Nbits;
-    private: transport::SubscriberPtr sub;
-    private: transport::NodePtr node;
-    physics::ModelPtr model;
-
-    ros::NodeHandle n;
-    ros::Publisher publisher_;
+    private: std::string gazebotopic; // name of Gazebo's topic
+    private: std::string rostopic; // name of ROS's topic
+    private: transport::SubscriberPtr sub; // Gazebo's subscriber
+    private: transport::NodePtr node; // Gazebo node handle
+    physics::ModelPtr model; // pointer to model
+    ros::NodeHandle n; // ros node handle
+    ros::Publisher publisher_; // Ros publisher
   };
 }
 #endif

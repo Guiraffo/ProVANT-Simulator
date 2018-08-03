@@ -4,14 +4,17 @@
 #
 #-------------------------------------------------
 
-QT       += core gui
-QT       += xml
+CONFIG += qt
+QT += gui
+QT += core
+QT += xml
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = GUI
 TEMPLATE = app
 
+CONFIG += c++11
 
 SOURCES += main.cpp\
         mainwindow.cpp \
@@ -25,7 +28,7 @@ SOURCES += main.cpp\
     Business/model.cpp \
     Business/world.cpp \
     Business/controller.cpp \
-    Business/simulation.cpp \
+#    Business/simulation.cpp \
     DataAccess/GazeboElements/worldfile.cpp \
     DataAccess/GazeboElements/Items/model_da.cpp \
     DataAccess/GazeboElements/Items/worldplugin.cpp \
@@ -45,13 +48,17 @@ SOURCES += main.cpp\
     DataAccess/RosElements/roslaunch.cpp \
     dialognewmodel.cpp \
     DataAccess/GazeboElements/Items/scene.cpp \
-    DataAccess/GazeboElements/Items/Instruments/sensor.cpp \
-    DataAccess/GazeboElements/Items/Instruments/sonar.cpp \
-    DataAccess/GazeboElements/Items/Instruments/gps.cpp \
-    DataAccess/GazeboElements/Items/Instruments/imu.cpp \
-    DataAccess/GazeboElements/Items/Instruments/magnetometer.cpp \
-    aboutform.cpp \
-    aboutdialog.cpp
+#    DataAccess/GazeboElements/Items/Instruments/sensor.cpp \
+#    DataAccess/GazeboElements/Items/Instruments/sonar.cpp \
+#    DataAccess/GazeboElements/Items/Instruments/gps.cpp \
+#    DataAccess/GazeboElements/Items/Instruments/imu.cpp \
+#    DataAccess/GazeboElements/Items/Instruments/magnetometer.cpp \
+#    aboutform.cpp \
+    aboutdialog.cpp \
+    DataAccess/GazeboElements/Items/multipleincludes.cpp \
+    DataAccess/GazeboElements/Items/multipleplugins.cpp \
+    jointsdialog.cpp
+    #Utils/tools.cpp
 
 HEADERS  += mainwindow.h \
     DataAccess/ControllerElements/configfile.h \
@@ -64,7 +71,7 @@ HEADERS  += mainwindow.h \
     Business/model.h \
     Business/world.h \
     Business/controller.h \
-    Business/simulation.h \
+#    Business/simulation.h \
     DataAccess/GazeboElements/worldfile.h \
     DataAccess/GazeboElements/Items/model_da.h \
     DataAccess/GazeboElements/Items/worldplugin.h \
@@ -85,15 +92,21 @@ HEADERS  += mainwindow.h \
     DataAccess/RosElements/roslaunch.h \
     dialognewmodel.h \
     DataAccess/GazeboElements/Items/scene.h \
-    DataAccess/GazeboElements/Items/Instruments/sensor.h \
-    aboutform.h \
-    aboutdialog.h
+#    DataAccess/GazeboElements/Items/Instruments/sensor.h \
+#    aboutform.h \
+    aboutdialog.h \
+    DataAccess/GazeboElements/Items/multipleincludes.h \
+    Utils/tools.h \
+    Utils/environmentexception.h \
+    DataAccess/GazeboElements/Items/multipleplugins.h \
+    jointsdialog.h
 
 FORMS    += mainwindow.ui \
     dialog.ui \
     dialognewcontroller.ui \
     dialogopencontroller.ui \
     dialognewmodel.ui \
-    aboutform.ui \
-    aboutform.ui \
-    aboutdialog.ui
+#    aboutform.ui \
+    aboutdialog.ui \
+    jointsdialog.ui \
+    jointsdialog.ui
