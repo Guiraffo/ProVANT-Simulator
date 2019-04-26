@@ -274,6 +274,7 @@
             <LinkDir>servodir</LinkDir>
             <topic_FL>Thrustesq</topic_FL>
             <topic_FR>Thrustdir</topic_FR>
+            <DragCte>0.00001</DragCte>
         </plugin>
         <plugin name="servoR" filename="libgazebo_ros_servo_motor_plugin.so">
             <TopicSubscriber>RefaR</TopicSubscriber>
@@ -281,6 +282,7 @@
             <Modo>Torque</Modo>
             <TopicPublisher>aR</TopicPublisher>
             <ChildLink>servodir</ChildLink>
+            <Saturation>1</Saturation>
         </plugin>
         <plugin name="servoL" filename="libgazebo_ros_servo_motor_plugin.so">
             <TopicSubscriber>RefaL</TopicSubscriber>
@@ -288,6 +290,7 @@
             <Modo>Torque</Modo>
             <TopicPublisher>aL</TopicPublisher>
             <ChildLink>servoesq</ChildLink>
+            <Saturation>1</Saturation>
         </plugin>
         <plugin name="VetorEstados" filename="libgazebo_ros_AllData_plugin2.so">
             <NameOfJointL>aL</NameOfJointL>

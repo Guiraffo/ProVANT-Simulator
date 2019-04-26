@@ -2,17 +2,22 @@
 
 ModelFile::ModelFile(std::string value):file(value.c_str())
 {
+    qDebug() << value.c_str();
     filename = value;
 }
 
 void ModelFile::Read()
 {
+    if(file.exists()) qDebug() << "existe";
     if(file.open(QIODevice::ReadOnly | QIODevice::Text))
     {
+         qDebug() << "teste 1";
         QString erro;
         int line, column;
         if(doc.setContent(&file,&erro,&line,&column))
         {
+
+             qDebug() << "teste 2";
             file.close();
 
             sdfVersion = doc.firstChildElement("sdf")
@@ -43,7 +48,7 @@ void ModelFile::Read()
     else
     {
         // TO DO: criar exceção
-        qDebug("Problemas com o arquivo xml");
+        qDebug(" 41 Problemas com o arquivo xml");
         file.close();
         exit(1);
     }
@@ -66,7 +71,7 @@ void ModelFile::Write()
     else
     {
         // TO DO: criar exceção
-        qDebug("Problemas com o arquivo xml");
+        qDebug(" 5 Problemas com o arquivo xml");
         file.close();
         exit(1);
     }

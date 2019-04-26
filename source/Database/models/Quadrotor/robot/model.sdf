@@ -1,0 +1,374 @@
+<?xml version="1.0" encoding="utf-8"?>
+<sdf version="1.5">
+  <model name="Quadrotor">
+    <pose>0 0 0.0456 0 0 0</pose>
+    <plugin name="clock" filename="libgz_clock.so">
+      <topic>/gazebo/frc/time</topic>
+    </plugin>
+    <link name="Main_Body">
+      <gravity>1</gravity>
+      <self_collide>0</self_collide>
+      <pose>-0.030499778763354 -0.0150007433100538 -0.0253368490908868 1.5707963267949 0 6.91838908175314E-15</pose>
+      <must_be_base_link>1</must_be_base_link>
+      <velocity_decay>
+        <linear>0</linear>
+        <angular>0</angular>
+      </velocity_decay>
+      <inertial>
+        <mass>0.13525116882176</mass>
+        <pose>0 0 0 0 0 0</pose>
+        <inertia>
+          <ixx>0.000317862669424313</ixx>
+          <ixy>4.22883029636484E-10</ixy>
+          <ixz>4.69023427971284E-10</ixz>
+          <iyy>0.000600538169108785</iyy>
+          <iyz>1.42076052497298E-09</iyz>
+          <izz>0.000330784470981439</izz>
+        </inertia>
+      </inertial>
+      <collision name="Main_Body_collision">
+        <pose>-2.21236645809856E-07 -0.0202631509091132 -7.433100534732E-07 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://Quadrotor/meshes/Main_Body_col.STL</uri>
+          </mesh>
+        </geometry>
+        <surface>
+          <contact>
+            <ode />
+          </contact>
+          <friction>
+            <ode>
+              <mu>0</mu>
+              <mu2>0</mu2>
+            </ode>
+          </friction>
+        </surface>
+      </collision>
+      <visual name="Main_Body_visual">
+        <pose>-2.21236645809856E-07 -0.0202631509091132 -7.433100534732E-07 0 0 0</pose>
+        <material>
+          <ambient>0 0 0.75 1</ambient>
+          <diffuse>0 0 0.75 1</diffuse>
+        </material>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://Quadrotor/meshes/Main_Body.STL</uri>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+    <link name="Hel_1">
+      <gravity>1</gravity>
+      <self_collide>0</self_collide>
+      <pose>-0.115352813742385 -0.0998528137423862 -0.0123189988839659 0 0 0</pose>
+      <must_be_base_link>0</must_be_base_link>
+      <velocity_decay>
+        <linear>0</linear>
+        <angular>0</angular>
+      </velocity_decay>
+      <inertial>
+        <mass>0.000954530577314195</mass>
+        <pose>0 0 0 0 0 0</pose>
+        <inertia>
+          <ixx>2.81385625747555E-07</ixx>
+          <ixy>7.67943755771322E-25</ixy>
+          <ixz>2.91544908221316E-07</ixz>
+          <iyy>6.0949206287129E-07</iyy>
+          <iyz>5.03088422234381E-25</iyz>
+          <izz>3.32004434341938E-07</izz>
+        </inertia>
+      </inertial>
+      <collision name="Hel_1_collision">
+        <pose>0.085 0.085 -0.03 1.5707963267949 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://Quadrotor/meshes/Hel_1_col.STL</uri>
+          </mesh>
+        </geometry>
+        <surface>
+          <contact>
+            <ode />
+          </contact>
+          <friction>
+            <ode>
+              <mu>0</mu>
+              <mu2>0</mu2>
+            </ode>
+          </friction>
+        </surface>
+      </collision>
+      <visual name="Hel_1_visual">
+        <pose>0.085 0.085 -0.03 1.5707963267949 0 0</pose>
+        <material>
+          <ambient>0 0 0.75 1</ambient>
+          <diffuse>0 0 0.75 1</diffuse>
+        </material>>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://Quadrotor/meshes/Hel_1.STL</uri>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+    <joint name="Main_Body-Hel_1" type="revolute">
+      <parent>Main_Body</parent>
+      <child>Hel_1</child>
+      <pose>-1.79023462720806E-15 0 -1.81799020282369E-15 0 6.81925780211572E-14 1.57079632679496</pose>
+      <axis>
+        <xyz>0 0 1</xyz>
+        <dynamics>
+          <damping>0</damping>
+          <friction>0</friction>
+        </dynamics>
+        <limit>
+          <effort>1</effort>
+        </limit>
+      </axis>
+    </joint>
+    <link name="Hel_2">
+      <gravity>1</gravity>
+      <self_collide>0</self_collide>
+      <pose>0.0543528137423864 -0.0998528137423854 -0.0123189988839659 0 0 0</pose>
+      <must_be_base_link>0</must_be_base_link>
+      <velocity_decay>
+        <linear>0</linear>
+        <angular>0</angular>
+      </velocity_decay>
+      <inertial>
+        <mass>0.000954530577314196</mass>
+        <pose>0 0 0 0 0 0</pose>
+        <inertia>
+          <ixx>3.32004434341938E-07</ixx>
+          <ixy>9.44803313118804E-26</ixy>
+          <ixz>2.91544908221317E-07</ixz>
+          <iyy>6.09492062871292E-07</iyy>
+          <iyz>3.14707955452116E-24</iyz>
+          <izz>2.81385625747558E-07</izz>
+        </inertia>
+      </inertial>
+      <collision name="Hel_2_collision">
+        <pose>-0.085 0.085 -0.03 1.5707963267949 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://Quadrotor/meshes/Hel_2_col.STL</uri>
+          </mesh>
+        </geometry>
+        <surface>
+          <contact>
+            <ode />
+          </contact>
+          <friction>
+            <ode>
+              <mu>0</mu>
+              <mu2>0</mu2>
+            </ode>
+          </friction>
+        </surface>
+      </collision>
+      <visual name="Hel_2_visual">
+        <pose>-0.085 0.085 -0.03 1.5707963267949 0 0</pose>
+        <material>
+          <ambient>0 0 0.75 1</ambient>
+          <diffuse>0 0 0.75 1</diffuse>
+        </material>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://Quadrotor/meshes/Hel_2.STL</uri>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+    <joint name="Main_Body-Hel_2" type="revolute">
+      <parent>Main_Body</parent>
+      <child>Hel_2</child>
+      <pose>-2.27595720048157E-15 0 2.26207941267376E-15 0 0 0</pose>
+      <axis>
+        <xyz>0 0 1</xyz>
+        <dynamics>
+          <damping>0</damping>
+          <friction>0</friction>
+        </dynamics>
+        <limit>
+          <effort>1</effort>
+        </limit>
+      </axis>
+    </joint>
+    <link name="Hel_3">
+      <gravity>1</gravity>
+      <self_collide>0</self_collide>
+      <pose>-0.115352813742385 0.0698528137423855 -0.012318998883966 0 0 0</pose>
+      <must_be_base_link>0</must_be_base_link>
+      <velocity_decay>
+        <linear>0</linear>
+        <angular>0</angular>
+      </velocity_decay>
+      <inertial>
+        <mass>0.000954530577314195</mass>
+        <pose>0 0 0 0 0 0</pose>
+        <inertia>
+          <ixx>3.32004434341941E-07</ixx>
+          <ixy>3.57858027691236E-23</ixy>
+          <ixz>2.91544908221316E-07</ixz>
+          <iyy>6.09492062871291E-07</iyy>
+          <iyz>3.1797890477376E-23</iyz>
+          <izz>2.81385625747553E-07</izz>
+        </inertia>
+      </inertial>
+      <collision name="Hel_3_collision">
+        <pose>0.085 -0.085 -0.03 1.5707963267949 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://Quadrotor/meshes/Hel_3_col.STL</uri>
+          </mesh>
+        </geometry>
+        <surface>
+          <contact>
+            <ode />
+          </contact>
+          <friction>
+            <ode>
+              <mu>0</mu>
+              <mu2>0</mu2>
+            </ode>
+          </friction>
+        </surface>
+      </collision>
+      <visual name="Hel_3_visual">
+        <pose>0.085 -0.085 -0.03 1.5707963267949 0 0</pose>
+       <material>
+          <ambient>0 0 0.75 1</ambient>
+          <diffuse>0 0 0.75 1</diffuse>
+        </material>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://Quadrotor/meshes/Hel_3.STL</uri>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+    <joint name="Main_Body-Hel_3" type="revolute">
+      <parent>Main_Body</parent>
+      <child>Hel_3</child>
+      <pose>2.3037127760972E-15 0 -2.23432383705813E-15 0 0 0</pose>
+      <axis>
+        <xyz>0 0 1</xyz>
+        <dynamics>
+          <damping>0</damping>
+          <friction>0</friction>
+        </dynamics>
+        <limit>
+          <effort>1</effort>
+        </limit>
+      </axis>
+    </joint>
+    <link name="Hel_4">
+      <gravity>1</gravity>
+      <self_collide>0</self_collide>
+      <pose>0.0543528137423862 0.069852813742385 -0.012318998883966 0 0 0</pose>
+      <must_be_base_link>0</must_be_base_link>
+      <velocity_decay>
+        <linear>0</linear>
+        <angular>0</angular>
+      </velocity_decay>
+      <inertial>
+        <mass>0.000954530577314195</mass>
+        <pose>0 0 0 0 0 0</pose>
+        <inertia>
+          <ixx>2.81385625747551E-07</ixx>
+          <ixy>8.01694670835355E-24</ixy>
+          <ixz>2.91544908221316E-07</ixz>
+          <iyy>6.09492062871291E-07</iyy>
+          <iyz>1.28745134274154E-23</iyz>
+          <izz>3.32004434341943E-07</izz>
+        </inertia>
+      </inertial>
+      <collision name="Hel_4_collision">
+        <pose>-0.085 -0.085 -0.03 1.5707963267949 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://Quadrotor/meshes/Hel_4_col.STL</uri>
+          </mesh>
+        </geometry>
+        <surface>
+          <contact>
+            <ode />
+          </contact>
+          <friction>
+            <ode>
+              <mu>0</mu>
+              <mu2>0</mu2>
+            </ode>
+          </friction>
+        </surface>
+      </collision>
+      <visual name="Hel_4_visual">
+        <pose>-0.085 -0.085 -0.03 1.5707963267949 0 0</pose>
+        <material>
+          <ambient>0 0 0.75 1</ambient>
+          <diffuse>0 0 0.75 1</diffuse>
+        </material>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://Quadrotor/meshes/Hel_4.STL</uri>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+    <joint name="Main_Body-Hel_4" type="revolute">
+      <parent>Main_Body</parent>
+      <child>Hel_4</child>
+      <pose>2.24820162486594E-15 0 2.27595720048157E-15 0 0 0</pose>
+      <axis>
+        <xyz>0 0 1</xyz>
+        <dynamics>
+          <damping>0</damping>
+          <friction>0</friction>
+        </dynamics>
+        <limit>
+          <effort>1</effort>
+        </limit>
+      </axis>
+    </joint>
+     <plugin name="empuxo"
+filename="libgazebo_ros_brushless_plugin.so">
+            <topic_FR>Empuxoh1</topic_FR>
+            <LinkDir>Hel_1</LinkDir>
+            <topic_FL>Empuxoh2</topic_FL>
+            <LinkEsq>Hel_2</LinkEsq>
+            <DragCte>0.02</DragCte>
+     	  </plugin>
+     <plugin name="empuxo"
+filename="libgazebo_ros_brushless_plugin.so">
+            <topic_FR>Empuxoh3</topic_FR>
+            <LinkDir>Hel_3</LinkDir>
+            <topic_FL>Empuxoh4</topic_FL>
+            <LinkEsq>Hel_4</LinkEsq>
+            <DragCte>0.02</DragCte>
+         </plugin> 
+     	 <plugin name="VetorEstados"
+filename="libgazebo_ros_QuadData.so">
+            <NameOfTopic>Estados1</NameOfTopic>
+            <NameOfJointR>Main_Body-Hel_4</NameOfJointR>
+            <NameOfJointL>Main_Body-Hel_3</NameOfJointL>
+            <bodyName>Main_Body</bodyName>
+     </plugin>  
+     <plugin name="VetorEstados"
+filename="libgazebo_ros_QuadData.so">
+            <NameOfTopic>Estados2</NameOfTopic>
+            <NameOfJointR>Main_Body-Hel_2</NameOfJointR>
+            <NameOfJointL>Main_Body-Hel_1</NameOfJointL>
+            <bodyName>Main_Body</bodyName>
+     </plugin>        
+  </model>
+</sdf>

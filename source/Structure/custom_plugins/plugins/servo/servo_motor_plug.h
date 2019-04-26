@@ -45,6 +45,7 @@ namespace gazebo
 			std::string TopicSubscriber_; // name of topic for receiving references
 			std::string TopicPublisher_; // name of topic for sending sensor data
 			std::string Modo_; // mode of servo working
+			double Saturation_;
 			physics::WorldPtr world; // world's pointer
 			physics::JointPtr junta;  // joint's pointer
 			UpdateTimer updateTimer; // pointer for notifying new step time

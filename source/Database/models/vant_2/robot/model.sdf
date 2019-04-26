@@ -79,6 +79,7 @@
             <pose>0 0 0 0 0 0</pose>
             <inertial>
                 <mass>1.92509767079622</mass>
+                <!--<mass>2.0639</mass>-->
                 <pose>-0.00254692194194197639 0.000137734082827298 -0.0181900814143879 0 0 0</pose>
                 <inertia>
                     <ixx>0.0697552757250878</ixx>
@@ -87,6 +88,12 @@
                     <iyy>0.00792827006001647</iyy>
                     <iyz>-1.07360516340487E-05</iyz>
                     <izz>0.0664000187819483</izz>
+                    <!--<ixx>0.07324303</ixx>
+                    <ixy>4.77417385357503E-05</ixy>
+                    <ixz>0.0003809199</ixz>
+                    <iyy>0.008324684</iyy>
+                    <iyz>-1.07360516340487E-05</iyz>
+                    <izz>0.06972001</izz>-->
                 </inertia>
             </inertial>
             <collision name="corpocollision">
@@ -153,12 +160,14 @@
             <LinkDir>servodir</LinkDir>
             <topic_FL>Thrustesq</topic_FL>
             <LinkEsq>servoesq</LinkEsq>
+            <DragCte>0.0001</DragCte>
         </plugin>
         <plugin name="aRteste" filename="libgazebo_ros_servo_motor_plugin.so">
             <NameOfJoint>aR</NameOfJoint>
             <TopicPublisher>SensoraR</TopicPublisher>
             <TopicSubscriber>RefaR</TopicSubscriber>
             <Modo>Torque</Modo>
+            <Saturation>1</Saturation>
         </plugin>
         <plugin name="VetorEstados" filename="libgazebo_ros_AllData_plugin.so">
             <NameOfJointR>aR</NameOfJointR>
@@ -171,6 +180,7 @@
             <TopicPublisher>SensoraL</TopicPublisher>
             <TopicSubscriber>RefaL</TopicSubscriber>
             <Modo>Torque</Modo>
+            <Saturation>1</Saturation>
         </plugin>
         <plugin name="hil" filename="libgazebo_hil_server4.so">
             <NameOfJointL>aL</NameOfJointL>
@@ -178,6 +188,12 @@
             <NameOfJointR>aR</NameOfJointR>
 	    	<BrushlessR>servodir</BrushlessR>
 	    	<BrushlessL>servoesq</BrushlessL>
-    	</plugin>
+    	</plugin> 
+    	 <plugin name="teste" filename="libtestePlugin.so">
+    	</plugin> 
+    	 <plugin name="Angle" filename="libAnglePlugin.so">
+    	 <NameOfJoint>aL</NameOfJoint>
+    	 <TopicPublisher>teste</TopicPublisher>
+    	</plugin> 
     </model>
 </sdf>

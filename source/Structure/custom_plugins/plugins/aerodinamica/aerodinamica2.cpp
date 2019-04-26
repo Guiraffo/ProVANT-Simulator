@@ -126,6 +126,7 @@ namespace gazebo
 	
 	void Aerodinamica2::CallbackFElev(std_msgs::Float64 De)
 	{
+	std::cout << "Elev Deflection: " << De.data << std::endl;
 		try
 		{
 			ElevatorDeflection = De.data;
@@ -458,6 +459,7 @@ namespace gazebo
 
 	double Aerodinamica2::c_e(double De)
 	{
+	std::cout<<"Aileron Deflection: "<<De<< std::endl;
 		try
 		{
 			return 2.1873375*De;

@@ -12,17 +12,32 @@
 
 namespace gazebo
 {
+	
 	// Callback for references
-        void ServoMotorPlugin::CallbackReferencias(std_msgs::Float64 msg)
+    void ServoMotorPlugin::CallbackReferencias(std_msgs::Float64 msg)
 	{
+		//std::cout << "entreiiiiii servo plugin!\n";
 		try
 		{	bool result = false;
-			boost::mutex::scoped_lock scoped_lock(lock);
-			if(Modo_ == "Torque")	junta->SetForce(0,msg.data);
-			if(Modo_ == "Posição")	result = junta->SetPosition(0,msg.data); // TO FIX
+			//std::cout << "entrei2 servo plugin!\n";
+			if(Modo_ == "Torque"){	
+				if(msg.data > Saturation_){
+				msg.data = Saturation_;
+				}else if(msg.data < -Saturation_){
+				msg.data = -Saturation_;
+				}
+			junta->SetForce(0,msg.data);
+			//	std::cout << "Junta: " << NameOfJoint_ << "ValorTorque: " << msg.data << std::endl;
+			}
+			if(Modo_ == "Position")	
+			{
+			//std::cout << "entrei4 servo plugin!\n";
+			result = junta->SetPosition(0,msg.data); // TO FIX
+			}
 		}
 		catch(std::exception& e)
 		{
+			//std::cout << "entrei3 servo plugin!\n";
 			std::cout << e.what() << std::endl;
 		}
 	}
@@ -51,6 +66,7 @@ namespace gazebo
 	{	
 		try
 		{
+			std::cout << "inicializado servo plugin!" << std::endl;
 	    		if (!ros::isInitialized())
 	    		{
 				std::cout << "Nao inicializado!" << std::endl;
@@ -61,8 +77,13 @@ namespace gazebo
 			TopicSubscriber_ = XMLRead::ReadXMLString("TopicSubscriber",_sdf); // Name of topic for receiving reference
 			TopicPublisher_ = XMLRead::ReadXMLString("TopicPublisher",_sdf); // Name of topic for sending data
 			Modo_ = XMLRead::ReadXMLString("Modo",_sdf); // mode of working
+			Saturation_ = XMLRead::ReadXMLDouble("Saturation",_sdf);
 			world = _model->GetWorld(); // get World's pointer	
 			junta = _model->GetJoint(NameOfJoint_); // get joint's pointer
+
+			
+		   // std::cout << NameOfJoint_ << std::endl;
+		   // std::cout << Modo_ << std::endl;
 
 			// subscriber
 			motor_subscriber_ = node_handle_.subscribe(TopicSubscriber_, 1, &gazebo::ServoMotorPlugin::CallbackReferencias, this);

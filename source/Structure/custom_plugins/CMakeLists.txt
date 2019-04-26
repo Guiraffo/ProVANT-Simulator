@@ -9,6 +9,9 @@ find_package(catkin REQUIRED COMPONENTS
 		simulator_msgs)
 include_directories(include ${catkin_INCLUDE_DIRS})
 
+
+#include_directories(plugins/<nome_da_pasta_do_plugin>)
+
 include_directories(plugins/force)
 include_directories(plugins/torque)
 include_directories(plugins/imu)
@@ -30,6 +33,11 @@ include_directories(plugins/pertubation)
 include_directories(plugins/aerodinamica)
 include_directories(plugins/servo2)
 include_directories(plugins/HIL_server)
+include_directories(plugins/teste_plugin)
+include_directories(plugins/get_angle_plugin)
+include_directories(plugins/QuadData)
+include_directories(plugins/Aerodinamica4dot0)
+
 
 
 
@@ -122,6 +130,18 @@ target_link_libraries(gazebo_ros_servo2_motor_plugin ${catkin_LIBRARIES} ${GAZEB
 add_library(gazebo_hil_server4 plugins/HIL_server/server.cpp plugins/HIL_server/protocol.cpp plugins/HIL_server/frame.cpp plugins/HIL_server/serial.cpp) 
 target_link_libraries(gazebo_hil_server4 ${catkin_LIBRARIES} ${GAZEBO_LIBRARIES})
 
+add_library(testePlugin plugins/teste_plugin/teste_plugin.cpp) 
+target_link_libraries(testePlugin ${catkin_LIBRARIES} ${GAZEBO_LIBRARIES})
+
+add_library(AnglePlugin plugins/get_angle_plugin/get_angle_plugin.cpp) 
+target_link_libraries(AnglePlugin ${catkin_LIBRARIES} ${GAZEBO_LIBRARIES})
+
+add_library(gazebo_ros_QuadData plugins/QuadData/QuadData.cpp) 
+target_link_libraries(gazebo_ros_QuadData ${catkin_LIBRARIES} ${GAZEBO_LIBRARIES})
+
+add_library(gazebo_ros_Aerodinamica4dot0_plugin plugins/Aerodinamica4dot0/Aerodinamica.cpp) 
+target_link_libraries(gazebo_ros_Aerodinamica4dot0_plugin ${catkin_LIBRARIES} ${GAZEBO_LIBRARIES})
+
 install(DIRECTORY include/${PROJECT_NAME}/
   DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION}
   FILES_MATCHING PATTERN "*.h"
@@ -148,6 +168,10 @@ install(TARGETS
   gazebo_ros_universaljoint
   gazebo_ros_universallink
   gazebo_ros_servo2_motor_plugin
+  testePlugin
+  AnglePlugin
+  gazebo_ros_QuadData
+  gazebo_ros_Aerodinamica4dot0_plugin
   ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}

@@ -37,7 +37,7 @@ class teste : public Icontroller
 	// initial configuration
 	public: void config()
 	{
-		
+		std::cout << "helloword testecpp";
 		// control matrix
 		K << -0.000509474023994 ,  1.381002006541810 ,  2.044930990723325 , -4.098388643419657 ,  0.002544968427177 ,  0.065243786421189, -0.011997162152724 ,  0.012231188237446 , -0.000191109567030 ,  0.977046060078436  , 2.067519443836474 , -1.069820095142832,
 0.003981280957280 ,  0.048837474399233 , -0.000157117358773  , 0.000160465562387 , -0.000324184653490 ,  0.932396154093819,
@@ -63,6 +63,8 @@ class teste : public Icontroller
 	}
 	public: std::vector<double> execute(simulator_msgs::SensorArray arraymsg)
 	{
+	
+	    std::cout << "Funciona teste";
 		// integrators variables
 		static double xint, x_ant = 0;
 		static double yint, y_ant = 0;

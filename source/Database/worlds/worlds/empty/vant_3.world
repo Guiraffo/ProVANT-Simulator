@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <sdf version="1.6">
-    <world name="/home/macro/catkin_ws/src/ProVANT-Simulator_Developer/source/Database/worlds/worlds/empty/empty2.world">
+    <world name="/home/macro/catkin_ws/src/ProVANT-Simulator_Developer/source/Database/worlds/worlds/empty/vant_3.world">
         <gravity>0 0 -9.8</gravity>
         <physics type="simbody">
             <max_step_size>0.0001000</max_step_size>
@@ -19,9 +19,9 @@
         </include>
         <include>
             <uri>model://vant_3</uri>
-            <name>myModel</name>
+            <name>newmodel</name>
             <static>false</static>
-            <pose>0 0 1 0 0 0</pose>
+            <pose>0 0 0 0 0 0</pose>
         </include>
         <scene>
             <sky>

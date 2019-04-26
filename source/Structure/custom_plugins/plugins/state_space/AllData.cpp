@@ -41,7 +41,7 @@ namespace gazebo
 	{	
 		try
 		{
-			std::cout << "entrei";
+			std::cout << "entrei Estados plugin"<<std::endl;
 	    		if (!ros::isInitialized())
 	    		{
 				ROS_INFO("Nao inicializado!");

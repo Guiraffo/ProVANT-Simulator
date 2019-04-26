@@ -443,7 +443,7 @@
 			<topic_Rud> Ruddef </topic_Rud>
             <LinkRud> rudder </LinkRud>
             <topic_Elev> Elevdef </topic_Elev>
-            <LinkElev> elevator </LinkElev>
+            <LinkElev> elevator </LinkElev>						
         </plugin>
     </model>
 </sdf>

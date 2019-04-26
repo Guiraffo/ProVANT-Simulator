@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <topicdata>data</topicdata>
+    <TopicoStep>Step</TopicoStep>
+    <Sampletime>3</Sampletime>
+    <Strategy>liblqr_vant4.so</Strategy>
+    <RefPath>ref.txt</RefPath>
+    <Outputfile>out.txt</Outputfile>
+    <InputPath>in.txt</InputPath>
+    <ErroPath>erro.txt</ErroPath>
+    <Sensors>
+        <Device>Estados</Device>
+    </Sensors>
+    <Actuators>
+        <Device>Thrustdir</Device>
+        <Device>Thrustesq</Device>
+        <Device>RefAileronR</Device>
+        <Device>RefAileronL</Device>
+        <Device>RefRotorR</Device>
+        <Device>RefRotorL</Device>
+        <Device>RefRudderR</Device>
+        <Device>RefRudderL</Device>
+    </Actuators>
+</config>

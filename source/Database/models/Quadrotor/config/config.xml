@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <topicdata>data</topicdata>
+    <TopicoStep>Step</TopicoStep>
+    <Sampletime>3</Sampletime>
+    <Strategy>liblqr_vant4.so</Strategy>
+    <RefPath>ref.txt</RefPath>
+    <Outputfile>out.txt</Outputfile>
+    <InputPath>in.txt</InputPath>
+    <ErroPath>erro.txt</ErroPath>
+    <Sensors>
+        <Device>Estados1</Device>
+        <Device>Estados2</Device>
+    </Sensors>
+    <Actuators>
+        <Device>Empuxoh1</Device>
+        <Device>Empuxoh2</Device>
+        <Device>Empuxoh3</Device>
+        <Device>Empuxoh4</Device>
+    </Actuators>
+</config>
