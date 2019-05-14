@@ -6,6 +6,7 @@
     <Strategy>liblqr_vant4.so</Strategy>
     <RefPath>ref.txt</RefPath>
     <Outputfile>out.txt</Outputfile>
+    <Outsaturedfile>outsatured.txt</Outsaturedfile>
     <InputPath>in.txt</InputPath>
     <ErroPath>erro.txt</ErroPath>
     <Sensors>

@@ -112,49 +112,16 @@ private: int Iterations;
 		Input = -K*Erro;
 
 		// Feedforward
-		Input(0) = Input(0) + 37.3;
-		if(Input(0) > 50)
-		{
-			Input(0) = 50;
-		}
-		else if(Input(0) < 0)
-		{
-			Input(0) = 0;
-		}
-		 
+		Input(0) = Input(0) + 37.3; 
 		Input(1) = Input(1) + 37.3;
-		if(Input(0) > 50)
-		{
-			Input(0) = 50;
-		}
-		else if(Input(0) < 0)
-		{
-			Input(0) = 0;
-		}
 		
-		std::cout << "Forca1: " << Input(0) << std::endl;
-		std::cout << "Forca2: " << Input(1) << std::endl;
 		// output
 		Input2(0) = Input(0);
 		Input2(1) = Input(1);
-	
 		//Input2(0) = 37.3;
 		//Input2(1) = 37.3;
 		Input2(2) = Input(2);
-		if(Input2(2) > 1){
-			Input(2) = 1;
-		}else if(Input(2) < -1){
-			Input(2) = -1;
-		}
 		Input2(3) = Input(3);
-		if(Input2(3) > 1){
-			Input(3) = 1;
-		}else if(Input(3) < -1){
-			Input(3) = -1;
-		} 
-			
-		std::cout << "Torque1: " << Input2(2) << std::endl;
-		std::cout << "Torque2: " << Input2(3) << std::endl;
 		Input2(4) = 1.57; 
 		Input2(5) = 0.52; 
 		Input2(6) = 0.0001;

@@ -10,6 +10,7 @@
 
 #include <servo_motor_plug.h>
 
+
 namespace gazebo
 {
 	
@@ -27,12 +28,15 @@ namespace gazebo
 				msg.data = -Saturation_;
 				}
 			junta->SetForce(0,msg.data);
+
+			//outsaturedfile.printFile(msg.data);
 			//	std::cout << "Junta: " << NameOfJoint_ << "ValorTorque: " << msg.data << std::endl;
 			}
 			if(Modo_ == "Position")	
 			{
 			//std::cout << "entrei4 servo plugin!\n";
 			result = junta->SetPosition(0,msg.data); // TO FIX
+			
 			}
 		}
 		catch(std::exception& e)
@@ -45,7 +49,10 @@ namespace gazebo
 	// constructor
 	ServoMotorPlugin::ServoMotorPlugin()
 	{ 
-
+			//	XMLRead doc(std::getenv("TILT_CONFIG"));
+			//	std::string OutputsaturedPath = doc.GetItem("Outsaturedfile");
+			//	OutputsaturedPath = std::getenv("TILT_MATLAB") + OutputsaturedPath;
+			//	outsaturedfile.startFile(OutputsaturedtPath,"OUTSATURED");
 	}
 
 	// destructor

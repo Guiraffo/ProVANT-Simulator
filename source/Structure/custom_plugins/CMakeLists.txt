@@ -9,6 +9,10 @@ find_package(catkin REQUIRED COMPONENTS
 		simulator_msgs)
 include_directories(include ${catkin_INCLUDE_DIRS})
 
+#find_package(TinyXML REQUIRED) 
+#include_directories("${TinyXML_INCLUDE_DIRS}")
+
+
 
 #include_directories(plugins/<nome_da_pasta_do_plugin>)
 
@@ -68,6 +72,9 @@ catkin_package(
     #CATKIN_DEPENDS roscpp std_msgs geometry_msgs 
     #INCLUDE_DIRS include
     #LIBRARIES
+   #  INCLUDE_DIRS include
+  	# CATKIN_DEPENDS roscpp
+   	# DEPENDS  TinyXML
 )
 
 add_library(gazebo_ros_force plugins/force/force.cpp)
@@ -141,6 +148,8 @@ target_link_libraries(gazebo_ros_QuadData ${catkin_LIBRARIES} ${GAZEBO_LIBRARIES
 
 add_library(gazebo_ros_Aerodinamica4dot0_plugin plugins/Aerodinamica4dot0/Aerodinamica.cpp) 
 target_link_libraries(gazebo_ros_Aerodinamica4dot0_plugin ${catkin_LIBRARIES} ${GAZEBO_LIBRARIES})
+
+
 
 install(DIRECTORY include/${PROJECT_NAME}/
   DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION}
