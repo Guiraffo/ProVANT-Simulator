@@ -54,7 +54,7 @@ private: int Iterations;
 			i++;
 		}
 		
-		/*
+		
 		//Movimentar para cima e para baixo
 		Iterations++;
 		if(Iterations%500==0){
@@ -66,10 +66,10 @@ private: int Iterations;
 				Xref << 0.577,0.577,0,-0.578,0,0,0,3,0,0,0,0,0,0,0,0;
 				p=false;
 			}
-		}*/
+		}
 		
 		//Movimentar para um lado e para o outro
-		Iterations++;
+	/*	Iterations++;
 		if(Iterations%500==0){
 			static bool p=0;
 			if(p==0){
@@ -79,7 +79,7 @@ private: int Iterations;
 				Xref << 0.577,0.577,0,-0.578,0,0,0.5,2,0,0,0,0,0,0,0,0;
 				p=false;
 			}
-		}
+		} */
 		
 		
 	
@@ -122,10 +122,10 @@ private: int Iterations;
 		//Input2(1) = 37.3;
 		Input2(2) = Input(2);
 		Input2(3) = Input(3);
-		Input2(4) = 1.57; 
-		Input2(5) = 0.52; 
-		Input2(6) = 0.0001;
-		Input2(7) = 0.0001;
+		Input2(4) = 0; 
+		Input2(5) = 0; 
+		Input2(6) = 0;
+		Input2(7) = 0;
 		
 	
 		

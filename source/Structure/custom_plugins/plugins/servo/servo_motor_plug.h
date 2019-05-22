@@ -19,13 +19,16 @@
 #include <iostream>
 #include <boost/thread.hpp>
 #include <ros/callback_queue.h>
+#include "XMLRead.h"
+//#include "teste.h"
+//#include "testedois.h"
 //#include "/home/macro/catkin_ws/src/ProVANT-Simulator_Developer/source/Structure/Controller/include/controller/XMLRead.h"
 #include "simulator_msgs/Sensor.h"
 //#include "/home/macro/catkin_ws/src/ProVANT-Simulator_Developer/source/Structure/Controller/include/controller/MatlabData.h"
-#include <string>
-#include <fstream>
-#include "std_msgs/String.h"
-#include "/home/macro/catkin_ws/src/ProVANT-Simulator_Developer/source/Structure/custom_plugins/include/XMLRead.h"
+//#include <string>
+//#include <fstream>
+//#include "std_msgs/String.h"
+
 
 
 
@@ -60,7 +63,9 @@ namespace gazebo
 			ros::Publisher motor_publisher_; // ROS publisher
 			ros::Subscriber motor_subscriber_; // ROS subscriber
 			boost::mutex lock; // mutex
-		//	MatlabData outsaturedfile;
+			
+		//	teste docme;
+		//	testedois outsaturedfile;
 
 	};
 }
