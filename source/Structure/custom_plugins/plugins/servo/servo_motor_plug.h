@@ -32,6 +32,8 @@
 
 
 
+
+
 namespace gazebo
 {
 	class ServoMotorPlugin : public ModelPlugin
@@ -65,7 +67,7 @@ namespace gazebo
 			boost::mutex lock; // mutex
 			
 		//	teste docme;
-		//	testedois outsaturedfile;
+		//	testedois outsfile;
 
 	};
 }

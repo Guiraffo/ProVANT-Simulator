@@ -4,7 +4,7 @@
     <link name='Main_Body'>
       <pose frame=''>0 0 0 0 -0 0</pose>
       <inertial>
-        <pose frame=''>0.008684 -0.002415 0.019392 0 -0 0</pose>
+        <pose frame=''>0.06684 0 0.005392 0 -0 0</pose>
         <mass>7.0</mass>
         <inertia>
           <ixx>0.1489</ixx>
@@ -219,7 +219,7 @@
       </axis>
     </joint>
    <link name='Hel_L'>
-      <pose frame=''>0.077968 0.60727 0.22 0 -0.083794 0</pose>
+      <pose frame=''>0.077968 0.60727 0.22 0 -0 0</pose> 
       <inertial>
         <pose frame=''>0 -0 0 0 -0 0</pose>
         <mass>0.0001</mass>
@@ -242,7 +242,7 @@
         </geometry>
       </collision>
       <visual name='Hel_L_visual'>
-        <pose frame=''>-0.077968 -0.60727 -0.22 0 0 0</pose>
+        <pose frame=''>-0.08 -0.60727 -0.23 -0 -0 0</pose>
         <material>
           <ambient>0 0 0.75 1</ambient>
           <diffuse>0 0 0.75 1</diffuse>
@@ -493,26 +493,41 @@
         <use_parent_model_frame>1</use_parent_model_frame>
       </axis>
     </joint>
-     <link name="WingR_aerodcenter">
-            <pose>-0.06 -0.20 0.01 0 0 0</pose>
-            <inertial>
-                <mass>0.000000001</mass>
-                <pose>0 0 0 0 0 0</pose>
-                <inertia>
-                    <ixx>0.0000001</ixx>
-                    <ixy>0</ixy>
-                    <ixz>0</ixz>
-                    <iyy>0.0000001</iyy>
-                    <iyz>0</iyz>
-                    <izz>0.0000001</izz>
-                </inertia>
-            </inertial>
-        </link>
+    <link name='Fuselage_aerodcenter'>
+      <pose frame=''>0 0 0 0 0 0</pose>
+      <inertial>
+        <pose frame=''>0.0512 0 0.10 0 -0 0</pose>
+        <mass>0.1</mass>
+        <inertia>
+        	<ixx>0.0000001</ixx>
+        	<ixy>0</ixy>
+        	<ixz>0</ixz>
+        	<iyy>0.0000001</iyy>
+        	<iyz>0</iyz>
+        	<izz>0.0000001</izz>
+       	</inertia>
+      </inertial>
+    </link>
+    <link name='WingR_aerodcenter'>
+      <pose frame=''>0 0 0 0 0 0</pose>
+      <inertial>
+        <pose>0.0512 -0.31 0.10 -0.0873 0 0</pose>
+        <mass>0.1</mass>
+        <inertia>
+        	<ixx>0.0000001</ixx>
+        	<ixy>0</ixy>
+        	<ixz>0</ixz>
+        	<iyy>0.0000001</iyy>
+        	<iyz>0</iyz>
+        	<izz>0.0000001</izz>
+       	</inertia>
+      </inertial>
+    </link>
          <link name="WingL_aerodcenter">
-            <pose>-0.06 0.20 0.01 0 0 0</pose>
+            <pose>0 0 0 0 0 0</pose>
             <inertial>
-                <mass>0.000000001</mass>
-                <pose>0 0 0 0 0 0</pose>
+                <mass>0.1</mass>
+                <pose>0.0512 0.31 0.10 0.0873 0 0</pose>
                 <inertia>
                     <ixx>0.0000001</ixx>
                     <ixy>0</ixy>
@@ -524,10 +539,10 @@
             </inertial>
         </link>
          <link name="RudR_aerodcenter">
-            <pose>-0.375547 -0.065 0.0384 0.52 0 0</pose>
+            <pose>0 0 0 0 0 0</pose>
             <inertial>
-                <mass>0.000000001</mass>
-                <pose>0 0 0 0 0 0</pose>
+                <mass>0.1</mass>
+                <pose>-0.3967 -0.168 0.148 -0.5061 0 0</pose>
                 <inertia>
                     <ixx>0.0000001</ixx>
                     <ixy>0</ixy>
@@ -539,10 +554,10 @@
             </inertial>
         </link>
          <link name="RudL_aerodcenter">
-            <pose>-0.375547 0.065 0.0384 -0.52 0 0</pose>
+            <pose>0 0 0 0 0 0</pose>
             <inertial>
-                <mass>0.000000001</mass>
-                <pose>0 0 0 0 0 0</pose>
+                <mass>0.1</mass>
+                <pose>-0.3967 0.168 0.148 0.5061 0 0</pose>
                 <inertia>
                     <ixx>0.0000001</ixx>
                     <ixy>0</ixy>
@@ -590,7 +605,7 @@ filename="libgazebo_ros_servo_motor_plugin.so">
             <NameOfJoint>Aileron_R_joint_name</NameOfJoint>
             <TopicPublisher>AileronRpub</TopicPublisher>
             <TopicSubscriber>RefAileronR</TopicSubscriber>
-            <Modo>Torque</Modo> 
+            <Modo>Position</Modo> 
             <Saturation>1</Saturation>          
   </plugin>
    	<plugin name="AileronLplugin"
@@ -598,7 +613,7 @@ filename="libgazebo_ros_servo_motor_plugin.so">
             <NameOfJoint>Aileron_L_joint_name</NameOfJoint>
             <TopicPublisher>AileronLpub</TopicPublisher>
             <TopicSubscriber>RefAileronL</TopicSubscriber>
-            <Modo>Torque</Modo> 
+            <Modo>Position</Modo> 
             <Saturation>1</Saturation>          
   </plugin>
   	<plugin name="RudderRplugin"
@@ -606,7 +621,7 @@ filename="libgazebo_ros_servo_motor_plugin.so">
             <NameOfJoint>Rudder_R_joint_name</NameOfJoint>
             <TopicPublisher>RudderRpub</TopicPublisher>
             <TopicSubscriber>RefRudderR</TopicSubscriber>
-            <Modo>Torque</Modo> 
+            <Modo>Position</Modo> 
             <Saturation>1</Saturation>         
   </plugin>
    	<plugin name="RudderLplugin"
@@ -614,7 +629,7 @@ filename="libgazebo_ros_servo_motor_plugin.so">
             <NameOfJoint>Rudder_L_joint_name</NameOfJoint>
             <TopicPublisher>RudderLpub</TopicPublisher>
             <TopicSubscriber>RefRudderL</TopicSubscriber>
-            <Modo>Torque</Modo>
+            <Modo>Position</Modo>
             <Saturation>1</Saturation>
   	</plugin> 
    <plugin name="empuxo" filename="libgazebo_ros_Aerodinamica4dot0_plugin.so">
@@ -624,11 +639,12 @@ filename="libgazebo_ros_servo_motor_plugin.so">
             <LinkFr> Rotor_R </LinkFr>
             <topic_Fl> ThrustL </topic_Fl>		<!--ThrustL-->
             <LinkFl> Rotor_L </LinkFl>				
-			<topic_AileronR> RefAileronR </topic_AileronR>
-		  	<LinkAileronR>Aileron_R</LinkAileronR>		
+	    <topic_AileronR> RefAileronR </topic_AileronR>
+	    <LinkAileronR>Aileron_R</LinkAileronR>
+	    <CentroAerod_F> Fuselage_aerodcenter </CentroAerod_F>		
             <CentroAerod_Wr> WingR_aerodcenter </CentroAerod_Wr>
             <topic_AileronL> RefAileronL </topic_AileronL>
-           	<LinkAileronL>Aileron_L</LinkAileronL>	
+            <LinkAileronL>Aileron_L</LinkAileronL>	
             <CentroAerod_Wl> WingL_aerodcenter </CentroAerod_Wl>
        <!--    <JointAileronR>Aileron_R_joint_name</JointAileronR>	-->
             <CentroAerod_RudR> RudR_aerodcenter </CentroAerod_RudR>

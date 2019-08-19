@@ -30,8 +30,10 @@ namespace gazebo
 			junta->SetForce(0,msg.data);
 			
 		//	std::vector<double> vec;
+			
 		//	vec.at(0) = msg.data;
-		//	outsaturedfile.printFile(vec);
+		//	std::cout<<"Valor Saturado: " << vec.at(0)<< std::endl;
+		//	outsfile.printFile(vec);
 			
 			//	std::cout << "Junta: " << NameOfJoint_ << "ValorTorque: " << msg.data << std::endl;
 			}
@@ -52,11 +54,12 @@ namespace gazebo
 	// constructor
 	ServoMotorPlugin::ServoMotorPlugin()
 	{ 
-			//	teste doc(std::getenv("TILT_CONFIG"));
-			//	docme=doc;
-			//	std::string OutputsaturedPath = docme.GetItem("Outsaturedfile");
-			//	OutputsaturedPath = std::getenv("TILT_MATLAB") + OutputsaturedPath;
-			//	outsaturedfile.startFile(OutputsaturedPath,"OUTSATURED");
+	
+		//		teste doc(std::getenv("TILT_CONFIG"));
+		//		docme=doc;
+		//		std::string OutputsaturedPath = docme.GetItem("Outputsaturedfile");
+		//		OutputsaturedPath = std::getenv("TILT_MATLAB") + OutputsaturedPath;
+		//		outsfile.startFile(OutputsaturedPath,"OUTS");
 	}
 
 	// destructor

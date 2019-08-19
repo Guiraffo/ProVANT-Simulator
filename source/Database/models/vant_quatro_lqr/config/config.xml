@@ -8,7 +8,6 @@
     <Outputfile>out.txt</Outputfile>
     <InputPath>in.txt</InputPath>
     <ErroPath>erro.txt</ErroPath>
-  
     <Sensors>
         <Device>Estados</Device>
     </Sensors>

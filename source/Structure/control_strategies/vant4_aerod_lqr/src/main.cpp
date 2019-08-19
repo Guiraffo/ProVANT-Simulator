@@ -122,10 +122,10 @@ private: int Iterations;
 		//Input2(1) = 37.3;
 		Input2(2) = Input(2);
 		Input2(3) = Input(3);
-		Input2(4) = 0; 
-		Input2(5) = 0; 
-		Input2(6) = 0;
-		Input2(7) = 0;
+		Input2(4) = 0.5; 
+		Input2(5) = 0.5; 
+		Input2(6) = 0.5;
+		Input2(7) = 0.5;
 		
 	
 		

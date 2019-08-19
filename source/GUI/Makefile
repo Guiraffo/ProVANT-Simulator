@@ -33,7 +33,7 @@ MOVE          = mv -f
 TAR           = tar -cf
 COMPRESS      = gzip -9f
 DISTNAME      = GUI1.0.0
-DISTDIR = /home/arthur/catkin_ws/src/ProVANT-Simulator_Developer/source/GUI/.tmp/GUI1.0.0
+DISTDIR = /home/macro/catkin_ws/src/ProVANT-Simulator_Developer/source/GUI/.tmp/GUI1.0.0
 LINK          = g++
 LFLAGS        = 
 LIBS          = $(SUBLIBS) -lQt5Widgets -L/usr/X11R6/lib64 -lQt5Gui -lQt5Xml -lQt5Core -lGL -lpthread 
@@ -81,12 +81,14 @@ SOURCES       = main.cpp \
 		DataAccess/GazeboElements/Items/scene.cpp \
 		aboutdialog.cpp \
 		DataAccess/GazeboElements/Items/multipleincludes.cpp \
-		DataAccess/GazeboElements/Items/multipleplugins.cpp moc_mainwindow.cpp \
+		DataAccess/GazeboElements/Items/multipleplugins.cpp \
+		jointsdialog.cpp moc_mainwindow.cpp \
 		moc_dialog.cpp \
 		moc_dialognewcontroller.cpp \
 		moc_dialogopencontroller.cpp \
 		moc_dialognewmodel.cpp \
-		moc_aboutdialog.cpp
+		moc_aboutdialog.cpp \
+		moc_jointsdialog.cpp
 OBJECTS       = main.o \
 		mainwindow.o \
 		configfile.o \
@@ -121,12 +123,14 @@ OBJECTS       = main.o \
 		aboutdialog.o \
 		multipleincludes.o \
 		multipleplugins.o \
+		jointsdialog.o \
 		moc_mainwindow.o \
 		moc_dialog.o \
 		moc_dialognewcontroller.o \
 		moc_dialogopencontroller.o \
 		moc_dialognewmodel.o \
-		moc_aboutdialog.o
+		moc_aboutdialog.o \
+		moc_jointsdialog.o
 DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/common/unix.conf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/common/linux.conf \
@@ -177,6 +181,7 @@ DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_script_private.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_scripttools.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_scripttools_private.pri \
+		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_serialport.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_sql.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_sql_private.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_svg.pri \
@@ -195,6 +200,7 @@ DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_xml_private.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_xmlpatterns.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_xmlpatterns_private.pri \
+		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_Solid.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/qt_functions.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/qt_config.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++/qmake.conf \
@@ -251,7 +257,8 @@ DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		DataAccess/GazeboElements/Items/multipleincludes.h \
 		Utils/tools.h \
 		Utils/environmentexception.h \
-		DataAccess/GazeboElements/Items/multipleplugins.h main.cpp \
+		DataAccess/GazeboElements/Items/multipleplugins.h \
+		jointsdialog.h main.cpp \
 		mainwindow.cpp \
 		DataAccess/ControllerElements/configfile.cpp \
 		DataAccess/GazeboElements/Items/include_da.cpp \
@@ -284,7 +291,8 @@ DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		DataAccess/GazeboElements/Items/scene.cpp \
 		aboutdialog.cpp \
 		DataAccess/GazeboElements/Items/multipleincludes.cpp \
-		DataAccess/GazeboElements/Items/multipleplugins.cpp
+		DataAccess/GazeboElements/Items/multipleplugins.cpp \
+		jointsdialog.cpp
 QMAKE_TARGET  = GUI
 DESTDIR       = #avoid trailing-slash linebreak
 TARGET        = GUI
@@ -312,7 +320,7 @@ first: all
 
 ####### Build rules
 
-$(TARGET): ui_mainwindow.h ui_dialog.h ui_dialognewcontroller.h ui_dialogopencontroller.h ui_dialognewmodel.h ui_aboutdialog.h $(OBJECTS)  
+$(TARGET): ui_mainwindow.h ui_dialog.h ui_dialognewcontroller.h ui_dialogopencontroller.h ui_dialognewmodel.h ui_aboutdialog.h ui_jointsdialog.h $(OBJECTS)  
 	$(LINK) $(LFLAGS) -o $(TARGET) $(OBJECTS) $(OBJCOMP) $(LIBS)
 
 Makefile: GUI.pro /usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++/qmake.conf /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
@@ -365,6 +373,7 @@ Makefile: GUI.pro /usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++/qmake.conf /us
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_script_private.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_scripttools.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_scripttools_private.pri \
+		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_serialport.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_sql.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_sql_private.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_svg.pri \
@@ -383,6 +392,7 @@ Makefile: GUI.pro /usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++/qmake.conf /us
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_xml_private.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_xmlpatterns.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_xmlpatterns_private.pri \
+		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_Solid.pri \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/qt_functions.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/qt_config.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++/qmake.conf \
@@ -460,6 +470,7 @@ Makefile: GUI.pro /usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++/qmake.conf /us
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_script_private.pri:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_scripttools.pri:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_scripttools_private.pri:
+/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_serialport.pri:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_sql.pri:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_sql_private.pri:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_svg.pri:
@@ -478,6 +489,7 @@ Makefile: GUI.pro /usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++/qmake.conf /us
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_xml_private.pri:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_xmlpatterns.pri:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_lib_xmlpatterns_private.pri:
+/usr/lib/x86_64-linux-gnu/qt5/mkspecs/modules/qt_Solid.pri:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/qt_functions.prf:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/qt_config.prf:
 /usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++/qmake.conf:
@@ -518,9 +530,9 @@ dist: distdir FORCE
 distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
-	$(COPY_FILE) --parents mainwindow.h DataAccess/ControllerElements/configfile.h DataAccess/GazeboElements/Items/include_da.h DataAccess/GazeboElements/Items/plugin_da.h DataAccess/GazeboElements/Items/physics_da.h DataAccess/GazeboElements/Items/gravity_da.h DataAccess/GazeboElements/Items/link_da.h DataAccess/GazeboElements/Items/joint_da.h Business/model.h Business/world.h Business/controller.h DataAccess/GazeboElements/worldfile.h DataAccess/GazeboElements/Items/model_da.h DataAccess/GazeboElements/Items/worldplugin.h DataAccess/GazeboElements/Items/modelplugin.h DataAccess/GazeboElements/Items/geometry.h DataAccess/GazeboElements/Items/geometrymesh.h DataAccess/GazeboElements/Items/inertial.h DataAccess/GazeboElements/Items/material.h DataAccess/GazeboElements/Items/collision.h DataAccess/GazeboElements/Items/visual.h DataAccess/GazeboElements/modelfile.h DataAccess/GazeboElements/Items/axis.h Business/treeitens.h dialog.h dialognewcontroller.h DataAccess/ControllerElements/newstrategy.h dialogopencontroller.h DataAccess/RosElements/roslaunch.h dialognewmodel.h DataAccess/GazeboElements/Items/scene.h aboutdialog.h DataAccess/GazeboElements/Items/multipleincludes.h Utils/tools.h Utils/environmentexception.h DataAccess/GazeboElements/Items/multipleplugins.h $(DISTDIR)/
-	$(COPY_FILE) --parents main.cpp mainwindow.cpp DataAccess/ControllerElements/configfile.cpp DataAccess/GazeboElements/Items/include_da.cpp DataAccess/GazeboElements/Items/plugin_da.cpp DataAccess/GazeboElements/Items/physics_da.cpp DataAccess/GazeboElements/Items/gravity_da.cpp DataAccess/GazeboElements/Items/link_da.cpp DataAccess/GazeboElements/Items/joint_da.cpp Business/model.cpp Business/world.cpp Business/controller.cpp DataAccess/GazeboElements/worldfile.cpp DataAccess/GazeboElements/Items/model_da.cpp DataAccess/GazeboElements/Items/worldplugin.cpp DataAccess/GazeboElements/Items/modelplugin.cpp DataAccess/GazeboElements/Items/geometrymesh.cpp DataAccess/GazeboElements/Items/inertial.cpp DataAccess/GazeboElements/Items/material.cpp DataAccess/GazeboElements/Items/collision.cpp DataAccess/GazeboElements/Items/visual.cpp DataAccess/GazeboElements/modelfile.cpp DataAccess/GazeboElements/Items/axis.cpp Business/treeitens.cpp dialog.cpp dialognewcontroller.cpp DataAccess/ControllerElements/newstrategy.cpp dialogopencontroller.cpp DataAccess/RosElements/roslaunch.cpp dialognewmodel.cpp DataAccess/GazeboElements/Items/scene.cpp aboutdialog.cpp DataAccess/GazeboElements/Items/multipleincludes.cpp DataAccess/GazeboElements/Items/multipleplugins.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents mainwindow.ui dialog.ui dialognewcontroller.ui dialogopencontroller.ui dialognewmodel.ui aboutdialog.ui $(DISTDIR)/
+	$(COPY_FILE) --parents mainwindow.h DataAccess/ControllerElements/configfile.h DataAccess/GazeboElements/Items/include_da.h DataAccess/GazeboElements/Items/plugin_da.h DataAccess/GazeboElements/Items/physics_da.h DataAccess/GazeboElements/Items/gravity_da.h DataAccess/GazeboElements/Items/link_da.h DataAccess/GazeboElements/Items/joint_da.h Business/model.h Business/world.h Business/controller.h DataAccess/GazeboElements/worldfile.h DataAccess/GazeboElements/Items/model_da.h DataAccess/GazeboElements/Items/worldplugin.h DataAccess/GazeboElements/Items/modelplugin.h DataAccess/GazeboElements/Items/geometry.h DataAccess/GazeboElements/Items/geometrymesh.h DataAccess/GazeboElements/Items/inertial.h DataAccess/GazeboElements/Items/material.h DataAccess/GazeboElements/Items/collision.h DataAccess/GazeboElements/Items/visual.h DataAccess/GazeboElements/modelfile.h DataAccess/GazeboElements/Items/axis.h Business/treeitens.h dialog.h dialognewcontroller.h DataAccess/ControllerElements/newstrategy.h dialogopencontroller.h DataAccess/RosElements/roslaunch.h dialognewmodel.h DataAccess/GazeboElements/Items/scene.h aboutdialog.h DataAccess/GazeboElements/Items/multipleincludes.h Utils/tools.h Utils/environmentexception.h DataAccess/GazeboElements/Items/multipleplugins.h jointsdialog.h $(DISTDIR)/
+	$(COPY_FILE) --parents main.cpp mainwindow.cpp DataAccess/ControllerElements/configfile.cpp DataAccess/GazeboElements/Items/include_da.cpp DataAccess/GazeboElements/Items/plugin_da.cpp DataAccess/GazeboElements/Items/physics_da.cpp DataAccess/GazeboElements/Items/gravity_da.cpp DataAccess/GazeboElements/Items/link_da.cpp DataAccess/GazeboElements/Items/joint_da.cpp Business/model.cpp Business/world.cpp Business/controller.cpp DataAccess/GazeboElements/worldfile.cpp DataAccess/GazeboElements/Items/model_da.cpp DataAccess/GazeboElements/Items/worldplugin.cpp DataAccess/GazeboElements/Items/modelplugin.cpp DataAccess/GazeboElements/Items/geometrymesh.cpp DataAccess/GazeboElements/Items/inertial.cpp DataAccess/GazeboElements/Items/material.cpp DataAccess/GazeboElements/Items/collision.cpp DataAccess/GazeboElements/Items/visual.cpp DataAccess/GazeboElements/modelfile.cpp DataAccess/GazeboElements/Items/axis.cpp Business/treeitens.cpp dialog.cpp dialognewcontroller.cpp DataAccess/ControllerElements/newstrategy.cpp dialogopencontroller.cpp DataAccess/RosElements/roslaunch.cpp dialognewmodel.cpp DataAccess/GazeboElements/Items/scene.cpp aboutdialog.cpp DataAccess/GazeboElements/Items/multipleincludes.cpp DataAccess/GazeboElements/Items/multipleplugins.cpp jointsdialog.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents mainwindow.ui dialog.ui dialognewcontroller.ui dialogopencontroller.ui dialognewmodel.ui aboutdialog.ui jointsdialog.ui jointsdialog.ui $(DISTDIR)/
 
 
 clean: compiler_clean 
@@ -543,9 +555,9 @@ check: first
 
 compiler_rcc_make_all:
 compiler_rcc_clean:
-compiler_moc_header_make_all: moc_mainwindow.cpp moc_dialog.cpp moc_dialognewcontroller.cpp moc_dialogopencontroller.cpp moc_dialognewmodel.cpp moc_aboutdialog.cpp
+compiler_moc_header_make_all: moc_mainwindow.cpp moc_dialog.cpp moc_dialognewcontroller.cpp moc_dialogopencontroller.cpp moc_dialognewmodel.cpp moc_aboutdialog.cpp moc_jointsdialog.cpp
 compiler_moc_header_clean:
-	-$(DEL_FILE) moc_mainwindow.cpp moc_dialog.cpp moc_dialognewcontroller.cpp moc_dialogopencontroller.cpp moc_dialognewmodel.cpp moc_aboutdialog.cpp
+	-$(DEL_FILE) moc_mainwindow.cpp moc_dialog.cpp moc_dialognewcontroller.cpp moc_dialogopencontroller.cpp moc_dialognewmodel.cpp moc_aboutdialog.cpp moc_jointsdialog.cpp
 moc_mainwindow.cpp: ui_mainwindow.h \
 		Business/world.h \
 		DataAccess/GazeboElements/worldfile.h \
@@ -582,10 +594,11 @@ moc_mainwindow.cpp: ui_mainwindow.h \
 		dialognewmodel.h \
 		mainwindow.h \
 		aboutdialog.h \
+		jointsdialog.h \
 		Utils/tools.h \
 		Utils/environmentexception.h \
 		mainwindow.h
-	/usr/lib/x86_64-linux-gnu/qt5/bin/moc $(DEFINES) -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/home/arthur/catkin_ws/src/ProVANT-Simulator_Developer/source/GUI -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtXml -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/5 -I/usr/include/x86_64-linux-gnu/c++/5 -I/usr/include/c++/5/backward -I/usr/lib/gcc/x86_64-linux-gnu/5/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include mainwindow.h -o moc_mainwindow.cpp
+	/usr/lib/x86_64-linux-gnu/qt5/bin/moc $(DEFINES) -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/home/macro/catkin_ws/src/ProVANT-Simulator_Developer/source/GUI -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtXml -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/5 -I/usr/include/x86_64-linux-gnu/c++/5 -I/usr/include/c++/5/backward -I/usr/lib/gcc/x86_64-linux-gnu/5/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include mainwindow.h -o moc_mainwindow.cpp
 
 moc_dialog.cpp: Business/model.h \
 		DataAccess/GazeboElements/modelfile.h \
@@ -609,14 +622,14 @@ moc_dialog.cpp: Business/model.h \
 		DataAccess/ControllerElements/newstrategy.h \
 		dialogopencontroller.h \
 		dialog.h
-	/usr/lib/x86_64-linux-gnu/qt5/bin/moc $(DEFINES) -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/home/arthur/catkin_ws/src/ProVANT-Simulator_Developer/source/GUI -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtXml -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/5 -I/usr/include/x86_64-linux-gnu/c++/5 -I/usr/include/c++/5/backward -I/usr/lib/gcc/x86_64-linux-gnu/5/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include dialog.h -o moc_dialog.cpp
+	/usr/lib/x86_64-linux-gnu/qt5/bin/moc $(DEFINES) -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/home/macro/catkin_ws/src/ProVANT-Simulator_Developer/source/GUI -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtXml -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/5 -I/usr/include/x86_64-linux-gnu/c++/5 -I/usr/include/c++/5/backward -I/usr/lib/gcc/x86_64-linux-gnu/5/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include dialog.h -o moc_dialog.cpp
 
 moc_dialognewcontroller.cpp: DataAccess/ControllerElements/newstrategy.h \
 		dialognewcontroller.h
-	/usr/lib/x86_64-linux-gnu/qt5/bin/moc $(DEFINES) -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/home/arthur/catkin_ws/src/ProVANT-Simulator_Developer/source/GUI -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtXml -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/5 -I/usr/include/x86_64-linux-gnu/c++/5 -I/usr/include/c++/5/backward -I/usr/lib/gcc/x86_64-linux-gnu/5/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include dialognewcontroller.h -o moc_dialognewcontroller.cpp
+	/usr/lib/x86_64-linux-gnu/qt5/bin/moc $(DEFINES) -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/home/macro/catkin_ws/src/ProVANT-Simulator_Developer/source/GUI -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtXml -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/5 -I/usr/include/x86_64-linux-gnu/c++/5 -I/usr/include/c++/5/backward -I/usr/lib/gcc/x86_64-linux-gnu/5/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include dialognewcontroller.h -o moc_dialognewcontroller.cpp
 
 moc_dialogopencontroller.cpp: dialogopencontroller.h
-	/usr/lib/x86_64-linux-gnu/qt5/bin/moc $(DEFINES) -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/home/arthur/catkin_ws/src/ProVANT-Simulator_Developer/source/GUI -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtXml -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/5 -I/usr/include/x86_64-linux-gnu/c++/5 -I/usr/include/c++/5/backward -I/usr/lib/gcc/x86_64-linux-gnu/5/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include dialogopencontroller.h -o moc_dialogopencontroller.cpp
+	/usr/lib/x86_64-linux-gnu/qt5/bin/moc $(DEFINES) -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/home/macro/catkin_ws/src/ProVANT-Simulator_Developer/source/GUI -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtXml -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/5 -I/usr/include/x86_64-linux-gnu/c++/5 -I/usr/include/c++/5/backward -I/usr/lib/gcc/x86_64-linux-gnu/5/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include dialogopencontroller.h -o moc_dialogopencontroller.cpp
 
 moc_dialognewmodel.cpp: mainwindow.h \
 		ui_mainwindow.h \
@@ -654,19 +667,23 @@ moc_dialognewmodel.cpp: mainwindow.h \
 		dialogopencontroller.h \
 		dialognewmodel.h \
 		aboutdialog.h \
+		jointsdialog.h \
 		Utils/tools.h \
 		Utils/environmentexception.h \
 		dialognewmodel.h
-	/usr/lib/x86_64-linux-gnu/qt5/bin/moc $(DEFINES) -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/home/arthur/catkin_ws/src/ProVANT-Simulator_Developer/source/GUI -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtXml -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/5 -I/usr/include/x86_64-linux-gnu/c++/5 -I/usr/include/c++/5/backward -I/usr/lib/gcc/x86_64-linux-gnu/5/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include dialognewmodel.h -o moc_dialognewmodel.cpp
+	/usr/lib/x86_64-linux-gnu/qt5/bin/moc $(DEFINES) -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/home/macro/catkin_ws/src/ProVANT-Simulator_Developer/source/GUI -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtXml -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/5 -I/usr/include/x86_64-linux-gnu/c++/5 -I/usr/include/c++/5/backward -I/usr/lib/gcc/x86_64-linux-gnu/5/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include dialognewmodel.h -o moc_dialognewmodel.cpp
 
 moc_aboutdialog.cpp: aboutdialog.h
-	/usr/lib/x86_64-linux-gnu/qt5/bin/moc $(DEFINES) -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/home/arthur/catkin_ws/src/ProVANT-Simulator_Developer/source/GUI -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtXml -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/5 -I/usr/include/x86_64-linux-gnu/c++/5 -I/usr/include/c++/5/backward -I/usr/lib/gcc/x86_64-linux-gnu/5/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include aboutdialog.h -o moc_aboutdialog.cpp
+	/usr/lib/x86_64-linux-gnu/qt5/bin/moc $(DEFINES) -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/home/macro/catkin_ws/src/ProVANT-Simulator_Developer/source/GUI -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtXml -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/5 -I/usr/include/x86_64-linux-gnu/c++/5 -I/usr/include/c++/5/backward -I/usr/lib/gcc/x86_64-linux-gnu/5/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include aboutdialog.h -o moc_aboutdialog.cpp
+
+moc_jointsdialog.cpp: jointsdialog.h
+	/usr/lib/x86_64-linux-gnu/qt5/bin/moc $(DEFINES) -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/home/macro/catkin_ws/src/ProVANT-Simulator_Developer/source/GUI -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtXml -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/5 -I/usr/include/x86_64-linux-gnu/c++/5 -I/usr/include/c++/5/backward -I/usr/lib/gcc/x86_64-linux-gnu/5/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include jointsdialog.h -o moc_jointsdialog.cpp
 
 compiler_moc_source_make_all:
 compiler_moc_source_clean:
-compiler_uic_make_all: ui_mainwindow.h ui_dialog.h ui_dialognewcontroller.h ui_dialogopencontroller.h ui_dialognewmodel.h ui_aboutdialog.h
+compiler_uic_make_all: ui_mainwindow.h ui_dialog.h ui_dialognewcontroller.h ui_dialogopencontroller.h ui_dialognewmodel.h ui_aboutdialog.h ui_jointsdialog.h ui_jointsdialog.h
 compiler_uic_clean:
-	-$(DEL_FILE) ui_mainwindow.h ui_dialog.h ui_dialognewcontroller.h ui_dialogopencontroller.h ui_dialognewmodel.h ui_aboutdialog.h
+	-$(DEL_FILE) ui_mainwindow.h ui_dialog.h ui_dialognewcontroller.h ui_dialogopencontroller.h ui_dialognewmodel.h ui_aboutdialog.h ui_jointsdialog.h ui_jointsdialog.h
 ui_mainwindow.h: mainwindow.ui
 	/usr/lib/x86_64-linux-gnu/qt5/bin/uic mainwindow.ui -o ui_mainwindow.h
 
@@ -684,6 +701,12 @@ ui_dialognewmodel.h: dialognewmodel.ui
 
 ui_aboutdialog.h: aboutdialog.ui
 	/usr/lib/x86_64-linux-gnu/qt5/bin/uic aboutdialog.ui -o ui_aboutdialog.h
+
+ui_jointsdialog.h: jointsdialog.ui
+	/usr/lib/x86_64-linux-gnu/qt5/bin/uic jointsdialog.ui -o ui_jointsdialog.h
+
+ui_jointsdialog.h: jointsdialog.ui
+	/usr/lib/x86_64-linux-gnu/qt5/bin/uic jointsdialog.ui -o ui_jointsdialog.h
 
 compiler_yacc_decl_make_all:
 compiler_yacc_decl_clean:
@@ -731,6 +754,7 @@ main.o: main.cpp mainwindow.h \
 		dialogopencontroller.h \
 		dialognewmodel.h \
 		aboutdialog.h \
+		jointsdialog.h \
 		Utils/tools.h \
 		Utils/environmentexception.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o main.cpp
@@ -771,6 +795,7 @@ mainwindow.o: mainwindow.cpp mainwindow.h \
 		dialogopencontroller.h \
 		dialognewmodel.h \
 		aboutdialog.h \
+		jointsdialog.h \
 		Utils/tools.h \
 		Utils/environmentexception.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mainwindow.o mainwindow.cpp
@@ -995,6 +1020,7 @@ dialognewmodel.o: dialognewmodel.cpp dialognewmodel.h \
 		DataAccess/ControllerElements/newstrategy.h \
 		dialogopencontroller.h \
 		aboutdialog.h \
+		jointsdialog.h \
 		Utils/tools.h \
 		Utils/environmentexception.h \
 		ui_dialognewmodel.h
@@ -1015,6 +1041,11 @@ multipleplugins.o: DataAccess/GazeboElements/Items/multipleplugins.cpp DataAcces
 		DataAccess/GazeboElements/Items/plugin_da.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o multipleplugins.o DataAccess/GazeboElements/Items/multipleplugins.cpp
 
+jointsdialog.o: jointsdialog.cpp jointsdialog.h \
+		ui_jointsdialog.h \
+		Business/treeitens.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o jointsdialog.o jointsdialog.cpp
+
 moc_mainwindow.o: moc_mainwindow.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_mainwindow.o moc_mainwindow.cpp
 
@@ -1032,6 +1063,9 @@ moc_dialognewmodel.o: moc_dialognewmodel.cpp
 
 moc_aboutdialog.o: moc_aboutdialog.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_aboutdialog.o moc_aboutdialog.cpp
+
+moc_jointsdialog.o: moc_jointsdialog.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_jointsdialog.o moc_jointsdialog.cpp
 
 ####### Install
 

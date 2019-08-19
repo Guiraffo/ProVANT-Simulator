@@ -13,12 +13,12 @@
 
 
 #include <AllData.h>
-
+#include <eigen3/Eigen/Eigen>
 
 namespace gazebo
 {
 	// constructor
-	AllData::AllData()
+	AllData::AllData(): PhipThetapPsip(3,1), RIB(3,3), W_n(3,3), WIIB(3,1)
 	{ 
 				
 	}
@@ -41,7 +41,7 @@ namespace gazebo
 	{	
 		try
 		{
-			std::cout << "entrei Estados plugin"<<std::endl;
+			std::cout << "entrei";
 	    		if (!ros::isInitialized())
 	    		{
 				ROS_INFO("Nao inicializado!");
@@ -111,15 +111,46 @@ namespace gazebo
 			newmsg.values.push_back(linear.y); // vy
 			newmsg.values.push_back(linear.z); //vz
 			math::Vector3 angular = link->GetWorldAngularVel( );
-			// droll -> attention! we receive angular velocity, but we want to publish the derivative of euler angle
+			
+			
+			//antigo
+			/*
+			newmsg.values.push_back(angular.x); //11
+			newmsg.values.push_back(angular.y); //12
+			newmsg.values.push_back(angular.z); //13
+			
+						// droll -> attention! we receive angular velocity, but we want to publish the derivative of euler angle
 			newmsg.values.push_back(angular.x*(1) + angular.y*((sin(pose.rot.GetAsEuler( ).x)*sin(pose.rot.GetAsEuler( ).y))/cos(pose.rot.GetAsEuler( ).y)) + angular.z*((cos(pose.rot.GetAsEuler( ).x)*sin(pose.rot.GetAsEuler( ).y))/cos(pose.rot.GetAsEuler( ).y)));
 			// dpitch  -> attention! we receive angular velocity, but we want to publish the derivative of euler angle
 			newmsg.values.push_back(angular.x*(0) + angular.y*(cos(pose.rot.GetAsEuler( ).x)) + angular.z*(-sin(pose.rot.GetAsEuler( ).x)));
 			// dyaw -> attention! we receive angular velocity, but we want to publish the derivative of euler angle
 			newmsg.values.push_back(angular.x*(0) + angular.y*(sin(pose.rot.GetAsEuler( ).x)/cos(pose.rot.GetAsEuler( ).y)) + angular.z*(cos(pose.rot.GetAsEuler( ).x)/cos(pose.rot.GetAsEuler( ).y)));
+			*/
+			
+			//novo			
+			//Maps to the body
+			Phi = pose.rot.GetAsEuler( ).x;
+			Theta = pose.rot.GetAsEuler( ).y;
+			Psi = pose.rot.GetAsEuler( ).z;
+			
+			RIB <<  (cos(Psi)*cos(Theta)), (cos(Psi)*sin(Phi)*sin(Theta) - cos(Phi)*sin(Psi)), (sin(Phi)*sin(Psi) + cos(Phi)*cos(Psi)*sin(Theta)),
+				(cos(Theta)*sin(Psi)), (cos(Phi)*cos(Psi) + sin(Phi)*sin(Psi)*sin(Theta)), (cos(Phi)*sin(Psi)*sin(Theta) - cos(Psi)*sin(Phi)), 
+        	                (-sin(Theta)),                              (cos(Theta)*sin(Phi)),                              (cos(Phi)*cos(Theta));
+	
+			W_n << 1.0,         0.0,          -sin(Theta), 
+			       0.0,  cos(Phi),  cos(Theta)*sin(Phi),
+	  	               0.0, -sin(Phi),  cos(Phi)*cos(Theta);
+	
+			WIIB << angular.x, angular.y, angular.z;
+			PhipThetapPsip = W_n.inverse() * RIB.transpose() * WIIB;
+			
+			newmsg.values.push_back(PhipThetapPsip(0));
+			newmsg.values.push_back(PhipThetapPsip(1));
+			newmsg.values.push_back(PhipThetapPsip(2));
 			
 			newmsg.values.push_back(juntaR->GetVelocity(0)); // daR
 			newmsg.values.push_back(juntaL->GetVelocity(0)); // daL
+			//std::cout << "alldata" << std::endl;
 			// publish data
 			publisher_.publish(newmsg);					
 		}

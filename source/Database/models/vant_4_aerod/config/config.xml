@@ -3,7 +3,7 @@
     <topicdata>data</topicdata>
     <TopicoStep>Step</TopicoStep>
     <Sampletime>3</Sampletime>
-    <Strategy>libvant4_aerod_lqr.so</Strategy>
+    <Strategy>libvant4_Winf.so</Strategy>
     <RefPath>ref.txt</RefPath>
     <Outputfile>out.txt</Outputfile>
     <InputPath>in.txt</InputPath>

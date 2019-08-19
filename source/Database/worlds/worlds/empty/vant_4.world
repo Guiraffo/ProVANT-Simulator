@@ -19,10 +19,10 @@
             <static>false</static>
         </include>
         <include>
-            <uri>model://vant_quatro_lqr</uri>
+            <uri>model://vant_4_aerod</uri>
             <name>newmodel</name>
             <static>false</static>
-            <pose>0 0 2 0 0 0</pose>
+            <pose>0 0 0 0 0 0</pose>
         </include>
         <scene>
             <sky>
