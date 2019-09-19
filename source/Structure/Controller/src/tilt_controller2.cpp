@@ -9,7 +9,8 @@
 */
 
 
-#include "controller/Controller2.cpp"
+#include <iostream>
+// #include "controller/Controller2.cpp"
 #include <exception>
 
 
@@ -18,9 +19,9 @@ int main (int argc, char **argv)
 	try
 	{
 		// Call a header and starts it
-		Controller2::init(argc,argv);
-		Controller2 Instance;
-		Instance.Start();
+		// Controller2::init(argc,argv);
+		// Controller2 Instance;
+		// Instance.Start();
 		return 0;
 	}
 	catch(std::exception& e)

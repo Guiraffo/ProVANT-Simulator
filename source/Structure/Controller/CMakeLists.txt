@@ -13,7 +13,7 @@ include_directories(include ${catkin_INCLUDE_DIRS})
 find_package(TinyXML REQUIRED) 
 
 include_directories( ${TinyXML_INCLUDE_DIRS})
-include_directories($ENV{TILT_PROJECT}/source/Structure/control_strategies/)
+include_directories("$ENV{TILT_PROJECT}/source/Structure/control_strategies/")
 message(" teste $ENV{TILT_PROJECT}/source/Structure/control_strategies/")
 
 catkin_package(

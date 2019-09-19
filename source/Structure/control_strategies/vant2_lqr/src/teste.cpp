@@ -13,7 +13,7 @@
 #include <Eigen/Eigen>
 #include "simulator_msgs/Sensor.h"
 
-class teste : public Icontroller 
+class teste : public Icontroller
 {
 	private: Eigen::VectorXd Xref;
 	private: Eigen::VectorXd Erro;
@@ -24,20 +24,20 @@ class teste : public Icontroller
 
 	// constructor
 	public: teste(): Xref(20), K(4,20), X(20), Erro(20), Input(4)
-	{ 
+	{
 		T = 0.012;
 	}
-	
+
 	// destructor
 	public: ~teste()
 	{
-		
+
 	}
-	
+
 	// initial configuration
 	public: void config()
 	{
-		std::cout << "helloword testecpp";
+
 		// control matrix
 		K << -0.000509474023994 ,  1.381002006541810 ,  2.044930990723325 , -4.098388643419657 ,  0.002544968427177 ,  0.065243786421189, -0.011997162152724 ,  0.012231188237446 , -0.000191109567030 ,  0.977046060078436  , 2.067519443836474 , -1.069820095142832,
 0.003981280957280 ,  0.048837474399233 , -0.000157117358773  , 0.000160465562387 , -0.000324184653490 ,  0.932396154093819,
@@ -61,6 +61,7 @@ class teste : public Icontroller
 		// reference
 		Xref << 2,0,1.7,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0;
 	}
+
 	public: std::vector<double> execute(simulator_msgs::SensorArray arraymsg)
 	{
 	
@@ -70,19 +71,19 @@ class teste : public Icontroller
 		static double yint, y_ant = 0;
 		static double zint, z_ant = 0;
 		static double yawint, yaw_ant = 0;
-	
+
 		// get data
 		int i = 0;
 		simulator_msgs::Sensor msg;
 		while(true)
 		{
 			if (arraymsg.values.at(i).name == "Estados"){
-				msg = arraymsg.values.at(i);			 	
+				msg = arraymsg.values.at(i);
 				break;
 			}
 			i++;
 		}
-	
+
 		// Trapezoidal Integrator
 		double x_atual = msg.values.at(0) - Xref(0);
 		xint = xint + (T/2)*(x_atual + x_ant);
@@ -96,7 +97,7 @@ class teste : public Icontroller
 		double yaw_atual = msg.values.at(5) - Xref(5);
 		yawint = yawint + (T/2)*(yaw_atual + yaw_ant);
 		yaw_ant = yaw_atual;
-		
+
 		// state vector
 		X << msg.values.at(0), // x
 		    msg.values.at(1), // y
@@ -108,11 +109,11 @@ class teste : public Icontroller
 		    msg.values.at(7), // aL
 		    msg.values.at(8), // dx
 		    msg.values.at(9), // dy
-		    msg.values.at(10),// dz 
-		    msg.values.at(11),// droll 
-		    msg.values.at(12),// dpitch 
-		    msg.values.at(13),// dyaw 
-		    msg.values.at(14),// daR 
+		    msg.values.at(10),// dz
+		    msg.values.at(11),// droll
+		    msg.values.at(12),// dpitch
+		    msg.values.at(13),// dyaw
+		    msg.values.at(14),// daR
 		    msg.values.at(15),// daL
 		    xint, // x integrator
 		    yint, // y integrator
@@ -126,7 +127,7 @@ class teste : public Icontroller
 		// Feedforward
 		Input(0) = Input(0) + 10.2751;
 		Input(1) = Input(1) + 10.2799;
-		
+
 		// output
 		std::vector<double> out(Input.data(), Input.data() + Input.rows() * Input.cols());
 		return out;
@@ -144,20 +145,20 @@ class teste : public Icontroller
 	{
 		std::vector<double> out(Erro.data(), Erro.data() + Erro.rows() * Erro.cols());
 		return out;
-	}	
+	}
 
 	// state data
 	public: std::vector<double> State()
 	{
 		std::vector<double> out(X.data(), X.data() + X.rows() * X.cols());
 		return out;
-	}	
-		
+	}
+
 };
 
 // to implement plugin
 extern "C"
-{ 
+{
 	Icontroller *create(void) {
 		return new teste;
 	}
