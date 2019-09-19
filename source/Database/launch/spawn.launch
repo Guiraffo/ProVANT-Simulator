@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<launch>
+	<param name="robot_description" command="$(find xacro)/xacro --inorder '$(find Database)/urdf/quadcopter.urdf'" />
+	
+	<arg name="x" default="0"/>
+	<arg name="y" default="0"/>
+	<arg name="z" default="1.5"/>
+
+	<node name="my_robot_spawn" pkg="gazebo_ros" type="spawn_model" output="screen"
+		args="-urdf -param robot_description -model my_robot -x $(arg x) -y $(arg y) -z $(arg z)" />
+		
+		
+</launch>	

@@ -49,13 +49,9 @@ namespace gazebo
 	    		}
 			
 			NameOfNode_ = XMLRead::ReadXMLString("NameOfTopic",_sdf); // Get name of topic to publish data
-			NameOfJointR_ = XMLRead::ReadXMLString("NameOfJointR",_sdf); // name of the right joint
-			NameOfJointL_ = XMLRead::ReadXMLString("NameOfJointL",_sdf); // name of the left joint
+			
 			
 			world = _model->GetWorld();	// pointer to the world
-			juntaR = _model->GetJoint(NameOfJointR_); // pointer to the right joint
-			juntaL = _model->GetJoint(NameOfJointL_); // pointer to the left joint
-
 			link_name_ = XMLRead::ReadXMLString("bodyName",_sdf); // name of the main body
 			link = _model->GetLink(link_name_); // pointer to the main body			
 
@@ -110,7 +106,7 @@ namespace gazebo
 			newmsg.values.push_back(linear.z); //dz
 			math::Vector3 angular = link->GetWorldAngularVel( );
 			// droll -> attention! we receive angular velocity, but we want to publish the derivative of euler angle
-			double phi = pose.rot.GetAsEuler().x;
+		double phi = pose.rot.GetAsEuler().x;
 			double theta = pose.rot.GetAsEuler().y;
 			double psi = pose.rot.GetAsEuler().z;
 			double p = angular.x;
@@ -120,7 +116,27 @@ namespace gazebo
 			 // dpitch  -> attention! we receive angular velocity, but we want to publish the derivative of euler angle
 			newmsg.values.push_back(0 + q*cos(phi) - r*sin(phi));    
 			// dyaw -> attention! we receive angular velocity, but we want to publish the derivative of euler angle
-			newmsg.values.push_back(0 + q*sin(phi)*(1/cos(theta)) + r*cos(phi)*(1/cos(theta)));
+			newmsg.values.push_back(0 + q*sin(phi)*(1/cos(theta)) + r*cos(phi)*(1/cos(theta)));			
+			
+	/*		Phi = pose.rot.GetAsEuler().x;
+			Theta = pose.rot.GetAsEuler().y;
+			Psi = pose.rot.GetAsEuler().z;
+			
+			RIB <<  (cos(Psi)*cos(Theta)), (cos(Psi)*sin(Phi)*sin(Theta) - cos(Phi)*sin(Psi)), (sin(Phi)*sin(Psi) + cos(Phi)*cos(Psi)*sin(Theta)),
+				(cos(Theta)*sin(Psi)), (cos(Phi)*cos(Psi) + sin(Phi)*sin(Psi)*sin(Theta)), (cos(Phi)*sin(Psi)*sin(Theta) - cos(Psi)*sin(Phi)), 
+        	                (-sin(Theta)),                              (cos(Theta)*sin(Phi)),                              (cos(Phi)*cos(Theta));
+	
+			W_n << 1.0,         0.0,          -sin(Theta), 
+			       0.0,  cos(Phi),  cos(Theta)*sin(Phi),
+	  	               0.0, -sin(Phi),  cos(Phi)*cos(Theta);
+	
+			WIIB << angular.x, angular.y, angular.z;
+			PhipThetapPsip = W_n.inverse() * RIB.transpose() * WIIB;
+			
+			
+			newmsg.values.push_back(PhipThetapPsip(0));  //droll
+			newmsg.values.push_back(PhipThetapPsip(1));	//dpitch
+			newmsg.values.push_back(PhipThetapPsip(2));	//dyaw		*/
 			
 			
 			// publish data

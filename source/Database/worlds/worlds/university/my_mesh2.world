@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sdf version="1.6">
+    <world name="/home/macro/catkin_ws/src/ProVANT-Simulator_Developer/source/Database/worlds/worlds/university/my_mesh2.world">
+        <gravity>0 0 -9.8</gravity>
+        <physics type="ode">
+            <max_step_size>0.001</max_step_size>
+            <real_time_factor>0</real_time_factor>
+        </physics>
+        <plugin name="gazebo_tutorials" filename="libgazebo_ros_world_plugin.so">
+            <ok>nothil</ok>
+        </plugin>
+        <include>
+            <uri>model://sun</uri>
+            <static>true</static>
+        </include>
+        <include>
+            <uri>model://vant_quatro_lqr</uri>
+            <name>newmodel</name>
+            <static>false</static>
+            <pose>0 0 2 0 0 0</pose>
+        </include>
+        <include>
+            <uri>model://cenario</uri>
+            <name>cenario</name>
+            <static>true</static>
+            <pose>0 0 0 0 0 0</pose>
+        </include>
+        <scene>
+            <sky>
+                <time>18</time>
+                <clouds>
+                    <speed>0</speed>
+                </clouds>
+            </sky>
+        </scene>
+    </world>
+</sdf>

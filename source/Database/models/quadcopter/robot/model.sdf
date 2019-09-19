@@ -1,0 +1,269 @@
+<sdf version='1.6'>
+  <model name='quadcopter'>
+    <link name='main_body'>
+      <pose frame=''>0 0 0 0 -0 0</pose>
+      <inertial>
+        <pose frame=''>0 -0 0 0 -0 0</pose>
+        <mass>0.052451</mass>
+        <inertia>
+          <ixx>0.00010119</ixx>
+          <ixy>5.6493e-08</ixy>
+          <ixz>2.442e-14</ixz>
+          <iyy>0.00010119</iyy>
+          <iyz>-2.2727e-14</iyz>
+          <izz>0.00019415</izz>
+        </inertia>
+      </inertial>
+      <collision name='main_body_collision'>
+        <pose frame=''>0 0 0 0 -0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://quadcopter/meshes/main_body.STL</uri>
+          </mesh>
+        </geometry>
+      </collision>
+      <visual name='main_body_visual'>
+        <pose frame=''>0 0 0 0 -0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://quadcopter/meshes/main_body.STL</uri>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+    <link name='motor1'>
+      <pose frame=''>-0.12 0 0.007797 -0 -0 -0.7854</pose>
+      <inertial>
+        <pose frame=''>0 -0 0 0 -0 0</pose>
+        <mass>0.0067333</mass>
+        <inertia>
+          <ixx>1.2162e-06</ixx>
+          <ixy>4.1395e-08</ixy>
+          <ixz>-4.4137e-19</ixz>
+          <iyy>6.3625e-07</iyy>
+          <iyz>-1.4697e-17</iyz>
+          <izz>9.6099e-07</izz>
+        </inertia>
+      </inertial>
+      <collision name='motor1_collision'>
+        <pose frame=''>0 0 0 0 -0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://quadcopter/meshes/motor1.STL</uri>
+          </mesh>
+        </geometry>
+      </collision>
+      <visual name='motor1_visual'>
+        <pose frame=''>0 0 0 0 -0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://quadcopter/meshes/motor1.STL</uri>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+    <joint name='prp1' type='revolute'>
+      <child>motor1</child>
+      <parent>main_body</parent>
+      <axis>
+        <xyz>0 0 1</xyz>
+        <limit>
+          <lower>0</lower>
+          <upper>31415</upper>
+          <effort>0</effort>
+          <velocity>0</velocity>
+        </limit>
+        <dynamics>
+          <spring_reference>0</spring_reference>
+          <spring_stiffness>0</spring_stiffness>
+        </dynamics>
+        <use_parent_model_frame>1</use_parent_model_frame>
+      </axis>
+    </joint>
+    <link name='motor2'>
+      <pose frame=''>0 -0.12 0.007797 -0 -0 -0.7854</pose>
+      <inertial>
+        <pose frame=''>-0 -0 0 0 -0 0</pose>
+        <mass>0.0067333</mass>
+        <inertia>
+          <ixx>9.2893e-07</ixx>
+          <ixy>-2.9263e-07</ixy>
+          <ixz>-4.4012e-19</ixz>
+          <iyy>9.2349e-07</iyy>
+          <iyz>-1.4699e-17</iyz>
+          <izz>9.6099e-07</izz>
+        </inertia>
+      </inertial>
+      <collision name='motor2_collision'>
+        <pose frame=''>0 0 0 0 -0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://quadcopter/meshes/motor2.STL</uri>
+          </mesh>
+        </geometry>
+      </collision>
+      <visual name='motor2_visual'>
+        <pose frame=''>0 0 0 0 -0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://quadcopter/meshes/motor2.STL</uri>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+    <joint name='prp2' type='revolute'>
+      <child>motor2</child>
+      <parent>main_body</parent>
+      <axis>
+        <xyz>0 0 1</xyz>
+        <limit>
+          <lower>0</lower>
+          <upper>31415</upper>
+          <effort>0</effort>
+          <velocity>0</velocity>
+        </limit>
+        <dynamics>
+          <spring_reference>0</spring_reference>
+          <spring_stiffness>0</spring_stiffness>
+        </dynamics>
+        <use_parent_model_frame>1</use_parent_model_frame>
+      </axis>
+    </joint>
+    <link name='motor3'>
+      <pose frame=''>0.12 0 0.007797 -0 -0 -0.7854</pose>
+      <inertial>
+        <pose frame=''>-0 -0 0 0 -0 0</pose>
+        <mass>0.0067333</mass>
+        <inertia>
+          <ixx>1.2154e-06</ixx>
+          <ixy>-4.6293e-08</ixy>
+          <ixz>-4.4086e-19</ixz>
+          <iyy>6.3699e-07</iyy>
+          <iyz>-1.47e-17</iyz>
+          <izz>9.6099e-07</izz>
+        </inertia>
+      </inertial>
+      <collision name='motor3_collision'>
+        <pose frame=''>0 0 0 0 -0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://quadcopter/meshes/motor3.STL</uri>
+          </mesh>
+        </geometry>
+      </collision>
+      <visual name='motor3_visual'>
+        <pose frame=''>0 0 0 0 -0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://quadcopter/meshes/motor3.STL</uri>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+    <joint name='prp3' type='revolute'>
+      <child>motor3</child>
+      <parent>main_body</parent>
+      <axis>
+        <xyz>0 0 1</xyz>
+        <limit>
+          <lower>0</lower>
+          <upper>31415</upper>
+          <effort>0</effort>
+          <velocity>0</velocity>
+        </limit>
+        <dynamics>
+          <spring_reference>0</spring_reference>
+          <spring_stiffness>0</spring_stiffness>
+        </dynamics>
+        <use_parent_model_frame>1</use_parent_model_frame>
+      </axis>
+    </joint>
+    <link name='motor4'>
+      <pose frame=''>0 0.12 0.007797 -0 -0 -0.7854</pose>
+      <inertial>
+        <pose frame=''>0 -0 0 0 -0 0</pose>
+        <mass>0.0067333</mass>
+        <inertia>
+          <ixx>1.2172e-06</ixx>
+          <ixy>-3.346e-08</ixy>
+          <ixz>-4.4048e-19</ixz>
+          <iyy>6.3522e-07</iyy>
+          <iyz>-1.4698e-17</iyz>
+          <izz>9.6099e-07</izz>
+        </inertia>
+      </inertial>
+      <collision name='motor4_collision'>
+        <pose frame=''>0 0 0 0 -0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://quadcopter/meshes/motor4.STL</uri>
+          </mesh>
+        </geometry>
+      </collision>
+      <visual name='motor4_visual'>
+        <pose frame=''>0 0 0 0 -0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://quadcopter/meshes/motor4.STL</uri>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+    <joint name='prp4' type='revolute'>
+      <child>motor4</child>
+      <parent>main_body</parent>
+      <axis>
+        <xyz>0 0 1</xyz>
+        <limit>
+          <lower>0</lower>
+          <upper>31415</upper>
+          <effort>0</effort>
+          <velocity>0</velocity>
+        </limit>
+        <dynamics>
+          <spring_reference>0</spring_reference>
+          <spring_stiffness>0</spring_stiffness>
+        </dynamics>
+        <use_parent_model_frame>1</use_parent_model_frame>
+      </axis>
+    </joint>
+    <plugin name="empuxo"
+filename="libgazebo_ros_brushless_plugin.so">
+            <topic_FR>Empuxoh1</topic_FR>
+            <LinkDir>motor1</LinkDir>
+            <topic_FL>Empuxoh2</topic_FL>
+            <LinkEsq>motor2</LinkEsq>
+            <DragCte>0.02</DragCte>
+     	  </plugin> 
+     <plugin name="empuxo"
+filename="libgazebo_ros_brushless_plugin.so">
+            <topic_FR>Empuxoh3</topic_FR>
+            <LinkDir>motor3</LinkDir>
+            <topic_FL>Empuxoh4</topic_FL>
+            <LinkEsq>motor4</LinkEsq>
+            <DragCte>0.02</DragCte>
+         </plugin> 
+   <!--  	 <plugin name="VetorEstados"
+filename="libgazebo_ros_QuadData.so">
+            <NameOfTopic>Estados1</NameOfTopic>
+            <NameOfJointR>prp4</NameOfJointR>
+            <NameOfJointL>prp3</NameOfJointL>
+            <bodyName>main_body</bodyName>
+     </plugin>  -->
+      <plugin name="VetorEstados"
+filename="libgazebo_ros_QuadData.so">
+            <NameOfTopic>Estados</NameOfTopic>
+            <bodyName>main_body</bodyName>
+     </plugin>
+  </model>
+</sdf>

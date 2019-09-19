@@ -41,6 +41,7 @@ include_directories(plugins/teste_plugin)
 include_directories(plugins/get_angle_plugin)
 include_directories(plugins/QuadData)
 include_directories(plugins/Aerodinamica4dot0)
+include_directories(plugins/saturation_plugin)
 
 
 
@@ -149,6 +150,9 @@ target_link_libraries(gazebo_ros_QuadData ${catkin_LIBRARIES} ${GAZEBO_LIBRARIES
 add_library(gazebo_ros_Aerodinamica4dot0_plugin plugins/Aerodinamica4dot0/Aerodinamica.cpp) 
 target_link_libraries(gazebo_ros_Aerodinamica4dot0_plugin ${catkin_LIBRARIES} ${GAZEBO_LIBRARIES})
 
+add_library(gazebo_ros_saturation_plugin plugins/saturation_plugin/saturation_plugin.cpp) 
+target_link_libraries(gazebo_ros_saturation_plugin ${catkin_LIBRARIES} ${GAZEBO_LIBRARIES})
+
 
 
 install(DIRECTORY include/${PROJECT_NAME}/
@@ -181,6 +185,7 @@ install(TARGETS
   AnglePlugin
   gazebo_ros_QuadData
   gazebo_ros_Aerodinamica4dot0_plugin
+  gazebo_ros_saturation_plugin
   ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}

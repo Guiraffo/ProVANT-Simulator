@@ -656,6 +656,16 @@ filename="libgazebo_ros_servo_motor_plugin.so">
             <!--    <JointFr>  Hel_L_joint_name  </JointFr>		
                   <JointFl>  Hel_R_joint_name  </JointFl> 	
               <topic_Wl> Wl_topic </topic_Wl>	-->			
-        </plugin>	
+        </plugin>
+        
+        	<plugin name="Saturation_plugin"
+filename="libgazebo_ros_saturation_plugin.so">
+            <TopicSubscriber1>RefRotorR</TopicSubscriber1>
+            <TopicSubscriber2>RefRotorL</TopicSubscriber2>
+            <TopicSubscriber3>RefAileronR</TopicSubscriber3>
+            <TopicSubscriber4>RefAileronL</TopicSubscriber4>
+            <TopicSubscriber5>RefRudderR</TopicSubscriber5>
+            <TopicSubscriber6>RefRudderL</TopicSubscriber6>
+  	</plugin> 	 
   </model>
 </sdf>
