@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <package>
-	<name>vant4_aerod_lqr</name>
+	<name>vant3_adaptiveMixCtrl2</name>
 	<version>0.0.0</version>
-	<description> vant4_aerod_lqr package</description>
+	<description> vant3_adaptiveMixCtrl2 package</description>
 	<maintainer email="macro@todo.todo">macro</maintainer>
 	<license>TODO</license>
 	<buildtool_depend>catkin</buildtool_depend>
