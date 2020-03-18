@@ -42,6 +42,7 @@ std::string ConfigFile::GetLogOut(){return outFilename;}
 
 std::string ConfigFile::GetLogIn(){return inFilename;}
 
+
 void ConfigFile::SetLog(std::string erro,std::string ref,std::string out,std::string in)
 {
     erroFilename = erro;
