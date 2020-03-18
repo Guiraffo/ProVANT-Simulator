@@ -3,7 +3,7 @@
     <topicdata>data</topicdata>
     <TopicoStep>Step</TopicoStep>
     <Sampletime>12</Sampletime>
-    <Strategy>liblqr_quadcopter.so</Strategy>
+    <Strategy>libvant4_Winf.so</Strategy>
     <RefPath>ref.txt</RefPath>
     <Outputfile>out.txt</Outputfile>
     <InputPath>in.txt</InputPath>
@@ -12,9 +12,13 @@
         <Device>Estados</Device>
     </Sensors>
     <Actuators>
-        <Device>Empuxoh1</Device>
-        <Device>Empuxoh2</Device>
-        <Device>Empuxoh3</Device>
-        <Device>Empuxoh4</Device>
+        <Device>ThrustR</Device>
+        <Device>ThrustL</Device>
+        <Device>RefRotorR</Device>
+        <Device>RefRotorL</Device>
+        <Device>RefAileronR</Device>
+        <Device>RefAileronL</Device>
+        <Device>RefRudderR</Device>
+        <Device>RefRudderL</Device>
     </Actuators>
 </config>

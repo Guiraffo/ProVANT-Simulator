@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sdf version="1.4">
+    <model name="cenario_hill">
+      <pose>0 0 0  0 0 0</pose>
+      <static>true</static>
+      <link name="body">
+        <visual name="visual">
+          <geometry>
+            <mesh> <uri>model://cenario_hill/meshes/hillblender.dae</uri></mesh>
+          </geometry>
+        </visual>
+      </link>
+    </model>
+</sdf>
