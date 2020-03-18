@@ -71,11 +71,7 @@ namespace gazebo
   		// Thread
   		boost::thread *t;	
   		
-  		physics::ModelPtr model;
-  		
-  		common::PID pid;
-  		common::PID pid2;
-  					
+  		physics::ModelPtr model;			
 
 	};
 }

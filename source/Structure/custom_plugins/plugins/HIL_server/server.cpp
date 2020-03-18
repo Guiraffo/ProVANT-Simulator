@@ -74,7 +74,7 @@ namespace gazebo
 					std::chrono::duration<double,std::nano> delta_t2 = tf-to2;
 					//std::chrono::duration<double,std::ratio<1l,1000000l>> delta_t = 
 					//std::chrono::duration_cast<std::chrono::miliseconds>(tf - to);
-					//std::cout << delta_t.count()/1000000.0 << "," << delta_t2.count()/1000000000.0 << ",";
+					std::cout << delta_t.count()/1000000.0 << "," << delta_t2.count()/1000000000.0 << ",";
 				
 					//std::cout << model->GetWorld()->GetRealTime().FormattedString() << ",";	
 				
@@ -98,7 +98,6 @@ namespace gazebo
 						Tr = frame.getFloat();
 						Tl = frame.getFloat();
 						
-						std::cout << "novo  ";
 						std::cout << Fr << ",";
 						std::cout << Fl << ",";
 						std::cout << Tr << ",";
@@ -170,12 +169,6 @@ namespace gazebo
 				updateTimer.Load(world, _sdf);
 		  		updateConnection = updateTimer.Connect(boost::bind(&HilServer::Update, this));
 	  		}
-	  		
-	  		//this->model->GetJointController()->SetPositionPID(NameOfJointR_,common::PID(10000, 0, 0));
-  			//this->model->GetJointController()->SetPositionPID(NameOfJointL_,common::PID(10000, 0, 0));
-  				
- 
-	  		
 		
 		}
 		catch(std::exception& e)
@@ -280,15 +273,8 @@ namespace gazebo
 	
 			// Torque do servo direito
 			juntaR->SetForce(0,Tr_);
-			//juntaR->SetPosition(0,Tr_);
-			//this->model->GetJointController()->SetPositionTarget(NameOfJointR_, Tr_);
-			
 			// Torque do servo esquerdo
-			//juntaL->SetPosition(0,Tl_);
 			juntaL->SetForce(0,Tl_);
-			
-			//this->model->GetJointController()->SetPositionTarget(NameOfJointL_, Tl_);
-			//std::cout << Tl_ << "," << Tr_ << std::endl;
 	}
 
 	GZ_REGISTER_MODEL_PLUGIN(HilServer)

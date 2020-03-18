@@ -64,7 +64,7 @@ void Dialog::setModel(std::string modelfile,std::string controllerfile)
     ui->ActuatorEdit->setText(QString::fromStdString(controller.config->GetLogOut()));
     ui->SensorEdit->setText(QString::fromStdString(controller.config->GetLogIn()));
     ui->ReferenceEdit->setText(QString::fromStdString(controller.config->GetLogRef()));
-}
+    }
 
 void Dialog::on_pushButton_5_clicked()
 {
@@ -184,6 +184,7 @@ void Dialog::SaveConfig()
                               ui->ReferenceEdit->text().toStdString(),
                               ui->ActuatorEdit->text().toStdString(),
                               ui->SensorEdit->text().toStdString());
+
     // adicionando sensores
     controller.config->Delete();
     for(int i = 0; i < ui->listWidget_2->count(); ++i)

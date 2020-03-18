@@ -282,7 +282,9 @@
             <Modo>Torque</Modo>
             <TopicPublisher>aR</TopicPublisher>
             <ChildLink>servodir</ChildLink>
-            <Saturation>1</Saturation>
+            <tag>RotR</tag>
+           <Force_Saturation>1</Force_Saturation>
+            <Angle_Saturation>1</Angle_Saturation>
         </plugin>
         <plugin name="servoL" filename="libgazebo_ros_servo_motor_plugin.so">
             <TopicSubscriber>RefaL</TopicSubscriber>
@@ -290,7 +292,9 @@
             <Modo>Torque</Modo>
             <TopicPublisher>aL</TopicPublisher>
             <ChildLink>servoesq</ChildLink>
-            <Saturation>1</Saturation>
+            <tag>RotL</tag>
+            <Force_Saturation>1</Force_Saturation>
+            <Angle_Saturation>1</Angle_Saturation>
         </plugin>
         <plugin name="VetorEstados" filename="libgazebo_ros_AllData_plugin2.so">
             <NameOfJointL>aL</NameOfJointL>

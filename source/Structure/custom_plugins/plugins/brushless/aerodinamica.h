@@ -55,7 +55,6 @@ namespace gazebo
 			std::string NameOfLinkDir_; // name of right brushless's link
 			std::string NameOfLinkEsq_; // name of left brushless's link	
 			double Fr, Fl; // Lift Forces
-			double DragConst;                                                    //TESTE QUAD
 	};
 }
 

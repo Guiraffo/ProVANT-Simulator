@@ -1,3 +1,4 @@
+
 /*
 * File: aerodinamica.cpp
 * Author: Arthur Viana Lara
@@ -25,7 +26,6 @@ namespace gazebo
 	// to load initial setup
 	void Aerodinamica::Load(physics::ModelPtr _model, sdf::ElementPtr _sdf)
 	{	
-		std::cout<< "Empuxo Inicializado" <<std::endl;
 		try
 		{
 	    		if (!ros::isInitialized())
@@ -38,10 +38,7 @@ namespace gazebo
 			topic_FL = XMLRead::ReadXMLString("topic_FL",_sdf); // name of left brushless's topic
 			NameOfLinkDir_ = XMLRead::ReadXMLString("LinkDir",_sdf); // name of right brushless's link
 			NameOfLinkEsq_ = XMLRead::ReadXMLString("LinkEsq",_sdf); // name of left brushless's link
-			DragConst = XMLRead::ReadXMLDouble("DragCte",_sdf); //Constante de Drag
-			
-			
-			
+
 			// get elements of the simulation
 			linkR = _model->GetLink(NameOfLinkDir_);
 			linkL = _model->GetLink(NameOfLinkEsq_);	
@@ -76,15 +73,12 @@ namespace gazebo
 	{
 		try
 		{
-			
 			Fr = msg.data;
-			std::cout<<"Fr:"<<Fr<<std::endl;
 			math::Vector3 forceR(0,0,Fr); // Right force in the left brushless
-			math::Vector3 torqueR(0,0,DragConst*Fr); // drag torque
+			math::Vector3 torqueR(0,0,0.0178947368*Fr); // drag torque
 			// Applying			
 			linkR->AddRelativeForce(forceR);
 			linkR->AddRelativeTorque(torqueR);
-			
 		}
 		catch(std::exception& e)
 		{
@@ -96,15 +90,12 @@ namespace gazebo
 	{
 		try
 		{	
-		
 			Fl = msg.data;
-			std::cout<<"Fl:"<<Fl<<std::endl;
 			math::Vector3 forceL(0,0,Fl); // Lift force in the left brushless
-			math::Vector3 torqueL(0,0,-DragConst*Fl); // drag torque				
+			math::Vector3 torqueL(0,0,-0.0178947368*Fl); // drag torque
 			// Applying			
 			linkL->AddRelativeForce(forceL);
 			linkL->AddRelativeTorque(torqueL);
-			
 		}
 		catch(std::exception& e)
 		{

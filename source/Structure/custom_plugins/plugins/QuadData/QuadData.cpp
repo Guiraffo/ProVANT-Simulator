@@ -18,10 +18,15 @@
 namespace gazebo
 {
 	// constructor
-	QuadData::QuadData()
+	QuadData::QuadData(): PhipThetapPsip(3,1), RIB(3,3), W_n(3,3), WIIB(3,1), XpYpZp(3,1)
 	{ 
 				
 	}
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 	// destructor
 	QuadData::~QuadData()
@@ -35,6 +40,11 @@ namespace gazebo
 			std::cout << e.what() << std::endl;
 		} 
 	}
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 	// initial setup
 	void QuadData::Load(physics::ModelPtr _model, sdf::ElementPtr _sdf)
@@ -69,6 +79,11 @@ namespace gazebo
 		}
 	}
 
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
 	// reset
 	void QuadData::Reset()
 	{
@@ -81,6 +96,11 @@ namespace gazebo
 			std::cout << e.what() << std::endl;
 		}
 	}
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 	// new step time
 	void QuadData::Update()
@@ -100,45 +120,38 @@ namespace gazebo
 			newmsg.values.push_back(pose.rot.GetAsEuler( ).x); //roll
 			newmsg.values.push_back(pose.rot.GetAsEuler( ).y); // pitch
 			newmsg.values.push_back(pose.rot.GetAsEuler( ).z); // yaw
+
+			//compute the generalized velocities
 			math::Vector3 linear = link->GetWorldLinearVel();
-			newmsg.values.push_back(linear.x); // dx
-			newmsg.values.push_back(linear.y); // dy
-			newmsg.values.push_back(linear.z); //dz
 			math::Vector3 angular = link->GetWorldAngularVel( );
-			// droll -> attention! we receive angular velocity, but we want to publish the derivative of euler angle
-		double phi = pose.rot.GetAsEuler().x;
-			double theta = pose.rot.GetAsEuler().y;
-			double psi = pose.rot.GetAsEuler().z;
-			double p = angular.x;
-			double q = angular.y;
-			double r = angular.z;
-			newmsg.values.push_back(p + q*sin(phi)*tan(theta) + r*cos(phi)*tan(theta)); 
-			 // dpitch  -> attention! we receive angular velocity, but we want to publish the derivative of euler angle
-			newmsg.values.push_back(0 + q*cos(phi) - r*sin(phi));    
-			// dyaw -> attention! we receive angular velocity, but we want to publish the derivative of euler angle
-			newmsg.values.push_back(0 + q*sin(phi)*(1/cos(theta)) + r*cos(phi)*(1/cos(theta)));			
 			
-	/*		Phi = pose.rot.GetAsEuler().x;
-			Theta = pose.rot.GetAsEuler().y;
-			Psi = pose.rot.GetAsEuler().z;
+			Phi = pose.rot.GetAsEuler( ).x;
+			Theta = pose.rot.GetAsEuler( ).y;
+			Psi = pose.rot.GetAsEuler( ).z;
 			
 			RIB <<  (cos(Psi)*cos(Theta)), (cos(Psi)*sin(Phi)*sin(Theta) - cos(Phi)*sin(Psi)), (sin(Phi)*sin(Psi) + cos(Phi)*cos(Psi)*sin(Theta)),
 				(cos(Theta)*sin(Psi)), (cos(Phi)*cos(Psi) + sin(Phi)*sin(Psi)*sin(Theta)), (cos(Phi)*sin(Psi)*sin(Theta) - cos(Psi)*sin(Phi)), 
         	                (-sin(Theta)),                              (cos(Theta)*sin(Phi)),                              (cos(Phi)*cos(Theta));
-	
+        	                
 			W_n << 1.0,         0.0,          -sin(Theta), 
 			       0.0,  cos(Phi),  cos(Theta)*sin(Phi),
 	  	               0.0, -sin(Phi),  cos(Phi)*cos(Theta);
-	
+	  	               
+			//Get the angular velocity w.r.t I expressed in I and maps to obtain the time derivative of Euler angles
 			WIIB << angular.x, angular.y, angular.z;
-			PhipThetapPsip = W_n.inverse() * RIB.transpose() * WIIB;
+			PhipThetapPsip = W_n.inverse() * (RIB.transpose() * WIIB);
+			XpYpZp << linear.x, linear.y, linear.z;
 			
-			
-			newmsg.values.push_back(PhipThetapPsip(0));  //droll
-			newmsg.values.push_back(PhipThetapPsip(1));	//dpitch
-			newmsg.values.push_back(PhipThetapPsip(2));	//dyaw		*/
-			
-			
+
+			newmsg.values.push_back(linear.x); // dx
+			newmsg.values.push_back(linear.y); //dy
+			newmsg.values.push_back(linear.z); //dz
+			newmsg.values.push_back(PhipThetapPsip(0));
+			newmsg.values.push_back(PhipThetapPsip(1));
+			newmsg.values.push_back(PhipThetapPsip(2));
+		
+			std::cout << pose.pos.x << ";"<< pose.pos.y << ";"<< pose.pos.z << ";"<< pose.rot.GetAsEuler( ).x << ";" << pose.rot.GetAsEuler( ).y << ";" << pose.rot.GetAsEuler( ).z << ";" << std::endl;
+		
 			// publish data
 			publisher_.publish(newmsg);					
 		}

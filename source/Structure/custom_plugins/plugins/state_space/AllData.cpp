@@ -20,7 +20,7 @@ namespace gazebo
 	// constructor
 	AllData::AllData(): PhipThetapPsip(3,1), RIB(3,3), W_n(3,3), WIIB(3,1)
 	{ 
-				
+			
 	}
 
 	// destructor
@@ -151,8 +151,12 @@ namespace gazebo
 			newmsg.values.push_back(juntaR->GetVelocity(0)); // daR
 			newmsg.values.push_back(juntaL->GetVelocity(0)); // daL
 			//std::cout << "alldata" << std::endl;
+			
 			// publish data
-			publisher_.publish(newmsg);					
+			publisher_.publish(newmsg);
+
+			
+				
 		}
 		catch(std::exception& e)
 		{

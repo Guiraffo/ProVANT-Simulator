@@ -58,12 +58,13 @@ namespace gazebo
 			boost::mutex lock; // mutex
 			ros::Publisher publisher_;  // ROS publisher
 			
-		//	Eigen::MatrixXd RIB;
-		//	Eigen::MatrixXd W_n;
-	//		Eigen::MatrixXd WIIB;
-	//		Eigen::MatrixXd PhipThetapPsip;
-		//	double Phi;
-	//		double Theta;
-	//		double Psi;	
+				Eigen::MatrixXd RIB;
+			Eigen::MatrixXd W_n;
+			Eigen::MatrixXd WIIB;
+			Eigen::MatrixXd PhipThetapPsip;
+			Eigen::MatrixXd XpYpZp;
+			double Phi;
+			double Theta;
+			double Psi;	
 	};
 }

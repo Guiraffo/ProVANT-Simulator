@@ -27,15 +27,9 @@
                 <pose>0 0 0 0 0 0</pose>
                 <geometry>
                     <mesh>
-                        <uri>model://vant_2/meshes/servodir.STL</uri>
+                        <uri>model://vant_2/meshes/servoR.dae</uri>
                     </mesh>
                 </geometry>
-                <material>
-                    <ambient>1 0 0 1</ambient>
-                    <diffuse>1 0 0 1</diffuse>
-                    <specular>0.1 0.1 0.1 1</specular>
-                    <emissive>0 0 0 0</emissive>
-                </material>
             </visual>
         </link>
         <link name="servoesq">
@@ -64,15 +58,9 @@
                 <pose>0 0 0 0 0 0</pose>
                 <geometry>
                     <mesh>
-                        <uri>model://vant_2/meshes/servoesq.STL</uri>
+                        <uri>model://vant_2/meshes/servoL.dae</uri>
                     </mesh>
                 </geometry>
-                <material>
-                    <ambient>1 0 0 1</ambient>
-                    <diffuse>1 0 0 1</diffuse>
-                    <specular>0.1 0.1 0.1 1</specular>
-                    <emissive>0 0 0 0</emissive>
-                </material>
             </visual>
         </link>
         <link name="corpo">
@@ -108,15 +96,9 @@
                 <pose>0 0 0 0 0 0</pose>
                 <geometry>
                     <mesh>
-                        <uri>model://vant_2/meshes/corpo.STL</uri>
+                        <uri>model://vant_2/meshes/mainbody.dae</uri>
                     </mesh>
                 </geometry>
-                <material>
-                    <ambient>1 0 0 1</ambient>
-                    <diffuse>1 0 0 1</diffuse>
-                    <specular>0.1 0.1 0.1 1</specular>
-                    <emissive>0 0 0 0</emissive>
-                </material>
             </visual>
         </link>
         <joint name="aR" type="revolute">
@@ -167,7 +149,9 @@
             <TopicPublisher>SensoraR</TopicPublisher>
             <TopicSubscriber>RefaR</TopicSubscriber>
             <Modo>Torque</Modo>
-            <Saturation>1</Saturation>
+            <tag>RotR</tag>
+           <Force_Saturation>100</Force_Saturation>
+            <Angle_Saturation>100</Angle_Saturation>
         </plugin>
         <plugin name="VetorEstados" filename="libgazebo_ros_AllData_plugin.so">
             <NameOfJointR>aR</NameOfJointR>
@@ -180,7 +164,9 @@
             <TopicPublisher>SensoraL</TopicPublisher>
             <TopicSubscriber>RefaL</TopicSubscriber>
             <Modo>Torque</Modo>
-            <Saturation>1</Saturation>
+             <tag>RotL</tag>
+            <Force_Saturation>100</Force_Saturation>
+            <Angle_Saturation>100</Angle_Saturation>
         </plugin>
         <plugin name="hil" filename="libgazebo_hil_server4.so">
             <NameOfJointL>aL</NameOfJointL>

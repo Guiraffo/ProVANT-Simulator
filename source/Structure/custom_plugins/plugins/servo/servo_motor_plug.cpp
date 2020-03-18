@@ -13,7 +13,8 @@
 
 namespace gazebo
 {
-	
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////	
 	// Callback for references
     void ServoMotorPlugin::CallbackReferencias(std_msgs::Float64 msg)
 	{
@@ -22,27 +23,23 @@ namespace gazebo
 		{	bool result = false;
 			//std::cout << "entrei2 servo plugin!\n";
 			if(Modo_ == "Torque"){	
-				if(msg.data > Saturation_){
-				msg.data = Saturation_;
-				}else if(msg.data < -Saturation_){
-				msg.data = -Saturation_;
+				if(msg.data > Force_Saturation_){
+				msg.data = Force_Saturation_;
+				}else if(msg.data < -Force_Saturation_){
+				msg.data = -Force_Saturation_;
 				}
-
-	
-			//	outsfile.printFile(msg.data);
-		
-			junta->SetForce(0,msg.data);
-			
-			
-			
-			//	std::cout << "Junta: " << NameOfJoint_ << "ValorTorque: " << msg.data << std::endl;
+				junta->SetForce(0,msg.data);	
 			}
-			if(Modo_ == "Position")	
-			{
+			if(Modo_ == "Position")	{
+				if(msg.data > Angle_Saturation_){
+				msg.data = Angle_Saturation_;
+				}else if(msg.data < -Angle_Saturation_){
+				msg.data = -Angle_Saturation_;
+				}
 			//std::cout << "entrei4 servo plugin!\n";
 			result = junta->SetPosition(0,msg.data); // TO FIX
-			
-			}
+
+			}	
 		}
 		catch(std::exception& e)
 		{
@@ -51,23 +48,25 @@ namespace gazebo
 		}
 	}
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 	// constructor
 	ServoMotorPlugin::ServoMotorPlugin()
 	{ 
-	
-		///		teste doc(std::getenv("TILT_CONFIG"));
-		//		docme=doc;
-		//		std::string OutputsaturedPath = docme.GetItem("Outputsaturedfile");
-		//		OutputsaturedPath = std::getenv("TILT_MATLAB") + OutputsaturedPath;
-		//		outsfile.startFile(OutputsaturedPath,"OUTS");
+				
 	}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	// destructor
 	ServoMotorPlugin::~ServoMotorPlugin()
 	{	
-		//outsfile.endFile();
+		
 		try
 		{
+			
 			updateTimer.Disconnect(updateConnection);
 		}
 		catch(std::exception& e)
@@ -76,45 +75,49 @@ namespace gazebo
 		} 
 	}
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 	// initial setup
 	void ServoMotorPlugin::Load(physics::ModelPtr _model, sdf::ElementPtr _sdf)
 	{	
 		try
 		{
 			std::cout << "inicializado servo plugin!" << std::endl;
-	    		if (!ros::isInitialized())
-	    		{
-				std::cout << "Nao inicializado!" << std::endl;
-	      		        return;
-	    		}
+	    if (!ros::isInitialized())
+	    {
+			std::cout << "Nao inicializado!" << std::endl;
+	    return;
+	    }
 
 			NameOfJoint_ = XMLRead::ReadXMLString("NameOfJoint",_sdf); // Get name of the joint
 			TopicSubscriber_ = XMLRead::ReadXMLString("TopicSubscriber",_sdf); // Name of topic for receiving reference
 			TopicPublisher_ = XMLRead::ReadXMLString("TopicPublisher",_sdf); // Name of topic for sending data
-			Modo_ = XMLRead::ReadXMLString("Modo",_sdf); // mode of working
-			Saturation_ = XMLRead::ReadXMLDouble("Saturation",_sdf);
+			Modo_ = XMLRead::ReadXMLString("Modo",_sdf); // mode of working defined in the model.sdf file
+		//	tag_ = XMLRead::ReadXMLString("tag",_sdf);	//Tag for knowing which actuator we're saturating	
+			Force_Saturation_ = XMLRead::ReadXMLDouble("Force_Saturation",_sdf);	//Value of saturation for force
+			Angle_Saturation_ = XMLRead::ReadXMLDouble("Angle_Saturation",_sdf);	//Value of saturation for angle
 			world = _model->GetWorld(); // get World's pointer	
 			junta = _model->GetJoint(NameOfJoint_); // get joint's pointer
-
-			
-		   // std::cout << NameOfJoint_ << std::endl;
-		   // std::cout << Modo_ << std::endl;
 
 			// subscriber
 			motor_subscriber_ = node_handle_.subscribe(TopicSubscriber_, 1, &gazebo::ServoMotorPlugin::CallbackReferencias, this);
 			// publisher
 			motor_publisher_ = node_handle_.advertise<simulator_msgs::Sensor>(TopicPublisher_, 5);
 
-	  		Reset();
+	  	Reset();
 			// starts connection
 			updateTimer.Load(world, _sdf);
-	  		updateConnection = updateTimer.Connect(boost::bind(&ServoMotorPlugin::Update, this));
+	  	updateConnection = updateTimer.Connect(boost::bind(&ServoMotorPlugin::Update, this));
 		}
 		catch(std::exception& e)
 		{
 			std::cout << e.what() << std::endl;
 		}
 	}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	
 	// reset
 	void ServoMotorPlugin::Reset()
@@ -129,6 +132,10 @@ namespace gazebo
 		}
 	}
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/**********************************************************************************************/
+
 	// for each ste time
 	void ServoMotorPlugin::Update()
 	{
@@ -140,7 +147,7 @@ namespace gazebo
 			newmsg.header.frame_id = "1";
 			newmsg.values.push_back(junta->GetAngle(0).Radian()); // angular position
 			newmsg.values.push_back(junta->GetVelocity(0)); // angular velocity
-			// publish data
+			// publishes data
 			motor_publisher_.publish(newmsg);
 
 		}

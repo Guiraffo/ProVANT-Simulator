@@ -27,6 +27,8 @@
 #include <eigen3/Eigen/Eigen>
 
 
+
+
 namespace gazebo
 {
 	class AllData : public ModelPlugin
@@ -55,7 +57,7 @@ namespace gazebo
   			event::ConnectionPtr updateConnection; // update connection
 			ros::NodeHandle node_handle_; // ROS's node handle
 			boost::mutex lock; // mutex
-			ros::Publisher publisher_;  // ROS publisher	
+			ros::Publisher publisher_;  // ROS publisher
 			Eigen::MatrixXd RIB;
 			Eigen::MatrixXd W_n;
 			Eigen::MatrixXd WIIB;
@@ -63,5 +65,6 @@ namespace gazebo
 			double Phi;
 			double Theta;
 			double Psi;
+
 	};
 }
