@@ -20,14 +20,14 @@
 #include <boost/thread.hpp>
 #include <ros/callback_queue.h>
 #include "XMLRead.h"
-//#include "teste.h"
-//#include "testedois.h"
+#include "teste.h"
+#include <MatlabData2.h>
 //#include "/home/macro/catkin_ws/src/ProVANT-Simulator_Developer/source/Structure/Controller/include/controller/XMLRead.h"
 #include "simulator_msgs/Sensor.h"
 //#include "/home/macro/catkin_ws/src/ProVANT-Simulator_Developer/source/Structure/Controller/include/controller/MatlabData.h"
-//#include <string>
-//#include <fstream>
-//#include "std_msgs/String.h"
+#include <string>
+#include <fstream>
+#include "std_msgs/String.h"
 
 
 
@@ -49,14 +49,20 @@ namespace gazebo
 		// update fpr each step time 
   		protected: virtual void Update(); 
 		// calback for receiving references
-		public: void CallbackReferencias(std_msgs::Float64);		
+		public: void CallbackReferencias(std_msgs::Float64);
+		
+		public: void PrintFileForce(double);	
+		
+		public: void PrintFileAngle(double);	
 
 		private:  
 			std::string NameOfJoint_; // name of joint
 			std::string TopicSubscriber_; // name of topic for receiving references
 			std::string TopicPublisher_; // name of topic for sending sensor data
 			std::string Modo_; // mode of servo working
-			double Saturation_;
+			double Force_Saturation_;
+			double Angle_Saturation_;
+			std::string tag_;
 			physics::WorldPtr world; // world's pointer
 			physics::JointPtr junta;  // joint's pointer
 			UpdateTimer updateTimer; // pointer for notifying new step time
@@ -65,9 +71,7 @@ namespace gazebo
 			ros::Publisher motor_publisher_; // ROS publisher
 			ros::Subscriber motor_subscriber_; // ROS subscriber
 			boost::mutex lock; // mutex
-			
-		//	teste docme;
-		//	testedois outsfile;
+
 
 	};
 }

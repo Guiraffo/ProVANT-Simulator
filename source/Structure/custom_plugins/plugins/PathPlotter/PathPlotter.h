@@ -1,13 +1,11 @@
 /*
-* File: AllData.h
-* Author: Arthur Viana Lara
+* File: PathPlotter.h
+* Author: Jonatan Mota Campos
 * Project: ProVANT
 * Company: Federal University of Minas Gerais
 * Version: 1.0
-* Date: 29/01/18
-* Description:  This library is responsable to implement a sensor that return all data of the folowing state space:
-
-- x,y,z,roll,pitch,yaw,aR,aL,dx,dy,dz,droll,dpitch,dyaw,daR,daL
+* Date: 14/10/19
+* Description:  This library is responsable to allow visualize the uav trajectory and reference trajectory in rviz
 
 */
 
@@ -24,16 +22,23 @@
 #include <random>
 #include "XMLRead.h"
 #include "simulator_msgs/Sensor.h"
+#include <eigen3/Eigen/Eigen>
+#include <nav_msgs/Path.h>
+#include <nav_msgs/Odometry.h>
+#include <visualization_msgs/Marker.h>
+#include <tf/transform_broadcaster.h>
+#include <tf2_ros/static_transform_broadcaster.h>
+
 
 
 namespace gazebo
 {
-	class AllData : public ModelPlugin
+	class PathPlotter : public ModelPlugin
 	{
 		// constructor
-		public: AllData();
+		public: PathPlotter();
 		// destructor 
-  		public:virtual ~AllData(); 
+  		public:virtual ~PathPlotter(); 
 		// initial setup
 		public:virtual void Load(physics::ModelPtr _model, sdf::ElementPtr _sdf);
 		// reset 
@@ -42,18 +47,22 @@ namespace gazebo
   		protected: virtual void Update(); 
 		
 		private:  
-			std::string NameOfJointR_; // name of right joint
-			std::string NameOfJointL_; // name od left joint
-			std::string NameOfNode_; // nme of node
+		
+			std::string NameOftopic_path_;
+			std::string NameOftopic_mark_;
+			std::string NameOftopic_ref_;
 			std::string link_name_; // name of link
+			std::string tag_; //To identify which uav we're using
 			physics::LinkPtr link; // pointer to the link
 			physics::WorldPtr world; // pointer to the world
-			physics::JointPtr juntaR; //poiter to the right joint
-			physics::JointPtr juntaL; // pointer to the left joint  
 			UpdateTimer updateTimer;  // update time
   			event::ConnectionPtr updateConnection; // update connection
 			ros::NodeHandle node_handle_; // ROS's node handle
 			boost::mutex lock; // mutex
-			ros::Publisher publisher_;  // ROS publisher	
+			ros::Publisher publisher_path_;  // ROS publisher
+			ros::Publisher publisher_path_ref_;		
+			ros::Publisher publisher_marker_;	
+			tf::TransformBroadcaster broadcaster;
+			tf2_ros::StaticTransformBroadcaster broadcaster_2;
 	};
 }

@@ -6,7 +6,9 @@ find_package(catkin REQUIRED COMPONENTS
 		std_msgs 
 		geometry_msgs 
 		gazebo_ros
-		simulator_msgs)
+		simulator_msgs
+		nav_msgs
+		visualization_msgs)
 include_directories(include ${catkin_INCLUDE_DIRS})
 
 #find_package(TinyXML REQUIRED) 
@@ -37,12 +39,13 @@ include_directories(plugins/pertubation)
 include_directories(plugins/aerodinamica)
 include_directories(plugins/servo2)
 include_directories(plugins/HIL_server)
-include_directories(plugins/teste_plugin)
-include_directories(plugins/get_angle_plugin)
 include_directories(plugins/QuadData)
 include_directories(plugins/Aerodinamica4dot0)
-include_directories(plugins/saturation_plugin)
-
+include_directories(plugins/PathPlotter)
+include_directories(plugins/DataSave)
+include_directories(plugins/QuadForces)
+include_directories(plugins/VisualPropellers)
+include_directories(plugins/DataSaveTiltRotor)
 
 
 
@@ -64,6 +67,8 @@ generate_messages(
    std_msgs  # Or other packages containing msgs
    sensor_msgs 
    geometry_msgs
+   nav_msgs
+   visualization_msgs
 )
 
 
@@ -138,20 +143,26 @@ target_link_libraries(gazebo_ros_servo2_motor_plugin ${catkin_LIBRARIES} ${GAZEB
 add_library(gazebo_hil_server4 plugins/HIL_server/server.cpp plugins/HIL_server/protocol.cpp plugins/HIL_server/frame.cpp plugins/HIL_server/serial.cpp) 
 target_link_libraries(gazebo_hil_server4 ${catkin_LIBRARIES} ${GAZEBO_LIBRARIES})
 
-add_library(testePlugin plugins/teste_plugin/teste_plugin.cpp) 
-target_link_libraries(testePlugin ${catkin_LIBRARIES} ${GAZEBO_LIBRARIES})
-
-add_library(AnglePlugin plugins/get_angle_plugin/get_angle_plugin.cpp) 
-target_link_libraries(AnglePlugin ${catkin_LIBRARIES} ${GAZEBO_LIBRARIES})
-
 add_library(gazebo_ros_QuadData plugins/QuadData/QuadData.cpp) 
 target_link_libraries(gazebo_ros_QuadData ${catkin_LIBRARIES} ${GAZEBO_LIBRARIES})
 
 add_library(gazebo_ros_Aerodinamica4dot0_plugin plugins/Aerodinamica4dot0/Aerodinamica.cpp) 
 target_link_libraries(gazebo_ros_Aerodinamica4dot0_plugin ${catkin_LIBRARIES} ${GAZEBO_LIBRARIES})
 
-add_library(gazebo_ros_saturation_plugin plugins/saturation_plugin/saturation_plugin.cpp) 
-target_link_libraries(gazebo_ros_saturation_plugin ${catkin_LIBRARIES} ${GAZEBO_LIBRARIES})
+add_library(gazebo_ros_PathPlotter plugins/PathPlotter/PathPlotter.cpp) 
+target_link_libraries(gazebo_ros_PathPlotter ${catkin_LIBRARIES} ${GAZEBO_LIBRARIES})
+
+add_library(gazebo_ros_DataSave plugins/DataSave/DataSave.cpp) 
+target_link_libraries(gazebo_ros_DataSave ${catkin_LIBRARIES} ${GAZEBO_LIBRARIES})
+
+add_library(gazebo_ros_QuadForces plugins/QuadForces/QuadForces.cpp) 
+target_link_libraries(gazebo_ros_QuadForces ${catkin_LIBRARIES} ${GAZEBO_LIBRARIES})
+
+add_library(gazebo_ros_VisualPropellers plugins/VisualPropellers/VisualPropellers.cpp) 
+target_link_libraries(gazebo_ros_VisualPropellers ${catkin_LIBRARIES} ${GAZEBO_LIBRARIES})
+
+add_library(gazebo_ros_DataSaveTiltRotor plugins/DataSaveTiltRotor/DataSaveTiltRotor.cpp) 
+target_link_libraries(gazebo_ros_DataSaveTiltRotor ${catkin_LIBRARIES} ${GAZEBO_LIBRARIES})
 
 
 
@@ -181,11 +192,14 @@ install(TARGETS
   gazebo_ros_universaljoint
   gazebo_ros_universallink
   gazebo_ros_servo2_motor_plugin
-  testePlugin
-  AnglePlugin
   gazebo_ros_QuadData
   gazebo_ros_Aerodinamica4dot0_plugin
-  gazebo_ros_saturation_plugin
+  gazebo_ros_PathPlotter
+  gazebo_ros_DataSave
+  gazebo_ros_QuadForces
+  gazebo_ros_VisualPropellers
+  gazebo_ros_DataSaveTiltRotor
+  
   ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}

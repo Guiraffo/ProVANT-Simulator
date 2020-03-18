@@ -8,17 +8,17 @@
 * Description: This library is responsable to implement code to print some data in a file with Matlab form
 */
 
-class testedois
+class MatlabData2
 {
 	private: std::fstream file;	
 	
 	// constructor
-	public: testedois()
+	public: MatlabData2()
 	{
 
 	}
 	// destructor	
-	public: ~testedois()
+	public: ~MatlabData2()
 	{
 
 	}
