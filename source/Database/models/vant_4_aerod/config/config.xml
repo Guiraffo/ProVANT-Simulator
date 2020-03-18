@@ -21,11 +21,4 @@
         <Device>RefRudderR</Device>
         <Device>RefRudderL</Device>
     </Actuators>
-    <OutputsaturedfileRotR>outsrotr.txt</OutputsaturedfileRotR>
-    <OutputsaturedfileRotL>outsrotl.txt</OutputsaturedfileRotL>
-    <OutputsaturedfileAilR>outsailr.txt</OutputsaturedfileAilR>
-    <OutputsaturedfileAilL>outsaill.txt</OutputsaturedfileAilL>
-    <OutputsaturedfileRudR>outsrudr.txt</OutputsaturedfileRudR>
-    <OutputsaturedfileRudL>outsrudl.txt</OutputsaturedfileRudL>
-    
 </config>
