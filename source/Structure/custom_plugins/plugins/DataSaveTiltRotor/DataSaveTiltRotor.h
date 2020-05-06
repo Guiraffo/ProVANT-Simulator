@@ -26,7 +26,7 @@
 #include "XMLRead.h"
 #include <eigen3/Eigen/Eigen>
 #include <MatlabData.h>
-#include <MatlabData2.h> 
+#include <MatlabData2.h>
 
 using namespace log4cxx;
 using namespace log4cxx::xml;
@@ -37,44 +37,52 @@ namespace gazebo
 
 	class DataSaveTiltRotor : public ModelPlugin
 	{
-		
+
 		public: DataSaveTiltRotor(); // constructor
   		public:virtual ~DataSaveTiltRotor(); // destructor
 		public:virtual void Load(physics::ModelPtr _model, sdf::ElementPtr _sdf); // initial setup
   		public: virtual void Reset();  // reset
 		public: void CallbackFr(std_msgs::Float64); // callback to saturate and save forces at right brushless
 		public: void CallbackFl(std_msgs::Float64); // callback to saturate and save forces at left brushless
+		public: void CallbackRotr(std_msgs::Float64); // callback to saturate and save deflection at right rotor
+		public: void CallbackRotl(std_msgs::Float64); // callback to saturate and save deflection at left rotor
 		public: void CallbackDAr(std_msgs::Float64);// callback to saturate and save deflection at right aileron
-		public: void CallbackDAl(std_msgs::Float64);// callback to saturate and save deflection at left aileron		
+		public: void CallbackDAl(std_msgs::Float64);// callback to saturate and save deflection at left aileron
 		public: void CallbackDRr(std_msgs::Float64);// callback to saturate and save deflection at right ruddervator
 		public: void CallbackDRl(std_msgs::Float64);// callback to saturate and save deflection at left ruddervator
 		public: void Update();
-		private: 
+		private:
 			ros::NodeHandle node_handle_; // node handle of ROS
 			physics::WorldPtr world; // pointer to the simulation world
 
 			std::string topic_Fr; // name of topic of right brushless
 			std::string topic_Fl; // name of topic of left brushless
+			std::string topic_Rotr; // name of topic of right rotor
+			std::string topic_Rotl; // name of topic of left rotor
 			std::string topic_DAr;// name of topic of right aileron
 			std::string topic_DAl; // name of topic of left aileron
 			std::string topic_DRr; // name of topic of right ruddervator
 			std::string topic_DRl; // name of topic of left ruddervator
-			
+
 			// ROS subscribers
-			ros::Subscriber subscriberFr_; 
+			ros::Subscriber subscriberFr_;
 			ros::Subscriber subscriberFl_;
+			ros::Subscriber subscriberRotr_;
+			ros::Subscriber subscriberRotl_;
 			ros::Subscriber subscriberDAr_;
 			ros::Subscriber subscriberDAl_;
 			ros::Subscriber subscriberDRr_;
 			ros::Subscriber subscriberDRl_;
-					
-			double Fr, Fl, DAr, DAl, DRr, DRl; //Values to be satureted and saved
-			double Fr_sat,Fl_sat,DAr_sat,DAl_sat,DRr_sat,DRl_sat; //Saturation values
-			
+
+			double Fr, Fl, DAr, DAl, DRr, DRl, Rotr, Rotl; //Values to be satureted and saved
+			double Fr_sat,Fl_sat,DAr_sat,DAl_sat,DRr_sat,DRl_sat, Rotr_sat, Rotl_sat; //Saturation values
+
 
 			//Files for saving data
-			MatlabData2 FrFile; 
+			MatlabData2 FrFile;
 			MatlabData2 FlFile;
+			MatlabData2 RotrFile;
+			MatlabData2 RotlFile;
 			MatlabData2 DArFile;
 			MatlabData2 DAlFile;
 			MatlabData2 DRrFile;
