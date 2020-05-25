@@ -560,12 +560,16 @@ filename="libgazebo_ros_VisualPropellers.so">
      filename="libgazebo_ros_DataSaveTiltRotor.so">
             <topic_Fr>ThrustR</topic_Fr>
             <topic_Fl>ThrustL</topic_Fl>
+	    <topic_Rotr>RefRotorR</topic_Rotr>
+            <topic_Rotl>RefRotorL</topic_Rotl>
             <topic_DAr>RefAileronR</topic_DAr>
             <topic_DAl>RefAileronL</topic_DAl>
             <topic_DRr>RefRudderR</topic_DRr>
             <topic_DRl>RefRudderL</topic_DRl>
             <Fr_sat>50</Fr_sat>
             <Fl_sat>50</Fl_sat>
+	    <Rotr_sat>100</Rotr_sat>
+            <Rotl_sat>100</Rotl_sat>
             <DAr_sat>10</DAr_sat>
             <DAl_sat>10</DAl_sat>
             <DRr_sat>10</DRr_sat>
