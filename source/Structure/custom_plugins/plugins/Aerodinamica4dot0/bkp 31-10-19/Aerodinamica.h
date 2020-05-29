@@ -9,7 +9,7 @@
 #include <gazebo/common/Events.hh>
 #include <update_timer.h>
 #include "std_msgs/Float64.h"
-#include <gazebo/math/Vector3.hh>
+// #include <gazebo/math/Vector3.hh>
 #include <ros/package.h>
 #include <log4cxx/logger.h>
 #include <log4cxx/xml/domconfigurator.h>
@@ -189,7 +189,7 @@ namespace gazebo
 			
 			// ângulo de ataque e derrapagem
 			double rho, sf, sw, st, kt, b, mi, wd;
-			math::Vector3 Ff, FWr, FWl, FTr, FTl;
+			ignition::math::Vector3d Ff, FWr, FWl, FTr, FTl;
 			
 			//aerodynamic coefficients
 			double VetCDt[63] = 

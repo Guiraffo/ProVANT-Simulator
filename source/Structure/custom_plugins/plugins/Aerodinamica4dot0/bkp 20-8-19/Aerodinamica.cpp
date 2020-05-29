@@ -153,7 +153,7 @@ namespace gazebo
 	{
 		try
 		{
-			math::Vector3 forceR(0,0,msg.data);
+			ignition::math::Vector3d forceR(0,0,msg.data);
 			linkFr->AddRelativeForce(forceR);
 		}
 		catch(std::exception& e)
@@ -165,7 +165,7 @@ namespace gazebo
 	{
 		try
 		{	
-			math::Vector3 forceL(0,0,msg.data);
+			ignition::math::Vector3d forceL(0,0,msg.data);
 			linkFl->AddRelativeForce(forceL);
 		}
 		catch(std::exception& e)
@@ -235,12 +235,12 @@ namespace gazebo
 		{	
 			
 			
-			Ep = link->GetWorldLinearVel();
-			Np = link->GetWorldAngularVel();
+			Ep = link->WorldLinearVel();
+			Np = link->WorldAngularVel();
 			
 			
 			//Fuselagem
-			common::Time sim_time = world->GetSimTime();
+			common::Time sim_time = world->SimTime();
 			boost::mutex::scoped_lock scoped_lock(lock);
 			
 			// Environment wind
@@ -505,7 +505,7 @@ namespace gazebo
 		Eigen::VectorXd dist_BS(3);
 		dist_BS << a, b, c;
 
-		math::Pose pose = link->GetWorldPose();
+		ignition::math::Pose3d pose = link->WorldPose();
 		phi = pose.rot.GetAsEuler().x;
 		theta = pose.rot.GetAsEuler().y;
 		psi = pose.rot.GetAsEuler().z;

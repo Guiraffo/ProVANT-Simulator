@@ -182,8 +182,8 @@ void QuadForces::Update(){
 			TorqueBody << (F2-F4)*length*cos(alpha),(F3-F1)*length*cos(alpha),DragConst*(F1 + F3 - F2 - F4)*cos(alpha);
 			ForceBody << (F3-F1)*sin(alpha) , (F4-F2)*sin(alpha) , (F1+F2+F3+F4)*cos(alpha);
 		
-			math::Vector3 Torque(TorqueBody(0),TorqueBody(1),TorqueBody(2));
-			math::Vector3 Force(ForceBody(0),ForceBody(1),ForceBody(2));
+			ignition::math::Vector3d Torque(TorqueBody(0),TorqueBody(1),TorqueBody(2));
+			ignition::math::Vector3d Force(ForceBody(0),ForceBody(1),ForceBody(2));
 
 			//Applies force and torque w.r.t the body frame
 			link->AddRelativeForce(Force);

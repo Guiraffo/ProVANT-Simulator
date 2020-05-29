@@ -167,7 +167,7 @@ namespace gazebo
 	{
 		try
 		{	//First try
-			math::Vector3 forceR(0,0,msg.data);
+			ignition::math::Vector3d forceR(0,0,msg.data);
 			linkFr->AddRelativeForce(forceR);
 			
 			
@@ -182,12 +182,12 @@ namespace gazebo
 //			       -sin(AlphaR), -cos(AlphaR)*sin(B), cos(AlphaR)*cos(B);
 //			Fr << 0, 0, msg.data;
 //			FrB = RBsR * Fr;
-//			math::Vector3 forceR(FrB(0),FrB(1),FrB(2));
+//			ignition::math::Vector3d forceR(FrB(0),FrB(1),FrB(2));
 //			linkFr->AddRelativeForce(forceR);
 
 			//Third try
 //			//Computing the wind properties
-//			math::Pose pose = link->GetWorldPose();
+//			ignition::math::Pose pose = link->GetWorldPose();
 //			
 //			//computing configuration variables
 //			Phi = pose.rot.GetAsEuler( ).x;
@@ -210,9 +210,9 @@ namespace gazebo
 //			Eigen::VectorXd Fr(3),FrI(3);
 //			Fr << 0, 0, msg.data;
 //			FrI = RI_B * RBsR * Fr;
-//			linkFr->AddForceAtRelativePosition( math::Vector3( FrI(0),  FrI(1),  FrI(2)), math::Vector3( 0, 0, 0.0));
+//			linkFr->AddForceAtRelativePosition( ignition::math::Vector3d( FrI(0),  FrI(1),  FrI(2)), ignition::math::Vector3d( 0, 0, 0.0));
 //			
-			math::Vector3 torqueR(0,0,0.0178947368*msg.data); // drag torque
+			ignition::math::Vector3d torqueR(0,0,0.0178947368*msg.data); // drag torque
 			// Applying			
 			linkFr->AddRelativeTorque(torqueR);
 			
@@ -227,7 +227,7 @@ namespace gazebo
 		try
 		{
 			//First try
-			math::Vector3 forceL(0,0,msg.data);
+			ignition::math::Vector3d forceL(0,0,msg.data);
 			linkFl->AddRelativeForce(forceL);	
 			
 			
@@ -242,13 +242,13 @@ namespace gazebo
 //			       -sin(AlphaL), cos(AlphaL)*sin(B), cos(AlphaL)*cos(B);
 //			Fl << 0, 0, msg.data;
 //			FlB = RBsL * Fl;
-//			math::Vector3 forceL(FlB(0),FlB(1),FlB(2));
+//			ignition::math::Vector3d forceL(FlB(0),FlB(1),FlB(2));
 //			linkFl->AddRelativeForce(forceL);
 //			
 			
 			//Third try
 //			//Computing the wind properties
-//			math::Pose pose = link->GetWorldPose();
+//			ignition::math::Pose pose = link->GetWorldPose();
 //			
 //			//computing configuration variables
 //			Phi = pose.rot.GetAsEuler( ).x;
@@ -270,9 +270,9 @@ namespace gazebo
 //			Eigen::VectorXd Fl(3),FlI(3);
 //			Fl << 0, 0, msg.data;
 //			FlI = RI_B * RBsL * Fl;
-//			linkFl->AddForceAtRelativePosition( math::Vector3( FlI(0),  FlI(1),  FlI(2)), math::Vector3( 0, 0, 0.0));
+//			linkFl->AddForceAtRelativePosition( ignition::math::Vector3d( FlI(0),  FlI(1),  FlI(2)), ignition::math::Vector3d( 0, 0, 0.0));
 
-			math::Vector3 torqueL(0,0,-0.0178947368*msg.data); // drag torque
+			ignition::math::Vector3d torqueL(0,0,-0.0178947368*msg.data); // drag torque
 			// Applying			
 			linkFl->AddRelativeTorque(torqueL);
 			
@@ -348,14 +348,14 @@ namespace gazebo
 			
 			
 			//Computing the wind properties
-			math::Vector3 Linear = link->GetWorldLinearVel();
-			math::Vector3 Angular = link->GetWorldAngularVel();
-			math::Pose pose = link->GetWorldPose();
+			ignition::math::Vector3d Linear = link->WorldLinearVel();
+			ignition::math::Vector3d Angular = link->WorldAngularVel();
+			ignition::math::Pose3d pose = link->WorldPose();
 			
 			//computing configuration variables
-			Phi = pose.rot.GetAsEuler( ).x;
-			Theta = pose.rot.GetAsEuler( ).y;
-			Psi = pose.rot.GetAsEuler( ).z;
+			Phi = pose.Rot().Euler( ).X();
+			Theta = pose.Rot().Euler( ).Y();
+			Psi = pose.Rot().Euler( ).Z();
 			
 			//computing transformation matrices
 			RI_B <<  (cos(Psi)*cos(Theta)), (cos(Psi)*sin(Phi)*sin(Theta) - cos(Phi)*sin(Psi)), (sin(Phi)*sin(Psi) + cos(Phi)*cos(Psi)*sin(Theta)),(cos(Theta)*sin(Psi)), 
@@ -384,11 +384,11 @@ namespace gazebo
 				  0, sin(-wd),  cos(-wd);
 			
 			//-----------Computing [phidot thetadot psidot]-----------------------%
-			WI_IB << Angular.x, Angular.y, Angular.z;
+			WI_IB << Angular.X(), Angular.Y(), Angular.Z();
 			PhipThetapPsip = Wn.inverse() * RI_B.transpose() * WI_IB;
 			
 			//-----------Computing [Xdot Ydot Zdot]-------------------------------%
-			XpYpZp << Linear.x, Linear.y, Linear.z;
+			XpYpZp << Linear.X(), Linear.Y(), Linear.Z();
 			
 			//Compute the velocity of the aerodynamic centers expressed in the Inertial frame
 			dPI_f  << -RI_B*SkewSymmetricMatrix( DBf  )*Wn*PhipThetapPsip + XpYpZp; //velocity of the aerodynamic center of fuselage w.r.t I expressed in I
@@ -587,11 +587,11 @@ namespace gazebo
 			
 			
 			//Apply to gazebo
-			MainBody->AddForceAtRelativePosition( math::Vector3( Forca_F(0),  Forca_F(1),  Forca_F(2)), math::Vector3(  DBf(0),  DBf(1),  DBf(2)));
-			MainBody->AddForceAtRelativePosition( math::Vector3(Forca_Wr(0), Forca_Wr(1), Forca_Wr(2)), math::Vector3( DBwr(0), DBwr(1), DBwr(2)));
-      			MainBody->AddForceAtRelativePosition( math::Vector3(Forca_Wl(0), Forca_Wl(1), Forca_Wl(2)), math::Vector3( DBwl(0), DBwl(1), DBwl(2)));
-			MainBody->AddForceAtRelativePosition( math::Vector3(Forca_Tr(0), Forca_Tr(1), Forca_Tr(2)), math::Vector3( DBtr(0), DBtr(1), DBtr(2)));
-      			MainBody->AddForceAtRelativePosition( math::Vector3(Forca_Tl(0), Forca_Tl(1), Forca_Tl(2)), math::Vector3( DBtl(0), DBtl(1), DBtl(2)));
+			MainBody->AddForceAtRelativePosition( ignition::math::Vector3d( Forca_F(0),  Forca_F(1),  Forca_F(2)), ignition::math::Vector3d(  DBf(0),  DBf(1),  DBf(2)));
+			MainBody->AddForceAtRelativePosition( ignition::math::Vector3d(Forca_Wr(0), Forca_Wr(1), Forca_Wr(2)), ignition::math::Vector3d( DBwr(0), DBwr(1), DBwr(2)));
+      			MainBody->AddForceAtRelativePosition( ignition::math::Vector3d(Forca_Wl(0), Forca_Wl(1), Forca_Wl(2)), ignition::math::Vector3d( DBwl(0), DBwl(1), DBwl(2)));
+			MainBody->AddForceAtRelativePosition( ignition::math::Vector3d(Forca_Tr(0), Forca_Tr(1), Forca_Tr(2)), ignition::math::Vector3d( DBtr(0), DBtr(1), DBtr(2)));
+      			MainBody->AddForceAtRelativePosition( ignition::math::Vector3d(Forca_Tl(0), Forca_Tl(1), Forca_Tl(2)), ignition::math::Vector3d( DBtl(0), DBtl(1), DBtl(2)));
 			
 			//plot everything in order to evaluate the results]
 			//std::cout << std::endl << "CaR:" << c_AileronR(ElevatorDeflectionR) << "CaL:" << c_AileronL(ElevatorDeflectionL) << "CrR:" << c_RudR(RudderDeflectionR) << "CrL:" << c_RudL(RudderDeflectionL) << std::endl;

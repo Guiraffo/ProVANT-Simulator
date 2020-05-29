@@ -140,7 +140,7 @@ namespace gazebo
 	{
 		try
 		{
-			math::Vector3 forceR(0,0,msg.data);
+			ignition::math::Vector3d forceR(0,0,msg.data);
 			linkFr->AddRelativeForce(forceR);
 		}
 		catch(std::exception& e)
@@ -152,7 +152,7 @@ namespace gazebo
 	{
 		try
 		{	
-			math::Vector3 forceL(0,0,msg.data);
+			ignition::math::Vector3d forceL(0,0,msg.data);
 			linkFl->AddRelativeForce(forceL);
 		}
 		catch(std::exception& e)
@@ -224,9 +224,9 @@ namespace gazebo
 			
 			//Computing the wind properties
 			
-			math::Vector3 Linear = link->GetWorldLinearVel();
-			math::Vector3 Angular = link->GetWorldAngularVel();
-			math::Pose pose = link->GetWorldPose();
+			ignition::math::Vector3d Linear = link->WorldLinearVel();
+			ignition::math::Vector3d Angular = link->WorldAngularVel();
+			iginition::math::Pose3dpose = link->WorldPose();
 
 			//Final - Obtido com base no email do Sergio
 			EnvironmentWind << 0, 0, 0;
@@ -238,9 +238,9 @@ namespace gazebo
 			
 			//computing configuration variables
 			
-			Phi = pose.rot.GetAsEuler( ).x;
-			Theta = pose.rot.GetAsEuler( ).y;
-			Psi = pose.rot.GetAsEuler( ).z;
+			Phi = pose.Rot().Euler().X();
+			Theta = pose.Rot().Euler().Y();
+			Psi = pose.Rot().Euler().Z();
 			
 			//computing transformation matrices
 			RI_B <<  (cos(Psi)*cos(Theta)), (cos(Psi)*sin(Phi)*sin(Theta) - cos(Phi)*sin(Psi)), (sin(Phi)*sin(Psi) + 					cos(Phi)*cos(Psi)*sin(Theta)),(cos(Theta)*sin(Psi)), 
@@ -269,11 +269,11 @@ namespace gazebo
 				  0, sin(-wd),  cos(-wd);
 			
 			//Computing [phidot thetadot psidot]
-			WI_IB << Angular.x, Angular.y, Angular.z;
+			WI_IB << Angular.X(), Angular.Y(), Angular.Z();
 			PhipThetapPsip = Wn.inverse() * RI_B.transpose() * WI_IB;
 			
 			//Computing [Xdot Ydot Zdot]
-			XpYpZp << Linear.x, Linear.y, Linear.z;
+			XpYpZp << Linear.X(), Linear.Y(), Linear.Z();
 			
 			//Compute the velocity of the aerodynamic centers expressed in the Inertial frame
 			dPI_f  << -RI_B*SkewSymmetricMatrix( DBf  )*Wn*PhipThetapPsip + XpYpZp;
@@ -421,13 +421,13 @@ namespace gazebo
 //			Ff.y = Forca_F(1);
 //			Ff.z = Forca_F(2);
 //			
-//			math::Vector3 DBf_V3;
+//			ignition::math::Vector3d DBf_V3;
 //			DBf_V3.x = DBf(0);
 //			DBf_V3.y = DBf(1);
 //			DBf_V3.z = DBf(2);
 
 			//workswell
-			MainBody->AddForceAtRelativePosition( math::Vector3(Forca_F(0), Forca_F(1), Forca_F(2)), math::Vector3( DBf(0), DBf(1), DBf(2)));
+			MainBody->AddForceAtRelativePosition( ignition::math::Vector3d(Forca_F(0), Forca_F(1), Forca_F(2)), ignition::math::Vector3d( DBf(0), DBf(1), DBf(2)));
 			
 			//linkF->AddForce(Ff);
 
@@ -463,9 +463,9 @@ namespace gazebo
 //			FWl.z = Forca_Wl(2);
 			
 			//workswell
-			MainBody->AddForceAtRelativePosition( math::Vector3(Forca_Wr(0), Forca_Wr(1), Forca_Wr(2)), math::Vector3( DBwr(0), DBwr(1), DBwr(2)));
+			MainBody->AddForceAtRelativePosition( ignition::math::Vector3d(Forca_Wr(0), Forca_Wr(1), Forca_Wr(2)), ignition::math::Vector3d( DBwr(0), DBwr(1), DBwr(2)));
       			
-      			MainBody->AddForceAtRelativePosition( math::Vector3(Forca_Wl(0), Forca_Wl(1), Forca_Wl(2)), math::Vector3( DBwl(0), DBwl(1), DBwl(2)));
+      			MainBody->AddForceAtRelativePosition( ignition::math::Vector3d(Forca_Wl(0), Forca_Wl(1), Forca_Wl(2)), ignition::math::Vector3d( DBwl(0), DBwl(1), DBwl(2)));
 							      
 							      
 
@@ -510,25 +510,25 @@ namespace gazebo
 //			FTl.z = F_TailL(2);	
 //			
 //			
-//			math::Vector3 DBtl_V3;
+//			ignition::math::Vector3d DBtl_V3;
 //			DBtl_V3.x = DBtl(0);
 //			DBtl_V3.y = DBtl(1);
 //			DBtl_V3.z = DBtl(2);
 //			
-//			math::Vector3 DBtr_V3;
+//			ignition::math::Vector3d DBtr_V3;
 //			DBtr_V3.x = DBtr(0);
 //			DBtr_V3.y = DBtr(1);
 //			DBtr_V3.z = DBtr(2);
 			
 			
 			//workswell
-			MainBody->AddForceAtRelativePosition( math::Vector3(F_TailR(0), F_TailR(1), F_TailR(2)), math::Vector3( DBtr(0), DBtr(1), DBtr(2)));
-      			MainBody->AddForceAtRelativePosition( math::Vector3(F_TailL(0), F_TailL(1), F_TailL(2)), math::Vector3( DBtl(0), DBtl(1), DBtl(2)));
+			MainBody->AddForceAtRelativePosition( ignition::math::Vector3d(F_TailR(0), F_TailR(1), F_TailR(2)), ignition::math::Vector3d( DBtr(0), DBtr(1), DBtr(2)));
+      			MainBody->AddForceAtRelativePosition( ignition::math::Vector3d(F_TailL(0), F_TailL(1), F_TailL(2)), ignition::math::Vector3d( DBtl(0), DBtl(1), DBtl(2)));
       			
       			
 			
 //			//MainBody->AddForceAtRelativePosition(FTl, DBtl_V3);
-//			MainBody->AddForceAtRelativePosition(FTl, math::Vector3(DBtl(0),DBtl(1),DBtl(2)));
+//			MainBody->AddForceAtRelativePosition(FTl, ignition::math::Vector3d(DBtl(0),DBtl(1),DBtl(2)));
 //			MainBody->AddForceAtRelativePosition(FTr, DBtr_V3);
 			
 			//linkRudR->AddForce(FTr);

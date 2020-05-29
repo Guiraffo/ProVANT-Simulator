@@ -98,19 +98,19 @@ namespace gazebo
 		try
 		{	
 			
-			math::Pose pose = link->GetWorldPose();
+			ignition::math::Pose3d pose = link->WorldPose();
 			
 			//compute generalized coordinates
-			q << pose.pos.x, pose.pos.y, pose.pos.z, pose.rot.GetAsEuler( ).x, pose.rot.GetAsEuler( ).y, pose.rot.GetAsEuler( ).z, juntaR->GetAngle(0).Radian(), juntaL->GetAngle(0).Radian();
+			q << pose.Pos().X(), pose.Pos().Y(), pose.Pos().Z(), pose.Rot().Euler().X(), pose.Rot().Euler().Y(), pose.Rot().Euler().Z(), juntaR->Position(0), juntaL->Position(0);
 
 			
 			//compute the generalized velocities
-			math::Vector3 linear = link->GetWorldLinearVel();
-			math::Vector3 angular = link->GetWorldAngularVel( );
+			ignition::math::Vector3d linear = link->WorldLinearVel();
+			ignition::math::Vector3d angular = link->WorldAngularVel( );
 			
-			Phi = pose.rot.GetAsEuler( ).x;
-			Theta = pose.rot.GetAsEuler( ).y;
-			Psi = pose.rot.GetAsEuler( ).z;
+			Phi = pose.Rot().Euler().X();
+			Theta = pose.Rot().Euler().Y();
+			Psi = pose.Rot().Euler().Z();
 			
 			RIB <<  (cos(Psi)*cos(Theta)), (cos(Psi)*sin(Phi)*sin(Theta) - cos(Phi)*sin(Psi)), (sin(Phi)*sin(Psi) + cos(Phi)*cos(Psi)*sin(Theta)),
 				(cos(Theta)*sin(Psi)), (cos(Phi)*cos(Psi) + sin(Phi)*sin(Psi)*sin(Theta)), (cos(Phi)*sin(Psi)*sin(Theta) - cos(Psi)*sin(Phi)), 
@@ -121,12 +121,12 @@ namespace gazebo
 	  	               0.0, -sin(Phi),  cos(Phi)*cos(Theta);
 	  	               
 			//Get the angular velocity w.r.t I expressed in I and maps to obtain the time derivative of Euler angles
-			WIIB << angular.x, angular.y, angular.z;
+			WIIB << angular.X(), angular.Y(), angular.Z();
 			PhipThetapPsip = W_n.inverse() * RIB.transpose() * WIIB;
-			XpYpZp << linear.x, linear.y, linear.z;
+			XpYpZp << linear.X(), linear.Y(), linear.Z();
 			
 			
-			qp << linear.x, linear.y, linear.z, PhipThetapPsip(0), PhipThetapPsip(1), PhipThetapPsip(2), juntaR->GetVelocity(0), juntaL->GetVelocity(0);
+			qp << linear.X(), linear.Y(), linear.Z(), PhipThetapPsip(0), PhipThetapPsip(1), PhipThetapPsip(2), juntaR->GetVelocity(0), juntaL->GetVelocity(0);
 			
 			
 			//save generalized coordinates and velocities data

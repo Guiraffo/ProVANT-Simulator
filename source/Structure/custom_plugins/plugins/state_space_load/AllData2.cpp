@@ -94,30 +94,30 @@ namespace gazebo
 		{
 			boost::mutex::scoped_lock scoped_lock(lock); // mutex
 			
-			math::Pose pose = link->GetWorldPose(); // get world pose
-			math::Vector3 linear = link->GetWorldLinearVel(); // get linear velocity pose
-			math::Vector3 angular = link->GetWorldAngularVel( ); // get angular velocity pose
+			ignition::math::Pose3d pose = link->WorldPose(); // get world pose
+			ignition::math::Vector3d linear = link->WorldLinearVel(); // get linear velocity pose
+			ignition::math::Vector3d angular = link->WorldAngularVel( ); // get angular velocity pose
 
 			simulator_msgs::Sensor newmsg; // time stamp
 			newmsg.name = NameOfNode_; // name of node
 			newmsg.header.stamp = ros::Time::now();
 			newmsg.header.frame_id = "1";
-			newmsg.values.push_back(pose.pos.x); // x
-			newmsg.values.push_back(pose.pos.y); // y
-			newmsg.values.push_back(pose.pos.z); // z
-			newmsg.values.push_back(pose.rot.GetAsEuler( ).x); // roll
-			newmsg.values.push_back(pose.rot.GetAsEuler( ).y); // pitch
-			newmsg.values.push_back(pose.rot.GetAsEuler( ).z); // yaw
-			newmsg.values.push_back(juntaR->GetAngle(0).Radian()); // aR
-			newmsg.values.push_back(juntaL->GetAngle(0).Radian()); // aL
-			newmsg.values.push_back(juntaLoadX->GetAngle(0).Radian()); // gammax
-			newmsg.values.push_back(juntaLoadY->GetAngle(0).Radian()); // gammay
-			newmsg.values.push_back(linear.x); // vx
-			newmsg.values.push_back(linear.y); // vy
-			newmsg.values.push_back(linear.z); // vz
-			newmsg.values.push_back(angular.x); // wx
-			newmsg.values.push_back(angular.y); // wy
-			newmsg.values.push_back(angular.z); // wz
+			newmsg.values.push_back(pose.Pos().X()); // x
+			newmsg.values.push_back(pose.Pos().Y()); // y
+			newmsg.values.push_back(pose.Pos().Z()); // z
+			newmsg.values.push_back(pose.Rot().Euler().X()); // roll
+			newmsg.values.push_back(pose.Rot().Euler().Y()); // pitch
+			newmsg.values.push_back(pose.Rot().Euler().Z()); // yaw
+			newmsg.values.push_back(juntaR->Position(0)); // aR
+			newmsg.values.push_back(juntaL->Position(0)); // aL
+			newmsg.values.push_back(juntaLoadX->Position(0)); // gammax
+			newmsg.values.push_back(juntaLoadY->Position(0)); // gammay
+			newmsg.values.push_back(linear.X()); // vx
+			newmsg.values.push_back(linear.Y()); // vy
+			newmsg.values.push_back(linear.Z()); // vz
+			newmsg.values.push_back(angular.X()); // wx
+			newmsg.values.push_back(angular.Y()); // wy
+			newmsg.values.push_back(angular.Z()); // wz
 			newmsg.values.push_back(juntaR->GetVelocity(0)); // daR
 			newmsg.values.push_back(juntaL->GetVelocity(0)); // daL
 			newmsg.values.push_back(juntaLoadX->GetVelocity(0)); // dgammax

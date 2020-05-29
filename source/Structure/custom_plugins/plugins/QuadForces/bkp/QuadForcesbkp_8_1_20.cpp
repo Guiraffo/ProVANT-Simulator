@@ -95,13 +95,13 @@ namespace gazebo
 			F1 = msg.data;
 			std::cout<<"F1:"<<F1<<std::endl;
 			RotationMatrixInertialBody();
-			math::Vector3 torque1(0,0,-DragConst*F1);
-			math::Vector3 RelativePose1(0.12,0,0);  //0.12,0,0
+			ignition::math::Vector3d torque1(0,0,-DragConst*F1);
+			ignition::math::Vector3d RelativePose1(0.12,0,0);  //0.12,0,0
 			F1Body << 0 , 0 , F1;
 			F1Inertial = RIB*F1Body;		
              
 			// Applying			
-			link->AddForceAtRelativePosition(math::Vector3(F1Body(0),F1Body(1),F1Body(2)),RelativePose1);
+			link->AddForceAtRelativePosition(ignition::math::Vector3d(F1Body(0),F1Body(1),F1Body(2)),RelativePose1);
 			link->SetTorque(torque1);
 		//	Motor1->SetVelocity(0,10.0);
 
@@ -124,14 +124,14 @@ namespace gazebo
 			F2 = msg.data;
 			RotationMatrixInertialBody();
 			std::cout<<"F2:"<<F2<<std::endl;
-			math::Vector3 torque2(0,0,DragConst*F2); // drag torque				
-			math::Vector3 RelativePose2(0,0.12,0);	// Applying	 //0,0.12,0
+			ignition::math::Vector3d torque2(0,0,DragConst*F2); // drag torque				
+			ignition::math::Vector3d RelativePose2(0,0.12,0);	// Applying	 //0,0.12,0
 			
 			F2Body << 0 , 0 , F2;
 			F2Inertial = RIB*F2Body;	 	    
                
 			// Applying			
-			link->AddForceAtRelativePosition(math::Vector3(F2Body(0),F2Body(1),F2Body(2)),RelativePose2);
+			link->AddForceAtRelativePosition(ignition::math::Vector3d(F2Body(0),F2Body(1),F2Body(2)),RelativePose2);
 			link->SetTorque(torque2);
 		//	Motor2->SetVelocity(0,-10.0);
 		
@@ -155,11 +155,11 @@ namespace gazebo
 			std::cout<<"F3:"<<F3<<std::endl;
 			RotationMatrixInertialBody();
 			F3Body << 0 , 0 , F3;
-			math::Vector3 torque3(0,0,-DragConst*F3); // drag torque
-			math::Vector3 RelativePose3(-0.12,0,0);		//-0.12,0,0
+			ignition::math::Vector3d torque3(0,0,-DragConst*F3); // drag torque
+			ignition::math::Vector3d RelativePose3(-0.12,0,0);		//-0.12,0,0
 			// Applying		
 			F3Inertial = RIB*F3Body;
-			link->AddForceAtRelativePosition(math::Vector3(F3Body(0),F3Body(1),F3Body(2)),RelativePose3);
+			link->AddForceAtRelativePosition(ignition::math::Vector3d(F3Body(0),F3Body(1),F3Body(2)),RelativePose3);
 			link->SetTorque(torque3);
 		//	Motor3->SetVelocity(0,10.0);
 
@@ -182,15 +182,15 @@ namespace gazebo
 			F4 = msg.data;
 			std::cout<<"F4:"<<F4<<std::endl;
 			RotationMatrixInertialBody();
-			math::Vector3 torque4(0,0,DragConst*F4); // drag torque
-			math::Vector3 RelativePose4(0,-0.12,0);	//
+			ignition::math::Vector3d torque4(0,0,DragConst*F4); // drag torque
+			ignition::math::Vector3d RelativePose4(0,-0.12,0);	//
 			
 			F4Body << 0 , 0 , F4;
 			F4Inertial = RIB*F4Body;		
 			
                
 			// Applying			
-			link->AddForceAtRelativePosition(math::Vector3(F4Body(0),F4Body(1),F4Body(2)),RelativePose4);
+			link->AddForceAtRelativePosition(ignition::math::Vector3d(F4Body(0),F4Body(1),F4Body(2)),RelativePose4);
 			link->SetTorque(torque4);
 		//	Motor4->SetVelocity(0,-10.0);
 			
@@ -208,10 +208,10 @@ namespace gazebo
 	void QuadForces::RotationMatrixInertialBody(){
 	
 	double Phi, Theta, Psi;
-	math::Pose pose = link->GetWorldPose();
-	Phi = pose.rot.GetAsEuler( ).x;
-	Theta = pose.rot.GetAsEuler( ).y;
-	Psi = pose.rot.GetAsEuler( ).z;
+	math::Pose pose = link->WorldPose();
+	Phi = pose.Rot().Euler( ).X();
+	Theta = pose.Rot().Euler( ).Y();
+	Psi = pose.Rot().Euler( ).Z();
 	RIB <<  (cos(Psi)*cos(Theta)), (cos(Psi)*sin(Phi)*sin(Theta) - cos(Phi)*sin(Psi)), (sin(Phi)*sin(Psi) + cos(Phi)*cos(Psi)*sin(Theta)),
 				(cos(Theta)*sin(Psi)), (cos(Phi)*cos(Psi) + sin(Phi)*sin(Psi)*sin(Theta)), (cos(Phi)*sin(Psi)*sin(Theta) - cos(Psi)*sin(Phi)), 
         	                (-sin(Theta)),                              (cos(Theta)*sin(Phi)),                              (cos(Phi)*cos(Theta));

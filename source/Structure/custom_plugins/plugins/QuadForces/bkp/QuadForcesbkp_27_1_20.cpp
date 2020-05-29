@@ -108,9 +108,8 @@ namespace gazebo
 			std::cout<<"T1y:"<<-F1*0.12<< std::endl;
 			
 			
-			math::Vector3 torque1(0,-F1*0.12*cos(0.087),DragConst*F1*cos(0.087));
-				
-      math::Vector3 Force1(-F1*sin(0.087),0,F1*cos(0.087));
+			ignition::math::Vector3d torque1(0,-F1*0.12*cos(0.087),DragConst*F1*cos(0.087));
+			ignition::math::Vector3d Force1(-F1*sin(0.087),0,F1*cos(0.087));
          
 			// Applying			
 		Motor1->SetForce(Force1);
@@ -140,9 +139,9 @@ namespace gazebo
 			
 			
 			
-			math::Vector3 torque2(F2*0.12*cos(0.087),0,-DragConst*F2*cos(0.087)); // drag torque				
+			ignition::math::Vector3d torque2(F2*0.12*cos(0.087),0,-DragConst*F2*cos(0.087)); // drag torque				
 			F2Body << 0 , 0 , F2;
-      math::Vector3 Force2(0,-F2*sin(0.087),F2*cos(0.087)); 
+      		ignition::math::Vector3d Force2(0,-F2*sin(0.087),F2*cos(0.087)); 
       
              
 			// Applying			
@@ -173,9 +172,9 @@ namespace gazebo
 			
 			
 			F3Body << 0 , 0 , F3;
-			math::Vector3 torque3(0,F3*0.12*cos(0.087),DragConst*F3*cos(0.087)); // drag torque
+			ignition::math::Vector3d torque3(0,F3*0.12*cos(0.087),DragConst*F3*cos(0.087)); // drag torque
 		
-			math::Vector3 Force3(F3*sin(0.087),0,F3*cos(0.087));
+			ignition::math::Vector3d Force3(F3*sin(0.087),0,F3*cos(0.087));
 			
 			
 			
@@ -207,9 +206,9 @@ namespace gazebo
 			
 			
 			
-			math::Vector3 torque4(-F4*0.12*cos(0.087),0,-DragConst*F4*cos(0.087)); // drag torque
+			ignition::math::Vector3d torque4(-F4*0.12*cos(0.087),0,-DragConst*F4*cos(0.087)); // drag torque
 			F4Body << 0 , 0 , F4;		
-			math::Vector3 Force4(0,F4*sin(0.087),F4*cos(0.087));
+			ignition::math::Vector3d Force4(0,F4*sin(0.087),F4*cos(0.087));
                
 			// Applying			
 

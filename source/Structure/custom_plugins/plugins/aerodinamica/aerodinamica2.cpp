@@ -110,8 +110,8 @@ namespace gazebo
 	{
 		try
 		{
-			math::Vector3 forceR(0,0,msg.data);
-			math::Vector3 torqueR(0,0,0.0178947368*msg.data); // drag torque
+			ignition::math::Vector3d forceR(0,0,msg.data);
+			ignition::math::Vector3d torqueR(0,0,0.0178947368*msg.data); // drag torque
 			linkFr->AddRelativeForce(forceR);
 			linkFr->AddRelativeTorque(torqueR);
 		}
@@ -124,8 +124,8 @@ namespace gazebo
 	{
 		try
 		{	
-			math::Vector3 forceL(0,0,msg.data);
-			math::Vector3 torqueL(0,0,-0.0178947368*msg.data); // drag torque
+			ignition::math::Vector3d forceL(0,0,msg.data);
+			ignition::math::Vector3d torqueL(0,0,-0.0178947368*msg.data); // drag torque
 			linkFl->AddRelativeForce(forceL);
 			linkFl->AddRelativeTorque(torqueL);
 		}
@@ -164,19 +164,19 @@ namespace gazebo
 		try
 		{	
 			//Fuselagem
-			common::Time sim_time = world->GetSimTime();
+			common::Time sim_time = world->SimTime();
 			boost::mutex::scoped_lock scoped_lock(lock);
 
 			//Calculo do vento
-			math::Vector3 linear = link->GetWorldLinearVel();				
-			double xp = linear.x; 
-			double yp = linear.y;
-			double zp = linear.z; 
+			ignition::math::Vector3d linear = link->WorldLinearVel();				
+			double xp = linear.X(); 
+			double yp = linear.Y();
+			double zp = linear.Z(); 
 
-			math::Pose pose = link->GetWorldPose();			
-			phi = pose.rot.GetAsEuler().x;
-			theta = pose.rot.GetAsEuler().y;
-			psi = pose.rot.GetAsEuler().z;	
+			ignition::math::Pose3d pose = link->WorldPose();			
+			phi = pose.Rot().Euler().X();
+			theta = pose.Rot().Euler().Y();
+			psi = pose.Rot().Euler().Z();	
 			
 			
 			R_IB << (cos(psi)*cos(theta)), (cos(psi)*sin(phi)*sin(theta) - cos(phi)*sin(psi)), (sin(phi)*sin(psi) + cos(phi)*cos(psi)*sin(theta)),
@@ -271,7 +271,7 @@ namespace gazebo
 			
 			
 			FIf = R_IB * (RBAlpha * Ffxz + RBBeta * Ffxy); // Expressa forças no inercial
-			link->AddForceAtRelativePosition( math::Vector3( FIf(0),  FIf(1),  FIf(2)), math::Vector3(  DBf(0),  DBf(1),  DBf(2))); // new
+			link->AddForceAtRelativePosition( ignition::math::Vector3d( FIf(0),  FIf(1),  FIf(2)), ignition::math::Vector3d(  DBf(0),  DBf(1),  DBf(2))); // new
 			
 			
 			//Aerodynamic forces applied by the vertical stabilizer
@@ -279,7 +279,7 @@ namespace gazebo
 			Eigen::MatrixXd FBv(3,1), FIv(3,1);
 			FBv << -kvxy * CDv, kvxy * (CLv + c_r(RudderDeflection)), 0;
 			FIv = R_IB*RBBeta*FBv; // Expressa forças no inercial
-			link->AddForceAtRelativePosition( math::Vector3( FIv(0),  FIv(1),  FIv(2)), math::Vector3(  DBv(0),  DBv(1),  DBv(2))); // new
+			link->AddForceAtRelativePosition( ignition::math::Vector3d( FIv(0),  FIv(1),  FIv(2)), ignition::math::Vector3d(  DBv(0),  DBv(1),  DBv(2))); // new
 			//std::cout << "Vertical Stabilizer" << FIv.transpose() << std::endl;
 			
 			//Aerodynamic forces applied by the horizontal stabilizer
@@ -287,7 +287,7 @@ namespace gazebo
 			Eigen::MatrixXd FBh(3,1), FIh(3,1);
 			FBh << -khxz * CDh, 0, khxz * (CLh + c_e(ElevatorDeflection));
 			FIh = R_IB*RBAlpha*FBh; // Expressa forças no inercial
-			link->AddForceAtRelativePosition( math::Vector3( FIh(0),  FIh(1),  FIh(2)), math::Vector3(  DBh(0),  DBh(1),  DBh(2))); // new	
+			link->AddForceAtRelativePosition( ignition::math::Vector3d( FIh(0),  FIh(1),  FIh(2)), ignition::math::Vector3d(  DBh(0),  DBh(1),  DBh(2))); // new	
 			//std::cout << "Horizontal Stabilizer" << FIh.transpose() << std::endl;
 		}
 		catch(std::exception& e)

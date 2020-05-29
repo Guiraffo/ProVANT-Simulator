@@ -97,25 +97,25 @@ namespace gazebo
 			newmsg.name = NameOfNode_;
 			newmsg.header.stamp = ros::Time::now(); // time stamp
 			newmsg.header.frame_id = "1";
-			math::Pose pose = link->GetWorldPose();
-			newmsg.values.push_back(pose.pos.x); // x
-			newmsg.values.push_back(pose.pos.y); // y
-			newmsg.values.push_back(pose.pos.z); // z
-			newmsg.values.push_back(pose.rot.GetAsEuler( ).x); //roll
-			newmsg.values.push_back(pose.rot.GetAsEuler( ).y); // pitch
-			newmsg.values.push_back(pose.rot.GetAsEuler( ).z); // yaw
-			math::Vector3 linear = link->GetWorldLinearVel();
-			newmsg.values.push_back(linear.x); // dx
-			newmsg.values.push_back(linear.y); // dy
-			newmsg.values.push_back(linear.z); //dz
-			math::Vector3 angular = link->GetWorldAngularVel( );
+			ignition::math::Pose3d pose = link->WorldPose();
+			newmsg.values.push_back(pose.Pos().X()); // x
+			newmsg.values.push_back(pose.Pos().Y()); // y
+			newmsg.values.push_back(pose.Pos().Z()); // z
+			newmsg.values.push_back(pose.Rot().Euler().X()); //roll
+			newmsg.values.push_back(pose.Rot().Euler().Y()); // pitch
+			newmsg.values.push_back(pose.Rot().Euler().Z()); // yaw
+			ignition::math::Vector3d linear = link->WorldLinearVel();
+			newmsg.values.push_back(linear.X()); // dx
+			newmsg.values.push_back(linear.Y()); // dy
+			newmsg.values.push_back(linear.Z()); //dz
+			gnition::math::Vector3d angular = link->WorldAngularVel( );
 			// droll -> attention! we receive angular velocity, but we want to publish the derivative of euler angle
-			double phi = pose.rot.GetAsEuler().x;
-			double theta = pose.rot.GetAsEuler().y;
-			double psi = pose.rot.GetAsEuler().z;
-			double p = angular.x;
-			double q = angular.y;
-			double r = angular.z;
+			double phi = pose.Rot().Euler().X();
+			double theta = pose.Rot().Euler().Y();
+			double psi = pose.Rot().Euler().Z();
+			double p = angular.X();
+			double q = angular.Y();
+			double r = angular.Z();
 			newmsg.values.push_back(p + q*sin(phi)*tan(theta) + r*cos(phi)*tan(theta)); 
 			 // dpitch  -> attention! we receive angular velocity, but we want to publish the derivative of euler angle
 			newmsg.values.push_back(0 + q*cos(phi) - r*sin(phi));    

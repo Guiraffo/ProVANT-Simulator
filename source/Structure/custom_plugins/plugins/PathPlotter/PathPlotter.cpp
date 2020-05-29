@@ -113,7 +113,7 @@ namespace gazebo
 		try
 		{
 			boost::mutex::scoped_lock scoped_lock(lock); // mutex
-			math::Pose pose = link->GetWorldPose();
+			ignition::math::Pose3d pose = link->WorldPose();
 			ros::Time time = ros::Time::now();
 			double tempo =time.toSec();
 
@@ -171,7 +171,7 @@ namespace gazebo
       tf::TransformBroadcaster broadcaster;
 			broadcaster.sendTransform(
       tf::StampedTransform(
-      tf::Transform(tf::Quaternion(pose.rot.GetAsEuler().x,pose.rot.GetAsEuler().y,pose.rot.GetAsEuler().z, 1), tf::Vector3(pose.pos.x,pose.pos.y,pose.pos.z)),
+      tf::Transform(tf::Quaternion(pose.Rot().Euler().X(),pose.Rot().Euler().Y(),pose.Rot().Euler().Z(), 1), tf::Vector3(pose.Pos().X(),pose.Pos().Y(),pose.Pos().Z())),
       ros::Time::now(),"inertial_frame", "base_link"));
        
        
@@ -180,12 +180,12 @@ namespace gazebo
 			geometry_msgs::PoseStamped pose_path;
 			pose_path.header.stamp = ros::Time::now();
 			pose_path.header.frame_id = "inertial_frame";
-			pose_path.pose.position.x = pose.pos.x;
-			pose_path.pose.position.y = pose.pos.y;
-			pose_path.pose.position.z = pose.pos.z;
-			pose_path.pose.orientation.x = pose.rot.GetAsEuler().x;
-			pose_path.pose.orientation.y = pose.rot.GetAsEuler().y;
-			pose_path.pose.orientation.z = pose.rot.GetAsEuler().z;
+			pose_path.pose.position.x = pose.Pos().X();
+			pose_path.pose.position.y = pose.Pos().Y();
+			pose_path.pose.position.z = pose.Pos().Z();
+			pose_path.pose.orientation.x = pose.Rot().Euler().X();
+			pose_path.pose.orientation.y = pose.Rot().Euler().Y();
+			pose_path.pose.orientation.z = pose.Rot().Euler().Z();
 			pose_path.pose.orientation.w = 1;			
 			
 			path.header.stamp= ros::Time::now();

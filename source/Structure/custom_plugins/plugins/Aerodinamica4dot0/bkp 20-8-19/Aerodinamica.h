@@ -9,7 +9,7 @@
 #include <gazebo/common/Events.hh>
 #include <update_timer.h>
 #include "std_msgs/Float64.h"
-#include <gazebo/math/Vector3.hh>
+// #include <gazebo/math/Vector3.hh>
 #include <ros/package.h>
 #include <log4cxx/logger.h>
 #include <log4cxx/xml/domconfigurator.h>
@@ -71,8 +71,8 @@ namespace gazebo
 			double c_RudR(double DrR);
 			double c_RudL(double DrL);
 			double u_angle;
-			math::Vector3 Np;
-			math::Vector3 Ep;
+			ignition::math::Vector3d Np;
+			ignition::math::Vector3d Ep;
 			std::vector<double> alpha_Vec;
 			std::vector<double> beta_Vec;
 			std::vector<double> air_xz_Vec;
@@ -219,7 +219,7 @@ namespace gazebo
                     -0.91178,  -0.77285,  -0.6198,  -0.63052,  -0.70076,   -0.5343};							
 
 			// forças aerodinâmicas
-			math::Vector3 Ff, FWr, FWl, FTailR, FTailL;
+			ignition::math::Vector3d Ff, FWr, FWl, FTailR, FTailL;
 			math::Pose pose;
 			Eigen::MatrixXd R_IB, wind_I, wind_B, wind_TailR,wind_TailL, Rxu1, Rxu2;
 		

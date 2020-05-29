@@ -186,12 +186,12 @@ void QuadForces::ApplyForces(std::string tag, double forca){
 			//std::cout << "F4: " << F4 << std::endl;
 
 
-			math::Vector3 Torque((F2-F4)*length*cos(alpha),(F3-F1)*length*cos(alpha),(DragConst*F1 + DragConst*F3 - DragConst*F2 - DragConst*F4)*cos(alpha));
+			ignition::math::Vector3d Torque((F2-F4)*length*cos(alpha),(F3-F1)*length*cos(alpha),(DragConst*F1 + DragConst*F3 - DragConst*F2 - DragConst*F4)*cos(alpha));
 
-			math::Pose pose = link->GetWorldPose();
-			Phi = pose.rot.GetAsEuler( ).x;
-			Theta = pose.rot.GetAsEuler( ).y;
-			Psi = pose.rot.GetAsEuler( ).z;
+			math::Pose pose = link->WorldPose();
+			Phi = pose.Rot().Euler( ).X();
+			Theta = pose.Rot().Euler( ).Y();
+			Psi = pose.Rot().Euler( ).Z();
 			
 			RIB <<  (cos(Psi)*cos(Theta)), (cos(Psi)*sin(Phi)*sin(Theta) - cos(Phi)*sin(Psi)), (sin(Phi)*sin(Psi) + cos(Phi)*cos(Psi)*sin(Theta)),
 				(cos(Theta)*sin(Psi)), (cos(Phi)*cos(Psi) + sin(Phi)*sin(Psi)*sin(Theta)), (cos(Phi)*sin(Psi)*sin(Theta) - cos(Psi)*sin(Phi)), 
@@ -199,8 +199,8 @@ void QuadForces::ApplyForces(std::string tag, double forca){
 
 
 			ForceBody << (F3-F1)*sin(alpha) , (F4-F2)*sin(alpha) , (F1+F2+F3+F4)*cos(alpha);
-			ForceInertial = RIB*ForceBody;			// Force must be expressed in Inertial frame in order to use SetForce(math::Vector3 Force))
-			math::Vector3 Force(ForceInertial(0),ForceInertial(1),ForceInertial(2)); 
+			ForceInertial = RIB*ForceBody;			// Force must be expressed in Inertial frame in order to use SetForce(ignition::math::Vector3d Force))
+			ignition::math::Vector3d Force(ForceInertial(0),ForceInertial(1),ForceInertial(2)); 
 
 			link->SetForce(Force);		
 			link->SetTorque(Torque);
