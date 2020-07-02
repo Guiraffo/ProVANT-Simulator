@@ -93,7 +93,7 @@
      </rect>
     </property>
    </widget>
-   <widget class="QLabel" name="label_3">
+   <widget class="QLabel" name="provantLogoDisplay">
     <property name="geometry">
      <rect>
       <x>400</x>
@@ -126,12 +126,12 @@
      <x>0</x>
      <y>0</y>
      <width>939</width>
-     <height>22</height>
+     <height>36</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuSimulation">
     <property name="title">
-     <string>Simulation</string>
+     <string>Si&amp;mulation</string>
     </property>
     <addaction name="actionNew"/>
     <addaction name="actionOpen"/>
@@ -144,7 +144,7 @@
     </property>
     <widget class="QMenu" name="menuModel">
      <property name="title">
-      <string>Model</string>
+      <string>&amp;Model</string>
      </property>
      <addaction name="actionNew_2"/>
     </widget>
@@ -152,7 +152,7 @@
    </widget>
    <widget class="QMenu" name="menuAbout">
     <property name="title">
-     <string>About</string>
+     <string>Abo&amp;ut</string>
     </property>
     <addaction name="actionAbout_ProVANT_Simulator"/>
    </widget>
@@ -171,17 +171,17 @@
   <widget class="QStatusBar" name="statusBar"/>
   <action name="actionNew">
    <property name="text">
-    <string>New</string>
+    <string>&amp;New</string>
    </property>
   </action>
   <action name="actionSave">
    <property name="text">
-    <string>Save</string>
+    <string>&amp;Save</string>
    </property>
   </action>
   <action name="actionExit">
    <property name="text">
-    <string>Exit</string>
+    <string>&amp;Exit</string>
    </property>
   </action>
   <action name="actionAdd">
@@ -266,7 +266,7 @@
   </action>
   <action name="actionNew_2">
    <property name="text">
-    <string>New</string>
+    <string>&amp;New</string>
    </property>
   </action>
   <action name="actionRemove">
@@ -311,12 +311,12 @@
   </action>
   <action name="actionOpen">
    <property name="text">
-    <string>Open</string>
+    <string>&amp;Open</string>
    </property>
   </action>
   <action name="actionAbout_ProVANT_Simulator">
    <property name="text">
-    <string>About ProVANT Simulator</string>
+    <string>&amp;About ProVANT Simulator</string>
    </property>
   </action>
  </widget>

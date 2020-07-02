@@ -1,28 +1,35 @@
-// Autor: Arthur Viana Lara
-// Projeto: ProVANT
-// Data: 18/05/2018
+/**
+  * @file mainwindow.cpp
+  * @author Arthur Viana Lara
+  * @date 18/05/2018
+  * Projeto: ProVANT
+  */
 
 #include "mainwindow.h"
 #include <fcntl.h>
 
 
-MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow)
+MainWindow::MainWindow(QWidget *parent) :
+    QMainWindow(parent),
+    ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
 
     try
     {
         // Inserindo Logo
-        QString env(getenv( "TILT_PROJECT" ));
-        QString fullpath(env+"/source/GUI/logos/");
-        QPixmap provantLogo(fullpath+"provant_ufmg_ufsc.jpg");
-        int w = ui->label_3->width();
-        int h = ui->label_3->height();
-        ui->label_3->setPixmap(provantLogo.scaled(w,h,Qt::KeepAspectRatio));
+        QPixmap provantLogo(":/logos/logos/provant_ufmg_ufsc.jpg");
+        int w = ui->provantLogoDisplay->width();
+        int h = ui->provantLogoDisplay->height();
+        ui->provantLogoDisplay->setPixmap(
+                    provantLogo.scaled(w,h,Qt::KeepAspectRatio)
+        );
 
-        // COnfigurando árvore de dados
-        ui->treeWidget->setColumnCount(2); // arvore de dados terá duas colunas
-        ui->treeWidget->setEditTriggers(QTreeWidget::NoEditTriggers); // inicialmente não se pode editar árvore de dados
+        // Configurando árvore de dados
+        // arvore de dados terá duas colunas
+        ui->treeWidget->setColumnCount(2);
+        // inicialmente não se pode editar árvore de dados
+        ui->treeWidget->setEditTriggers(QTreeWidget::NoEditTriggers);
 
         // quando a interface é aberta, não há cenário selecionado
         // então não é permitido adicionar modelo, salvar cenário e nem
@@ -317,6 +324,7 @@ void MainWindow::on_treeWidget_itemDoubleClicked(QTreeWidgetItem *item, int colu
 
 void MainWindow::on_treeWidget_itemClicked(QTreeWidgetItem *item, int column)
 {
+    Q_UNUSED(column)
     try
     {
         if(item->text(0) == "uri")

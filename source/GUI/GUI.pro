@@ -110,3 +110,6 @@ FORMS    += mainwindow.ui \
     aboutdialog.ui \
     jointsdialog.ui \
     jointsdialog.ui
+
+RESOURCES += \
+    resources.qrc
