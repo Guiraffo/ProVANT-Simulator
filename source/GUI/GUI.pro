@@ -117,4 +117,5 @@ FORMS    += mainwindow.ui \
     jointsdialog.ui
 
 RESOURCES += \
+    icons.qrc \
     resources.qrc
