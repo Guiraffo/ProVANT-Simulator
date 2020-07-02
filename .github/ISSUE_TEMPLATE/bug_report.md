@@ -1,3 +1,10 @@
+---
+name: Bug Report
+about: Report an error found on the simulator.
+
+---
+
+
 # Issue title
 
 <!--
