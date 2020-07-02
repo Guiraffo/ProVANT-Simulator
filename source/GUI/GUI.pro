@@ -47,7 +47,6 @@ SOURCES += main.cpp\
     modelsetupdialog.cpp \
     dialognewcontroller.cpp \
     DataAccess/ControllerElements/newstrategy.cpp \
-    dialogopencontroller.cpp \
     DataAccess/RosElements/roslaunch.cpp \
     dialognewmodel.cpp \
     DataAccess/GazeboElements/Items/scene.cpp \
@@ -93,7 +92,6 @@ HEADERS  += mainwindow.h \
     applicationsettingsdialog.h \
     dialognewcontroller.h \
     DataAccess/ControllerElements/newstrategy.h \
-    dialogopencontroller.h \
     DataAccess/RosElements/roslaunch.h \
     dialognewmodel.h \
     DataAccess/GazeboElements/Items/scene.h \
@@ -111,7 +109,6 @@ FORMS    += mainwindow.ui \
     applicationsettingsdialog.ui \
     modelsetupdialog.ui \
     dialognewcontroller.ui \
-    dialogopencontroller.ui \
     dialognewmodel.ui \
 #    aboutform.ui \
     aboutdialog.ui \
