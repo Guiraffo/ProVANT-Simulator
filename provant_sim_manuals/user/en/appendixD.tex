@@ -1,0 +1,302 @@
+\chapter{package.xml}
+\label{package}
+
+This section was extracted from \url{http://wiki.ros.org/catkin/package.xml} on August 25,2017. Visit it for further information.
+
+\section{Overviewl}
+
+The package manifest is an XML file called \verb package.xml  that must be included with any catkin-compliant package's root folder. This file defines properties about the package such as the package name, version numbers, authors, maintainers, and dependencies on other catkin packages.
+
+Your system package dependencies are declared in \verb package.xml . If they are missing or incorrect, you may be able to build from source and run tests on your own machine, but your package will not work correctly when released to the ROS community. Others depend on this information to install the software they need for using your package.
+
+\section{Format 2 (recommended)}
+
+This is the recommended format for new packages. It is also recommended that older format 1 packages be migrated to format 2. For instructions on migrating from format 1 to format 2, see \href{http://docs.ros.org/indigo/api/catkin/html/howto/format2/migrating_from_format_1.html#migrating-from-format1-to-format2}{Migrating from Format 1 to Format 2} in the catkin API docs.
+
+The full documentation for format 2 can be found in the \href{http://docs.ros.org/indigo/api/catkin/html/howto/format2/index.html}{catkin API docs}.
+
+\subsection{Basic structure}
+
+Each \verb package.xml  file has the \xmltag{package} tag as the root tag in the document.
+
+\begin{minted}{xml}
+	<package format="2">
+	
+	</package>
+\end{minted}
+
+\subsection{Required tags}
+
+There is a minimal set of tags that need to be nested within the \xmltag{package} tag to make the package manifest complete.
+
+\begin{itemize}
+	\setlength{\itemsep}{1pt}
+	\setlength{\parskip}{0pt}
+	\setlength{\parsep}{0pt}
+	\item[]\xmltag{name}: The name of the package
+	\item[]\xmltag{name}: The version number of the package (required to be 3 dot-separated integers)
+	\item[]\xmltag{name}: A description of the package contents
+	\item[]\xmltag{name}: The name of the person(s) that is/are maintaining the package
+	\item[]\xmltag{name}: The software license(s) (e.g. GPL, BSD, ASL) under which the code is released
+\end{itemize}
+
+As an example, here is package manifest for a fictional package called \verb foo_core .
+
+\begin{minted}{xml}
+	<package format="2">
+		<name>foo_core</name>
+		<version>1.2.4</version>
+		<description>
+			This package provides foo capability.
+		</description>
+		<maintainer email="ivana@osrf.org">Ivana Bildbotz</maintainer>
+		<license>BSD</license>
+	</package>
+\end{minted}
+
+\subsection{Dependencies}
+
+The package manifest with minimal tags does not specify any dependencies on other packages. Packages can have six types of dependencies:
+
+\begin{itemize}
+	\setlength{\itemsep}{1pt}
+	\setlength{\parskip}{0pt}
+	\setlength{\parsep}{0pt}
+	\item \textbf{Build Dependencies} specify which packages are needed to build this package. This is the case when any file from these packages is required at build time. This can be including headers from these packages at compilation time, linking against libraries from these packages or requiring any other resource at build time (especially when these packages are \verb find_package d in CMake). In a cross-compilation scenario build dependencies are for the targeted architecture.
+	\item \textbf{Build Export Dependencies} specify which packages are needed to build libraries against this package. This is the case when you transitively include their headers in public headers in this package (especially when these packages are declared as (\verb CATKIN_ )\verb DEPENDS  in \verb catkin_package()  in CMake).
+	\item \textbf{Execution Dependencies} specify which packages are needed to run code in this package. This is the case when you depend on shared libraries in this package (especially when these packages are declared as (\verb CATKIN_ )\verb DEPENDS  in \verb catkin_package()  in CMake).
+	\item \textbf{Test Dependencies} specify only additional dependencies for unit tests. They should never duplicate any dependencies already mentioned as build or run dependencies.
+	\item \textbf{Build Tool Dependencies} specify build system tools which this package needs to build itself. Typically the only build tool needed is catkin. In a cross-compilation scenario build tool dependencies are for the architecture on which the compilation is performed.
+	\item \textbf{Documentation Tool Dependencies} specify documentation tools which this package needs to generate documentation.
+\end{itemize}
+
+These six types of dependencies are specified using the following respective tags:
+
+\begin{itemize}
+	\setlength{\itemsep}{1pt}
+	\setlength{\parskip}{0pt}
+	\setlength{\parsep}{0pt}
+	\item []\xmltag{depend} specifies that a dependency is a build, export, and execution dependency. This is the most commonly used dependency tag.
+	\item []\xmltag{buildtool\_depend}
+	\item []\xmltag{build\_depend}
+	\item []\xmltag{build\_export\_depend}
+	\item []\xmltag{exec\_depend}
+	\item []\xmltag{test\_depend}
+	\item []\xmltag{doc\_depend}
+\end{itemize}
+
+All packages have at least one dependency, a build tool dependency on catkin as the following example shows.
+
+\begin{minted}{xml}
+	<package>
+		<name>foo_core</name>
+		<version>1.2.4</version>
+		<description>
+			This package provides foo capability.
+		</description>
+		<maintainer email="ivana@osrf.org">Ivana Bildbotz</maintainer>
+		<license>BSD</license>
+		<buildtool_depend>catkin</buildtool_depend>
+	</package>
+\end{minted}
+
+A more realistic example that specifies build, exec, test, and doc dependencies could look as follows.
+
+\begin{minted}{xml}
+	<package>
+		<name>foo_core</name>
+		<version>1.2.4</version>
+		<description>
+			This package provides foo capability.
+		</description>
+		<maintainer email="ivana@willowgarage.com">Ivana Bildbotz</maintainer>
+		<license>BSD</license>
+		<url>http://ros.org/wiki/foo_core</url>
+		<author>Ivana Bildbotz</author>
+		<buildtool_depend>catkin</buildtool_depend>
+		<depend>roscpp</depend>
+		<depend>std_msgs</depend>
+		<build_depend>message_generation</build_depend>
+		<exec_depend>message_runtime</exec_depend>
+		<exec_depend>rospy</exec_depend>
+		<test_depend>python-mock</test_depend>
+		<doc_depend>doxygen</doc_depend>
+	</package>
+\end{minted}
+
+\subsection{Metapackages}
+
+It is often convenient to group multiple packages as a single logical package. This can be accomplished through metapackages. A metapackage is a normal package with the following export tag in the \verb package.xml :
+
+\begin{minted}{xml}
+	<export>
+		<metapackage />
+	</export>
+\end{minted}
+
+Other than a required \xmltag{buildtool\_depends} dependency on catkin, metapackages can only have execution dependencies on packages of which they group.
+
+Additionally a metapackage has a required, boilerplate \verb CMakeLists.txt  file:
+
+\begin{minted}{xml}
+	cmake_minimum_required(VERSION 2.8.3)
+	project(<PACKAGE_NAME>)
+	find_package(catkin REQUIRED)
+	catkin_metapackage()
+\end{minted}
+
+Note: replace \verb <PACKAGE_NAME>  with the name of the metapackage.
+
+\subsection{Additional tags}
+
+\begin{itemize}
+	\setlength{\itemsep}{1pt}
+	\setlength{\parskip}{0pt}
+	\setlength{\parsep}{0pt}
+	\item [] \xmltag{url}: A URL for information on the package, typically a wiki page on ros.org.
+	\item [] \xmltag{author}: The author(s) of the package
+\end{itemize}
+
+\section{Format 1 (legacy))}
+
+Older catkin pakages use format 1. If the \xmltag{package} tag has no \verb format  attribute, it is a format 1 package. Use format 2 for new packages.
+
+The format of \verb package.xml  is straightforward.
+
+\subsection{Basic structure}
+
+Each \verb package.xml  file has the \xmltag{package} tag as the root tag in the document.
+
+\begin{minted}{xml}
+	<package>
+	
+	</package>
+\end{minted}
+
+\subsection{Required tags}
+
+There are a minimal set of tags that need to be nested within the \xmltag{package} tag to make the package manifest complete.
+
+\begin{itemize}
+	\setlength{\itemsep}{1pt}
+	\setlength{\parskip}{0pt}
+	\setlength{\parsep}{0pt}
+	\item[]\xmltag{name}: The name of the package
+	\item[]\xmltag{name}: The version number of the package (required to be 3 dot-separated integers)
+	\item[]\xmltag{name}: A description of the package contents
+	\item[]\xmltag{name}: The name of the person(s) that is/are maintaining the package
+	\item[]\xmltag{name}: The software license(s) (e.g. GPL, BSD, ASL) under which the code is released
+\end{itemize}
+
+As an example, here is package manifest for a fictional package called \verb foo_core .
+
+\begin{minted}{xml}
+	<package>
+		<name>foo_core</name>
+		<version>1.2.4</version>
+		<description>
+			This package provides foo capability.
+		</description>
+		<maintainer email="ivana@willowgarage.com">Ivana Bildbotz</maintainer>
+		<license>BSD</license>
+	</package>
+\end{minted}
+
+\subsection{Build, run, and test dependencies}
+
+O manifesto do pacote com tags mínimas não especifica nenhuma dependência em outros pacotes. Pacotes podem ter quatro tipos de dependências:
+
+\begin{itemize}
+	\setlength{\itemsep}{1pt}
+	\setlength{\parskip}{0pt}
+	\setlength{\parsep}{0pt}
+	\item \textbf{Build Dependencies} specify build system tools which this package needs to build itself. Typically the only build tool needed is catkin. In a cross-compilation scenario build tool dependencies are for the architecture on which the compilation is performed.
+	\item \textbf{Build Export Dependencies} specify which packages are needed to build this package. This is the case when any file from these packages is required at build time. This can be including headers from these packages at compilation time, linking against libraries from these packages or requiring any other resource at build time (especially when these packages are \verb find_package d in CMake). In a cross-compilation scenario build dependencies are for the targeted architecture.
+	\item \textbf{Execution Dependencies} specify which packages are needed to run code in this package, or build libraries against this package. This is the case when you depend on shared libraries or transitively include their headers in public headers in this package (especially when these packages are declared as (\verb CATKIN_ )\verb DEPENDS  in \verb catkin_package()  in CMake).
+	\item \textbf{Test Dependencies} specify only additional dependencies for unit tests. They should never duplicate any dependencies already mentioned as build or run dependencies.
+\end{itemize}
+
+These four types of dependencies are specified using the following respective tags:
+
+\begin{itemize}
+	\setlength{\itemsep}{1pt}
+	\setlength{\parskip}{0pt}
+	\setlength{\parsep}{0pt}
+	\item \xmltag{buildtool\_depend}
+	\item\xmltag{build\_depend}
+	\item\xmltag{run\_depend}
+	\item\xmltag{test\_depend}
+\end{itemize}
+
+All packages have at least one dependency, a build tool dependency on catkin as the following example shows.
+
+\begin{minted}{xml}
+	<package>
+		<name>foo_core</name>
+		<version>1.2.4</version>
+		<description>
+			This package provides foo capability.
+		</description>
+		<maintainer email="ivana@willowgarage.com">Ivana Bildbotz</maintainer>
+		<license>BSD</license>
+		<buildtool_depend>catkin</buildtool_depend>
+	</package>
+\end{minted}
+
+A more realistic example that specifies build, runtime, and test dependencies could look as follows.
+
+\begin{minted}{xml}
+	<package>
+		<name>foo_core</name>
+		<version>1.2.4</version>
+		<description>
+			This package provides foo capability.
+		</description>
+		<maintainer email="ivana@willowgarage.com">Ivana Bildbotz</maintainer>
+		<license>BSD</license>
+		<url>http://ros.org/wiki/foo_core</url>
+		<author>Ivana Bildbotz</author>
+		<buildtool_depend>catkin</buildtool_depend>
+		<build_depend>message_generation</build_depend>
+		<build_depend>roscpp</build_depend>
+		<build_depend>std_msgs</build_depend>
+		<run_depend>message_runtime</run_depend>
+		<run_depend>roscpp</run_depend>
+		<run_depend>rospy</run_depend>
+		<run_depend>std_msgs</run_depend>
+		<test_depend>python-mock</test_depend>
+	</package>
+\end{minted}
+
+\subsection{Metapackages}
+
+It is often convenient to group multiple packages as a single logical package. This can be accomplished through metapackages. A metapackage is a normal package with the following export tag in the \verb package.xml :
+
+\begin{minted}{xml}
+	<export>
+		<metapackage />
+	</export>
+\end{minted}
+
+Other than a required \xmltag{buildtool\_depend} dependency on catkin, metapackages can only have run dependencies on packages of which they group.
+
+Additionally a metapackage has a required, boilerplate \verb CMakeLists.txt  file:
+
+\begin{minted}{xml}
+	cmake_minimum_required(VERSION 2.8.3)
+	project(<PACKAGE_NAME>)
+	find_package(catkin REQUIRED)
+	catkin_metapackage()
+\end{minted}
+
+Note: replace \verb <PACKAGE_NAME>  with the name of the metapackage.
+
+\subsection{Additional tags}
+
+\begin{itemize}
+	\setlength{\itemsep}{1pt}
+	\setlength{\parskip}{0pt}
+	\setlength{\parsep}{0pt}
+	\item [] \xmltag{url}: A URL for information on the package, typically a wiki page on ros.org.
+	\item [] \xmltag{author}: The author(s) of the package
+\end{itemize}

@@ -1,0 +1,456 @@
+\chapter{CMakeLists.txt}
+\label{cmake}
+
+This section was extracted from \url{http://wiki.ros.org/catkin/CMakeLists.txt} on August 08, 2017. Visit it for further information.
+
+\section{Overview and structure of file \texttt{CMakeLists.txt}}
+
+The file CMakeLists.txt is the input to the CMake build system for building software packages. This file \textbf{must follow the following format and order}. 
+
+\begin{enumerate}
+	\setlength{\itemsep}{1pt}
+	\setlength{\parskip}{0pt}
+	\setlength{\parsep}{0pt}
+	\item Required CMake Version (\verb cmake_minimum_required )
+	\item Package Name (\verb project() )
+	\item Find other CMake/Catkin packages needed for build (\verb find_package() )
+	\item Enable Python module support (\verb catkin_python_setup() )
+	\item Message/Service/Action Generators (\verb.add_message_files(), add_service_files(), add_action_files().)
+	\item Invoke message/service/action generation (\verb generate_messages() )
+	\item Specify package build info export (\verb catkin_package() )
+	\item Libraries/Executables to build (\verb add_library()/add_executable()/target_link_libraries() )
+	\item Tests to build (\verb catkin_add_gtest() )
+	\item Install rules (\verb install() )
+\end{enumerate}
+
+\section{CMake Version}
+
+Every catkin CMakeLists.txt file must start with the required version of CMake needed. Catkin requires version 2.8.3 or higher.
+
+\begin{verbatim} 
+    cmake_minimum_required(VERSION 2.8.3)
+\end{verbatim}
+
+
+\section{Package name}
+The next item is the name of the ROS package. In the following example, the package is called \emph{robot\_brain}.
+
+\begin{verbatim} 
+    project(robot_brain)
+\end{verbatim}
+
+Note: In CMake you can reference the project name anywhere later in the CMake script by using the variable \verb ${PROJECT_NAME} .
+
+\section{Finding dependent CMake packages}
+
+We need to then specify which other CMake packages that need to be found to build our project using the CMake \verb find_package  function. There is always at least one dependency on catkin:
+
+\begin{verbatim} 
+    find_package(catkin REQUIRED)
+\end{verbatim}
+
+If your project depends on other wet packages, they are automatically turned into components (in terms of CMake) of catkin. Instead of using \verb find_package  on those packages, if you specify them as components, it will make life easier. For example, if you use the package \verb nodelet .
+
+\begin{verbatim} 
+    find_package(catkin REQUIRED COMPONENTS nodelet)
+\end{verbatim}
+
+Note: You should only \verb find_package  components for which you want build flags. You should not add runtime dependencies.
+
+\subsection{Command \texttt{find\_package()}}
+
+
+
+If a package is found by CMake through \verb find_package , it results in the creation of several CMake environment variables that give information about the found package. These environment variables can be utilized later in the CMake script. The environment variables describe where the packages exported header files are, where source files are, what libraries the package depends on, and the paths of those libraries. The names always follow the convention of \verb.<PACKAGE NAME>_<PROPERTY>.:
+
+\begin{itemize}
+	\setlength{\itemsep}{1pt}
+	\setlength{\parskip}{0pt}
+	\setlength{\parsep}{0pt}
+	\item[] \verb <NAME>_FOUND : Set to true if the library is found, otherwise false
+	\item[] \verb <NAME>_INCLUDE_DIRS  or \verb <NAME>_INCLUDES : The include paths exported by the package
+	\item[] \verb <NAME>_LIBRARIES  or \verb <NAME>_LIBS : The libraries exported by the package
+	\item[] \verb <NAME>_DEFINITIONS : Definitions exported by the package
+\end{itemize}
+
+\subsection{Why are catkin packages specified as components?}
+
+Catkin packages are not really components of catkin. Rather the components feature of CMake was utilized in the design of catkin to save you significant typing time.
+
+For catkin packages, if you \verb find_package  them as components of catkin, this is advantageous as a single set of environment variables is created with the \verb catkin_  prefix. For example, let us say you were using the package \verb nodelet  in your code. The recommended way of finding the package is:
+
+\begin{verbatim} 
+    find_package(catkin REQUIRED COMPONENTS nodelet)
+\end{verbatim}
+
+This means that the include paths, libraries, etc exported by nodelet are also appended to the \verb catkin_  variables. For example, \verb catkin_INCLUDE_DIRS  contains the include paths not only for catkin but also for \verb nodelet  as well! This will come in handy later.
+
+We could alternatively \verb.find_package nodelet. on its own:
+
+\begin{verbatim} 
+    find_package(nodelet)
+\end{verbatim}
+
+This means the \verb nodelet  paths, libraries and so on would not be added to \verb catkin_  variables.
+
+This results in \verb nodelet_INCLUDE_DIRS , \verb nodelet_LIBRARIES , and so on. The same variables are also created using
+
+\begin{verbatim} 
+    find_package(catkin REQUIRED COMPONENTS nodelet)
+\end{verbatim}
+
+\subsection{Boost}
+
+If using C++ and Boost, you need to invoke \verb find_package()  on Boost and specify which aspects of Boost you are using as components. Boost is a set of libraries for C++ which offers support for tasks and structures such as linear algebra, pseudorandom number generation, multithreading, image processing, regular expressions and unit testing. For example, if you wanted to use Boost threads, you would say:
+
+\begin{verbatim} 
+    find_package(Boost REQUIRED COMPONENTS thread)
+\end{verbatim}
+
+\section{\texttt{catkin\_package()}}
+
+Command \verb catkin_package()  specifies catkin-specific information for the compiler.
+
+This function must be called before declaring any targets with \verb add_library()  or \verb add_executable() . The function has 5 optional arguments:
+
+\begin{itemize}
+	\setlength{\itemsep}{1pt}
+	\setlength{\parskip}{0pt}
+	\setlength{\parsep}{0pt}
+	\item[]\verb INCLUDE_DIRS : The exported include paths for the package
+	\item[]\verb LIBRARIES : The exported libraries from the project
+	\item[]\verb CATKIN_DEPENDS : Other catkin projects that this project depends on
+	\item[]\verb DEPENDS : Non-catkin projects that this project depends on
+	\item[]\verb CFG\_EXTRAS : Additional configuration options
+\end{itemize}
+
+As an example:
+
+\begin{verbatim} 
+    catkin_package(INCLUDE_DIRS include
+        LIBRARIES ${PROJECT_NAME}
+        CATKIN_DEPENDS roscpp nodelet
+        DEPENDS eigen opencv)
+\end{verbatim}
+
+This indicates that the folder \verb include/  within the package folder is where exported headers go. The CMake environment variable \verb ${PROJECT_NAME}  evaluates to whatever you passed to the \verb project()  function earlier, in this case it will be \verb robot_brain . \verb roscpp  and \verb nodelet  are packages that need to be present to build/run this package, and \verb eigen  and \verb opencv  are system dependencies that need to be present to build/run this package.
+
+\section{Specifying build targets}
+
+Build targets can take many forms, but usually they represent one of two possibilties:
+
+\begin{itemize}
+	\setlength{\itemsep}{1pt}
+	\setlength{\parskip}{0pt}
+	\setlength{\parsep}{0pt}
+	\item[]Executable Target: programs we can run
+	\item[]Library Target: libraries that can be used by executable targets at build and/or runtime
+\end{itemize}
+
+\subsection{Target naming}
+
+It is very important to note that the names of build targets in catkin must be unique regardless of the folders they are built/installed to. This is a requirement of CMake. However, unique names of targets are only necessary internally to CMake. One can have a target renamed to something else using the \verb set_target_properties()  function.
+
+Example:
+
+\begin{verbatim}
+    set_target_properties(rviz_image_view
+                          PROPERTIES OUTPUT_NAME image_view
+                          PREFIX "")
+\end{verbatim}
+
+This will change the name of the target \verb rviz_image_view  to \verb image_view  in the build and install outputs.
+
+\subsection{Custom output directory}
+
+While the default output directory for executables and libraries is usual set to a reasonable value it must be customized in certain cases, i.e. a library containing Python bindings must be placed in a different folder to be importable in Python.
+
+Example:
+
+\begin{verbatim}
+    set_target_properties(python_module_library
+    PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${CATKIN_DEVEL_PREFIX}${CATKIN_PACKAGE_PYTHON_DESTINATION})
+\end{verbatim}
+
+\subsection{Include paths and library paths}
+
+Prior to specifying targets, you need to specify where resources can be found for said targets, specifically header files and libraries
+
+\begin{itemize}
+	\setlength{\itemsep}{1pt}
+	\setlength{\parskip}{0pt}
+	\setlength{\parsep}{0pt}
+	\item[]Include paths
+	\item[]Library paths
+	\item[]\verb'include_directories(<dir1>, <dir2>, ..., <dirN>)'
+	\item[]\verb'link\_directories(<dir1>, <dir2>, ..., <dirN>)'
+\end{itemize}
+
+\textbf{a) \tt include\_directories()} \\
+
+The argument to \verb include_directories  should be the \verb *_INCLUDE_DIRS  variables generated by your \verb find_package  calls and any additional directories that need to be included. If you are using catkin and Boost, your \verb include_directories()  call should look like:
+
+\begin{verbatim}
+    include_directories(include ${Boost_INCLUDE_DIRS} ${catkin_INCLUDE_DIRS})
+\end{verbatim}
+
+The first argument \verb include  indicates that the \verb include/  directory within the package is also part of the path. \\
+
+\textbf{b) \tt link\_directories()} \\
+
+The CMake \verb link_directories()  function can be used to add additional library paths, however, this is not recommended. All catkin and CMake packages automatically have their link information added when they are \verb find_package d. Simply link against the libraries in \verb target_link_libraries() .
+
+Example:
+
+\begin{verbatim}
+    link_directories(~/my_libs)
+\end{verbatim}
+
+\subsection{Executable targets}
+
+To specify an executable target that must be built, we must use the \verb add_executable()  CMake function.
+
+\begin{verbatim}
+    add_executable(myProgram src/main.cpp src/some_file.cpp src/another_file.cpp)
+\end{verbatim}
+
+This will build a target executable called \verb myProgram  which is built from 3 source files: \verb src/main.cpp , \verb src/some_file.cpp  and \verb src/another_file.cpp .
+
+\subsection{Library targets}
+
+The \verb add_library()  CMake function is used to specify libraries to build. By default catkin builds shared libraries.
+
+\begin{verbatim}
+    add_library(${PROJECT_NAME} ${${PROJECT_NAME}_SRCS})
+\end{verbatim}
+
+\subsection{\texttt{target\_link\_libraries}}
+
+Use the \verb target_link_libraries()  function to specify which libraries an executable target links against. This is done typically after an \verb add_executable()  call. Add \verb ${catkin_LIBRARIES}  if ros is not found.
+
+Syntax:
+
+\begin{verbatim}
+    target_link_libraries(<executableTargetName>, <lib1>, <lib2>, ... <libN>)
+\end{verbatim}
+
+Example:
+
+\begin{verbatim}
+    add_executable(foo src/foo.cpp)
+    add_library(moo src/moo.cpp)
+    target_link_libraries(foo moo)  -- This links foo against libmoo.so
+\end{verbatim}
+
+Note that there is no need to use \verb ink_directories() in most use cases as that information is automatically pulled in via \verb find_package() .
+
+\section{Messages, services, and action targetss}
+
+Message (\verb .msg ), service (\verb .srv ) and action (\verb .action ) files in ROS require a special preprocessor build step before being built and used by ROS packages. The point of these macros is to generate programming language-specific files so that one can utilize messages, services, and actions in their programming language of choice. The build system will generate bindings using all available generators (e.g. gencpp, genpy, genlisp, etc).
+
+There are three macros provided to handle messages, services, and actions respectively:
+
+\begin{verbatim}
+    add_message_files
+    add_service_files
+    add_action_files
+\end{verbatim}
+
+These macros must then be followed by a call to the macro that invokes generation:
+
+\begin{verbatim}
+    generate_messages()
+\end{verbatim}
+
+\subsubsection{Important prerequisites/constraints}
+
+These macros must come textbf{before} the \verb catkin_package()  macro in order for generation to work correctly.
+
+\begin{verbatim}
+    find_package(catkin REQUIRED COMPONENTS ...)
+    add_message_files(...)
+    add_service_files(...)
+    add_action_files(...)
+    generate_messages(...)
+    catkin_package(...)
+    ...
+\end{verbatim}
+
+Your \verb catkin_package()  macro must have a \verb CATKIN_DEPENDS  dependency on \verb message_runtime .
+
+\begin{verbatim}
+    catkin_package(
+    ...
+    CATKIN_DEPENDS message_runtime ...
+    ...)
+\end{verbatim}
+
+You must use \verb find_package()  for the package \verb message_generation , either alone or as a component of catkin:
+
+\begin{verbatim}
+    find_package(catkin REQUIRED COMPONENTS message_generation)
+\end{verbatim}
+
+Your \verb package.xml  file must contain a build dependency on \verb message_generation  and a runtime dependency on \verb message_runtime . This is not necessary if the dependencies are pulled in transitively from other packages.
+
+If you have a target which (even transitively) depends on some other target that needs messages/services/actions to be built, you need to add an explicit dependency on target \verb catkin_EXPORTED_TARGETS , so that they are built in the correct order. This case applies almost always, unless your package really doesn't use any part of ROS. Unfortunately, this dependency cannot be automatically propagated. (\verb some_target  is the name of the target set by \verb add_executable() ):
+
+\begin{verbatim}
+    add_dependencies(some_target ${catkin_EXPORTED_TARGETS})
+\end{verbatim}
+
+If you have a package which builds messages and/or services as well as executables that use these, you need to create an explicit dependency on the automatically-generated message target so that they are built in the correct order. (\verb some_target  is the name of the target set by \verb add_executable() ):
+
+\begin{verbatim}
+    add_dependencies(some_target ${${PROJECT_NAME}_EXPORTED_TARGETS})
+\end{verbatim}
+
+If you your package satisfies both of the above conditions, you need to add both dependencies, i.e.:
+
+\begin{verbatim}
+    add_dependencies(some_target ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+\end{verbatim}
+
+\subsection{Example}
+
+If your package has two messages in a directory called \verb msg  named \verb MyMessage1.msg  and \verb MyMessage2.msg  and these messages depend on \verb std_msgs  and \verb sensor_msgs , a service in a directory called \verb srv  named \verb MyService.srv , defines executable \verb message_program  that uses these messages and service, and an executable called \verb does_not_use_local_messages_program , which uses some parts of ROS, but not the messages/service defined in this package, then you will need the following in your \verb CMakeLists.txt :
+
+\begin{verbatim}
+    # Get the information about this package's buildtime dependencies
+    find_package(catkin REQUIRED
+        COMPONENTS message_generation std_msgs sensor_msgs)
+
+    # Declare the message files to be built
+    add_message_files(FILES
+        MyMessage1.msg
+        MyMessage2.msg
+    )
+
+    # Declare the service files to be built
+    add_service_files(FILES
+        MyService.srv
+    )
+
+    # Actually generate the language-specific message and service files
+    generate_messages(DEPENDENCIES std_msgs sensor_msgs)
+
+    # Declare that this catkin package's runtime dependencies
+    catkin_package(
+     CATKIN_DEPENDS message_runtime std_msgs sensor_msgs
+    )
+
+    # define executable using MyMessage1 etc.
+    add_executable(message_program src/main.cpp)
+    add_dependencies(message_program ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+
+    # define executable not using any messages/services provided by this package
+    add_executable(does_not_use_local_messages_program src/main.cpp)
+    add_dependencies(does_not_use_local_messages_program ${catkin_EXPORTED_TARGETS})
+\end{verbatim}
+
+If, additionally, you want to build actionlib actions, and have an action specification file called \verb MyAction.action  in the \verb action  directory, you must add \verb actionlib_msgs  to the list of components which are \verb find_package d with catkin and add the following call before the call to \verb generate_messages(...) :
+
+\begin{verbatim}
+    add_action_files(FILES
+        MyAction.action
+    )
+\end{verbatim}
+
+
+Furthermore the package must have a build dependency on \verb actionlib_msgs .
+
+\section{Enabling Python module support}
+
+If your ROS package provides some Python modules, you should create a \verb setup.py  file and call
+
+\begin{verbatim}
+    catkin_python_setup()
+\end{verbatim}
+
+before the call to \verb generate_messages()  and \verb catkin_package() .
+
+\section{Unit tests}
+
+There is a catkin-specific macro for handling gtest-based unit tests called \verb catkin_add_gtest() .
+
+\begin{verbatim}
+    catkin_add_gtest(myUnitTest test/utest.cpp)
+\end{verbatim}
+
+\section{Optional step: specifying installable targets}
+
+After build time, targets are placed into the devel space of the catkin workspace. However, often we want to install targets to the system so that they can be used by others or to a local folder to test a system-level installation. In other words, if you want to be able to do a "make install" of your code, you need to specify where targets should end up.
+
+This is done using the CMake \verb install()  function which takes as arguments:
+
+\begin{itemize}
+	\setlength{\itemsep}{1pt}
+	\setlength{\parskip}{0pt}
+	\setlength{\parsep}{0pt}
+	\item[] \verb TARGETS : Which targets to install
+	\item[] \verb ARCHIVE DESTINATION : Static libraries and DLL (Windows) .lib stubs
+	\item[] \verb LIBRARY DESTINATION : Non-DLL shared libraries and modules
+	\item[] \verb RUNTIME DESTINATION : Executable targets and DLL (Windows) style shared libraries
+\end{itemize}
+
+Take as an example:
+
+\begin{verbatim}
+    install(TARGETS ${PROJECT_NAME}
+        ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+        LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+        RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+    )
+\end{verbatim}
+
+Besides these standard destination some files must be installed to special folders, i.e. a library containing Python bindings must be installed to a different folder to be importable in Python:
+
+\begin{verbatim}
+    install(TARGETS python_module_library
+        ARCHIVE DESTINATION ${CATKIN_PACKAGE_PYTHON_DESTINATION}
+        LIBRARY DESTINATION ${CATKIN_PACKAGE_PYTHON_DESTINATION}
+    )
+\end{verbatim}
+
+\subsection{Installing Python Executable Scripts}
+
+For Python code, the install rule looks different as there is no use of the \verb add_library()  and \verb add_executable()  functions so as for CMake to determine which files are targets and what type of targets they are. Instead, use the following in your \verb CMakeLists.txt  file:
+
+\begin{verbatim}
+    catkin_install_python(PROGRAMS scripts/myscript
+        DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})
+\end{verbatim}
+
+Detailed information about installing python scripts and modules, as well as best practices for folder layout can be found in the \href{http://docs.ros.org/api/catkin/html/howto/format2/installing_python.html}{catkin manual}.
+
+If you only install Python scripts and do not provide any modules, you need neither to create the above mentioned \verb setup.py  file, nor to call \verb catkin_python_setup() .
+
+\subsection{Installing header files}
+
+Header files must also be installed to the \verb include  folder, This is often done by installing the files of an entire folder (optionally filtered by filename patterns and excluding SVN subfolders). This can be done with an install rule that looks as follows:
+
+\begin{verbatim}
+    install(DIRECTORY include/${PROJECT_NAME}/
+        DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION}
+        PATTERN ".svn" EXCLUDE
+    )
+\end{verbatim}
+
+or if the subfolder under include does not match the package name:
+
+\begin{verbatim}
+    install(DIRECTORY include/
+        DESTINATION ${CATKIN_GLOBAL_INCLUDE_DESTINATION}
+        PATTERN ".svn" EXCLUDE
+    )
+\end{verbatim}
+
+\subsubsection{Installing \texttt{roslaunch} files or other resources}
+
+Other resources like launchfiles can be installed to \verb ${CATKIN_PACKAGE_SHARE_DESTINATION} :
+
+\begin{verbatim}
+    install(DIRECTORY launch/
+        DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/launch
+        PATTERN ".svn" EXCLUDE)
+\end{verbatim}
