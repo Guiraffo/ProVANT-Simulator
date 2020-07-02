@@ -8,14 +8,15 @@
 #include "dialogopencontroller.h"
 
 namespace Ui {
-class Dialog;
+class ModelSetupDialog;
 }
 
 /*!
- * \brief Entidade responsável pelo desenvolvimento da janela de configuração do modelo e VANT
+ * \brief Entidade responsável pelo desenvolvimento da janela de configuração
+ * do modelo e VANT
  *
  * A janela de configuração será onde o usuário visualizará dados de modelagem e
- * configurará o controlador com as sseguintes opções:
+ * configurará o controlador com as seguintes opções:
  * - nome do controlador
  * - tópicos dos sensores a serem utilizados
  * - tópicos dos atuadores a serem utilizados
@@ -23,7 +24,6 @@ class Dialog;
  * - nome de arquivos para armazenamento de dados para uso em Matlab
  * - pose inicial
  */
-
 class ModelSetupDialog : public QDialog
 {
     Q_OBJECT
@@ -39,29 +39,29 @@ public:
 
 private slots:
 
-    void on_pushButton_5_clicked(); // criando novo projeto de estratégia de controle
+    void on_newControllerButton_clicked(); // criando novo projeto de estratégia de controle
 
-    void on_pushButton_7_clicked(); // compilando estratégia de controle
+    void on_compileControllerButton_clicked(); // compilando estratégia de controle
 
-    void on_pushButton_6_clicked(); // abrindo projeto de controle já existente
+    void on_openControllerButton_clicked(); // abrindo projeto de controle já existente
 
-    void on_pushButton_3_clicked(); // adicionando novo sensor
+    void on_addSensorButton_clicked(); // adicionando novo sensor
 
-    void on_pushButton_4_clicked(); // removendo sensor
+    void on_removeSensorButton_clicked(); // removendo sensor
 
-    void on_pushButton_clicked(); // adicionando controlador
+    void on_addActuatorButton_clicked(); // adicionando controlador
 
-    void on_pushButton_2_clicked(); // removendo controlador
+    void on_removeActuatorButton_clicked(); // removendo controlador
 
     void on_buttonBox_accepted(); // botão de ok
 
     void SaveConfig(); // salvando dados no arquivo de configuração
 
-    void on_checkBox_clicked(bool checked);
+    void on_hilCheckBox_clicked(bool checked);
 
 
 protected:
-    Ui::Dialog *ui;
+    Ui::ModelSetupDialog *ui;
 private:
     Model model; // classe modelo
     Controller controller; // classe controlador

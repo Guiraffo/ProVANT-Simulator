@@ -1,11 +1,11 @@
 #include "modelsetupdialog.h"
-#include "ui_dialog.h"
+#include "ui_modelsetupdialog.h"
 #include"qdebug.h"
 #include"Business/treeitens.h"
 
 ModelSetupDialog::ModelSetupDialog(QWidget *parent) :
     QDialog(parent),
-    ui(new Ui::Dialog)
+    ui(new Ui::ModelSetupDialog)
 {
     ui->setupUi(this);
     ui->treeWidget->setColumnCount(2);
@@ -25,7 +25,7 @@ void ModelSetupDialog::setModel(std::string modelfile,std::string controllerfile
 
     // obtém modelo e controlador armazenados em arquivos
     model.getFirst(modelfile,ui->treeWidget);
-    controller.get(controllerfile,ui->listWidget_2,ui->listWidget);
+    controller.get(controllerfile,ui->sensorsListWidget,ui->actuatorsListWidget);
 
     // adiciona no combobox todos os controladores existentes
     char const* tmp = getenv( "TILT_PROJECT" );
@@ -36,14 +36,14 @@ void ModelSetupDialog::setModel(std::string modelfile,std::string controllerfile
         env = env + "/source/Structure/control_strategies";
         QDir dir(env.c_str());
         QFileInfoList files = dir.entryInfoList();
-        ui->comboBox->clear();
+        ui->controllerComboBox->clear();
         foreach (QFileInfo file, files)
         {
             if (file.isDir())
             {
                 if(file.fileName().size()>2)
                 {
-                    ui->comboBox->addItem(file.fileName());
+                    ui->controllerComboBox->addItem(file.fileName());
                     QString temp = "lib"+file.fileName()+".so";
                     if(temp==QString::fromStdString(controller.config->GetStrategy()))
                     {
@@ -55,7 +55,7 @@ void ModelSetupDialog::setModel(std::string modelfile,std::string controllerfile
             }
         }
         // adicionar item atual ao combobox
-        ui->comboBox->setCurrentIndex(j);
+        ui->controllerComboBox->setCurrentIndex(j);
     }
 
     // adicionar demais informaçõeos à janela
@@ -66,7 +66,7 @@ void ModelSetupDialog::setModel(std::string modelfile,std::string controllerfile
     ui->ReferenceEdit->setText(QString::fromStdString(controller.config->GetLogRef()));
 }
 
-void ModelSetupDialog::on_pushButton_5_clicked()
+void ModelSetupDialog::on_newControllerButton_clicked()
 {
     int j = 0; // variável para armezanar estratégia de controle corrente
     int i = 0; // variável para varrer diretório
@@ -86,14 +86,14 @@ void ModelSetupDialog::on_pushButton_5_clicked()
         QDir dir(env.c_str());
         // obtendo o nome de todos o projetos de estratégias de controle
         QFileInfoList files = dir.entryInfoList();
-        ui->comboBox->clear();
+        ui->controllerComboBox->clear();
         foreach (QFileInfo file, files)
         {
             if (file.isDir())
             {
                 if(file.fileName().size()>2)
                 {
-                    ui->comboBox->addItem(file.fileName());
+                    ui->controllerComboBox->addItem(file.fileName());
                     QString temp = "lib"+file.fileName()+".so";
                     if(temp==QString::fromStdString(controller.config->GetStrategy()))
                     {
@@ -104,11 +104,11 @@ void ModelSetupDialog::on_pushButton_5_clicked()
                 }
             }
         }
-        ui->comboBox->setCurrentIndex(j);
+        ui->controllerComboBox->setCurrentIndex(j);
     }
 }
 
-void ModelSetupDialog::on_pushButton_7_clicked()
+void ModelSetupDialog::on_compileControllerButton_clicked()
 {
     // obtendo caminho da pasta catkin_ws
     char const* tmp = getenv( "DIR_ROS" );
@@ -120,13 +120,13 @@ void ModelSetupDialog::on_pushButton_7_clicked()
     {
         // comando para compilação e armazenamento da saída de erro em arquivo texto
         std::string env(tmp);
-        env = "cd "+env+"; catkin_make --pkg "+ ui->comboBox->currentText().toStdString() + " 2> OutCompile.txt; xdg-open OutCompile.txt";
+        env = "cd "+env+"; catkin_make --pkg "+ ui->controllerComboBox->currentText().toStdString() + " 2> OutCompile.txt; xdg-open OutCompile.txt";
         qDebug() << env.c_str();
         std::system(env.c_str());
     }
 }
 
-void ModelSetupDialog::on_pushButton_6_clicked()
+void ModelSetupDialog::on_openControllerButton_clicked()
 {
     char const* tmp = getenv( "TILT_PROJECT" );
     if ( tmp == NULL ) {
@@ -134,37 +134,37 @@ void ModelSetupDialog::on_pushButton_6_clicked()
     } else {
         std::string env(tmp);
         env = env + "/source/Structure/control_strategies";
-        std::string command("xdg-open "+env+"/"+ui->comboBox->currentText().toStdString());
+        std::string command("xdg-open "+env+"/"+ui->controllerComboBox->currentText().toStdString());
         std::system(command.c_str());
     }
 }
 
-void ModelSetupDialog::on_pushButton_3_clicked()
+void ModelSetupDialog::on_addSensorButton_clicked()
 {
     // adicionando sensores
     QListWidgetItem* item = new QListWidgetItem(QString("New Sensor"));
-    ui->listWidget_2->addItem(item);
+    ui->sensorsListWidget->addItem(item);
     item->setFlags(Qt::ItemIsEditable|Qt::ItemIsEnabled);
 }
 
-void ModelSetupDialog::on_pushButton_4_clicked()
+void ModelSetupDialog::on_removeSensorButton_clicked()
 {
     // removendo sensor
-    delete ui->listWidget_2->currentItem();
+    delete ui->sensorsListWidget->currentItem();
 }
 
-void ModelSetupDialog::on_pushButton_clicked()
+void ModelSetupDialog::on_addActuatorButton_clicked()
 {
     // novo atuador na lista
     QListWidgetItem* item = new QListWidgetItem(QString("New Actuator"));
-    ui->listWidget->addItem(item);
+    ui->actuatorsListWidget->addItem(item);
     item->setFlags(Qt::ItemIsEditable|Qt::ItemIsEnabled);
 }
 
-void ModelSetupDialog::on_pushButton_2_clicked()
+void ModelSetupDialog::on_removeActuatorButton_clicked()
 {
     // deletendo da lista
-    delete ui->listWidget->currentItem();
+    delete ui->actuatorsListWidget->currentItem();
 }
 
 
@@ -176,7 +176,7 @@ void ModelSetupDialog::on_buttonBox_accepted()
 void ModelSetupDialog::SaveConfig()
 {
     // armazenando estratégia deo controle
-    controller.config->SetStrategy("lib"+ui->comboBox->currentText().toStdString()+".so");
+    controller.config->SetStrategy("lib"+ui->controllerComboBox->currentText().toStdString()+".so");
     // armazenando período de amostragem
     controller.config->SetSampleTime(ui->SampleEdit->text().toStdString());
     // armazenando nome dos arquivos para armazenamento de dados de simulação
@@ -186,21 +186,21 @@ void ModelSetupDialog::SaveConfig()
                               ui->SensorEdit->text().toStdString());
     // adicionando sensores
     controller.config->Delete();
-    for(int i = 0; i < ui->listWidget_2->count(); ++i)
+    for(int i = 0; i < ui->sensorsListWidget->count(); ++i)
     {
-        controller.config->AddSensor(ui->listWidget_2->item(i)->text().toStdString());
+        controller.config->AddSensor(ui->sensorsListWidget->item(i)->text().toStdString());
     }
     // adicionando atuadores
-    for(int i = 0; i < ui->listWidget->count(); ++i)
+    for(int i = 0; i < ui->actuatorsListWidget->count(); ++i)
     {
-        controller.config->AddActuator(ui->listWidget->item(i)->text().toStdString());
+        controller.config->AddActuator(ui->actuatorsListWidget->item(i)->text().toStdString());
     }
     // escrevendo em arquivo
     controller.config->WriteFile();
 }
 
 
-void ModelSetupDialog::on_checkBox_clicked(bool checked)
+void ModelSetupDialog::on_hilCheckBox_clicked(bool checked)
 {
     if(checked==true)
     {
@@ -209,10 +209,10 @@ void ModelSetupDialog::on_checkBox_clicked(bool checked)
         ui->ActuatorEdit->setEnabled(false);
         ui->SensorEdit->setEnabled(false);
         ui->ReferenceEdit->setEnabled(false);
-        ui->pushButton_5->setEnabled(false);
-        ui->pushButton_6->setEnabled(false);
-        ui->pushButton_7->setEnabled(false);
-        ui->comboBox->setEnabled(false);
+        ui->newControllerButton->setEnabled(false);
+        ui->openControllerButton->setEnabled(false);
+        ui->compileControllerButton->setEnabled(false);
+        ui->controllerComboBox->setEnabled(false);
         hil = true;
     }
     else
@@ -222,10 +222,10 @@ void ModelSetupDialog::on_checkBox_clicked(bool checked)
         ui->ActuatorEdit->setEnabled(true);
         ui->SensorEdit->setEnabled(true);
         ui->ReferenceEdit->setEnabled(true);
-        ui->pushButton_5->setEnabled(true);
-        ui->pushButton_6->setEnabled(true);
-        ui->pushButton_7->setEnabled(true);
-        ui->comboBox->setEnabled(true);
+        ui->newControllerButton->setEnabled(true);
+        ui->openControllerButton->setEnabled(true);
+        ui->compileControllerButton->setEnabled(true);
+        ui->controllerComboBox->setEnabled(true);
         hil = false;
     }
 }

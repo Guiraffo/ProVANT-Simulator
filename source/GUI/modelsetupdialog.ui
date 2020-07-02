@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>Dialog</class>
- <widget class="QDialog" name="Dialog">
+ <class>ModelSetupDialog</class>
+ <widget class="QDialog" name="ModelSetupDialog">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -13,371 +13,245 @@
   <property name="windowTitle">
    <string>Dialog</string>
   </property>
-  <widget class="QDialogButtonBox" name="buttonBox">
-   <property name="geometry">
-    <rect>
-     <x>480</x>
-     <y>20</y>
-     <width>81</width>
-     <height>241</height>
-    </rect>
-   </property>
-   <property name="orientation">
-    <enum>Qt::Vertical</enum>
-   </property>
-   <property name="standardButtons">
-    <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
-   </property>
-  </widget>
-  <widget class="QTabWidget" name="tabWidget">
-   <property name="geometry">
-    <rect>
-     <x>20</x>
-     <y>10</y>
-     <width>421</width>
-     <height>451</height>
-    </rect>
-   </property>
-   <property name="currentIndex">
-    <number>1</number>
-   </property>
-   <widget class="QWidget" name="tab">
-    <attribute name="title">
-     <string>Parameters</string>
-    </attribute>
-    <widget class="QTreeWidget" name="treeWidget">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>10</y>
-       <width>391</width>
-       <height>401</height>
-      </rect>
+  <layout class="QHBoxLayout" name="mainLayout">
+   <item>
+    <widget class="QTabWidget" name="tabWidget">
+     <property name="currentIndex">
+      <number>3</number>
      </property>
-     <column>
-      <property name="text">
-       <string notr="true">Item</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>Description</string>
-      </property>
-     </column>
+     <widget class="QWidget" name="parametersTab">
+      <attribute name="title">
+       <string>Parameters</string>
+      </attribute>
+      <layout class="QHBoxLayout" name="parametersTabLayout">
+       <item>
+        <widget class="QTreeWidget" name="treeWidget">
+         <column>
+          <property name="text">
+           <string notr="true">Item</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>Description</string>
+          </property>
+         </column>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="controllerTab">
+      <attribute name="title">
+       <string>Controller</string>
+      </attribute>
+      <layout class="QVBoxLayout" name="controllerTabLayout">
+       <item>
+        <widget class="QCheckBox" name="hilCheckBox">
+         <property name="text">
+          <string>Hardware-in-the-loop</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="controllerLayout">
+         <item>
+          <widget class="QLabel" name="controllerLabel">
+           <property name="text">
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Controller&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           </property>
+           <property name="buddy">
+            <cstring>controllerComboBox</cstring>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QComboBox" name="controllerComboBox"/>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="controllerButtonsLayout">
+         <item>
+          <widget class="QPushButton" name="newControllerButton">
+           <property name="text">
+            <string>New controller</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="openControllerButton">
+           <property name="text">
+            <string>Open Controller</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="compileControllerButton">
+           <property name="text">
+            <string>Compile</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QFormLayout" name="controllerOptionsLayout">
+         <item row="0" column="0">
+          <widget class="QLabel" name="sampleTimeLabel">
+           <property name="text">
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Sample time&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           </property>
+           <property name="buddy">
+            <cstring>SampleEdit</cstring>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="1">
+          <widget class="QLineEdit" name="SampleEdit"/>
+         </item>
+         <item row="1" column="0">
+          <widget class="QLabel" name="errorFileLabel">
+           <property name="text">
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Error file&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           </property>
+           <property name="buddy">
+            <cstring>ErrorEdit</cstring>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="1">
+          <widget class="QLineEdit" name="ErrorEdit"/>
+         </item>
+         <item row="2" column="0">
+          <widget class="QLabel" name="referenceFileLabel">
+           <property name="text">
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Reference file&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           </property>
+           <property name="buddy">
+            <cstring>ReferenceEdit</cstring>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="1">
+          <widget class="QLineEdit" name="ReferenceEdit"/>
+         </item>
+         <item row="3" column="0">
+          <widget class="QLabel" name="sensorDataLabel">
+           <property name="text">
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Sensor data file&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           </property>
+           <property name="buddy">
+            <cstring>SensorEdit</cstring>
+           </property>
+          </widget>
+         </item>
+         <item row="3" column="1">
+          <widget class="QLineEdit" name="SensorEdit"/>
+         </item>
+         <item row="4" column="0">
+          <widget class="QLabel" name="actuatorDataLabel">
+           <property name="text">
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Actuator data file&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           </property>
+           <property name="buddy">
+            <cstring>ActuatorEdit</cstring>
+           </property>
+          </widget>
+         </item>
+         <item row="4" column="1">
+          <widget class="QLineEdit" name="ActuatorEdit"/>
+         </item>
+        </layout>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="sensorsTab">
+      <attribute name="title">
+       <string>Sensors</string>
+      </attribute>
+      <layout class="QVBoxLayout" name="sensorsTabLayout">
+       <item>
+        <widget class="QListWidget" name="sensorsListWidget"/>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="sensorButtonsLayout">
+         <item>
+          <widget class="QPushButton" name="addSensorButton">
+           <property name="text">
+            <string>Add</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="removeSensorButton">
+           <property name="text">
+            <string>Remove</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="actuatorsTab">
+      <attribute name="title">
+       <string>Actuators</string>
+      </attribute>
+      <layout class="QVBoxLayout" name="verticalLayout_4">
+       <item>
+        <widget class="QListWidget" name="actuatorsListWidget"/>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="actuatorsButtonsLayout">
+         <item>
+          <widget class="QPushButton" name="addActuatorButton">
+           <property name="text">
+            <string>Add</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="removePushButton">
+           <property name="text">
+            <string>Remove</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+      </layout>
+     </widget>
     </widget>
-   </widget>
-   <widget class="QWidget" name="tab_2">
-    <attribute name="title">
-     <string>Controller</string>
-    </attribute>
-    <widget class="QLabel" name="label">
-     <property name="geometry">
-      <rect>
-       <x>20</x>
-       <y>40</y>
-       <width>71</width>
-       <height>31</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Controller&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-     </property>
-    </widget>
-    <widget class="QComboBox" name="comboBox">
-     <property name="geometry">
-      <rect>
-       <x>100</x>
-       <y>40</y>
-       <width>301</width>
-       <height>27</height>
-      </rect>
-     </property>
-    </widget>
-    <widget class="QPushButton" name="pushButton_5">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>80</y>
-       <width>121</width>
-       <height>27</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>New controller</string>
-     </property>
-    </widget>
-    <widget class="QLabel" name="label_2">
-     <property name="geometry">
-      <rect>
-       <x>20</x>
-       <y>260</y>
-       <width>91</width>
-       <height>31</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Sample time&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-     </property>
-    </widget>
-    <widget class="QLabel" name="label_3">
-     <property name="geometry">
-      <rect>
-       <x>20</x>
-       <y>290</y>
-       <width>91</width>
-       <height>31</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Error file&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-     </property>
-    </widget>
-    <widget class="QLabel" name="label_4">
-     <property name="geometry">
-      <rect>
-       <x>20</x>
-       <y>320</y>
-       <width>101</width>
-       <height>31</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Reference file&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-     </property>
-    </widget>
-    <widget class="QLabel" name="label_5">
-     <property name="geometry">
-      <rect>
-       <x>20</x>
-       <y>350</y>
-       <width>111</width>
-       <height>31</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Sensor data file&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-     </property>
-    </widget>
-    <widget class="QLabel" name="label_11">
-     <property name="geometry">
-      <rect>
-       <x>20</x>
-       <y>380</y>
-       <width>121</width>
-       <height>31</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Actuator data file&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-     </property>
-    </widget>
-    <widget class="QLineEdit" name="SampleEdit">
-     <property name="geometry">
-      <rect>
-       <x>150</x>
-       <y>260</y>
-       <width>251</width>
-       <height>27</height>
-      </rect>
-     </property>
-    </widget>
-    <widget class="QLineEdit" name="ErrorEdit">
-     <property name="geometry">
-      <rect>
-       <x>150</x>
-       <y>290</y>
-       <width>251</width>
-       <height>27</height>
-      </rect>
-     </property>
-    </widget>
-    <widget class="QLineEdit" name="ReferenceEdit">
-     <property name="geometry">
-      <rect>
-       <x>150</x>
-       <y>320</y>
-       <width>251</width>
-       <height>27</height>
-      </rect>
-     </property>
-    </widget>
-    <widget class="QLineEdit" name="SensorEdit">
-     <property name="geometry">
-      <rect>
-       <x>150</x>
-       <y>350</y>
-       <width>251</width>
-       <height>27</height>
-      </rect>
-     </property>
-    </widget>
-    <widget class="QLineEdit" name="ActuatorEdit">
-     <property name="geometry">
-      <rect>
-       <x>150</x>
-       <y>380</y>
-       <width>251</width>
-       <height>27</height>
-      </rect>
-     </property>
-    </widget>
-    <widget class="QPushButton" name="pushButton_6">
-     <property name="geometry">
-      <rect>
-       <x>150</x>
-       <y>80</y>
-       <width>121</width>
-       <height>27</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Open Controller</string>
-     </property>
-    </widget>
-    <widget class="QPushButton" name="pushButton_7">
-     <property name="geometry">
-      <rect>
-       <x>290</x>
-       <y>80</y>
-       <width>121</width>
-       <height>27</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Compile</string>
-     </property>
-    </widget>
-    <widget class="QCheckBox" name="checkBox">
-     <property name="geometry">
-      <rect>
-       <x>20</x>
-       <y>10</y>
-       <width>171</width>
-       <height>22</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Hardware-in-the-loop</string>
-     </property>
-    </widget>
-   </widget>
-   <widget class="QWidget" name="tab_3">
-    <attribute name="title">
-     <string>Sensors</string>
-    </attribute>
-    <widget class="QListWidget" name="listWidget_2">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>10</y>
-       <width>391</width>
-       <height>351</height>
-      </rect>
-     </property>
-    </widget>
-    <widget class="QPushButton" name="pushButton_3">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>380</y>
-       <width>99</width>
-       <height>27</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Add</string>
-     </property>
-    </widget>
-    <widget class="QPushButton" name="pushButton_4">
-     <property name="geometry">
-      <rect>
-       <x>120</x>
-       <y>380</y>
-       <width>99</width>
-       <height>27</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Remove</string>
-     </property>
-    </widget>
-   </widget>
-   <widget class="QWidget" name="tab_4">
-    <attribute name="title">
-     <string>Actuators</string>
-    </attribute>
-    <widget class="QListWidget" name="listWidget">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>10</y>
-       <width>391</width>
-       <height>351</height>
-      </rect>
-     </property>
-    </widget>
-    <widget class="QPushButton" name="pushButton">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>380</y>
-       <width>99</width>
-       <height>27</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Add</string>
-     </property>
-    </widget>
-    <widget class="QPushButton" name="pushButton_2">
-     <property name="geometry">
-      <rect>
-       <x>120</x>
-       <y>380</y>
-       <width>99</width>
-       <height>27</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Remove</string>
-     </property>
-    </widget>
-   </widget>
-  </widget>
+   </item>
+   <item>
+    <layout class="QVBoxLayout" name="buttonBoxLayout">
+     <item>
+      <widget class="QDialogButtonBox" name="buttonBox">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+       <property name="standardButtons">
+        <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="buttonsSpacer">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>20</width>
+         <height>40</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+    </layout>
+   </item>
+  </layout>
  </widget>
  <resources/>
- <connections>
-  <connection>
-   <sender>buttonBox</sender>
-   <signal>accepted()</signal>
-   <receiver>Dialog</receiver>
-   <slot>accept()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>248</x>
-     <y>254</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>157</x>
-     <y>274</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>buttonBox</sender>
-   <signal>rejected()</signal>
-   <receiver>Dialog</receiver>
-   <slot>reject()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>316</x>
-     <y>260</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>286</x>
-     <y>274</y>
-    </hint>
-   </hints>
-  </connection>
- </connections>
+ <connections/>
 </ui>
