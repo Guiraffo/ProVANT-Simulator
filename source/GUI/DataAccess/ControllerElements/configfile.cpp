@@ -1,137 +1,397 @@
 #include "configfile.h"
-#include "QDebug"
 
-ConfigFile::ConfigFile(std::string filename):file(filename.c_str())
+#include <QtGlobal>
+
+/**
+ * @brief ConfigFile::setSensors Override the list of sensors.
+ * @param sensors
+ */
+void ConfigFile::setSensors(const QStringList &sensors)
 {
-    Filename = filename;
+    _sensors = sensors;
 }
 
-std::vector<std::string> ConfigFile::GetSensors(){return Sensors;}
-
-void ConfigFile::SetSensors(std::vector<std::string> listSensors){ Sensors = listSensors;}
-
-void ConfigFile::AddSensor(std::string sensor){Sensors.push_back(sensor);}
-
-void ConfigFile::DeleteSensor(int pos){Sensors.erase(Sensors.begin()+pos-1);}
-
-std::vector<std::string> ConfigFile::GetActuators(){return Actuators;}
-
-void ConfigFile::SetActuators(std::vector<std::string> listactuators){Actuators = listactuators;}
-
-void ConfigFile::AddActuator(std::string actuator){Actuators.push_back(actuator);}
-
-void ConfigFile::DeleteActuator(int pos){Actuators.erase(Actuators.begin()+pos-1);}
-
-std::string ConfigFile::GetStrategy(){return control_strategy;}
-
-void ConfigFile::SetStrategy(std::string strategy){control_strategy = strategy;}
-
-std::string ConfigFile::GetSampleTime(){return sample_time;}
-
-void ConfigFile::SetSampleTime(std::string sampletime){sample_time = sampletime;}
-
-std::string ConfigFile::GetCommunication(){return communication;}
-
-void ConfigFile::SetCommunication(std::string topicCommunication){communication = topicCommunication;}
-
-std::string ConfigFile::GetLogErro(){return erroFilename;}
-
-std::string ConfigFile::GetLogRef(){return refFilename;}
-
-std::string ConfigFile::GetLogOut(){return outFilename;}
-
-std::string ConfigFile::GetLogIn(){return inFilename;}
-
-
-void ConfigFile::SetLog(std::string erro,std::string ref,std::string out,std::string in)
+/**
+ * @brief ConfigFile::addSensor Add a new sensor to the list.
+ * @param sensor Name of the sensor that will be added to the list.
+ */
+void ConfigFile::addSensor(const QString &sensor)
 {
-    erroFilename = erro;
-    refFilename = ref;
-    outFilename = out;
-    inFilename = in;
+    _sensors.push_back(sensor);
 }
 
-std::string ConfigFile::GetStepTopic(){return stepTopic;}
-
-void ConfigFile::SetStepTopic(std::string topic){stepTopic = topic;}
-
-void ConfigFile::ReadFile()
+/**
+ * @brief ConfigFile::deleteSensor
+ * @param pos The position of the sensor to be removed.
+ *
+ * Removes a sensor from the sensors list by the index
+ */
+void ConfigFile::deleteSensor(int pos)
 {
-     control_strategy = Readitem("Strategy");
-     sample_time = Readitem("Sampletime");
-     communication = Readitem("topicdata");
-     erroFilename = Readitem("ErroPath");
-     refFilename = Readitem("RefPath");
-     outFilename = Readitem("Outputfile");
-     inFilename = Readitem("InputPath");
-     stepTopic = Readitem("TopicoStep");
-     Sensors = ReadAllItems("Sensors");
-     Actuators = ReadAllItems("Actuators");
+    _sensors.removeAt(pos);
 }
 
-std::string ConfigFile::Readitem(std::string tag)
+/**
+ * @brief ConfigFile::getActuators
+ * @return The list of actuators.
+ */
+const QStringList ConfigFile::getActuators() const
 {
-    file.close();
-    if(file.open(QIODevice::ReadOnly | QIODevice::Text))
+    return _actuators;
+}
+
+/**
+ * @brief ConfigFile::setActuators Overrides the list of actuators.
+ * @param actuators The new list of actuators.
+ */
+void ConfigFile::setActuators(const QStringList &actuators)
+{
+    _actuators = actuators;
+}
+
+/**
+ * @brief ConfigFile::addActuator Add a new actuator to the actuator list.
+ * @param actuator The name of the new actuator.
+ */
+void ConfigFile::addActuator(const QString &actuator)
+{
+    _actuators.push_back(actuator);
+}
+
+/**
+ * @brief ConfigFile::deleteActuator Remove a new acutator of the list by index.
+ * @param pos The index of the actuator to be removed.
+ */
+void ConfigFile::deleteActuator(int pos)
+{
+    _actuators.removeAt(pos);
+}
+
+/**
+ * @brief ConfigFile::getControlStrategy
+ * @return The name of the control strategy selected by this model.
+ */
+const QString &ConfigFile::getControlStrategy() const
+{
+    return _controlStrategy;
+}
+
+/**
+ * @brief ConfigFile::setStrategy
+ * @param strategy The name of the new control strategy.
+ */
+void ConfigFile::setStrategy(const QString &strategy)
+{
+    _controlStrategy = strategy;
+}
+
+/**
+ * @brief ConfigFile::getSampleTime
+ * @return The sample time to this controller.
+ */
+const QString &ConfigFile::getSampleTime() const
+{
+    return _sampleTime;
+}
+
+/**
+ * @brief ConfigFile::setSampleTime Defines the new sample time for the
+ * controller.
+ * @param sampleTime The sample time.
+ * @todo Identificar em que a unidade está o sample time e adicionar métodos
+ * com o tipo númerico correto.
+ */
+void ConfigFile::setSampleTime(const QString &sampleTime)
+{
+    _sampleTime = sampleTime;
+}
+
+/**
+ * @brief ConfigFile::getCommunication
+ * @return The communication.
+ * @todo Identificar o que é o objeto de comunicação.
+ */
+const QString &ConfigFile::getCommunication() const
+{
+    return _communication;
+}
+
+/**
+ * @brief ConfigFile::setCommunication Defines the new communication for the
+ * controller.
+ * @param comm
+ */
+void ConfigFile::setCommunication(const QString &comm)
+{
+    _communication = comm;
+}
+
+/**
+ * @brief ConfigFile::getErrorLogFilename
+ * @return The name of the file that should contain the error log.
+ */
+const QString &ConfigFile::getErrorLogFilename() const
+{
+    return _errorFilename;
+}
+
+/**
+ * @brief ConfigFile::getRefLogFilename
+ * @return The name of the file that should contain the reference log.
+ */
+const QString &ConfigFile::getRefLogFilename() const
+{
+    return _refFilename;
+}
+
+/**
+ * @brief ConfigFile::getOutLogFilename
+ * @return The name of the file that should contain the output log.
+ */
+const QString &ConfigFile::getOutLogFilename() const
+{
+    return _outFilename;
+}
+
+/**
+ * @brief ConfigFile::getInLog
+ * @return The name of the file that should contain the input log.
+ */
+const QString &ConfigFile::getInLog() const
+{
+    return _inFilename;
+}
+
+/**
+ * @brief ConfigFile::setLog Defines the filenames of the simulation logs.
+ * @param erro The filename of the error log.
+ * @param ref The filename of the reference log.
+ * @param out The filename of the output log.
+ * @param in The filename of the input log.
+ */
+void ConfigFile::setLog(const QString &erro,
+                        const QString &ref,
+                        const QString &out,
+                        const QString &in)
+{
+    _errorFilename = erro;
+    _refFilename = ref;
+    _outFilename = out;
+    _inFilename = in;
+}
+
+/**
+ * @brief ConfigFile::getStepTopic
+ * @return The name of the ROS topic used to increment
+ * the step of the simulation.
+ */
+const QString &ConfigFile::getStepTopic() const
+{
+    return _stepTopic;
+}
+
+/**
+ * @brief ConfigFile::setStepTopic Defines the name of the ROS topic used
+ * to increment the simulation step.
+ * @param topic The new topic name.
+ */
+void ConfigFile::setStepTopic(const QString &topic)
+{
+    _stepTopic = topic;
+}
+
+/**
+ * @brief ConfigFile::readFile Reads the content of the config file.
+ */
+void ConfigFile::readFile()
+{
+     _controlStrategy = readItem("Strategy");
+     _sampleTime = readItem("Sampletime");
+     _communication = readItem("topicdata");
+     _errorFilename = readItem("ErroPath");
+     _refFilename = readItem("RefPath");
+     _outFilename = readItem("Outputfile");
+     _inFilename = readItem("InputPath");
+     _stepTopic = readItem("TopicoStep");
+     _sensors = readAllItems("Sensors");
+     _actuators = readAllItems("Actuators");
+}
+
+/**
+ * @brief ConfigFile::createFile Creates a new config file with empty values in
+ * all parameters.
+ * @return True if the file was sucessfully created and false otherwise.
+ */
+bool ConfigFile::createFile()
+{
+    if ( _file.open(QIODevice::ReadWrite | QIODevice::Text) )
+    {
+        QXmlStreamWriter xml;
+        xml.setAutoFormatting(true);
+        xml.setDevice(&_file);
+        xml.writeStartDocument();
+        xml.writeStartElement("config");
+        xml.writeTextElement("topicdata", "");
+        xml.writeTextElement("TopicoStep", "");
+        xml.writeTextElement("Sampletime", "");
+        xml.writeTextElement("Strategy", "");
+        xml.writeTextElement("RefPath", "");
+        xml.writeTextElement("Outputfile", "");
+        xml.writeTextElement("InputPath", "");
+        xml.writeTextElement("ErroPath", "");
+        xml.writeStartElement("Sensors");
+        xml.writeEndElement(); //End Sensors element
+        xml.writeStartElement("Actuators");
+        xml.writeEndElement(); // End Actuators element
+        xml.writeEndDocument(); // End config element
+        _file.close();
+        return true;
+    }
+    else{
+        qCritical("Error when trying to create the file %s.\nThe file could not"
+                  "be opened.",
+                  qUtf8Printable(_filename));
+        return false;
+    }
+}
+
+/**
+ * @brief ConfigFile::writeFile Writes the configured options to a xml file.
+ * @return
+ */bool ConfigFile::writeFile()
+{
+    if(_file.open(QIODevice::ReadWrite|QIODevice::Truncate))
+    {
+        QXmlStreamWriter xml;
+        xml.setAutoFormatting(true);
+        xml.setDevice(&_file);
+        xml.writeStartDocument();
+
+        xml.writeStartElement("config");
+        xml.writeTextElement("topicdata", _communication);
+        xml.writeTextElement("TopicoStep", _stepTopic);
+        xml.writeTextElement("Sampletime", _sampleTime);
+        xml.writeTextElement("Strategy", _controlStrategy);
+        xml.writeTextElement("RefPath", _refFilename);
+        xml.writeTextElement("Outputfile", _outFilename);
+        xml.writeTextElement("InputPath", _inFilename);
+        xml.writeTextElement("ErroPath", _errorFilename);
+
+        xml.writeStartElement("Sensors");
+        for(int i=0; i < _sensors.size(); i++)
+        {
+            xml.writeTextElement("Device", _sensors.at(i));
+        }
+        xml.writeEndElement(); // End element Sensors
+
+        xml.writeStartElement("Actuators");
+        for(int i = 0; i < _actuators.size(); i++)
+        {
+            xml.writeTextElement("Device", _actuators.at(i));
+        }
+        xml.writeEndElement(); // End element Actuators
+
+        xml.writeEndElement(); // End element config
+        xml.writeEndDocument();
+
+        _file.close();
+        return true;
+    }
+    else
+    {
+        /*
+         * Logs the error and finishes the application.
+         */
+        //! @todo Create exception
+        qFatal("An error ocurred when trying to write the file %s.",
+               qUtf8Printable(_filename));
+        _file.close();
+        QCoreApplication::exit(1);
+    }
+    return false; // Just to please the compiler and avoid a "not all paths
+    // return a value warning.
+}
+
+/**
+ * @brief ConfigFile::readItem Read the contents of a single XML tag.
+ * @param tag The XML tag to read.
+ * @return The contents of the specified tag.
+ */
+QString ConfigFile::readItem(const QString &tag)
+{
+    /*
+     * The previous line contained here shouldn't do anything, so i updated
+     * the code to check if the file is opened and report the occurence of
+     * this error.
+     */
+    if(_file.isOpen()) {
+        _file.close();
+        qWarning("The _file %s was not properly closed in a "
+                 "previous instance.",
+                 qUtf8Printable(_file.fileName()));
+    }
+
+    if(_file.open(QIODevice::ReadOnly | QIODevice::Text))
     {
         QString erro;
-        int line, column;
-        if(document.setContent(&file,&erro,&line,&column))
+        int line = 0, column = 0;
+        if(_document.setContent(&_file, &erro, &line, &column))
         {
-            file.close();
-            return  document.firstChildElement("config")
-                            .firstChildElement(QString::fromStdString(tag))
-                            .text()
-                            .toStdString();
+            _file.close();
+            return  _document.firstChildElement("config")
+                            .firstChildElement(tag)
+                            .text();
         }
         else
         {
-            if (erro == "unexpected end of file")
-            {
-                qDebug() << "Arquivo Vazio";
-            }
-            else
-            {
-                qDebug()<< "Problemas com conteudo" << erro;
-                qDebug("Linha %d",line);
-                qDebug("Coluna %d",column);
-                file.close();
-                exit(1);
-            }
+            _file.close();
+            qFatal("An error (%s) ocurred when reading the %s file on line"
+                   " %d and column %d.",
+                   qUtf8Printable(_filename),
+                   qUtf8Printable(erro),
+                   line,
+                   column);
+            QCoreApplication::exit(1);
         }
     }
     else
     {
-        // TO DO: criar exceção
-        std::string msg;
-        msg = "2 - Problemas com o arquivo xml"+tag;
-        qDebug(msg.c_str());
-        file.close();
-        exit(1);
+        //! @todo Create exception
+        _file.close();
+        qFatal("An error ocurred when tyring to open the file %s.",
+               qUtf8Printable(_filename));
+
+        _file.close();
     }
-    file.close();
+    _file.close();
     return "";
 }
 
-std::vector<std::string> ConfigFile::ReadAllItems (std::string tag)
+/**
+ * @brief ConfigFile::readAllItems Reads the contents of all the tags
+ * under a specified XML tag.
+ * @param tag The tag whose elements should be read.
+ * @return The readed elements of the specified tag.
+ */
+QStringList ConfigFile::readAllItems(const QString &tag)
 {
-    std::vector<std::string> output;
-    if(file.open(QIODevice::ReadOnly | QIODevice::Text))
+    QStringList output;
+    if(_file.open(QIODevice::ReadOnly | QIODevice::Text))
     {
         QString erro;
         int line, column;
-        if(document.setContent(&file,&erro,&line,&column))
+        if(_document.setContent(&_file,&erro,&line,&column))
         {
-            file.close();
-            QDomNodeList devices = document.firstChildElement("config")
-                                           .firstChildElement((QString::fromStdString(tag)))
+            _file.close();
+            QDomNodeList devices = _document.firstChildElement("config")
+                                           .firstChildElement(tag)
                                            .elementsByTagName("Device");
             for(int i=0; i< devices.count(); i++)
             {
                 QDomNode device = devices.at(i);
                 if(device.isElement())
                 {
-                    output.push_back(device.toElement().text().toStdString());
+                    output.push_back(device.toElement().text());
                 }
             }
         }
@@ -143,108 +403,86 @@ std::vector<std::string> ConfigFile::ReadAllItems (std::string tag)
             }
             else
             {
-                qDebug()<< "Problemas com conteudo" << erro;
-                qDebug("Linha %d",line);
-                qDebug("Coluna %d",column);
-                file.close();
-                exit(1);
+                qDebug() << "Problemas com conteudo" << erro;
+                qDebug("Linha %d", line);
+                qDebug("Coluna %d", column);
+                _file.close();
+                QCoreApplication::exit(1);
             }
         }
     }
     else
     {
-        // TO DO: criar exceção
-        std::string msg;
-        msg = "1 - Problemas com o arquivo xml"+tag;
-        qDebug(msg.c_str());
-        file.close();
-        exit(1);
+        //! @todo Criar exceção
+        const QString msg = "1 - Problemas com o arquivo xml" + tag;
+        qFatal("An error ocurred when trying to read the file %s.",
+               qUtf8Printable(_file.fileName()));
+
+        _file.close();
+        QCoreApplication::exit(1);
     }
-    file.close();
+    _file.close();
     return output;
 }
 
-void ConfigFile::CreateFile()
+/**
+ * @brief ConfigFile::ConfigFile
+ * @param filename The path to the config file.
+ *
+ * Initializes the object, sets the filename and constructs the file object.
+ */
+ConfigFile::ConfigFile(const QString &filename) :
+    _filename(filename),
+    _file(filename)
 {
-    if ( file.open(QIODevice::ReadWrite) )
+
+}
+
+/**
+ * @brief ConfigFile::print
+ *
+ * Outputs the contents of the configfile to a debug window.
+ */
+void ConfigFile::print() const
+{
+    qDebug() << "Filename: " << qUtf8Printable(_filename);
+    qDebug() << "Control Strategy" << qUtf8Printable(_controlStrategy);
+    qDebug() << "Sample Time: " << qUtf8Printable(_sampleTime);
+    qDebug() << "Communication: " << qUtf8Printable(_communication);
+    qDebug() << "Error Filename: " << qUtf8Printable(_errorFilename);
+    qDebug() << "Ref Filename: " << qUtf8Printable(_refFilename);
+    qDebug() << "Out Filename: " << qUtf8Printable(_outFilename);
+    qDebug() << "In Filename: " << qUtf8Printable(_inFilename);
+    qDebug() << "Step Topic: " << qUtf8Printable(_stepTopic);
+
+    qDebug() << "Sensors: ";
+    for(int i = 0; i < _sensors.size(); i++)
     {
-        QXmlStreamWriter xml;
-        xml.setAutoFormatting(true);
-        xml.setDevice(&file);
-        xml.writeStartDocument();
-        xml.writeStartElement("config");
-        xml.writeTextElement("topicdata","");
-        xml.writeTextElement("TopicoStep","");
-        xml.writeTextElement("Sampletime","");
-        xml.writeTextElement("Strategy","");
-        xml.writeTextElement("RefPath","");
-        xml.writeTextElement("Outputfile","");
-        xml.writeTextElement("InputPath","");
-        xml.writeTextElement("ErroPath","");
-        xml.writeStartElement("Sensors");
-        xml.writeEndElement();
-        xml.writeStartElement("Actuators");
-        xml.writeEndElement();
-        xml.writeEndDocument();
-        file.close();
+        qDebug() << qUtf8Printable(_sensors.at(i));
+    }
+
+    qDebug() << "Actuators: ";
+    for(int i=0; i < _actuators.size(); i++)
+    {
+        qDebug() << qUtf8Printable(_actuators.at(i));
     }
 }
 
-void ConfigFile::WriteFile()
+/**
+ * @brief ConfigFile::clearSensorsAndActuators
+ * Clears the content of the lists of sensors and actuators.
+ */
+void ConfigFile::clearSensorsAndActuators()
 {
-    if(file.open(QIODevice::ReadWrite|QIODevice::Truncate))
-    {
-        QXmlStreamWriter xml;
-        xml.setAutoFormatting(true);
-        xml.setDevice(&file);
-        xml.writeStartDocument();
-        xml.writeStartElement("config");
-        xml.writeTextElement("topicdata",this->communication.c_str());
-        xml.writeTextElement("TopicoStep",this->stepTopic.c_str());
-        xml.writeTextElement("Sampletime",this->sample_time.c_str());
-        xml.writeTextElement("Strategy",this->control_strategy.c_str());
-        xml.writeTextElement("RefPath",this->refFilename.c_str());
-        xml.writeTextElement("Outputfile",this->outFilename.c_str());
-        xml.writeTextElement("InputPath",this->inFilename.c_str());
-        xml.writeTextElement("ErroPath",this->erroFilename.c_str());
-        xml.writeStartElement("Sensors");
-        for(uint i=0;i<Sensors.size();i++)xml.writeTextElement("Device",this->Sensors.at(i).c_str());
-        xml.writeEndElement();
-        xml.writeStartElement("Actuators");
-        for(uint i=0;i<Actuators.size();i++)xml.writeTextElement("Device",this->Actuators.at(i).c_str());
-        xml.writeEndElement();
-        xml.writeEndDocument();
-    }
-    else
-    {
-        // TO DO: criar exceção
-        qDebug("3- Problemas com o arquivo xml");
-        file.close();
-        exit(1);
-    }
-    file.close();
+    _actuators.clear();
+    _sensors.clear();
 }
 
-void ConfigFile::print()
+/**
+ * @brief ConfigFile::getSensors
+ * @return The list of sensors.
+ */
+const QStringList &ConfigFile::getSensors() const
 {
-    qDebug() << Filename.c_str();
-    qDebug() << control_strategy.c_str();
-    qDebug() << sample_time.c_str();
-    qDebug() << communication.c_str();
-    qDebug() << erroFilename.c_str();
-    qDebug() << refFilename.c_str();
-    qDebug() << outFilename.c_str();
-    qDebug() << inFilename.c_str();
-    qDebug() << stepTopic.c_str();
-    qDebug() << "Sensors:";
-    for(uint i=0; i < Sensors.size();i++) qDebug() << Sensors.at(i).c_str();
-    qDebug() << "Actuators:";
-    for(uint i=0; i < Actuators.size();i++) qDebug() << Actuators.at(i).c_str();
-}
-
-
-void ConfigFile::Delete()
-{
-    this->Actuators.clear();
-    this->Sensors.clear();
+    return _sensors;
 }
