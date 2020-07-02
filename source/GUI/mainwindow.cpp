@@ -7,11 +7,12 @@
 
 #include "mainwindow.h"
 
+#include <QTreeWidgetItemIterator>
+
 #include <fcntl.h>
 
-#include "Utils/appsettings.h"
-
 #include "applicationsettingsdialog.h"
+#include "Utils/appsettings.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -198,14 +199,15 @@ void MainWindow::on_actionNew_triggered()
     istemplate = true;
 }
 
-void MainWindow::on_treeWidget_itemDoubleClicked(QTreeWidgetItem *item, int column)
+void MainWindow::on_treeWidget_itemDoubleClicked(QTreeWidgetItem *item,
+                                                 int column)
 {
     // permite edição de dados na segunda coluna da árvore de dados
     if (column == 1 && item->text(0) != "uri") {
             ui->treeWidget->editItem(item, column);
         }
 
-    // se campo for do tipo uri, abrir diálogo de configuração do modelo
+    // If the field is of URI type, start the model editor.
     if(item->text(0) == "uri")
     {
         AppSettings settings;
@@ -213,72 +215,107 @@ void MainWindow::on_treeWidget_itemDoubleClicked(QTreeWidgetItem *item, int colu
         QDir dir(env);
         QStringList list;
         list = item->text(1).split("//");
-        if (!dir.cd(QString::fromStdString(list.at(1).toStdString()))) // "/tmp"
+
+        // Model description file
+        QString localModelPath = QDir::cleanPath(env +
+                                                 QDir::separator() +
+                                                 list.at(1) +
+                                                 QDir::separator() +
+                                                 "robot" +
+                                                 QDir::separator() +
+                                                 "model.sdf");
+
+        // Controller configuration file path
+        QString localConfig = QDir::cleanPath(
+                    env + QDir::separator() + list.at(1) + QDir::separator() +
+                    "config" + QDir::separator() + "config.xml");
+
+        // Opens the window
+        ModelSetupDialog modelsetup;
+        modelsetup.setModel(localModelPath.toStdString(),
+                            localConfig.toStdString());
+        modelsetup.setModal(true);
+        modelsetup.exec();
+
+        hil = modelsetup.hil;
+        QString s = QString::number(hil);
+
+        if(hil)
         {
-            // não faz nada
+
+            // Setando valores padronizados da simumlação para permitir bom
+            // funcionamento do HIL
+            for(int i = 0; i< ui->treeWidget->topLevelItemCount();i++)
+            {
+                QTreeWidgetItem* item = ui->treeWidget->topLevelItem(i);
+
+                if(item->text(0) == "Physics")
+                {
+                    QTreeWidgetItemIterator it(item);
+
+                    while(*it)
+                    {
+                        // Set step time
+                        if((*it)->text(0) == "Step time")
+                        {
+                            (*it)->setText(1, "0.004");
+                        }
+                        // Set the real time factor
+                        else if((*it)->text(0) == "Real time factor")
+                        {
+                            (*it)->setText(1, "1");
+                        }
+                        // Set the real time update rate
+                        else if((*it)->text(0) == "Real time update rate")
+                        {
+                            (*it)->setText(1, "250");
+                        }
+                        ++it;
+                    }
+                }
+                else if(item->text(0) == "Plugin")
+                {
+                    //! @todo Check the behavior of this part with Arthur
+                    //! This action was modified because it caused the
+                    //! application to crash after closing the modelsetupdialog.
+                    //item->child(2)->setText(1, QString("hil"));
+
+                    QTreeWidgetItemIterator it(item);
+
+                    while(*it)
+                    {
+                        if((*it)->text(0) == "ok")
+                        {
+                            (*it)->setText(1, "hil");
+                        }
+
+                        ++it;
+                    }
+                }
+            }
+
         }
         else
         {
-            // arquivo de descrição física
-            std::string localmodel = env.toStdString()+"/"+list.at(1).toStdString()+"/robot/model.sdf";
-            // arquivo de configuração de controlador
-            std::string localconfig = env.toStdString()+"/"+list.at(1).toStdString()+"/config/config.xml";
-            // abrir janela
-            ModelSetupDialog modelsetup;
-            modelsetup.setModel(localmodel,localconfig);
-            modelsetup.setModal(true);
-            modelsetup.exec();
-            hil = modelsetup.hil;
-            QString s = QString::number(hil);
-
-            if(hil)
+            // Disables the hil
+            for(int i = 0; i< ui->treeWidget->topLevelItemCount();i++)
             {
-                // Setando valores padronizados da simumlação para permitir bom
-                // funcionamento do HIL
-                for(int i = 0; i< ui->treeWidget->topLevelItemCount();i++)
+                QTreeWidgetItem* item = ui->treeWidget->topLevelItem(i);
+                if(item->text(0)=="Plugin")
                 {
-                    QTreeWidgetItem* item = ui->treeWidget->topLevelItem(i);
-                    if(item->text(0)=="Physics")
-                    {
-                        std::string description = "0.004"; // step time
-                        item->child(1)->setText(1, QString::fromStdString(description));
-                        std::string description2 = "1"; // fator de tempo real
-                        item->child(2)->setText(1, QString::fromStdString(description2));
-                        std::string description3 = "250"; // update
-                        item->child(3)->setText(1, QString::fromStdString(description3));
+                    QTreeWidgetItemIterator it(item);
 
-                    }
-                    if(item->text(0)=="Plugin")
+                    while(*it)
                     {
-                        item->child(2)->setText(1, QString("hil"));
-                    }
-                }
+                        if((*it)->text(0) == "ok")
+                        {
+                            (*it)->setText(1, "nothil");
+                        }
 
-            }
-            else
-            {
-                // Setando valores padronizados da simumlação para permitir bom
-                // funcionamento do HIL
-                for(int i = 0; i< ui->treeWidget->topLevelItemCount();i++)
-                {
-                    QTreeWidgetItem* item = ui->treeWidget->topLevelItem(i);
-                    /*if(item->text(0)=="Physics")
-                    {
-                        std::string description = "0.004"; // step time
-                        item->child(1)->setText(1, QString::fromStdString(description));
-                        std::string description2 = "1"; // fator de tempo real
-                        item->child(2)->setText(1, QString::fromStdString(description2));
-                        std::string description3 = "250"; // update
-                        item->child(3)->setText(1, QString::fromStdString(description3));
-
-                    }*/
-                    if(item->text(0)=="Plugin")
-                    {
-                        item->child(2)->setText(1, QString("nothil"));
+                        ++it;
                     }
                 }
             }
-
         }
     }
 }
