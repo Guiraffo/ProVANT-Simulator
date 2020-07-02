@@ -73,7 +73,7 @@ public:
     const QString getGazeboModelPathDefault() const;
     bool setGazeboModelPath(const QString &path);
 
-    const QString getProvanRosPathUnchecked() const;
+    const QString getProvantRosPathUnchecked() const;
     const QString getProvantRosPath() const;
     const QString getProvantRosPathDefault() const;
     bool setProvantRosPath(const QString &path);
@@ -102,6 +102,9 @@ public:
     const QString getRosPath() const;
     const QString getRosPathDefault() const;
     bool setRosPath(const QString &path);
+
+    bool checkAllParametersSet() const;
+    void applyValuesToEnvrionmentVariables();
 
 protected:
     QString getEnvironmentVariable(const QString &key,

@@ -44,6 +44,13 @@ MainWindow::MainWindow(QWidget *parent) :
     // nome que será observado na parte superior da janela
     const QString name("ProVANT Simulator v1");
     setWindowTitle(name);
+
+    // Verifica se todas as configurações de parametros está correta e em caso
+    // contrário, exibe mensagens de erro para o usuaŕio
+    AppSettings settings;
+    if(settings.checkAllParametersSet()) {
+        settings.applyValuesToEnvrionmentVariables();
+    }
 }
 
 MainWindow::~MainWindow()

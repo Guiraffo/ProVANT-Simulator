@@ -42,7 +42,7 @@ ApplicationSettingsDialog::ApplicationSettingsDialog(QWidget *parent) :
                 tr("Path to the directory containing the catkin workspace "
                    "source files. This directory is usually the \"src\" "
                    "directory inside your catkin workspace."));
-    ui->provantROSWidget->setFilePath(settings.getProvanRosPathUnchecked());
+    ui->provantROSWidget->setFilePath(settings.getProvantRosPathUnchecked());
 
     // Configura o Widget para o caminho de Tilt Strategies
     ui->tiltStrategiesLabel->setText(TILT_STRATEGIES_KEY);

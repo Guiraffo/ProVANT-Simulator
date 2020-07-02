@@ -85,7 +85,7 @@ bool AppSettings::setGazeboModelPath(const QString &path)
  * the current configured value for user modification, otherwise prefer
  * the getProvantRosPath method.
  */
-const QString AppSettings::getProvanRosPathUnchecked() const
+const QString AppSettings::getProvantRosPathUnchecked() const
 {
     return getDirectoryPath(PROVANT_ROS_KEY,
                             getProvantRosPathDefault());
@@ -390,6 +390,74 @@ bool AppSettings::setRosPath(const QString &path)
 }
 
 /**
+ * @brief AppSettings::checkAllParametersSet
+ * @return True if all options are correctly configured and false otherwise.
+ *
+ * Verifies if all the parameters are correctly configured.
+ * If one parameter is not configured, show the error message informing the
+ * user about the need of correction.
+ */
+bool AppSettings::checkAllParametersSet() const
+{
+    if(getProvantRosPath().isEmpty())
+    {
+        return false;
+    }
+    if(getTiltStrategiesPath().isEmpty())
+    {
+        return false;
+    }
+    if(getTiltProjectPath().isEmpty())
+    {
+        return false;
+    }
+    if(getTiltMatlabPath().isEmpty())
+    {
+        return false;
+    }
+    if(getProvantDatabasePath().isEmpty())
+    {
+        return false;
+    }
+    if(getGazeboModelPath().isEmpty())
+    {
+        return false;
+    }
+    if(getRosPath().isEmpty())
+    {
+        return false;
+    }
+    return true;
+}
+
+/**
+ * @brief AppSettings::applyValuesToEnvrionmentVariables
+ *
+ * Updates the values of all environment variables to the values from the
+ * QSettings configurations.
+ *
+ * This function doesn't verify if the configurations are set and point to valid
+ * locations.
+ *
+ * Its purpose is to ensure that any other ROS nodes spawned by the GUI that
+ * use one or more of the environment variables also have access to the correct
+ * values.
+ */
+void AppSettings::applyValuesToEnvrionmentVariables()
+{
+    setEnvironmentVariable(PROVANT_ROS_KEY, getProvantRosPathUnchecked());
+    setEnvironmentVariable(TILT_STRATEGIES_KEY,
+                           getTiltStratigiesPathUnchecked());
+    setEnvironmentVariable(TILT_PROJECT_KEY, getTiltProjectPathUnchecked());
+    setEnvironmentVariable(TILT_MATLAB_KEY, getTiltMatlabPathUnchecked());
+    setEnvironmentVariable(PROVANT_DATABASE_KEY,
+                           getProvantDatabsePathUnchecked());
+    setEnvironmentVariable(GAZEBO_MODEL_PATH_KEY,
+                           getGazeboModelPathUncheked());
+    setEnvironmentVariable(DIR_ROS_KEY, getRosPath());
+}
+
+/**
  * @brief AppSettings::getEnvironmentVariable
  * @param key The key to the desired environment variable (the environment
  * variable name)
@@ -478,6 +546,7 @@ const QString AppSettings::checkDirectoryPath(const QString &key,
                     _criticalMsgTitle,
                     errorMessage +
                     getErrorCorrectionMessage(key));
+        return QString();
     }
 
     return dir.absolutePath();
