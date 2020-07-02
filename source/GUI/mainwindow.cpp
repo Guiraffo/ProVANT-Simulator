@@ -18,7 +18,7 @@ MainWindow::MainWindow(QWidget *parent) :
     try
     {
         // Inserindo Logo
-        QPixmap provantLogo(":/logos/logos/provant_ufmg_ufsc.jpg");
+        QPixmap provantLogo(":/logos/logos/provant_ufmg_ufsc_fundoalpha.png");
         int w = ui->provantLogoDisplay->width();
         int h = ui->provantLogoDisplay->height();
         ui->provantLogoDisplay->setPixmap(
