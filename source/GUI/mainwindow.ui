@@ -14,27 +14,52 @@
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <layout class="QHBoxLayout" name="horizontalLayout_3">
-    <item>
-     <widget class="QTreeWidget" name="treeWidget">
-      <column>
-       <property name="text">
-        <string>Item</string>
+   <layout class="QGridLayout" name="gridLayout">
+    <item row="0" column="0">
+     <widget class="QSplitter" name="mainSplitter">
+      <property name="frameShape">
+       <enum>QFrame::NoFrame</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Raised</enum>
+      </property>
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+      <widget class="QTreeWidget" name="treeWidget">
+       <property name="minimumSize">
+        <size>
+         <width>250</width>
+         <height>400</height>
+        </size>
        </property>
-      </column>
-      <column>
-       <property name="text">
-        <string>Value</string>
+       <column>
+        <property name="text">
+         <string>Item</string>
+        </property>
+       </column>
+       <column>
+        <property name="text">
+         <string>Value</string>
+        </property>
+       </column>
+      </widget>
+      <widget class="QSplitter" name="rightSideSplitter">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
        </property>
-      </column>
-     </widget>
-    </item>
-    <item>
-     <layout class="QVBoxLayout" name="rightSideLayout">
-      <item>
-       <layout class="QHBoxLayout" name="upperRightSideLayout">
-        <item>
-         <layout class="QVBoxLayout" name="modelLayout">
+       <widget class="QSplitter" name="worldModelSplliter">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <widget class="QFrame" name="modelFrame">
+         <property name="frameShape">
+          <enum>QFrame::NoFrame</enum>
+         </property>
+         <property name="frameShadow">
+          <enum>QFrame::Raised</enum>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout">
           <item>
            <widget class="QLabel" name="modelLabel">
             <property name="text">
@@ -52,9 +77,15 @@
            <widget class="QGraphicsView" name="modelGraphicsView"/>
           </item>
          </layout>
-        </item>
-        <item>
-         <layout class="QVBoxLayout" name="worldLayout">
+        </widget>
+        <widget class="QFrame" name="worldFrame">
+         <property name="frameShape">
+          <enum>QFrame::NoFrame</enum>
+         </property>
+         <property name="frameShadow">
+          <enum>QFrame::Raised</enum>
+         </property>
+         <layout class="QVBoxLayout" name="worldFrameLayout">
           <item>
            <widget class="QLabel" name="worldLabel">
             <property name="text">
@@ -72,26 +103,43 @@
            <widget class="QGraphicsView" name="worldGraphicsView"/>
           </item>
          </layout>
-        </item>
-       </layout>
-      </item>
-      <item>
-       <layout class="QHBoxLayout" name="lowerRightSideLayout">
-        <item>
-         <widget class="QLabel" name="provantLogoDisplay">
-          <property name="minimumSize">
-           <size>
-            <width>291</width>
-            <height>121</height>
-           </size>
-          </property>
-          <property name="text">
-           <string/>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <layout class="QVBoxLayout" name="buttonsLayout">
+        </widget>
+       </widget>
+       <widget class="QSplitter" name="lowerRightSideSplitter">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <widget class="QFrame" name="provantLogoFrame">
+         <property name="frameShape">
+          <enum>QFrame::NoFrame</enum>
+         </property>
+         <property name="frameShadow">
+          <enum>QFrame::Raised</enum>
+         </property>
+         <layout class="QHBoxLayout" name="horizontalLayout">
+          <item>
+           <widget class="QLabel" name="provantLogoDisplay">
+            <property name="minimumSize">
+             <size>
+              <width>291</width>
+              <height>121</height>
+             </size>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+        <widget class="QFrame" name="buttonsFrame">
+         <property name="frameShape">
+          <enum>QFrame::NoFrame</enum>
+         </property>
+         <property name="frameShadow">
+          <enum>QFrame::Plain</enum>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_3">
           <item>
            <widget class="QPushButton" name="startGazeboPushButton">
             <property name="text">
@@ -107,10 +155,10 @@
            </widget>
           </item>
          </layout>
-        </item>
-       </layout>
-      </item>
-     </layout>
+        </widget>
+       </widget>
+      </widget>
+     </widget>
     </item>
    </layout>
   </widget>
