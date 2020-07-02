@@ -60,7 +60,8 @@ SOURCES += main.cpp\
     aboutdialog.cpp \
     DataAccess/GazeboElements/Items/multipleincludes.cpp \
     DataAccess/GazeboElements/Items/multipleplugins.cpp \
-    jointsdialog.cpp
+    jointsdialog.cpp \
+    processoutputwindow.cpp
 
 HEADERS  += mainwindow.h \
     DataAccess/ControllerElements/configfile.h \
@@ -102,7 +103,8 @@ HEADERS  += mainwindow.h \
     DataAccess/GazeboElements/Items/multipleincludes.h \
     DataAccess/GazeboElements/Items/multipleplugins.h \
     jointsdialog.h \
-    modelsetupdialog.h
+    modelsetupdialog.h \
+    processoutputwindow.h
 
 FORMS    += mainwindow.ui \
     Widgets/filebrowserwidget.ui \
@@ -114,7 +116,8 @@ FORMS    += mainwindow.ui \
 #    aboutform.ui \
     aboutdialog.ui \
     jointsdialog.ui \
-    jointsdialog.ui
+    jointsdialog.ui \
+    processoutputwindow.ui
 
 RESOURCES += \
     icons.qrc \
