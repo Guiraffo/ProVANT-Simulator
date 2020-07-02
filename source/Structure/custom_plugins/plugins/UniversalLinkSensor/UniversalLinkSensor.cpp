@@ -84,60 +84,60 @@ namespace gazebo
 			newmsg.header.stamp = ros::Time::now(); // time stamp
 			newmsg.header.frame_id = "1";
 			// more information http://osrf-distributions.s3.amazonaws.com/gazebo/api/dev/classgazebo_1_1physics_1_1Link.html
-			newmsg.values.push_back(link->GetRelativePose().pos.x);//0
-                        newmsg.values.push_back(link->GetRelativePose().pos.y);//1
-                        newmsg.values.push_back(link->GetRelativePose().pos.z);//2
-                        newmsg.values.push_back(link->GetRelativePose().rot.GetAsEuler( ).x);//3
-                        newmsg.values.push_back(link->GetRelativePose().rot.GetAsEuler( ).y);//4
-                        newmsg.values.push_back(link->GetRelativePose().rot.GetAsEuler( ).z);//5
-			newmsg.values.push_back(link->GetRelativeLinearVel().x);//6
-                        newmsg.values.push_back(link->GetRelativeLinearVel().y);//7
-                        newmsg.values.push_back(link->GetRelativeLinearVel().z);//8
-			newmsg.values.push_back(link->GetRelativeLinearAccel().x);//9
-                        newmsg.values.push_back(link->GetRelativeLinearAccel().y);//10
-                        newmsg.values.push_back(link->GetRelativeLinearAccel().z);//11
-			newmsg.values.push_back(link->GetRelativeForce().x);//12
-                        newmsg.values.push_back(link->GetRelativeForce().y);//13
-                        newmsg.values.push_back(link->GetRelativeForce().z);//14
-			newmsg.values.push_back(link->GetRelativeAngularVel().x);//15
-                        newmsg.values.push_back(link->GetRelativeAngularVel().y);//16
-                        newmsg.values.push_back(link->GetRelativeAngularVel().z);//17
-			newmsg.values.push_back(link->GetRelativeAngularAccel().x);//18
-                        newmsg.values.push_back(link->GetRelativeAngularAccel().y);//19
-                        newmsg.values.push_back(link->GetRelativeAngularAccel().z);//20
-			newmsg.values.push_back(link->GetRelativeTorque().x);//21
-                        newmsg.values.push_back(link->GetRelativeTorque().y);//22
-                        newmsg.values.push_back(link->GetRelativeTorque().z);//23
-			newmsg.values.push_back(link->GetWorldPose().pos.x);//24
-                        newmsg.values.push_back(link->GetWorldPose().pos.y);//25
-                        newmsg.values.push_back(link->GetWorldPose().pos.z);//26
-                        newmsg.values.push_back(link->GetWorldPose().rot.GetAsEuler( ).x);//27
-                        newmsg.values.push_back(link->GetWorldPose().rot.GetAsEuler( ).y);//28
-                        newmsg.values.push_back(link->GetWorldPose().rot.GetAsEuler( ).z);//29
-			newmsg.values.push_back(link->GetWorldLinearVel().x);//30
-                        newmsg.values.push_back(link->GetWorldLinearVel().y);//31
-                        newmsg.values.push_back(link->GetWorldLinearVel().z);//32
-			newmsg.values.push_back(link->GetWorldLinearAccel().x);//33
-                        newmsg.values.push_back(link->GetWorldLinearAccel().y);//34
-                        newmsg.values.push_back(link->GetWorldLinearAccel().z);//35
-			newmsg.values.push_back(link->GetWorldForce().x);//36
-                        newmsg.values.push_back(link->GetWorldForce().y);//37
-                        newmsg.values.push_back(link->GetWorldForce().z);//38
-			newmsg.values.push_back(link->GetWorldAngularVel().x);//39
-                        newmsg.values.push_back(link->GetWorldAngularVel().y);//40
-                        newmsg.values.push_back(link->GetWorldAngularVel().z);//41
-			newmsg.values.push_back(link->GetWorldAngularAccel().x);//42
-                        newmsg.values.push_back(link->GetWorldAngularAccel().y);//43
-                        newmsg.values.push_back(link->GetWorldAngularAccel().z);//44
-			newmsg.values.push_back(link->GetWorldTorque().x);//45
-                        newmsg.values.push_back(link->GetWorldTorque().y);//46
-                        newmsg.values.push_back(link->GetWorldTorque().z);//47
-			newmsg.values.push_back(link->GetWorldCoGLinearVel().x);//48
-                        newmsg.values.push_back(link->GetWorldCoGLinearVel().y);//49
-                        newmsg.values.push_back(link->GetWorldCoGLinearVel().z);//50
-			newmsg.values.push_back(link->GetWorldCoGPose().pos.x);//51
-                        newmsg.values.push_back(link->GetWorldCoGPose().pos.y);//52
-                        newmsg.values.push_back(link->GetWorldCoGPose().pos.z);//53
+			newmsg.values.push_back(link->RelativePose().Pos().X());//0
+                        newmsg.values.push_back(link->RelativePose().Pos().Y());//1
+                        newmsg.values.push_back(link->RelativePose().Pos().Z());//2
+                        newmsg.values.push_back(link->RelativePose().Rot().Euler().X());//3
+                        newmsg.values.push_back(link->RelativePose().Rot().Euler().Y());//4
+                        newmsg.values.push_back(link->RelativePose().Rot().Euler().Z());//5
+			newmsg.values.push_back(link->RelativeLinearVel().X());//6
+                        newmsg.values.push_back(link->RelativeLinearVel().Y());//7
+                        newmsg.values.push_back(link->RelativeLinearVel().Z());//8
+			newmsg.values.push_back(link->RelativeLinearAccel().X());//9
+                        newmsg.values.push_back(link->RelativeLinearAccel().Y());//10
+                        newmsg.values.push_back(link->RelativeLinearAccel().Z());//11
+			newmsg.values.push_back(link->RelativeForce().X());//12
+                        newmsg.values.push_back(link->RelativeForce().Y());//13
+                        newmsg.values.push_back(link->RelativeForce().Z());//14
+			newmsg.values.push_back(link->RelativeAngularVel().X());//15
+                        newmsg.values.push_back(link->RelativeAngularVel().Y());//16
+                        newmsg.values.push_back(link->RelativeAngularVel().Z());//17
+			newmsg.values.push_back(link->RelativeAngularAccel().X());//18
+                        newmsg.values.push_back(link->RelativeAngularAccel().Y());//19
+                        newmsg.values.push_back(link->RelativeAngularAccel().Z());//20
+			newmsg.values.push_back(link->RelativeTorque().X());//21
+                        newmsg.values.push_back(link->RelativeTorque().Y());//22
+                        newmsg.values.push_back(link->RelativeTorque().Z());//23
+			newmsg.values.push_back(link->WorldPose().Pos().X());//25
+                        newmsg.values.push_back(link->WorldPose().Pos().Y());//25
+                        newmsg.values.push_back(link->WorldPose().Pos().Z());//26
+                        newmsg.values.push_back(link->WorldPose().Rot().Euler().X());//27
+                        newmsg.values.push_back(link->WorldPose().Rot().Euler().Y());//28
+                        newmsg.values.push_back(link->WorldPose().Rot().Euler().Z());//29
+			newmsg.values.push_back(link->WorldLinearVel().X());//30
+                        newmsg.values.push_back(link->WorldLinearVel().Y());//31
+                        newmsg.values.push_back(link->WorldLinearVel().Z());//32
+			newmsg.values.push_back(link->WorldLinearAccel().X());//33
+                        newmsg.values.push_back(link->WorldLinearAccel().Y());//34
+                        newmsg.values.push_back(link->WorldLinearAccel().Z());//35
+			newmsg.values.push_back(link->WorldForce().X());//36
+                        newmsg.values.push_back(link->WorldForce().Y());//37
+                        newmsg.values.push_back(link->WorldForce().Z());//38
+			newmsg.values.push_back(link->WorldAngularVel().X());//39
+                        newmsg.values.push_back(link->WorldAngularVel().Y());//40
+                        newmsg.values.push_back(link->WorldAngularVel().Z());//41
+			newmsg.values.push_back(link->WorldAngularAccel().X());//42
+                        newmsg.values.push_back(link->WorldAngularAccel().Y());//43
+                        newmsg.values.push_back(link->WorldAngularAccel().Z());//44
+			newmsg.values.push_back(link->WorldTorque().X());//45
+                        newmsg.values.push_back(link->WorldTorque().Y());//46
+                        newmsg.values.push_back(link->WorldTorque().Z());//47
+			newmsg.values.push_back(link->WorldCoGLinearVel().X());//48
+                        newmsg.values.push_back(link->WorldCoGLinearVel().Y());//49
+                        newmsg.values.push_back(link->WorldCoGLinearVel().Z());//50
+			newmsg.values.push_back(link->WorldCoGPose().Pos().X());//51
+                        newmsg.values.push_back(link->WorldCoGPose().Pos().Y());//52
+                        newmsg.values.push_back(link->WorldCoGPose().Pos().Z());//53
 			
 			// publish data
 			publisher_.publish(newmsg);					

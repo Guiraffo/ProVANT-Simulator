@@ -16,7 +16,7 @@
 #include <gazebo/common/Events.hh>
 #include <update_timer.h>
 #include "std_msgs/Float64.h"
-#include <gazebo/math/Vector3.hh>
+// #include <gazebo/math/Vector3.hh>
 #include <ros/package.h>
 #include <log4cxx/logger.h>
 #include <log4cxx/xml/domconfigurator.h>

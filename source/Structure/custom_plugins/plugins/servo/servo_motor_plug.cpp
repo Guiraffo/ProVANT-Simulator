@@ -145,7 +145,7 @@ namespace gazebo
 			newmsg.name = TopicPublisher_;
 			newmsg.header.stamp = ros::Time::now(); // time stamp
 			newmsg.header.frame_id = "1";
-			newmsg.values.push_back(junta->GetAngle(0).Radian()); // angular position
+			newmsg.values.push_back(junta->Position(0)); // angular position
 			newmsg.values.push_back(junta->GetVelocity(0)); // angular velocity
 			// publishes data
 			motor_publisher_.publish(newmsg);

@@ -68,7 +68,7 @@ namespace gazebo
 	{
 		try
 		{
-			common::Time sim_time = world->GetSimTime();
+			common::Time sim_time = world->SimTime();
 			boost::mutex::scoped_lock scoped_lock(lock);
 //			data.header.stamp = ros::Time(sim_time.sec, sim_time.nsec);
 
@@ -76,46 +76,46 @@ namespace gazebo
 			newmsg.name = NameOfNode_;	
 			newmsg.header.stamp = ros::Time::now();
 			newmsg.header.frame_id = "1";
-			math::Pose pose = link->GetWorldPose();
+			ignition::math::Pose3d pose = link->WorldPose();
 			
-			newmsg.values.push_back(pose.pos.x); //0
-			newmsg.values.push_back(pose.pos.y); //1
-			newmsg.values.push_back(pose.pos.z); //2
-			newmsg.values.push_back(pose.rot.GetAsEuler().x); //3
-			newmsg.values.push_back(pose.rot.GetAsEuler().y); //4
-			newmsg.values.push_back(pose.rot.GetAsEuler().z); //5		
-			newmsg.values.push_back(juntaR->GetAngle(0).Radian()); //6
-			newmsg.values.push_back(juntaL->GetAngle(0).Radian()); //7
+			newmsg.values.push_back(pose.Pos().X()); //0
+			newmsg.values.push_back(pose.Pos().Y()); //1
+			newmsg.values.push_back(pose.Pos().Z()); //2
+			newmsg.values.push_back(pose.Rot().Euler().X()); //3
+			newmsg.values.push_back(pose.Rot().Euler().Y()); //4
+			newmsg.values.push_back(pose.Rot().Euler().Z()); //5		
+			newmsg.values.push_back(juntaR->Position(0)); //aR
+			newmsg.values.push_back(juntaL->Position(0)); //aL
 
-			math::Vector3 linear = link->GetWorldLinearVel();
+			ignition::math::Vector3d linear = link->WorldLinearVel();
 		
-			newmsg.values.push_back(linear.x); //8
-			newmsg.values.push_back(linear.y); //9
-			newmsg.values.push_back(linear.z); //10
+			newmsg.values.push_back(linear.X()); //8
+			newmsg.values.push_back(linear.Y()); //9
+			newmsg.values.push_back(linear.Z()); //10
 		
-			math::Vector3 angular = link->GetWorldAngularVel();
-			newmsg.values.push_back(angular.x); //11
-			newmsg.values.push_back(angular.y); //12
-			newmsg.values.push_back(angular.z); //13
+			ignition::math::Vector3d angular = link->WorldAngularVel();
+			newmsg.values.push_back(angular.X()); //11
+			newmsg.values.push_back(angular.Y()); //12
+			newmsg.values.push_back(angular.Z()); //13
 			newmsg.values.push_back(juntaR->GetVelocity(0)); //14
 			newmsg.values.push_back(juntaL->GetVelocity(0)); //15
 
-			//newmsg.values.push_back(angular.x*(1) + angular.y*((sin(pose.rot.GetAsEuler( ).x)*sin(pose.rot.GetAsEuler( ).y))/cos(pose.rot.GetAsEuler( ).y)) + angular.z*((cos(pose.rot.GetAsEuler( ).x)*sin(pose.rot.GetAsEuler( ).y))/cos(pose.rot.GetAsEuler( ).y)));
+			//newmsg.values.push_back(angular.X()*(1) + angular.Y()*((sin(pose.Rot().Euler().X())*sin(pose.Rot().Euler().Y()))/cos(pose.Rot().Euler().Y())) + angular.Z()*((cos(pose.Rot().Euler().X())*sin(pose.Rot().Euler().Y()))/cos(pose.Rot().Euler().Y())));
 
 			
-			//newmsg.values.push_back(angular.x*(0) + angular.y*(cos(pose.rot.GetAsEuler( ).x)) + angular.z*(-sin(pose.rot.GetAsEuler( ).x)));
+			//newmsg.values.push_back(angular.X()*(0) + angular.Y()*(cos(pose.Rot().Euler().X())) + angular.Z()*(-sin(pose.Rot().Euler().X())));
 			
-			//newmsg.values.push_back(angular.x*(0) + angular.y*(sin(pose.rot.GetAsEuler( ).x)/cos(pose.rot.GetAsEuler( ).y)) + angular.z*(cos(pose.rot.GetAsEuler( ).x)/cos(pose.rot.GetAsEuler( ).y)));
+			//newmsg.values.push_back(angular.X()*(0) + angular.Y()*(sin(pose.Rot().Euler().X())/cos(pose.Rot().Euler().Y())) + angular.Z()*(cos(pose.Rot().Euler().X())/cos(pose.Rot().Euler().Y())));
 
 			
-			//math::Vector3 linear = link->GetRelativeLinearVel();				
-			//newmsg.values.push_back(linear.x); 
-			//newmsg.values.push_back(linear.y);
-			//newmsg.values.push_back(linear.z); 
-			//math::Vector3 angular = link->GetRelativeAngularVel();	
-			//newmsg.values.push_back(angular.x); 
-			//newmsg.values.push_back(angular.y); 
-			//newmsg.values.push_back(angular.z);	
+			//ignition::math::Vector3d linear = link->RelativeLinearVel();				
+			//newmsg.values.push_back(linear.X()); 
+			//newmsg.values.push_back(linear.Y());
+			//newmsg.values.push_back(linear.Z()); 
+			//ignition::math::Vector3d angular = link->RelativeAngularVel();	
+			//newmsg.values.push_back(angular.X()); 
+			//newmsg.values.push_back(angular.Y()); 
+			//newmsg.values.push_back(angular.Z());	
 								
 			//newmsg.values.push_back(juntaR->GetVelocity(0)); 
 			//newmsg.values.push_back(juntaL->GetVelocity(0)); 

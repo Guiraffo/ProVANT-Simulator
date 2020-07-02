@@ -99,7 +99,7 @@ namespace gazebo
 					exit(1);
 				}
 			}
-			newmsg.values.push_back(junta->GetAngle(index).Radian()); // get angle
+			newmsg.values.push_back(junta->Position(index)); // get angle
 			newmsg.values.push_back(junta->GetVelocity(index)); // get velocity
 			newmsg.values.push_back(junta->GetForce(index)); // get force
 			

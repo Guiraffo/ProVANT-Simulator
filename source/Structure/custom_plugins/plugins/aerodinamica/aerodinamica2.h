@@ -9,7 +9,7 @@
 #include <gazebo/common/Events.hh>
 #include <update_timer.h>
 #include "std_msgs/Float64.h"
-#include <gazebo/math/Vector3.hh>
+// #include <gazebo/math/Vector3.hh>
 #include <ros/package.h>
 #include <log4cxx/logger.h>
 #include <log4cxx/xml/domconfigurator.h>
@@ -172,8 +172,8 @@ namespace gazebo
                     -0.91178,  -0.77285,  -0.6198,  -0.63052,  -0.70076,   -0.5343};
 
 			// forças aerodinâmicas
-//			math::Vector3 Ff, Fh, Fv;
-			math::Pose pose;
+//			ignition::math::Vector3d Ff, Fh, Fv;
+			ignition::math::Pose3d pose;
 			Eigen::MatrixXd R_IB, wind_I, wind_B;
 			Eigen::VectorXd DBf;
 			Eigen::VectorXd DBh;

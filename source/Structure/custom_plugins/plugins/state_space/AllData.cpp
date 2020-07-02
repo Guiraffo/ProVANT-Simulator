@@ -97,41 +97,41 @@ namespace gazebo
 			newmsg.name = NameOfNode_;
 			newmsg.header.stamp = ros::Time::now(); // time stamp
 			newmsg.header.frame_id = "1";
-			math::Pose pose = link->GetWorldPose();
-			newmsg.values.push_back(pose.pos.x); // x
-			newmsg.values.push_back(pose.pos.y); // y
-			newmsg.values.push_back(pose.pos.z); // z
-			newmsg.values.push_back(pose.rot.GetAsEuler( ).x); //roll
-			newmsg.values.push_back(pose.rot.GetAsEuler( ).y); // pitch
-			newmsg.values.push_back(pose.rot.GetAsEuler( ).z); // yaw
-			newmsg.values.push_back(juntaR->GetAngle(0).Radian()); // aR
-			newmsg.values.push_back(juntaL->GetAngle(0).Radian()); // aL
-			math::Vector3 linear = link->GetWorldLinearVel();
-			newmsg.values.push_back(linear.x); // vx
-			newmsg.values.push_back(linear.y); // vy
-			newmsg.values.push_back(linear.z); //vz
-			math::Vector3 angular = link->GetWorldAngularVel( );
+			ignition::math::Pose3d pose = link->WorldPose();
+			newmsg.values.push_back(pose.Pos().X()); // x
+			newmsg.values.push_back(pose.Pos().Y()); // y
+			newmsg.values.push_back(pose.Pos().Z()); // z
+			newmsg.values.push_back(pose.Rot().Euler().X()); //roll
+			newmsg.values.push_back(pose.Rot().Euler().Y()); // pitch
+			newmsg.values.push_back(pose.Rot().Euler().Z()); // yaw
+			newmsg.values.push_back(juntaR->Position(0)); //aR
+			newmsg.values.push_back(juntaL->Position(0)); //aL
+			ignition::math::Vector3d linear = link->WorldLinearVel();
+			newmsg.values.push_back(linear.X()); // vx
+			newmsg.values.push_back(linear.Y()); // vy
+			newmsg.values.push_back(linear.Z()); //vz
+			ignition::math::Vector3d angular = link->WorldAngularVel( );
 			
 			
 			//antigo
 			/*
-			newmsg.values.push_back(angular.x); //11
-			newmsg.values.push_back(angular.y); //12
-			newmsg.values.push_back(angular.z); //13
+			newmsg.values.push_back(angular.X()); //11
+			newmsg.values.push_back(angular.Y()); //12
+			newmsg.values.push_back(angular.Z()); //13
 			
 						// droll -> attention! we receive angular velocity, but we want to publish the derivative of euler angle
-			newmsg.values.push_back(angular.x*(1) + angular.y*((sin(pose.rot.GetAsEuler( ).x)*sin(pose.rot.GetAsEuler( ).y))/cos(pose.rot.GetAsEuler( ).y)) + angular.z*((cos(pose.rot.GetAsEuler( ).x)*sin(pose.rot.GetAsEuler( ).y))/cos(pose.rot.GetAsEuler( ).y)));
+			newmsg.values.push_back(angular.X()*(1) + angular.Y()*((sin(pose.Rot().Euler().X())*sin(pose.Rot().Euler().Y()))/cos(pose.Rot().Euler().Y())) + angular.Z()*((cos(pose.Rot().Euler().X())*sin(pose.Rot().Euler().Y()))/cos(pose.Rot().Euler().Y())));
 			// dpitch  -> attention! we receive angular velocity, but we want to publish the derivative of euler angle
-			newmsg.values.push_back(angular.x*(0) + angular.y*(cos(pose.rot.GetAsEuler( ).x)) + angular.z*(-sin(pose.rot.GetAsEuler( ).x)));
+			newmsg.values.push_back(angular.X()*(0) + angular.Y()*(cos(pose.Rot().Euler().X())) + angular.Z()*(-sin(pose.Rot().Euler().X())));
 			// dyaw -> attention! we receive angular velocity, but we want to publish the derivative of euler angle
-			newmsg.values.push_back(angular.x*(0) + angular.y*(sin(pose.rot.GetAsEuler( ).x)/cos(pose.rot.GetAsEuler( ).y)) + angular.z*(cos(pose.rot.GetAsEuler( ).x)/cos(pose.rot.GetAsEuler( ).y)));
+			newmsg.values.push_back(angular.X()*(0) + angular.Y()*(sin(pose.Rot().Euler().X())/cos(pose.Rot().Euler().Y())) + angular.Z()*(cos(pose.Rot().Euler().X())/cos(pose.Rot().Euler().Y())));
 			*/
 			
 			//novo			
 			//Maps to the body
-			Phi = pose.rot.GetAsEuler( ).x;
-			Theta = pose.rot.GetAsEuler( ).y;
-			Psi = pose.rot.GetAsEuler( ).z;
+			Phi = pose.Rot().Euler().X();
+			Theta = pose.Rot().Euler().Y();
+			Psi = pose.Rot().Euler().Z();
 			
 			RIB <<  (cos(Psi)*cos(Theta)), (cos(Psi)*sin(Phi)*sin(Theta) - cos(Phi)*sin(Psi)), (sin(Phi)*sin(Psi) + cos(Phi)*cos(Psi)*sin(Theta)),
 				(cos(Theta)*sin(Psi)), (cos(Phi)*cos(Psi) + sin(Phi)*sin(Psi)*sin(Theta)), (cos(Phi)*sin(Psi)*sin(Theta) - cos(Psi)*sin(Phi)), 
@@ -141,7 +141,7 @@ namespace gazebo
 			       0.0,  cos(Phi),  cos(Theta)*sin(Phi),
 	  	               0.0, -sin(Phi),  cos(Phi)*cos(Theta);
 	
-			WIIB << angular.x, angular.y, angular.z;
+			WIIB << angular.X(), angular.Y(), angular.Z();
 			PhipThetapPsip = W_n.inverse() * RIB.transpose() * WIIB;
 			
 			newmsg.values.push_back(PhipThetapPsip(0));

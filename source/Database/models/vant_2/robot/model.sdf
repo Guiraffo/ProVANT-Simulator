@@ -174,12 +174,6 @@
             <NameOfJointR>aR</NameOfJointR>
 	    	<BrushlessR>servodir</BrushlessR>
 	    	<BrushlessL>servoesq</BrushlessL>
-    	</plugin> 
-    	 <plugin name="teste" filename="libtestePlugin.so">
-    	</plugin> 
-    	 <plugin name="Angle" filename="libAnglePlugin.so">
-    	 <NameOfJoint>aL</NameOfJoint>
-    	 <TopicPublisher>teste</TopicPublisher>
-    	</plugin> 
+    	</plugin>
     </model>
 </sdf>

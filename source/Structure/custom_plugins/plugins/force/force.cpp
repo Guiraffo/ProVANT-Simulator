@@ -77,7 +77,7 @@ namespace gazebo
 		{
 			//Applying force
 			Fx = msg.data;
-			math::Vector3 force(Fx,0,0);
+			ignition::math::Vector3d force(Fx,0,0);
 			link->AddRelativeForce(force); // relative force
 		}
 		catch(std::exception& e)
@@ -93,7 +93,7 @@ namespace gazebo
 		{
 			//Applying force
 			Fy = msg.data;
-			math::Vector3 force(0,Fy,0);
+			ignition::math::Vector3d force(0,Fy,0);
 			link->AddRelativeForce(force);
 		}
 		catch(std::exception& e)
@@ -109,7 +109,7 @@ namespace gazebo
 		{
 			//Applying force
 			Fz = msg.data;
-			math::Vector3 force(0,0,Fz);
+			ignition::math::Vector3d force(0,0,Fz);
 			link->AddRelativeForce(force);
 		}
 		catch(std::exception& e)
