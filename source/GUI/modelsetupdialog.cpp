@@ -27,7 +27,9 @@ void ModelSetupDialog::setModel(std::string modelfile,std::string controllerfile
 
     // obtém modelo e controlador armazenados em arquivos
     model.getFirst(modelfile,ui->treeWidget);
-    controller.get(controllerfile,ui->sensorsListWidget,ui->actuatorsListWidget);
+    controller.open(QString::fromStdString(controllerfile),
+                    ui->sensorsListWidget,
+                    ui->actuatorsListWidget);
 
     // adiciona no combobox todos os controladores existentes
     AppSettings settings;
@@ -48,7 +50,7 @@ void ModelSetupDialog::setModel(std::string modelfile,std::string controllerfile
                 {
                     ui->controllerComboBox->addItem(file.fileName());
                     QString temp = "lib"+file.fileName()+".so";
-                    if(temp==QString::fromStdString(controller.config->GetStrategy()))
+                    if(temp == controller.config->getControlStrategy())
                     {
                         // item atual do combobox
                         j = i;
@@ -62,11 +64,11 @@ void ModelSetupDialog::setModel(std::string modelfile,std::string controllerfile
     }
 
     // adicionar demais informaçõeos à janela
-    ui->SampleEdit->setText(QString::fromStdString(controller.config->GetSampleTime()));
-    ui->ErrorEdit->setText(QString::fromStdString(controller.config->GetLogErro()));
-    ui->ActuatorEdit->setText(QString::fromStdString(controller.config->GetLogOut()));
-    ui->SensorEdit->setText(QString::fromStdString(controller.config->GetLogIn()));
-    ui->ReferenceEdit->setText(QString::fromStdString(controller.config->GetLogRef()));
+    ui->SampleEdit->setText(controller.config->getSampleTime());
+    ui->ErrorEdit->setText(controller.config->getErrorLogFilename());
+    ui->ActuatorEdit->setText(controller.config->getOutLogFilename());
+    ui->SensorEdit->setText(controller.config->getInLog());
+    ui->ReferenceEdit->setText(controller.config->getRefLogFilename());
 }
 
 void ModelSetupDialog::on_newControllerButton_clicked()
@@ -99,7 +101,7 @@ void ModelSetupDialog::on_newControllerButton_clicked()
                 {
                     ui->controllerComboBox->addItem(file.fileName());
                     QString temp = "lib"+file.fileName()+".so";
-                    if(temp==QString::fromStdString(controller.config->GetStrategy()))
+                    if(temp == controller.config->getControlStrategy())
                     {
                         // item atual do combobox
                         j = i;
@@ -182,29 +184,30 @@ void ModelSetupDialog::on_buttonBox_accepted()
 void ModelSetupDialog::SaveConfig()
 {
     // armazenando estratégia deo controle
-    controller.config->SetStrategy("lib"+ui->controllerComboBox->currentText().toStdString()+".so");
+    controller.config->setStrategy("lib" +
+                                   ui->controllerComboBox->currentText() +
+                                   ".so");
     // armazenando período de amostragem
-    controller.config->SetSampleTime(ui->SampleEdit->text().toStdString());
+    controller.config->setSampleTime(ui->SampleEdit->text());
     // armazenando nome dos arquivos para armazenamento de dados de simulação
-    controller.config->SetLog(ui->ErrorEdit->text().toStdString(),
-                              ui->ReferenceEdit->text().toStdString(),
-                              ui->ActuatorEdit->text().toStdString(),
-                              ui->SensorEdit->text().toStdString());
+    controller.config->setLog(ui->ErrorEdit->text(),
+                              ui->ReferenceEdit->text(),
+                              ui->ActuatorEdit->text(),
+                              ui->SensorEdit->text());
     // adicionando sensores
-    controller.config->Delete();
+    controller.config->clearSensorsAndActuators();
     for(int i = 0; i < ui->sensorsListWidget->count(); ++i)
     {
-        controller.config->AddSensor(ui->sensorsListWidget->item(i)->text().toStdString());
+        controller.config->addSensor(ui->sensorsListWidget->item(i)->text());
     }
     // adicionando atuadores
     for(int i = 0; i < ui->actuatorsListWidget->count(); ++i)
     {
-        controller.config->AddActuator(ui->actuatorsListWidget->item(i)->text().toStdString());
+        controller.config->addActuator(ui->actuatorsListWidget->item(i)->text());
     }
     // escrevendo em arquivo
-    controller.config->WriteFile();
+    controller.config->writeFile();
 }
-
 
 void ModelSetupDialog::on_hilCheckBox_clicked(bool checked)
 {

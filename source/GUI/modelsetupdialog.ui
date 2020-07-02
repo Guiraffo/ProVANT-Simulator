@@ -253,5 +253,38 @@
   </layout>
  </widget>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>accepted()</signal>
+   <receiver>ModelSetupDialog</receiver>
+   <slot>accept()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>562</x>
+     <y>20</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>560</x>
+     <y>346</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>rejected()</signal>
+   <receiver>ModelSetupDialog</receiver>
+   <slot>reject()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>550</x>
+     <y>110</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>590</x>
+     <y>422</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
 </ui>
