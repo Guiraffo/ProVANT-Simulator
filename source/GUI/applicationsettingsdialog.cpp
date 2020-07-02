@@ -53,7 +53,7 @@ ApplicationSettingsDialog::ApplicationSettingsDialog(QWidget *parent) :
                    "the  controllers. This directory is usually inside the "
                    "catkin workspace in the \"devel/lib\" directory."));
     ui->tiltStrategiesWidget->setFilePath(
-                settings.getTiltStratigiesPathUnchecked());
+                settings.getTiltStrategiesPathUnchecked());
 
     // Configura o Widget para o caminho de Tilt Project
     ui->tiltProjectLabel->setText(TILT_PROJECT_KEY);
@@ -87,7 +87,7 @@ ApplicationSettingsDialog::ApplicationSettingsDialog(QWidget *parent) :
                    "directory is inside the path to the \"TILT_PROJECT\" "
                    "directory under \"source/Database/\""));
     ui->provantDatabaseWidget->setFilePath(
-                settings.getProvantDatabsePathUnchecked());
+                settings.getProvantDatabasePathUnchecked());
 
     // Configura o Widget para o caminho de Gazebo Model Path
     ui->gazeboModelPathLabel->setText(GAZEBO_MODEL_PATH_KEY);
@@ -106,6 +106,21 @@ ApplicationSettingsDialog::ApplicationSettingsDialog(QWidget *parent) :
     ui->dirRosWidget->setToolTip(
                 tr("Path to your catkin workspace."));
     ui->dirRosWidget->setFilePath(settings.getRosPathUnchecked());
+
+    // Configura o Widget para o caminho de CONTROL_STRATEGIES_PATH
+    ui->controlStrategiesSourceLabel->setText(CONTROL_STRATEGIES_SOURCE_KEY);
+    ui->controlStrategiesSourceWidget->setBrowserDialogCaption(
+                tr("Control Strategies Source"));
+    ui->controlStrategiesSourceWidget->setBrowserType(
+                FileBrowserWidget::Directory);
+    ui->controlStrategiesSourceWidget->setToolTip(
+                tr("Path to the directory which contains the source files to "
+                   "all of the control strategies that can be used in the "
+                   "simulator. This directory is usually inside the path to "
+                   "\"%1\" under \"/source/Structure/control_strategies/\".")
+                .arg(TILT_PROJECT_KEY));
+    ui->controlStrategiesSourceWidget->setFilePath(
+                settings.getControlStrategiesPathUnchecked());
 }
 
 /**

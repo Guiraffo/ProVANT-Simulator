@@ -28,7 +28,7 @@ AppSettings::AppSettings(QObject *parent) : QObject(parent)
  * This function doesn't check if the currently configured value is valid.
  * Use this method only when extremamely necessary, such as in displaying
  * the current configured value for user modification, otherwise prefer
- * the getGazeboModelPath method.
+ * the getGazeboModelPath() method.
  */
 const QString AppSettings::getGazeboModelPathUncheked() const
 {
@@ -73,7 +73,7 @@ const QString AppSettings::getGazeboModelPathDefault() const
  */
 bool AppSettings::setGazeboModelPath(const QString &path)
 {
-    return setDirectoryPath(GAZEBO_MODEL_PATH_KEY, path);
+    return setDirectoryPath(GAZEBO_MODEL_PATH_KEY, path, true);
 }
 
 /**
@@ -83,7 +83,7 @@ bool AppSettings::setGazeboModelPath(const QString &path)
  * This function doesn't check if the currently configured value is valid.
  * Use this method only when extremamely necessary, such as in displaying
  * the current configured value for user modification, otherwise prefer
- * the getProvantRosPath method.
+ * the getProvantRosPath() method.
  */
 const QString AppSettings::getProvantRosPathUnchecked() const
 {
@@ -124,7 +124,7 @@ const QString AppSettings::getProvantRosPathDefault() const
  */
 bool AppSettings::setProvantRosPath(const QString &path)
 {
-    return setDirectoryPath(PROVANT_ROS_KEY, path);
+    return setDirectoryPath(PROVANT_ROS_KEY, path, true);
 }
 
 /**
@@ -134,9 +134,9 @@ bool AppSettings::setProvantRosPath(const QString &path)
  * This function doesn't check if the currently configured value is valid.
  * Use this method only when extremamely necessary, such as in displaying
  * the current configured value for user modification, otherwise prefer
- * the getTiltStrategiesPath method.
+ * the getTiltStrategiesPath() method.
  */
-const QString AppSettings::getTiltStratigiesPathUnchecked() const
+const QString AppSettings::getTiltStrategiesPathUnchecked() const
 {
     return getDirectoryPath(TILT_STRATEGIES_KEY,
                             getTiltStrategiesPathDefault());
@@ -176,7 +176,7 @@ const QString AppSettings::getTiltStrategiesPathDefault() const
  */
 bool AppSettings::setTiltStrategiesPath(const QString &path)
 {
-    return setDirectoryPath(TILT_STRATEGIES_KEY, path);
+    return setDirectoryPath(TILT_STRATEGIES_KEY, path, true);
 }
 
 /**
@@ -186,7 +186,7 @@ bool AppSettings::setTiltStrategiesPath(const QString &path)
  * This function doesn't check if the currently configured value is valid.
  * Use this method only when extremamely necessary, such as in displaying
  * the current configured value for user modification, otherwise prefer
- * the getTiltMatlabPath method.
+ * the getTiltMatlabPath() method.
  */
 const QString AppSettings::getTiltMatlabPathUnchecked() const
 {
@@ -230,7 +230,7 @@ const QString AppSettings::getTiltMatlabPathDefault() const
  */
 bool AppSettings::setTiltMatlabPath(const QString &path)
 {
-    return setDirectoryPath(TILT_MATLAB_KEY, path);
+    return setDirectoryPath(TILT_MATLAB_KEY, path, true);
 }
 
 /**
@@ -240,7 +240,7 @@ bool AppSettings::setTiltMatlabPath(const QString &path)
  * This function doesn't check if the currently configured value is valid.
  * Use this method only when extremamely necessary, such as in displaying
  * the current configured value for user modification, otherwise prefer
- * the getTiltStrategiesPath method.
+ * the getTiltStrategiesPath() method.
  */
 const QString AppSettings::getTiltProjectPathUnchecked() const
 {
@@ -282,7 +282,7 @@ const QString AppSettings::getTiltProjectPathDefault() const
  */
 bool AppSettings::setTiltProjectPath(const QString &path)
 {
-    return setDirectoryPath(TILT_PROJECT_KEY, path);
+    return setDirectoryPath(TILT_PROJECT_KEY, path, true);
 }
 
 /**
@@ -292,9 +292,9 @@ bool AppSettings::setTiltProjectPath(const QString &path)
  * This function doesn't check if the currently configured value is valid.
  * Use this method only when extremamely necessary, such as in displaying
  * the current configured value for user modification, otherwise prefer
- * the getProvantDatabasePath method.
+ * the getProvantDatabasePath() method.
  */
-const QString AppSettings::getProvantDatabsePathUnchecked() const
+const QString AppSettings::getProvantDatabasePathUnchecked() const
 {
     return getDirectoryPath(PROVANT_DATABASE_KEY,
                             getProvantDatabasePathDefault());
@@ -335,7 +335,7 @@ const QString AppSettings::getProvantDatabasePathDefault() const
  */
 bool AppSettings::setProvantDatabasePath(const QString &path)
 {
-    return setDirectoryPath(PROVANT_DATABASE_KEY, path);
+    return setDirectoryPath(PROVANT_DATABASE_KEY, path, true);
 }
 
 /**
@@ -345,7 +345,7 @@ bool AppSettings::setProvantDatabasePath(const QString &path)
  * This function doesn't check if the currently configured value is valid.
  * Use this method only when extremamely necessary, such as in displaying
  * the current configured value for user modification, otherwise prefer
- * the getRosPath method.
+ * the getRosPath() method.
  */
 const QString AppSettings::getRosPathUnchecked() const
 {
@@ -386,7 +386,72 @@ const QString AppSettings::getRosPathDefault() const
  */
 bool AppSettings::setRosPath(const QString &path)
 {
-    return setDirectoryPath(DIR_ROS_KEY, path);
+    return setDirectoryPath(DIR_ROS_KEY, path, true);
+}
+
+/**
+ * @brief AppSettings::getControlStrategiesPathUnchecked
+ * @return The path to the control strategies directory.
+ *
+ * This function doesn't check if the currently configured value is valid.
+ * Use this method only when extremamely necessary, such as in displaying
+ * the current configured value for user modification, otherwise prefer
+ * the getControlStrategiesPath() method.
+ */
+const QString AppSettings::getControlStrategiesPathUnchecked() const
+{
+    return getDirectoryPath(CONTROL_STRATEGIES_SOURCE_KEY,
+                            getControlStrategiesPathDefault());
+}
+
+/**
+ * @brief AppSettings::getControlStrategiesPath
+ * @return The path to the directory containing the source files for the
+ * control strategies contained in the simulator.
+ *
+ * This directory should contain all the source files for the control strategies
+ * that can be used with the simulator.
+ *
+ * Each control strategy should be under a directory named with the control
+ * strategy name.
+ *
+ * This function first tests if the returned value points to a valid system
+ * path and if not, shows an error message informing the user about this error
+ * and how to fix it.
+ */
+const QString AppSettings::getControlStrategiesPath() const
+{
+    return checkDirectoryPath(CONTROL_STRATEGIES_SOURCE_KEY,
+                              getControlStrategiesPathDefault(),
+                              tr("The path to the directory containing the "
+                                 "source files for the control strategies "
+                                 "used in the simulator."));
+}
+
+/**
+ * @brief AppSettings::getControlStrategiesPathDefault
+ * @return The default path to the CONTROL_STRATEGIES_SOURCE.
+ *
+ * See also: getControlStrategiesPath().
+ */
+const QString AppSettings::getControlStrategiesPathDefault() const
+{
+    return QDir::cleanPath(getTiltProjectPathDefault() + QDir::separator() +
+                           "/source/Structure/control_strategies");
+}
+
+/**
+ * @brief AppSettings::setControlStrategiesPath Updates the path to the
+ * controls strategies directory.
+ * @param path The new path to the control strategies source directory.
+ * @return True if the informed value points to a valid system path and false
+ * if the path is invalid.
+ *
+ * See also: getControlStrategiesPath().
+ */
+bool AppSettings::setControlStrategiesPath(const QString &path)
+{
+    return setDirectoryPath(CONTROL_STRATEGIES_SOURCE_KEY, path);
 }
 
 /**
@@ -427,6 +492,10 @@ bool AppSettings::checkAllParametersSet() const
     {
         return false;
     }
+    if(getControlStrategiesPath().isEmpty())
+    {
+        return false;
+    }
     return true;
 }
 
@@ -442,19 +511,90 @@ bool AppSettings::checkAllParametersSet() const
  * Its purpose is to ensure that any other ROS nodes spawned by the GUI that
  * use one or more of the environment variables also have access to the correct
  * values.
+ *
+ * This function should not contain the creation of an environemnt variable that
+ * isn't used by at least one program called by the GUI.
  */
 void AppSettings::applyValuesToEnvrionmentVariables()
 {
     setEnvironmentVariable(PROVANT_ROS_KEY, getProvantRosPathUnchecked());
     setEnvironmentVariable(TILT_STRATEGIES_KEY,
-                           getTiltStratigiesPathUnchecked());
+                           getTiltStrategiesPathUnchecked());
     setEnvironmentVariable(TILT_PROJECT_KEY, getTiltProjectPathUnchecked());
     setEnvironmentVariable(TILT_MATLAB_KEY, getTiltMatlabPathUnchecked());
     setEnvironmentVariable(PROVANT_DATABASE_KEY,
-                           getProvantDatabsePathUnchecked());
+                           getProvantDatabasePathUnchecked());
     setEnvironmentVariable(GAZEBO_MODEL_PATH_KEY,
                            getGazeboModelPathUncheked());
     setEnvironmentVariable(DIR_ROS_KEY, getRosPath());
+}
+
+/**
+ * @brief AppSettings::applyDefaultsToUndefinedParameters
+ *
+ * Check if the QSettings object has a key corresponding to each application
+ * parameter, if the option isn't set, the value is updated with the parameter
+ * default.
+ *
+ * All options already configured aren't modified.
+ */
+void AppSettings::applyDefaultsToUndefinedParameters()
+{
+    if(!settings.contains(PROVANT_ROS_KEY))
+    {
+        setProvantRosPath(getProvantRosPathDefault());
+    }
+    if(!settings.contains(TILT_STRATEGIES_KEY))
+    {
+        setTiltStrategiesPath(getTiltStrategiesPathDefault());
+    }
+    if(!settings.contains(TILT_PROJECT_KEY))
+    {
+        setTiltProjectPath(getTiltProjectPathDefault());
+    }
+    if(!settings.contains(TILT_MATLAB_KEY))
+    {
+        setTiltMatlabPath(getTiltMatlabPathDefault());
+    }
+    if(!settings.contains(PROVANT_DATABASE_KEY))
+    {
+        setProvantDatabasePath(getProvantDatabasePathDefault());
+    }
+    if(!settings.contains(GAZEBO_MODEL_PATH_KEY))
+    {
+        setGazeboModelPath(getGazeboModelPathDefault());
+    }
+    if(!settings.contains(DIR_ROS_KEY))
+    {
+        setRosPath(getRosPathDefault());
+    }
+    if(!settings.contains(CONTROL_STRATEGIES_SOURCE_KEY))
+    {
+        setControlStrategiesPath(getControlStrategiesPathDefault());
+    }
+}
+
+/**
+ * @brief AppSettings::restoreDefaults
+ *
+ * Sets all application settings to the respective default values.
+ *
+ * This function should be used with extreme care, since there is no way
+ * to undo this action after its realization.
+ *
+ * A good example of when to call this function is in the installation of the
+ * GUI in a new computer, where the configuration files don't exist yet.
+ */
+void AppSettings::restoreDefaults()
+{
+    setProvantRosPath(getProvantRosPathDefault());
+    setTiltStrategiesPath(getTiltStrategiesPathDefault());
+    setTiltProjectPath(getTiltProjectPathDefault());
+    setTiltMatlabPath(getTiltMatlabPathDefault());
+    setProvantDatabasePath(getProvantDatabasePathDefault());
+    setGazeboModelPath(getGazeboModelPathDefault());
+    setRosPath(getRosPathDefault());
+    setControlStrategiesPath(getControlStrategiesPathDefault());
 }
 
 /**
@@ -556,6 +696,8 @@ const QString AppSettings::checkDirectoryPath(const QString &key,
  * @brief AppSettings::setDirectoryPath
  * @param key The key to the parameter that will be updated.
  * @param value The new value to the parameter.
+ * @param setEnvironmentVariable_ Indicates if the parameter should also be
+ * persisted in an enviornment variable.
  * @return True if the path is valid and the operation was concluded and false
  * otherwise.
  *
@@ -565,13 +707,17 @@ const QString AppSettings::checkDirectoryPath(const QString &key,
  * If the path is valid, the QSettings value is updated along with the value
  * in the environment variables.
  */
-bool AppSettings::setDirectoryPath(const QString &key, const QString &value)
+bool AppSettings::setDirectoryPath(const QString &key, const QString &value,
+                                   bool setEnrionmentVariable_)
 {
     QDir dir(value);
 
     if(dir.exists()) {
         settings.setValue(key, value);
-        setEnvironmentVariable(key, value);
+        if(setEnrionmentVariable_)
+        {
+            setEnvironmentVariable(key, value);
+        }
         return true;
     }
     return false;

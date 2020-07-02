@@ -26,41 +26,51 @@ static const QString TILT_PROJECT_KEY = "TILT_PROJECT";
 static const QString PROVANT_DATABASE_KEY = "PROVANT_DATABASE";
 //! The key used to access the DirRosPath.
 static const QString DIR_ROS_KEY = "DIR_ROS";
+//! The key used to access the parameter ControlStrategiesPath
+static const QString CONTROL_STRATEGIES_SOURCE_KEY = "CONTROL_STRATEGIES_SOURCE";
 
 /*!
  * \brief The AppSettings class is used to access all the paths used in the
  * application.
  *
- * This class was created to be a single source of thruth for the paths of the
- * used in the application.
+ * This class was created as a single source of truth for the settings used in
+ * the application.
  *
- * Two kinds of access methods are provided for each parameter.
- * The first one is checked, and verifies if the path is valid, if it isn't
- * an error message is show to the user in a dialog box, informing which
- * parameter is incorrectly configured and explaining to the user which actions
- * should be taken to fix the error.
+ * Each setting in this class should provide the following methods:
+ *  - A method to access the parameter without checking if its configuration is
+ * valid. This option is used to display the current value of the parameter to
+ * the user.  Most existing parameters use the getDirectoryPath() method.
+ *  - A method to access the parameter and check if its value is correct. In
+ *  case of an error, this should be logged and reported to the user. Most
+ *  existing parameters use the checkDirectoryPath() method.
+ *  - A method to return the default value for the parameter. For parameters
+ *  regarding the location of directories, this value is the original path on
+ *  a fresh install.
+ *  - A method for setting a new value for the parameter. Most existing
+ * parameters use the setDirectoryPath() method.
  *
- * The second one is unchecked and is intended to be used when the check is
- * redundant or unecessary, such as displaying the current value of the
- * parameter for user modification.
+ * A new parameter should also define a static const QString containing the key
+ * used to access the parameter value in the QSettings and, if needed,
+ * in environment variables.
  *
- * When reading the values, first the function tries to read the value from
- * the QSettings object. This is the primary option because it is a more
- * portable option across diferent operational systems and more robust than
- * using environment variables, since the application can always read its
- * own configurations, but it needs to the opened from a previously configured
- * terminal session to have access to the user environment variables.
+ * Please note that an environment variable with the parameter value should
+ * only be created if this value is necessary to at least one program started
+ * by the GUI.
  *
- * If the QSettings option hasn't been configured, the value of the environment
- * variable is then read. If this value is a valid path, it is returned,
- * otherwise a default path is returned.
+ * Don't forget to update the methods checkAllParametersSet(),
+ * applyValuesToEnvironmentVariables(), restoreDefaults() and
+ * applyDefaultsToUndefinedParameters() to include the new parameter.
  *
- * The dafault paths were created based on the path of the Folders contained in
- * the simulator source files.
+ * The access to settings first checks if the value is present in the
+ * QSettings object; if the value isn't set, the environment variable with the
+ * same name is queried. If both the previous attempts return an empty value
+ * (meaning the value isn't set), the method returns the default.
  *
- * The methods used for setting the values in the QSettings object also sets
- * the values in the respective environment variables to maintain compatibility
- * with previous versions.
+ * Error messages exhibited to the user should report what the parameter
+ * represents in the application and the steps to fix the error.
+ *
+ * Eror messages logged should report a problem with the access of a value.
+ *
  */
 class AppSettings : public QObject
 {
@@ -78,7 +88,7 @@ public:
     const QString getProvantRosPathDefault() const;
     bool setProvantRosPath(const QString &path);
 
-    const QString getTiltStratigiesPathUnchecked() const;
+    const QString getTiltStrategiesPathUnchecked() const;
     const QString getTiltStrategiesPath() const;
     const QString getTiltStrategiesPathDefault() const;
     bool setTiltStrategiesPath(const QString &path);
@@ -93,7 +103,7 @@ public:
     const QString getTiltProjectPathDefault() const;
     bool setTiltProjectPath(const QString &path);
 
-    const QString getProvantDatabsePathUnchecked() const;
+    const QString getProvantDatabasePathUnchecked() const;
     const QString getProvantDatabasePath() const;
     const QString getProvantDatabasePathDefault() const;
     bool setProvantDatabasePath(const QString &path);
@@ -103,8 +113,15 @@ public:
     const QString getRosPathDefault() const;
     bool setRosPath(const QString &path);
 
+    const QString getControlStrategiesPathUnchecked() const;
+    const QString getControlStrategiesPath() const;
+    const QString getControlStrategiesPathDefault() const;
+    bool setControlStrategiesPath(const QString &path);
+
     bool checkAllParametersSet() const;
     void applyValuesToEnvrionmentVariables();
+    void applyDefaultsToUndefinedParameters();
+    void restoreDefaults();
 
 protected:
     QString getEnvironmentVariable(const QString &key,
@@ -118,7 +135,9 @@ protected:
     const QString checkDirectoryPath(const QString &path,
                                      const QString &defaultValue,
                                      const QString &errorMessage) const;
-    bool setDirectoryPath(const QString &key, const QString &value);
+    bool setDirectoryPath(const QString &key,
+                          const QString &value,
+                          bool setEnrionmentVariable = false);
     bool setEnvironmentVariable(const QString &key, const QString &value);
 
 private:
