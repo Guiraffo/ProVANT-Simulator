@@ -6,7 +6,6 @@
 #include "QApplication"
 #include "QDesktopWidget"
 #include "QFileDialog"
-#include "qdebug.h"
 #include "Business/world.h"
 #include "Business/model.h"
 #include "DataAccess/RosElements/roslaunch.h"

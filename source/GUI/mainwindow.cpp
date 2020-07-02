@@ -7,11 +7,14 @@
 
 #include "mainwindow.h"
 
+#include <QDebug>
+#include <QMessageBox>
 #include <QTreeWidgetItemIterator>
 
 #include <fcntl.h>
 
 #include "applicationsettingsdialog.h"
+#include "processoutputwindow.h"
 #include "Utils/appsettings.h"
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -61,41 +64,156 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_startGazeboPushButton_clicked()
 {
+    // Get a list with all the models available under gazeboModelPath
+    AppSettings settings;
+    QString gazeboModelPath = settings.getGazeboModelPath();
+    QDir gazeboModelPathDir(gazeboModelPath);
+
+    // Checks if gazebo model is valid, if it isn't report the error to the
+    // user and stops the execution of this method.
+    if(!gazeboModelPathDir.exists())
+    {
+        QMessageBox::critical(
+                    this,
+                    tr("Error"),
+                    tr("An error ocurred while reading the gazebo model path, "
+                       "and therefore it is not possible to start the "
+                       "simulation. Please fix the configure value of the "
+                       "gazebo model path and try again."));
+        qCritical() << "An error ocurred when trying to start the gazebo "
+                       "simulation. The path to the gazebo model path was "
+                       "invalid and the startup process was halted.";
+        return;
+    }
+
+    // Get a list of all the directories under gazeboModelPath
+    QFileInfoList gazeboModels = gazeboModelPathDir.entryInfoList(
+                QDir::NoDotAndDotDot | QDir::Dirs);
+
+    // A string with the path of the model config file path.
+    QString modelConfigFilePath;
+
+    // Find the include values in the tree widget
     for(int i=0;i<ui->treeWidget->topLevelItemCount();i++)
     {
-        // analisar todos os os modelos do gazebo existentes no mundo
-        if(ui->treeWidget->topLevelItem(i)->text(0)=="Include")
+        if(ui->treeWidget->topLevelItem(i)->text(0) == "Include")
         {
-            // adquire a URL onde estão armazenados todos os modelos de vant do ambiente de simulação
-            AppSettings settings;
-            QString env = settings.getGazeboModelPath();
-            QDir dir(env);
-
-            // Listando Modelos
-            QFileInfoList files = dir.entryInfoList();
-            foreach (QFileInfo file, files)
+            // Fins the item with the uri
+            QString modelName;
+            QTreeWidgetItem *currentItem = ui->treeWidget->topLevelItem(i);
+            for(int i = 0; i < currentItem->childCount(); i++)
             {
-                if (file.isDir())
+                if(currentItem->child(i)->text(0) == "uri")
                 {
-                    // determinou-se que o terceiro include, corresponde sempre ao modelo do vant
-                    if(file.fileName() == ui->treeWidget->topLevelItem(i)->child(3)->text(1).replace("model://",""))
-                    {
-                         env = env +
-                                 "/" +
-                                 ui->treeWidget->topLevelItem(i)->child(3)->text(1).replace("model://","") +
-                                "/config/config.xml";
-
-                         // informa o arquivo de configuração da malha de controle configurada na interface de simulação
-                         // para dado vant (arquivo se ecnontra dentro da pasta config com o nome config.xml)
-                         std::string command("export TILT_CONFIG="+env.toStdString());
-                         std::system(command.c_str());
-                    }
+                    modelName = currentItem->child(i)->text(1).replace(
+                                "model://", "");
+                    break;
                 }
+            }
+
+            // If a model URI was not found, continues the loop to the next
+            // element
+            if(modelName.isEmpty())
+            {
+                continue;
+            }
+
+            // Loops trough the models list
+            foreach (const QFileInfo &model, gazeboModels)
+            {
+                // Checks if the current model directory is equal to the
+                // model managed by the tree widget item.
+                if(model.fileName() == modelName)
+                {
+                    // Sets the path to the model config file and stops the
+                    // loop
+                    modelConfigFilePath = QDir::cleanPath(
+                                gazeboModelPath +
+                                QDir::separator() +
+                                modelName +
+                                QDir::separator() +
+                                "config" +
+                                QDir::separator() +
+                                "config.xml");
+                    break;
+                }
+            }
+
+            // If the model was already found, finishes the loop
+            if(!modelConfigFilePath.isEmpty())
+            {
+                break;
             }
         }
     }
 
-    QString base;
+    /*
+     * If the modelConfigFilePath variable is empty, its because
+     */
+    if(modelConfigFilePath.isEmpty())
+    {
+        qCritical() << "An error ocurred while trying to start the gazebo "
+                       "simulation. A valid model was not found under the "
+                       "gazebo model path directory for the currently selected "
+                       "world file.";
+        QMessageBox::critical(
+                    this,
+                    tr("Error"),
+                    tr("A model was not found under the gazebo model path "
+                       "that matches any of the models specified in this "
+                       "simulation world. Please check the values of the "
+                       "configured models path and of the gazebo model path "
+                       "setting and try again."));
+        return;
+    }
+
+    // Stores the environment variable for the new simulation process
+    QProcessEnvironment gazeboProcessEnv = settings.getEnvironmentVariables();
+
+    // Checks if the model config file path is valid
+    QFileInfo configFileInfo(modelConfigFilePath);
+    if(configFileInfo.exists())
+    {
+        // Sets the TILT_CONFIG environment variable.
+        if(!qputenv("TILT_CONFIG", modelConfigFilePath.toLocal8Bit()))
+        {
+            qCritical() << "An error ocurred while trying to start the gazebo "
+                           "simulation. It was not possible to set the "
+                           "TILT_CONFIG environment variable.";
+            QMessageBox::critical(
+                        this,
+                        tr("Error"),
+                        tr("A fatal error ocurred, it was not possible to set "
+                           "the value of the TILT_CONFIG environment "
+                           "variable. Check your user permissions and try "
+                           "again."));
+            gazeboProcessEnv.insert("TILT_CONFIG", modelConfigFilePath);
+            return;
+        }
+    }
+    else
+    {
+        qCritical() << "An error ocurred while trying to start the gazebo "
+                       "simulation. The file in the specified path "
+                    << modelConfigFilePath << " does not exist.";
+        QMessageBox::critical(
+                    this,
+                    tr("Error"),
+                    tr("The file %1 does not exist, please check the model "
+                       "configuration and the value of the gazebo model path "
+                       "setting and try again."));
+        return;
+    }
+
+    QString launchFile;
+    /*
+     * OBS: This section of the code wont be refactored now.
+     * I'm leaving it as is, note that a few modifications will be necessary
+     * here to finish upgrading the use of system to QProcess.
+     *
+     * Further modification will be nedded to add a feature allowing the user
+     * to select the USB port on the GUI.
+     */
     if(hil)
     {
         std::system("kill `pgrep gzclient`");
@@ -105,34 +223,61 @@ void MainWindow::on_startGazeboPushButton_clicked()
         int open_result = open("/dev/ttyUSB0", O_RDWR | O_NOCTTY);
         if(open_result == -1)
         {
-            qDebug() << "Port Failed to Open";
+            qCritical() << "Port Failed to Open";
             exit(EXIT_FAILURE);
         }
         else
         {
             std::system("setserial /dev/ttyUSB0 low_latency");
         }
-        base = QString("hil.launch");
-    }
-    else base = QString ("gazebo.launch");
-
-    if(istemplate) // caso seja template, o usuário é obrigado a adicionar informações em um arquivo .world
-    {
-        if(SaveAs())
-        {
-            mundo.Write(ui->treeWidget); // salvar modificações no mesmo arquivo de destino
-            roslaunch::WriteNew(QString::fromStdString(mundo.word->Filename),base,hil); // configurando rotina de inicilização do simulador
-            base = "xterm -e roslaunch Database " + base + " &";
-            std::system(base.toStdString().c_str()); // comando de inicializar simulação
-        }
+        launchFile = QString("hil.launch");
     }
     else
     {
-        mundo.Write(ui->treeWidget); // salvar modificações no mesmo arquivo de destino
-        roslaunch::WriteNew(QString::fromStdString(mundo.word->Filename),base,hil); // configurando rotina de inicilização do simulador
-        base = "xterm -e roslaunch Database " + base + " &";
-        std::system(base.toStdString().c_str()); // comando de inicializar simulação
+        launchFile = QString("gazebo.launch");
     }
+
+    // Check if the currently opened file is a template.
+    // If it is. Saves the file.
+    if(istemplate)
+    {
+        if(!SaveAs())
+        {
+            qCritical() << "Error, the template file must be saved before "
+                           "running the simulation.";
+            QMessageBox::critical(
+                        this,
+                        tr("Error"),
+                        tr("The currently selected file is a template, so it "
+                           "must be saved before running the simulation."));
+            return;
+        }
+    }
+
+    // Start the simulation.
+    // Saves the modifications in  the simulation file.
+    mundo.Write(ui->treeWidget);
+    // Writes a new roslaunch file for the simulation
+    roslaunch::WriteNew(QString::fromStdString(mundo.word->Filename),
+                        launchFile,
+                        hil);
+
+    QString gazeboProcessCmd = "roslaunch";
+    QStringList gazeboProcessArgs;
+    gazeboProcessArgs << "Database" << launchFile;
+
+    // Creates the process to execute the simulation
+    QProcess *gazeboSimulationProcess = new QProcess(this);
+    gazeboSimulationProcess->setProcessEnvironment(gazeboProcessEnv);
+    gazeboSimulationProcess->setWorkingDirectory(
+                settings.getCatkinWorkspacePath());
+    gazeboSimulationProcess->setProgram(gazeboProcessCmd);
+    gazeboSimulationProcess->setArguments(gazeboProcessArgs);
+
+    ProcessOutputWindow *gazeboProcessWindow = new ProcessOutputWindow(
+                gazeboSimulationProcess, this);
+    gazeboProcessWindow->show();
+    gazeboProcessWindow->start();
 
     ui->jointValuesPushButton->setDisabled(false);
 }
