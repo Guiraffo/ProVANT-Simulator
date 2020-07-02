@@ -1,0 +1,440 @@
+\chapter{Modelos}
+\label{newmodel}
+
+Os arquivos associados aos modelos de VANTs, utilizados no ambiente de simulação ProVANT, estão localizados na pasta referênte ao caminho:
+
+\begin{bashcode}
+$HOME/catkin\_ws/src/provant\_simulator/source/Database/simulation_elements/models/real
+\end{bashcode}
+
+
+Cada modelo no ambiente de simulação ProVant possui um diretório com o seu respectivo nome. Nesse diretório estão arquivos que descrevem os modelos dinâmicos, visuais, de colisão, sensoriais e da lei de controle utilizada. Portanto, caso seja necessário adicionar um novo modelo, ou editar um existente, o mesmo deve possuir(ou possui) arquivos de configuração/descrição do VANT organizados conforme os diretórios ilustrados na Figura \ref{modeloorg}., onde\\
+
+\begin{enumerate}
+\item O arquivo config.xml armazena  as informações referentes ao controlador a ser utilizado no modelo. 
+\item O arquivo model.sdf descreve o modelo dinâmico, de colisão e visual do VANT para o simulador Gazebo.
+\item O arquivo model.config descreve metadados do modelo.
+\item O arquivo imagem.gif contém a imagem utilizada pela interface gráfica para ilustrar o modelo do VANT (vide Figura \ref{tela_inicial.jpg}, item 2).
+\item O diretório meshes armazena os arquivos exportados da ferramenta CAD (utilizada para o desenvolvimento mecânico do VANT), exemplo: SolidWorks.
+\end{enumerate}
+
+\begin{figure}[H]
+	\centering
+	\begin{tikzpicture}[%
+	grow via three points={one child at (0.5,-0.7) and
+		two children at (0.5,-0.7) and (0.5,-1.4)},
+	edge from parent path={(\tikzparentnode.south) |- (\tikzchildnode.west)}]
+	\node {nome\_do\_modelo}
+	child { node {config}
+		child { node {config.xml}}
+	}
+	child [missing] {}
+	child { node {meshes}}		
+	child { node {robot}
+		child { node {model.sdf}}
+	}
+	child [missing] {}
+	child { node {model.config}}
+	child { node {imagem.gif}};
+	\end{tikzpicture}
+	\caption{Organização do diretório com arquivos de descrição do modelo VANT}
+	
+	\label{modeloorg}
+\end{figure}
+
+
+
+No arquivo ''model.config'' o gazebo identifica onde está o arquivo com os dados estruturais do modelo, além de informações associadas à autoria, versão e descrição do modelo. O Código A.1 ilustra um exemplo desse arquivo. 
+
+
+	\begin{minted}{xml}
+	<?xml version="1.0"?>
+	<model>
+		<name>vant</name>
+		<version>1.0</version>
+		<sdf version='1.5'>robot/model.sdf</sdf>
+		<author>
+			<name>provant</name>
+			<email>provant@ufmg.br</email>
+		</author>
+		<description>
+			The UAV version 3.0 of the provant project 
+		</description>
+	</model>
+	\end{minted}
+	
+	\centerline{Código A.1: Exemplo de conteúdo existente no arquivo ''model.config''.}
+	
+	\vspace{1cm}
+
+
+As \textit{tags} utilizadas no arquivo ''model.config'' são:
+
+\small
+\begin{itemize}
+\setlength{\itemsep}{1pt}
+\setlength{\parskip}{0pt}
+\setlength{\parsep}{0pt}
+\item[-] \textcolor{blue}{<name></name>}: especifica o nome do modelo;
+\item[-] \textcolor{blue}{<version></version>}: especifica a versão;
+\item[-] \textcolor{blue}{<sdf></sdf>}: especifica o arquivo com a descrição do modelo dinâmico, de colisão e visual de modelo para o simulador Gazebo;
+\item[-] \textcolor{blue}{<author><name></name></author>}\textcolor{blue}: especifica o nome do autor do modelo;
+\item[-] \textcolor{blue}{<author><email></email></author>}: especifica o email para contato com o autor;
+\item[-] \textcolor{blue}{<description></description>}: descreve brevemente o modelo.
+\end{itemize}\normalsize
+
+
+O arquivo ''config.xml'' armazena todas as configurações relativas à estrutura de controle que será utilizada durante a simulação, como: sensores, atuadores, lei de controle e período de amostragem. Com o intuíto de ajudar o usuário com a edição desse arquivo, a interface gráfica fornece ferramentas para esse propósito, não sendo necessário que o usuário acesse diretamente o arquivo. O Código A.2: ilustra um exemplo desse arquivo. 
+
+
+	\begin{minted}{xml}
+	<?xml version="1.0" encoding="UTF-8"?>
+	<config>
+		<TopicoStep>Step</TopicoStep>
+		<Sampletime>12</Sampletime>
+		<Strategy>libvant3_lqr.so</Strategy>
+		<RefPath>ref.txt</RefPath>
+		<Outputfile>out.txt</Outputfile>
+		<InputPath>in.txt</InputPath>
+		<ErroPath>erro.txt</ErroPath>
+		<Sensors>
+			<Device>Estados</Device>
+		</Sensors>
+		<Actuators>
+			<Device>ThrustR</Device>
+			<Device>ThrustL</Device>
+			<Device>TauR</Device>
+			<Device>TauL</Device>
+			<Device>Elevdef</Device>
+			<Device>Ruddef</Device>
+		</Actuators>
+	</config>
+	\end{minted}
+	
+	\centerline{Código A.2: Exemplo de arquivo ''config.xml''.}
+	
+	\vspace{1cm}
+	
+	As \textit{tags} utilizadas no arquivo ''config.xml'' são:
+	\small
+	\begin{itemize}
+	\setlength{\itemsep}{1pt}
+	\setlength{\parskip}{0pt}
+	\setlength{\parsep}{0pt}
+	\item[-] \textcolor{blue}{<TopicoStep></TopicoStep>}: declara tópico de sincronização do simulador ao controlador. \textbf{O valor desta tag não deve ser alterado}.;
+	\item[-] \textcolor{blue}{<Sampletime></Sampletime>}: define o período de amostragem do controlador, em milissegundos;
+	\item[-] \textcolor{blue}{<Strategy></Strategy>}: nome da biblioteca dinâmica associada à implementação da estratégia de controle a ser utilizada em conjunto com esse modelo;
+	\item[-] \textcolor{blue}{<RefPath></RefPath>}: nome do arquivo no qual os dados do sinal de referência são armazenados;
+	\item[-] \textcolor{blue}{<Outputfile></Outputfile>} nome do arquivo no qual os dados dos sinais de controle são armazenados;
+	\item[-] \textcolor{blue}{<InputPath></InputPath>}: nome do arquivo no qual os dados dos sensores são armazenados;
+	\item[-] \textcolor{blue}{<ErroPath></ErroPath>} nome do arquivo no qual os dados do vetor de erro são armazenados;
+	\item[-] \textcolor{blue}{<Sensors></Sensors>} nome dos tópicos dos sensores aos quais a estratégia de controle terá acesso (na ordem especificada)
+	\item[-] \textcolor{blue}{<Actuators></Actuators>} nome dos tópicos dos atuadores aos quais a estratégia de controle terá acesso. (o controlador deve retornar um vetor com a mesma quantidade de dados e na ordem aqui especificados)
+	\end{itemize}\normalsize
+	\label{config.xml}
+
+O arquivo ''model.sdf'' fornece ao Gazebo as informações do modelo do VANT no formato XML conforme o padrão SDF \footnote{\url{http://sdformat.org/spec}} (A Figura \ref{geral} illustra um exemplo desse tipo de arquivo). A próxima seção descreve com mais detalhes a estrutura básica de um arquivo SDF.
+
+\section{O arquivo SDF}
+
+Antes de apresentar a configuração básica de um arquivo SDF, é necessário primeiro introduzir algums conceitos: No simulador um modelo corresponde a um sistema mecânico, que pode ser formado por um ou múltiplos corpos rígidos\footnote{Ao assumir um corpo como rígido são desprezando efeitos de elasticidade e deformações}. Assim, como em um manipulador, no simulador os corpos são denominados elos, sendo os elos filhos conectados a elos pai através de juntas. Elos filhos são corpos rígidos que possuem movimento restringido pela conexão ("junta") com corpos denominados elos pai. Os elos possuem propriedades inerciais, visuais e de colisão. Já as juntas, impõem a restrição do movimento relativo entre dois elos, com propriedades como o tipo de junta (Prismática, rotativa, etc.), limites de movimento (Posição e velocidade), existência de atrito, etc. O Código A.3 ilustra um exemplo de arquivo SDF.
+ 
+	\begin{minted}{xml}
+	<?xml version="1.0" encoding="UTF-8"?>
+	<sdf version="1.4">
+		<model name="modelo">
+			<link name="corpo">
+				...
+			</link>
+			<link name="servo">
+				...
+			</link>
+			<joint name="corpo_servo">
+				...
+			</joint>
+		</model>
+	</sdf>
+	\end{minted}
+	
+	\centerline{Código A.3: Descrição de um elo no arquivo ''modelo.sdf''}
+	
+	\vspace{1cm}
+	 
+	 As \textit{tags} utilizadas são:
+	 \small
+	 \begin{itemize}
+	 \setlength{\itemsep}{1pt}
+	 \setlength{\parskip}{0pt}
+	 \setlength{\parsep}{0pt}
+	 \item[-] \textcolor{blue}{<link></link>}: especifica a existência de um elo, com o seu nome;
+	 \item[-] \textcolor{blue}{<joint></joint>}: especifica a existência de uma junta, com o seu nome.  
+	 \end{itemize}\normalsize
+	 
+
+Cada elo do modelo possui três tipos de descrições para o simulador: cinemática, visual e de colisão.  A estrutura de configuração de um elo em um arquivo SDF possui o formato ilustrado no Código A.4, onde:
+\small
+\begin{itemize}
+\setlength{\itemsep}{1pt}
+\setlength{\parskip}{0pt}
+\setlength{\parsep}{0pt}
+\item[-] \textcolor{blue}{<pose></pose>}: define a pose do elo;
+\item[-] \textcolor{blue}{<inertial></inertial>}: especifica as propriedades inerciais do elo;
+\item[-] \textcolor{blue}{<collision></collision>}: especifica o modelo de colisão do elo. Os modelos de colisão dos VANTs usados no ambiente de simulação são obtidos de arquivos CAD;
+\item[-] \textcolor{blue}{<visual></visual>}: especifica características visuais, como cor e formato. Os modelos visuais dos VANTs usados no ambiente de simulação são obtidos de arquivos CAD, exceto a cor, que é especificada separadamente.
+\end{itemize}\normalsize
+
+	\begin{minted}{xml}
+	<link name="servodir">
+		<pose>0.02E-3 -277.61E-3 56.21E-3 -0.0872665 0 0</pose>
+		<inertial> 
+			...
+		</inertial>
+		<collision name="servodircollision"> <!--opcional-->
+			...
+		</collision>
+		<visual name="servodirvisual"> <!--opcional-->
+			...
+		</visual>
+	</link>
+	\end{minted}
+	\centerline{Código A.4: Descrição da de um elo no ''modelo.sdf''} 
+	
+	\vspace{1cm}
+	
+
+
+\noindent \textbf{Parâmetros de inércia do elo}: O usuário deve informar os parâmetros de inércia de cada elo na \textit{tag} ''inertial''. As informações obrigatórias são a massa, posição relativa do centro de massa e o tensor de inércia. No Código A.5 é ilustrado um exemplo de configuração dos parâmetros de inércia de um elo em formato SDF, onde:
+\small
+\begin{itemize}
+\setlength{\itemsep}{1pt}
+\setlength{\parskip}{0pt}
+\setlength{\parsep}{0pt}
+\item[-] \textcolor{blue}{<mass></mass>}: define a massa do elo;
+\item[-] \textcolor{blue}{<pose></pose>}: especifica a posição do centro de massa do elo em relação a seu sistema de coordenadas principal;
+\item[-] \textcolor{blue}{<inertia></inertia>}: especifica o tensor de inércia do elo;
+\end{itemize}\normalsize
+
+
+	\begin{minted}{xml}
+	<inertial>
+		<mass>0.0809439719362664</mass>
+		<pose>
+			-3.60859273452335E-10 -0.000226380714807978 0.0594780519701684 0 0 0
+		</pose>
+		<inertia>
+			<ixx>3.88267747087835E-06</ixx>
+			<ixy>6.03219085082653E-06</ixy>
+			<ixz>-2.78471406661236E-12</ixz>
+			<iyy>0.000104858690365283</iyy>
+			<iyz>7.0486590219062E-07</iyz>
+			<izz>8.31755564684115E-05</izz>		
+		</inertia>
+	</inertial>
+	\end{minted}
+	\centerline{Código A.5: Descrição de características inerciais no arquivo ''modelo.sdf''}
+	
+	\vspace{1cm}
+
+\noindent \textbf{Propriedades de colisão do elo}: Para que efeitos de colisão sejam aplicados ao elo, o usuário deve descrever o formato do elo no arquivo ''model.sdf''. Existem diversas formas de descrição, porém este manual apresenta apenas o método utilizado nos modelos de VANTs do ambiente de simulação ProVANT, que consiste na importação de arquivos criados através de ferramentas CAD, como o SolidWorks. No Código A.6 mostra um exemplo de descrição dos parâmetros visuais de um elo a partir de um arquivo STL, onde:
+\small
+\begin{itemize}
+\setlength{\itemsep}{1pt}
+\setlength{\parskip}{0pt}
+\setlength{\parsep}{0pt}
+\item[-] \textcolor{blue}{<pose></pose>}: especifica a pose do modelo colisão em relação ao centro de coordenadas do elo;
+\item[-] \textcolor{blue}{<uri></uri>}: caminho do arquivo mesh, a partir do diretório do modelo, obtido via exportação no SolidWorks; 
+\end{itemize} \normalsize
+
+
+	\begin{minted}{xml}
+	<collision name="servodircollision">
+		<pose>0 0 0 0 0 0</pose>
+		<geometry>
+			<mesh>
+				<uri>model://vant_2comcarga/meshes/servodir.STL</uri>
+			</mesh>
+		</geometry>
+	</collision>
+	\end{minted}
+	\centerline{Código A.6: Descrição de características de colisão no arquivo ''model.sdf''}
+
+	\vspace{1cm}
+
+\noindent \textbf{Propriedades visuais do elo}: Para que o elo seja visualizado durante a simulação, o usuário deve descrever os parâmetros visuais do elo no arquivo ''model.sdf''. Assim como no caso anterior, existem diversas formas de descrição, porém este manual ilustra apenas o método utilizado nos modelos de VANTs do ambiente de simulação, que consiste na importação de arquivos criados através de ferramentas CAD. O Código A.7 mostra um exemplo de descrição dos parâmetros visuais de um elo a partir de um arquivo STL, 	
+onde: \small
+\begin{itemize}
+\setlength{\itemsep}{1pt}
+\setlength{\parskip}{0pt}
+\setlength{\parsep}{0pt}
+\item[-] \textcolor{blue}{<pose></pose>}: especifica a pose que o modelo visual do elo será definido em relação ao sistema de coordenadas do elo;
+\item[-] \textcolor{blue}{<uri></uri>}: caminho do arquivo mesh, a partir do diretório do modelo, obtido via exportação no SolidWorks;
+\item[-] \textcolor{blue}{<ambient></ambient>}: definição de cor ambiente;
+\item[-] \textcolor{blue}{<diffuse></diffuse>}: definição de cor difusa;
+\item[-] \textcolor{blue}{<specular></specular>}: definição de cor especular;
+\item[-] \textcolor{blue}{<emissive></emissive>}: definição de cor emissiva.
+\end{itemize} \normalsize
+
+
+	\begin{minted}{xml}
+	<visual name="servodirvisual">
+		<pose>0 0 0 0 0 0</pose>
+		<geometry>
+			<mesh>
+				<uri>model://vant_2comcarga/meshes/servodir.STL</uri>
+			</mesh>
+		</geometry>
+		<material>
+			<ambient>0 0 0 0</ambient>
+			<diffuse>1 1 1 1</diffuse>
+			<specular>0.1 0.1 0.1 1</specular>
+			<emissive>0 0 0 0</emissive>
+		</material>
+	</visual>
+	\end{minted}
+	\centerline{Código A.7: Descrição de características visuais no arquivo ''model.sdf''}
+	
+
+\subsection{Descrição de junta} 
+
+Há 7 tipos de juntas no simulador: 
+
+\begin{itemize}
+	\item \textbf{revolute}: junta rotativa; 
+	\item \textbf{gearbox}: junta rotativa com presença de engrenagens para transmissão de movimento angular entre elos com diferentes relações de torque e velocidade; 
+	\item \textbf{revolute2}: junta composta por duas juntas rotativas em série; 
+	\item \textbf{prismatic}: junta prismática; \item \textbf{universal}, junta com comportamento de uma esfera articulada; 
+	\item \textbf{piston}: junta com comportamento da combinação de uma junta rotativa e uma junta prismática.
+\end{itemize}
+
+Um exemplo de estrutura de configuração de uma junta é mostrado no Código A.8, onde:
+\begin{itemize}
+\setlength{\itemsep}{1pt}
+\setlength{\parskip}{0pt}
+\setlength{\parsep}{0pt}
+\item[-] \textcolor{blue}{<pose></pose>}: descreve a pose relativa em que o elo filho está em relação ao elo pai.
+\item[-] \textcolor{blue}{<parent></parent>}: nome do elo pai.
+\item[-] \textcolor{blue}{<child></child>}: nome do elo filho.
+\item[-] \textcolor{blue}{<axis></axis>}: vetor unitário que corresponde ao eixo de rotação da junta. (expressado no sistema de coordenadas do modelo, se estiver utilizando a versão 1.4 do formato SDF; e expressado no sistema de coordenadas do elo filho, se estiver utilizando a versão 1.6 do formato SDF).
+\item[-] \textcolor{blue}{<lower></lower>}: limite inferior de posição da junta (em rad, caso seja do tipo rotativa, e metros, caso seja prismática).
+\item[-] \textcolor{blue}{<upper></upper>}: limite superior de posição da junta (em rad, caso seja do tipo rotativa, e metros, caso seja prismática).
+\item[-] \textcolor{blue}{<velocity></velocity>}: limite de velocidade da junta (em rad/s, caso seja do tipo rotativa, e m/s, caso seja prismática).
+\item[-] \textcolor{blue}{<effort></effort>}: limite de esforço da junta (em N.m, caso seja do tipo rotativa, e N, caso seja prismática).
+\item[-] \textcolor{blue}{<damping></damping>}: coeficiente de atrito viscoso.
+\item[-] \textcolor{blue}{<friction></friction>}: coeficiente de atrito estático.
+\end{itemize}
+
+
+	\begin{minted}{xml}
+	<joint name="aR" type="revolute">
+		<pose>0 0 0 0 0 0</pose>
+		<parent>corpo</parent>
+		<child>servodir</child>
+		<axis>
+			<xyz>0 0.9962 -0.0872</xyz>
+			<limit>
+				<lower>-1.5</lower>
+				<upper>1.5</upper>
+				<effort>2</effort>
+				<velocity>0.5</velocity>
+			</limit>
+			<dynamics>
+				<damping>0</damping>
+				<friction>0</friction>
+			</dynamics>
+		</axis>
+	</joint>
+	\end{minted}
+	\centerline{Código A.8: Descrição de juntas no arquivo ''model.sdf''}
+	
+\subsection{Descrição de plugins}
+\label{plugins}
+
+Plugins são bibliotecas dinâmicas carregadas durante a inicialização do simulador, a partir das configurações armazenadas no arquivo de descrição de modelo (arquivo SDF). Tais bibliotecas são utilizadas para a implementação de sensores e atuadores no ambiente de simulação. \\
+
+O ambiente de simulação ProVANT utiliza apenas dois tipos de plugins existentes no simulador Gazebo para controle e monitoramento do modelo do VANT: Modelo e Sensor. Mais detalhes sobre os plugins disponibilizados no simulador Gazebo podem ser encontrados em: \url{http://gazebosim.org/tutorials/?tut=plugins\_hello\_world}
+
+\noindent \textbf{Plugins modelo}: Plugins modelo são bibliotecas dinâmicas que controlam e monitoram variáveis de simulação do modelo VANT. Através delas, é possível criar sensores e atuadores customizados. Para inserir um plugin modelo no arquivo ''model.sdf'', o usuário deve adicionar tags <plugin></plugin>, definindo nome, nome da biblioteca dinâmica e as tags internas necessárias para configuração do plugin. O Código A.9 exemplifica o processo de inserção. 
+
+Opções de plugins modelo disponíveis no ambiente de simulação ProVANT estão detalhados no apêndice \ref{pluginsAp}.
+
+
+	\begin{minted}{xml}
+	<?xml version="1.0" encoding="UTF-8"?>
+	<sdf version="1.4">
+		<model name="modelo">
+			<link name="corpo">
+				...
+			</link>
+			<link name="servo">
+				...
+			</link>
+			<joint name="corpo_servo">
+				...
+			</joint>
+			<plugin name="plugin_servo">
+				...
+			</plugin>
+		</model>
+	</sdf>
+	\end{minted}
+	\centerline{Código A.9: Inserção de plugins modelo no arquivo ''model.sdf''}
+	
+	\vspace{1cm}
+	
+\noindent \textbf{Plugins sensor}: Plugins sensor são bibliotecas dinâmicas que simulam sensores, portanto, são utilizados pelo ambiente de simulação ProVANT para mensurar dados de um modelo VANT. Para inserir plugins sensor basta inserir tags <sensor></sensor>, definindo nome e as tags internas necessárias para configuração do plugin. O Código A.10 exemplifica o processo de inserção.
+
+	
+	\begin{minted}{xml}
+	<link name="servodir">
+		<pose>0.02E-3 -277.61E-3 56.21E-3 -0.0872665 0 0</pose>
+		<inertial> 
+			...
+		</inertial>
+		<collision name="servodircollision"><!--opcional-->
+			...
+		</collision>
+		<visual name="servodirvisual"> <!--opcional-->
+			...
+		</visual>
+		<sensor name="servosensor"> <!--opcional-->
+			...
+		</sensor>
+		<sensor name="servosensor2"> <!--opcional-->
+			...
+		</sensor>
+	</link>
+	\end{minted}
+	\centerline{Código A.10: Inserção de plugins sensor no arquivo ''model.sdf''}
+
+	\vspace{1cm}
+
+Os sensores disponíveis no ambiente de simulação ProVANT são GPS, IMU, sonar e magnetômetro (Detalhes de configurações no arquivo model.sdf podem ser encontrados em \url{http://sdformat.org/spec}). No entanto, estes sensores não possuem interface de comunicação com o ROS, pois eles transmitem seus dados via tópicos do Gazebo. Para realizar a transmissão destes dados para tópicos do ROS, é necessário adicionar, juntamente aos plugins sensores, plugins modelo. Tais plugins estão especificados no apêndice \ref{pluginsAp}.
+
+Obs.: para funcionamento correto do sensor, o usuário deve ajustar a taxa de amostragem exatamente para o inverso do passo de simulação, por exemplo 1000 HZ.
+
+\subsection{Padrão de mensagens de comunicação}
+
+Como padrão, todos o plugins e sensores disponíveis no ambiente de simulação disponibilizam dados através de uma mesma estrutura de dados. Esta estrutura de dados é abstraída no ROS através de mensagens. As mensagens são estruturas de dados simples, contendo campos tipados. A mensagem padrão de plugins sensores está ilustrada abaixo. 	onde:
+\begin{itemize}
+\item header: fornece o instante que o dado foi obtido, o frame e o número de sequência durante a comunicação.
+\item name: fornece o nome do instrumento que forneceu a mensagem.
+\item values: vetor composto pelos mais variados dados providos pelos sensores.
+\end{itemize} 
+
+\begin{figure}[H]
+	\begin{minted}{xml}
+	Header header
+	string name
+	float64[] values
+	\end{minted}	
+\end{figure}
+
+Por outro lado o controlador recebe um outro tipo de mensagem que armazena as mensagens de todos os sensores num dado passo de simulação num mesmo local e na ordem pré-definida pelo usuário, como é descrito na seção \ref{sensoresatuadores}. Tal estrutura esta ilustrada a seguir.
+
+\begin{figure}[H]
+	\begin{minted}{xml}
+	Header header
+	string name
+	Sensor[] values
+	\end{minted}
+\end{figure}
