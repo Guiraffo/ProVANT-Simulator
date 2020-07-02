@@ -1,9 +1,9 @@
-#include "dialog.h"
+#include "modelsetupdialog.h"
 #include "ui_dialog.h"
 #include"qdebug.h"
 #include"Business/treeitens.h"
 
-Dialog::Dialog(QWidget *parent) :
+ModelSetupDialog::ModelSetupDialog(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::Dialog)
 {
@@ -12,13 +12,13 @@ Dialog::Dialog(QWidget *parent) :
     ui->treeWidget->setEditTriggers(QTreeWidget::NoEditTriggers);
 }
 
-Dialog::~Dialog()
+ModelSetupDialog::~ModelSetupDialog()
 {
     delete ui;
 }
 
 
-void Dialog::setModel(std::string modelfile,std::string controllerfile)
+void ModelSetupDialog::setModel(std::string modelfile,std::string controllerfile)
 {
     int j = 0; // variável para armezanar estratégia de controle corrente
     int i = 0; // variável para varrer diretório
@@ -64,9 +64,9 @@ void Dialog::setModel(std::string modelfile,std::string controllerfile)
     ui->ActuatorEdit->setText(QString::fromStdString(controller.config->GetLogOut()));
     ui->SensorEdit->setText(QString::fromStdString(controller.config->GetLogIn()));
     ui->ReferenceEdit->setText(QString::fromStdString(controller.config->GetLogRef()));
-    }
+}
 
-void Dialog::on_pushButton_5_clicked()
+void ModelSetupDialog::on_pushButton_5_clicked()
 {
     int j = 0; // variável para armezanar estratégia de controle corrente
     int i = 0; // variável para varrer diretório
@@ -108,7 +108,7 @@ void Dialog::on_pushButton_5_clicked()
     }
 }
 
-void Dialog::on_pushButton_7_clicked()
+void ModelSetupDialog::on_pushButton_7_clicked()
 {
     // obtendo caminho da pasta catkin_ws
     char const* tmp = getenv( "DIR_ROS" );
@@ -126,7 +126,7 @@ void Dialog::on_pushButton_7_clicked()
     }
 }
 
-void Dialog::on_pushButton_6_clicked()
+void ModelSetupDialog::on_pushButton_6_clicked()
 {
     char const* tmp = getenv( "TILT_PROJECT" );
     if ( tmp == NULL ) {
@@ -139,7 +139,7 @@ void Dialog::on_pushButton_6_clicked()
     }
 }
 
-void Dialog::on_pushButton_3_clicked()
+void ModelSetupDialog::on_pushButton_3_clicked()
 {
     // adicionando sensores
     QListWidgetItem* item = new QListWidgetItem(QString("New Sensor"));
@@ -147,13 +147,13 @@ void Dialog::on_pushButton_3_clicked()
     item->setFlags(Qt::ItemIsEditable|Qt::ItemIsEnabled);
 }
 
-void Dialog::on_pushButton_4_clicked()
+void ModelSetupDialog::on_pushButton_4_clicked()
 {
     // removendo sensor
     delete ui->listWidget_2->currentItem();
 }
 
-void Dialog::on_pushButton_clicked()
+void ModelSetupDialog::on_pushButton_clicked()
 {
     // novo atuador na lista
     QListWidgetItem* item = new QListWidgetItem(QString("New Actuator"));
@@ -161,19 +161,19 @@ void Dialog::on_pushButton_clicked()
     item->setFlags(Qt::ItemIsEditable|Qt::ItemIsEnabled);
 }
 
-void Dialog::on_pushButton_2_clicked()
+void ModelSetupDialog::on_pushButton_2_clicked()
 {
     // deletendo da lista
     delete ui->listWidget->currentItem();
 }
 
 
-void Dialog::on_buttonBox_accepted()
+void ModelSetupDialog::on_buttonBox_accepted()
 {
      SaveConfig();
 }
 
-void Dialog::SaveConfig()
+void ModelSetupDialog::SaveConfig()
 {
     // armazenando estratégia deo controle
     controller.config->SetStrategy("lib"+ui->comboBox->currentText().toStdString()+".so");
@@ -184,7 +184,6 @@ void Dialog::SaveConfig()
                               ui->ReferenceEdit->text().toStdString(),
                               ui->ActuatorEdit->text().toStdString(),
                               ui->SensorEdit->text().toStdString());
-
     // adicionando sensores
     controller.config->Delete();
     for(int i = 0; i < ui->listWidget_2->count(); ++i)
@@ -201,7 +200,7 @@ void Dialog::SaveConfig()
 }
 
 
-void Dialog::on_checkBox_clicked(bool checked)
+void ModelSetupDialog::on_checkBox_clicked(bool checked)
 {
     if(checked==true)
     {

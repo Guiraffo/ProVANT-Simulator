@@ -24,14 +24,16 @@ class Dialog;
  * - pose inicial
  */
 
-class Dialog : public QDialog
+class ModelSetupDialog : public QDialog
 {
     Q_OBJECT
 
 public:
-    explicit Dialog(QWidget *parent = 0);
-    void setModel(std::string,std::string); //! método que adquire os nomes e caminhos dos arquivos de descrção física e do controlador
-    ~Dialog();
+    explicit ModelSetupDialog(QWidget *parent = 0);
+    //! método que adquire os nomes e caminhos dos arquivos de descrção física
+    //! e do controlador
+    void setModel(std::string,std::string);
+    ~ModelSetupDialog();
 
     bool hil = false;
 

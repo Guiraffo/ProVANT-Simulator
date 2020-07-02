@@ -10,7 +10,7 @@
 #include "Business/world.h"
 #include "Business/model.h"
 #include "DataAccess/RosElements/roslaunch.h"
-#include "dialog.h"
+#include "modelsetupdialog.h"
 #include "dialognewmodel.h"
 #include "aboutdialog.h"
 #include <libusb-1.0/libusb.h>

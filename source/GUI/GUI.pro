@@ -41,7 +41,7 @@ SOURCES += main.cpp\
     DataAccess/GazeboElements/modelfile.cpp \
     DataAccess/GazeboElements/Items/axis.cpp \
     Business/treeitens.cpp \
-    dialog.cpp \
+    modelsetupdialog.cpp \
     dialognewcontroller.cpp \
     DataAccess/ControllerElements/newstrategy.cpp \
     dialogopencontroller.cpp \
@@ -85,7 +85,6 @@ HEADERS  += mainwindow.h \
     DataAccess/GazeboElements/modelfile.h \
     DataAccess/GazeboElements/Items/axis.h \
     Business/treeitens.h \
-    dialog.h \
     dialognewcontroller.h \
     DataAccess/ControllerElements/newstrategy.h \
     dialogopencontroller.h \
@@ -98,10 +97,11 @@ HEADERS  += mainwindow.h \
     DataAccess/GazeboElements/Items/multipleincludes.h \
     Utils/tools.h \
     DataAccess/GazeboElements/Items/multipleplugins.h \
-    jointsdialog.h
+    jointsdialog.h \
+    modelsetupdialog.h
 
 FORMS    += mainwindow.ui \
-    dialog.ui \
+    modelsetupdialog.ui \
     dialognewcontroller.ui \
     dialogopencontroller.ui \
     dialognewmodel.ui \

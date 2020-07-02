@@ -211,7 +211,7 @@ void MainWindow::on_treeWidget_itemDoubleClicked(QTreeWidgetItem *item, int colu
             // arquivo de configuração de controlador
             std::string localconfig = env.toStdString()+"/"+list.at(1).toStdString()+"/config/config.xml";
             // abrir janela
-            Dialog modelsetup;
+            ModelSetupDialog modelsetup;
             modelsetup.setModel(localmodel,localconfig);
             modelsetup.setModal(true);
             modelsetup.exec();
