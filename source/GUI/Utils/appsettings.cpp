@@ -347,10 +347,10 @@ bool AppSettings::setProvantDatabasePath(const QString &path)
  * the current configured value for user modification, otherwise prefer
  * the getRosPath() method.
  */
-const QString AppSettings::getRosPathUnchecked() const
+const QString AppSettings::getCatkinWorkspacePathUncheked() const
 {
     return getDirectoryPath(DIR_ROS_KEY,
-                            getRosPathDefault());
+                            getCatkinWorkspacePathDefault());
 }
 
 /**
@@ -361,10 +361,10 @@ const QString AppSettings::getRosPathUnchecked() const
  * path and if not, shows an error message informing the user about this error
  * and how to fix it.
  */
-const QString AppSettings::getRosPath() const
+const QString AppSettings::getCatkinWorkspacePath() const
 {
     return checkDirectoryPath(DIR_ROS_KEY,
-                            getRosPathDefault(),
+                            getCatkinWorkspacePathDefault(),
                             tr("The path to the root of your catkin workspace "
                                "could not be opened."));
 }
@@ -373,7 +373,7 @@ const QString AppSettings::getRosPath() const
  * @brief AppSettings::getRosPathDefault
  * @return The default path to the DIR_ROS.
  */
-const QString AppSettings::getRosPathDefault() const
+const QString AppSettings::getCatkinWorkspacePathDefault() const
 {
     return QDir::home().absoluteFilePath("catkin_ws");
 }
@@ -384,7 +384,7 @@ const QString AppSettings::getRosPathDefault() const
  * @return True if the informed value points to a valid system path and false
  * if the path is invalid.
  */
-bool AppSettings::setRosPath(const QString &path)
+bool AppSettings::setCatkinWorkspacePath(const QString &path)
 {
     return setDirectoryPath(DIR_ROS_KEY, path, true);
 }
@@ -425,7 +425,7 @@ const QString AppSettings::getControlStrategiesPath() const
                               getControlStrategiesPathDefault(),
                               tr("The path to the directory containing the "
                                  "source files for the control strategies "
-                                 "used in the simulator."));
+                                 "used in the simulator could not be opened."));
 }
 
 /**
@@ -452,6 +452,130 @@ const QString AppSettings::getControlStrategiesPathDefault() const
 bool AppSettings::setControlStrategiesPath(const QString &path)
 {
     return setDirectoryPath(CONTROL_STRATEGIES_SOURCE_KEY, path);
+}
+
+/**
+ * @brief AppSettings::getRosVersionUnchecked
+ * @return The version of ROS used to run the simulator.
+ */
+const QString AppSettings::getRosVersionUnchecked() const
+{
+    return settings.value(ROS_VERSION_KEY, getRosVersionDefault()).toString();
+}
+
+/**
+ * @brief AppSettings::getRosVersion
+ * @return The ROS version configured in the settings.
+ *
+ * Checks to see if the ros version is already defined in QSettings, if it is
+ * this value is returned, if not, the default version is returned.
+ *
+ * Currently two versions are allowed:
+ *  - Melodic
+ *  - Kinetic
+ *
+ * This function first tests if the returned value points to a valid system
+ * path and if not, shows an error message informing the user about this error
+ * and how to fix it.
+ */
+const QString AppSettings::getRosVersion() const
+{
+    if(!settings.contains(ROS_VERSION_KEY)) {
+        qWarning("The value of the %s setting is not configured, returning "
+                 "default value.",
+                 qUtf8Printable(ROS_VERSION_KEY));
+        return getRosVersionDefault();
+    }
+    return settings.value(ROS_VERSION_KEY).toString();
+}
+
+/**
+ * @brief AppSettings::getRosVersionDefault
+ * @return The default ROS version for the simulator.
+ */
+const QString AppSettings::getRosVersionDefault() const
+{
+    return "melodic";
+}
+
+/**
+ * @brief AppSettings::setRosVersion
+ * @param version The new ROS version used in the application.
+ * @return True if the value is a valid option and the setting was updated,
+ * and false otherwise.
+ *
+ * See getRosVersion() to check the allowed values.
+ */
+bool AppSettings::setRosVersion(const QString &version)
+{
+    if(version == "melodic" || version == "kinetic")
+    {
+        settings.setValue(ROS_VERSION_KEY, version);
+        qInfo("Updated the value of %s to %s.",
+              qUtf8Printable(ROS_VERSION_KEY),
+              qUtf8Printable(version));
+        return true;
+    }
+    else {
+        qWarning("Trying to update the value of %s to %s. This operation is "
+                 "not permited and no modification has been made.",
+                 qUtf8Printable(ROS_VERSION_KEY),
+                 qUtf8Printable(version));
+        return false;
+    }
+}
+
+/**
+ * @brief AppSettings::getRosPathUnchecked
+ * @return The path to the ROS installation directory.
+ *
+ * This function doesn't check if the currently configured value is valid.
+ * Use this method only when extremamely necessary, such as in displaying
+ * the current configured value for user modification, otherwise prefer
+ * the getRosPath() method.
+ */
+const QString AppSettings::getRosPathUnchecked() const
+{
+    return getDirectoryPath(ROS_PATH_KEY,
+                            getRosPathDefault());
+}
+
+/**
+ * @brief AppSettings::getRosPath
+ * @return The path to the ROS installation directory.
+ *
+ * This is the path to the directory where ROS keeps all of the files and
+ * packages for the core ROS tools.
+ *
+ * It is used by the application when it is necessary to call an external ROS
+ * tool.
+ */
+const QString AppSettings::getRosPath() const
+{
+    return checkDirectoryPath(ROS_PATH_KEY,
+                              getRosPathDefault(),
+                              tr(""));
+}
+
+/**
+ * @brief AppSettings::getRosPathDefault
+ * @return The default path to the ROS installation directory.
+ */
+const QString AppSettings::getRosPathDefault() const
+{
+    return QString("/opt/ros/%1/").arg(getRosVersionDefault());
+}
+
+/**
+ * @brief AppSettings::setRosPath Defines a new path to the ROS installation
+ * directory.
+ * @param path The new path to the ROS installation directory.
+ * @return True if the value points to a valid directory and the configuration
+ * was updated, and false otherwise.
+ */
+bool AppSettings::setRosPath(const QString &path)
+{
+    return setDirectoryPath(ROS_PATH_KEY, path);
 }
 
 /**
@@ -488,11 +612,19 @@ bool AppSettings::checkAllParametersSet() const
     {
         return false;
     }
-    if(getRosPath().isEmpty())
+    if(getCatkinWorkspacePath().isEmpty())
     {
         return false;
     }
     if(getControlStrategiesPath().isEmpty())
+    {
+        return false;
+    }
+    if(getRosVersion().isEmpty())
+    {
+        return false;
+    }
+    if(getRosPath().isEmpty())
     {
         return false;
     }
@@ -515,7 +647,7 @@ bool AppSettings::checkAllParametersSet() const
  * This function should not contain the creation of an environemnt variable that
  * isn't used by at least one program called by the GUI.
  */
-void AppSettings::applyValuesToEnvrionmentVariables()
+void AppSettings::applyValuesToEnvironmentVariables()
 {
     setEnvironmentVariable(PROVANT_ROS_KEY, getProvantRosPathUnchecked());
     setEnvironmentVariable(TILT_STRATEGIES_KEY,
@@ -526,7 +658,7 @@ void AppSettings::applyValuesToEnvrionmentVariables()
                            getProvantDatabasePathUnchecked());
     setEnvironmentVariable(GAZEBO_MODEL_PATH_KEY,
                            getGazeboModelPathUncheked());
-    setEnvironmentVariable(DIR_ROS_KEY, getRosPath());
+    setEnvironmentVariable(DIR_ROS_KEY, getCatkinWorkspacePath());
 }
 
 /**
@@ -566,11 +698,19 @@ void AppSettings::applyDefaultsToUndefinedParameters()
     }
     if(!settings.contains(DIR_ROS_KEY))
     {
-        setRosPath(getRosPathDefault());
+        setCatkinWorkspacePath(getCatkinWorkspacePathDefault());
     }
     if(!settings.contains(CONTROL_STRATEGIES_SOURCE_KEY))
     {
         setControlStrategiesPath(getControlStrategiesPathDefault());
+    }
+    if(!settings.contains(ROS_VERSION_KEY))
+    {
+        setRosVersion(getRosVersionDefault());
+    }
+    if(!settings.contains(ROS_PATH_KEY))
+    {
+        setRosPath(getRosPathDefault());
     }
 }
 
@@ -587,14 +727,36 @@ void AppSettings::applyDefaultsToUndefinedParameters()
  */
 void AppSettings::restoreDefaults()
 {
+    qWarning("Restoring all configuration to default values");
     setProvantRosPath(getProvantRosPathDefault());
     setTiltStrategiesPath(getTiltStrategiesPathDefault());
     setTiltProjectPath(getTiltProjectPathDefault());
     setTiltMatlabPath(getTiltMatlabPathDefault());
     setProvantDatabasePath(getProvantDatabasePathDefault());
     setGazeboModelPath(getGazeboModelPathDefault());
-    setRosPath(getRosPathDefault());
+    setCatkinWorkspacePath(getCatkinWorkspacePathDefault());
     setControlStrategiesPath(getControlStrategiesPathDefault());
+    setRosVersion(getRosVersionDefault());
+    setRosPath(getRosPathDefault());
+}
+
+/**
+ * @brief AppSettings::getEnvironmentVariables Create a QProcessEnvironment
+ * object with all the environment variables set to the values defined by
+ * the user settings.
+ * @return A QProcessEnvironment object containing the values of the
+ * environment variables to be passed to other programas called by the GUI.
+ */
+QProcessEnvironment AppSettings::getEnvironmentVariables() const
+{
+    QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
+    env.insert(PROVANT_ROS_KEY, getProvantRosPath());
+    env.insert(TILT_STRATEGIES_KEY, getTiltStrategiesPath());
+    env.insert(TILT_PROJECT_KEY, getTiltProjectPath());
+    env.insert(PROVANT_DATABASE_KEY, getProvantDatabasePath());
+    env.insert(GAZEBO_MODEL_PATH_KEY, getGazeboModelPath());
+    env.insert(DIR_ROS_KEY, getCatkinWorkspacePath());
+    return env;
 }
 
 /**

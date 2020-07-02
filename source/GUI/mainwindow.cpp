@@ -49,7 +49,7 @@ MainWindow::MainWindow(QWidget *parent) :
     // contrário, exibe mensagens de erro para o usuaŕio
     AppSettings settings;
     if(settings.checkAllParametersSet()) {
-        settings.applyValuesToEnvrionmentVariables();
+        settings.applyValuesToEnvironmentVariables();
     }
 }
 

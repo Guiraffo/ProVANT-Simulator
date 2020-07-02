@@ -105,7 +105,7 @@ ApplicationSettingsDialog::ApplicationSettingsDialog(QWidget *parent) :
     ui->dirRosWidget->setBrowserType(FileBrowserWidget::Directory);
     ui->dirRosWidget->setToolTip(
                 tr("Path to your catkin workspace."));
-    ui->dirRosWidget->setFilePath(settings.getRosPathUnchecked());
+    ui->dirRosWidget->setFilePath(settings.getCatkinWorkspacePathUncheked());
 
     // Configura o Widget para o caminho de CONTROL_STRATEGIES_PATH
     ui->controlStrategiesSourceLabel->setText(CONTROL_STRATEGIES_SOURCE_KEY);
@@ -121,6 +121,24 @@ ApplicationSettingsDialog::ApplicationSettingsDialog(QWidget *parent) :
                 .arg(TILT_PROJECT_KEY));
     ui->controlStrategiesSourceWidget->setFilePath(
                 settings.getControlStrategiesPathUnchecked());
+
+    //Configure o Widget para o caminho de ROS_PATH
+    ui->rosPathLabel->setText(ROS_PATH_KEY);
+    ui->rosPathWidget->setBrowserDialogCaption(tr("ROS Installation path"));
+    ui->rosPathWidget->setBrowserType(FileBrowserWidget::Directory);
+    ui->rosPathWidget->setToolTip(
+                tr("Path to the directory which contains the installation "
+                   "of ROS. This directory is usually inside /opt/ros/"
+                   "<ros_version>/"));
+    ui->rosPathWidget->setFilePath(settings.getRosPathUnchecked());
+
+    //Configure o Widget para o caminho de ROS_VERSION
+    ui->rosVersionLabel->setText(ROS_VERSION_KEY);
+    ui->rosVersionWidget->addItem("melodic");
+    ui->rosVersionWidget->addItem("kinetic");
+    ui->rosVersionWidget->setCurrentText(settings.getRosVersionUnchecked());
+    ui->rosVersionWidget->setToolTip(
+                tr("The ROS version used to run the simulator."));
 }
 
 /**
@@ -202,8 +220,22 @@ void ApplicationSettingsDialog::accept()
     {
         showErrorOnSettingMessage(GAZEBO_MODEL_PATH_KEY);
     }
-    else if(!settings.setRosPath(ui->dirRosWidget->filePath())) {
+    else if(!settings.setCatkinWorkspacePath(ui->dirRosWidget->filePath()))
+    {
         showErrorOnSettingMessage(DIR_ROS_KEY);
+    }
+    else if(!settings.setControlStrategiesPath(
+                ui->controlStrategiesSourceWidget->filePath()))
+    {
+        showErrorOnSettingMessage(CONTROL_STRATEGIES_SOURCE_KEY);
+    }
+    else if(!settings.setRosPath(ui->rosPathWidget->filePath()))
+    {
+        showErrorOnSettingMessage(ROS_PATH_KEY);
+    }
+    else if(!settings.setRosVersion(ui->rosVersionWidget->currentText()))
+    {
+        showErrorOnSettingMessage(ROS_VERSION_KEY);
     }
     else {
         QDialog::accept();

@@ -9,6 +9,7 @@
 
 #include <QObject>
 #include <QDir>
+#include <QProcessEnvironment>
 #include <QString>
 #include <QSettings>
 
@@ -27,7 +28,12 @@ static const QString PROVANT_DATABASE_KEY = "PROVANT_DATABASE";
 //! The key used to access the DirRosPath.
 static const QString DIR_ROS_KEY = "DIR_ROS";
 //! The key used to access the parameter ControlStrategiesPath
-static const QString CONTROL_STRATEGIES_SOURCE_KEY = "CONTROL_STRATEGIES_SOURCE";
+static const QString CONTROL_STRATEGIES_SOURCE_KEY =
+        "CONTROL_STRATEGIES_SOURCE";
+//! The key used to access the ros version parameter
+static const QString ROS_VERSION_KEY = "ROS_VERSION";
+//! The path to the ros installation
+static const QString ROS_PATH_KEY = "ROS_PATH";
 
 /*!
  * \brief The AppSettings class is used to access all the paths used in the
@@ -58,8 +64,9 @@ static const QString CONTROL_STRATEGIES_SOURCE_KEY = "CONTROL_STRATEGIES_SOURCE"
  * by the GUI.
  *
  * Don't forget to update the methods checkAllParametersSet(),
- * applyValuesToEnvironmentVariables(), restoreDefaults() and
- * applyDefaultsToUndefinedParameters() to include the new parameter.
+ * applyValuesToEnvironmentVariables(), restoreDefaults(),
+ * applyDefaultsToUndefinedParameters() and getEnvironmentVariables()
+ * to include the new parameter.
  *
  * The access to settings first checks if the value is present in the
  * QSettings object; if the value isn't set, the environment variable with the
@@ -108,20 +115,31 @@ public:
     const QString getProvantDatabasePathDefault() const;
     bool setProvantDatabasePath(const QString &path);
 
-    const QString getRosPathUnchecked() const;
-    const QString getRosPath() const;
-    const QString getRosPathDefault() const;
-    bool setRosPath(const QString &path);
+    const QString getCatkinWorkspacePathUncheked() const;
+    const QString getCatkinWorkspacePath() const;
+    const QString getCatkinWorkspacePathDefault() const;
+    bool setCatkinWorkspacePath(const QString &path);
 
     const QString getControlStrategiesPathUnchecked() const;
     const QString getControlStrategiesPath() const;
     const QString getControlStrategiesPathDefault() const;
     bool setControlStrategiesPath(const QString &path);
 
+    const QString getRosVersionUnchecked() const;
+    const QString getRosVersion() const;
+    const QString getRosVersionDefault() const;
+    bool setRosVersion(const QString &version);
+
+    const QString getRosPathUnchecked() const;
+    const QString getRosPath() const;
+    const QString getRosPathDefault() const;
+    bool setRosPath(const QString &path);
+
     bool checkAllParametersSet() const;
-    void applyValuesToEnvrionmentVariables();
+    void applyValuesToEnvironmentVariables();
     void applyDefaultsToUndefinedParameters();
     void restoreDefaults();
+    QProcessEnvironment getEnvironmentVariables() const;
 
 protected:
     QString getEnvironmentVariable(const QString &key,

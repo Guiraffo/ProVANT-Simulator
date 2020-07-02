@@ -24,8 +24,8 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>936</width>
-        <height>492</height>
+        <width>919</width>
+        <height>494</height>
        </rect>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout">
@@ -33,6 +33,9 @@
         <widget class="QLabel" name="provantRosLabel">
          <property name="text">
           <string>PROVANT_ROS</string>
+         </property>
+         <property name="buddy">
+          <cstring>provantROSWidget</cstring>
          </property>
         </widget>
        </item>
@@ -44,6 +47,9 @@
          <property name="text">
           <string>TILT_STRATEGIES</string>
          </property>
+         <property name="buddy">
+          <cstring>tiltStrategiesWidget</cstring>
+         </property>
         </widget>
        </item>
        <item>
@@ -53,6 +59,9 @@
         <widget class="QLabel" name="tiltProjectLabel">
          <property name="text">
           <string>TILT_PROJECT</string>
+         </property>
+         <property name="buddy">
+          <cstring>tiltProjectWidget</cstring>
          </property>
         </widget>
        </item>
@@ -64,6 +73,9 @@
          <property name="text">
           <string>TILT_MATLAB</string>
          </property>
+         <property name="buddy">
+          <cstring>tiltMatlabWidget</cstring>
+         </property>
         </widget>
        </item>
        <item>
@@ -73,6 +85,9 @@
         <widget class="QLabel" name="provantDatabaseLabel">
          <property name="text">
           <string>PROVANT_DATABASE</string>
+         </property>
+         <property name="buddy">
+          <cstring>provantDatabaseWidget</cstring>
          </property>
         </widget>
        </item>
@@ -84,6 +99,9 @@
          <property name="text">
           <string>GAZEBO_MODEL_PATH</string>
          </property>
+         <property name="buddy">
+          <cstring>gazeboModelWidget</cstring>
+         </property>
         </widget>
        </item>
        <item>
@@ -94,10 +112,46 @@
          <property name="text">
           <string>DIR_ROS</string>
          </property>
+         <property name="buddy">
+          <cstring>dirRosWidget</cstring>
+         </property>
         </widget>
        </item>
        <item>
         <widget class="FileBrowserWidget" name="dirRosWidget" native="true"/>
+       </item>
+       <item>
+        <widget class="QLabel" name="controlStrategiesSourceLabel">
+         <property name="text">
+          <string>CONTROL_STRATEGIES_SOURCE</string>
+         </property>
+         <property name="buddy">
+          <cstring>controlStrategiesSourceWidget</cstring>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="FileBrowserWidget" name="controlStrategiesSourceWidget" native="true"/>
+       </item>
+       <item>
+        <widget class="QLabel" name="rosPathLabel">
+         <property name="text">
+          <string>ROS_PATH</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="FileBrowserWidget" name="rosPathWidget" native="true"/>
+       </item>
+       <item>
+        <widget class="QLabel" name="rosVersionLabel">
+         <property name="text">
+          <string>ROS_VERSION</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QComboBox" name="rosVersionWidget"/>
        </item>
       </layout>
      </widget>
@@ -110,6 +164,9 @@
      </property>
      <property name="standardButtons">
       <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+     </property>
+     <property name="centerButtons">
+      <bool>true</bool>
      </property>
     </widget>
    </item>
