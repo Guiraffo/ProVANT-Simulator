@@ -257,14 +257,12 @@ void MainWindow::on_startGazeboPushButton_clicked()
     // Start the simulation.
     // Saves the modifications in  the simulation file.
     mundo.Write(ui->treeWidget);
-    // Writes a new roslaunch file for the simulation
-    roslaunch::WriteNew(QString::fromStdString(mundo.word->Filename),
-                        launchFile,
-                        hil);
 
     QString gazeboProcessCmd = "roslaunch";
     QStringList gazeboProcessArgs;
     gazeboProcessArgs << "Database" << launchFile;
+    gazeboProcessArgs << QString("world:=%1").arg(QString::fromStdString(
+                                              mundo.word->Filename));
 
     // Creates the process to execute the simulation
     QProcess *gazeboSimulationProcess = new QProcess(this);
