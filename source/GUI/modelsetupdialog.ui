@@ -211,7 +211,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QPushButton" name="removePushButton">
+          <widget class="QPushButton" name="removeActuatorButton">
            <property name="text">
             <string>Remove</string>
            </property>
@@ -261,12 +261,12 @@
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>562</x>
-     <y>20</y>
+     <x>569</x>
+     <y>27</y>
     </hint>
     <hint type="destinationlabel">
-     <x>560</x>
-     <y>346</y>
+     <x>589</x>
+     <y>357</y>
     </hint>
    </hints>
   </connection>
@@ -277,12 +277,12 @@
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>550</x>
-     <y>110</y>
+     <x>541</x>
+     <y>222</y>
     </hint>
     <hint type="destinationlabel">
-     <x>590</x>
-     <y>422</y>
+     <x>541</x>
+     <y>336</y>
     </hint>
    </hints>
   </connection>

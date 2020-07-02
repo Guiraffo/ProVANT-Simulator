@@ -4,25 +4,22 @@
 #include <QDialog>
 #include "Business/model.h"
 #include "Business/controller.h"
-#include "dialognewcontroller.h"
-#include "dialogopencontroller.h"
 
 namespace Ui {
 class ModelSetupDialog;
 }
 
 /*!
- * \brief Entidade responsável pelo desenvolvimento da janela de configuração
- * do modelo e VANT
+ * \brief The ModelSetupDialog class is a window that allows the user to
+ * configure a model used in the simulation.
  *
- * A janela de configuração será onde o usuário visualizará dados de modelagem e
- * configurará o controlador com as seguintes opções:
- * - nome do controlador
- * - tópicos dos sensores a serem utilizados
- * - tópicos dos atuadores a serem utilizados
- * - período de amostragem
- * - nome de arquivos para armazenamento de dados para uso em Matlab
- * - pose inicial
+ * Among the options provided to the user, the following itens can be changed:
+ *  - Control strategy;
+ *  - Use of hardware in the loop simulation;
+ *  - Sensors and actuators provided by the model;
+ *  - Sampling time;
+ *  - Initial pose;
+ *  - Log files for the simulation;
  */
 class ModelSetupDialog : public QDialog
 {
@@ -30,41 +27,73 @@ class ModelSetupDialog : public QDialog
 
 public:
     explicit ModelSetupDialog(QWidget *parent = 0);
-    //! método que adquire os nomes e caminhos dos arquivos de descrção física
-    //! e do controlador
-    void setModel(std::string,std::string);
     ~ModelSetupDialog();
 
-    bool hil = false;
+    //! Sets the controller and model displayed on the window.
+    void setModel(QString modelFile, QString controllerFile);
+
+    //! Returns the state of the hardware on the loop flag.
+    bool hil() const;
+
+signals:
+    /**
+     * @brief hilFlagChanged Singla emited when the hardware on the loop status
+     * flag changes.
+     * @param hil The status of the hardware on the loop flag.
+     */
+    void hilFlagChanged(bool hil);
+
+public slots:
+    //! Save the controller data in the respective file.
+    void saveConfig();
+
+    //! Saves the modifications made to the model and closes the window.
+    void accept();
+
+    //! Defines the state of the hardware on the loop flag.
+    void setHil(bool hil);
+
+    //! Lists the available control strategies in the source directory and
+    //! shows then in the control selection combobox.
+    void updateAvailableControllers();
 
 private slots:
+    //! Creates a new controll strategy.
+    void on_newControllerButton_clicked();
 
-    void on_newControllerButton_clicked(); // criando novo projeto de estratégia de controle
+    //! Compiles the selected controll strategy.
+    void on_compileControllerButton_clicked();
 
-    void on_compileControllerButton_clicked(); // compilando estratégia de controle
+    //! Opens an existing controll strategy project.
+    void on_openControllerButton_clicked();
 
-    void on_openControllerButton_clicked(); // abrindo projeto de controle já existente
+    //! Add a new sensor to the model.
+    void on_addSensorButton_clicked();
 
-    void on_addSensorButton_clicked(); // adicionando novo sensor
+    //! Removes the selected sensor from the model.
+    void on_removeSensorButton_clicked();
 
-    void on_removeSensorButton_clicked(); // removendo sensor
+    //! Add an actuator to the model.
+    void on_addActuatorButton_clicked();
 
-    void on_addActuatorButton_clicked(); // adicionando controlador
+    //! Removes the selected actuator from the model.
+    void on_removeActuatorButton_clicked();
 
-    void on_removeActuatorButton_clicked(); // removendo controlador
-
-    void on_buttonBox_accepted(); // botão de ok
-
-    void SaveConfig(); // salvando dados no arquivo de configuração
-
+    //! Enables the Hardware on  the Loop mode.
     void on_hilCheckBox_clicked(bool checked);
 
-
 protected:
+    //! Pointer the elements of the user interface
     Ui::ModelSetupDialog *ui;
+
 private:
-    Model model; // classe modelo
-    Controller controller; // classe controlador
+    //! Used to manipulate the model config.xml file
+    Model _model;
+    //! Used to manipulate the controller options
+    Controller _controller;
+
+    //! Indiciates if the model should use the hardware on the loop mode.
+    bool _hil = false;
 };
 
 #endif // DIALOG_H

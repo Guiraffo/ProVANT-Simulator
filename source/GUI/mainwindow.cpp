@@ -232,12 +232,11 @@ void MainWindow::on_treeWidget_itemDoubleClicked(QTreeWidgetItem *item,
 
         // Opens the window
         ModelSetupDialog modelsetup;
-        modelsetup.setModel(localModelPath.toStdString(),
-                            localConfig.toStdString());
+        modelsetup.setModel(localModelPath, localConfig);
         modelsetup.setModal(true);
         modelsetup.exec();
 
-        hil = modelsetup.hil;
+        hil = modelsetup.hil();
         QString s = QString::number(hil);
 
         if(hil)
