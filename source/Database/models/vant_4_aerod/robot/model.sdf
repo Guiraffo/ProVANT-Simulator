@@ -1,0 +1,725 @@
+<?xml version="1.0" encoding="UTF-8"?> 									<!--Versão com erros consertados-->
+<sdf version='1.6'>
+  <model name='vant_4_aerod'>
+    <link name='Main_Body'>
+    <self_collide>false</self_collide>
+      <pose frame=''>0 0 0 0 0 0</pose>
+      <inertial>
+        <pose frame=''>0.06684 0 0.005392 0 0 0</pose>
+        <mass>7.0</mass>
+        <inertia>
+          <ixx>0.1489</ixx>
+          <ixy>0.0001</ixy>
+          <ixz>-0.0189</ixz>
+          <iyy>0.1789</iyy>
+          <iyz>-0.000029</iyz>
+          <izz>0.3011</izz>
+        </inertia>
+      </inertial>
+      <collision name='Main_Body_collision'>    
+        <pose frame=''>0 0 0 0 -0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://vant_4_aerod/meshes/Main_Body.STL</uri>
+          </mesh>
+        </geometry>
+      </collision>
+      <visual name='Main_Body_visual'>
+        <pose frame=''>0 0 0 0 -0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://vant_4_aerod/meshes/mainbody_red.dae</uri>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>										
+    <link name='Aileron_L'>
+      <pose frame=''>0.015778 0.35336 0.10425 0.082272 0.12555 -0.000197</pose>
+      <inertial>
+        <pose frame=''>0 0 0 0 -0 0</pose>
+        <mass>0.000001</mass>
+        <inertia>
+          <ixx>0.00000001</ixx>
+          <ixy>0</ixy>
+          <ixz>0.0000000</ixz>
+          <iyy>0.00000001</iyy>
+          <iyz>0.0000000</iyz>
+          <izz>0.00000001</izz>
+        </inertia>
+      </inertial>
+      <collision name='Aileron_L_collision'>
+        <pose frame=''>0 0 0 0 -0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://vant_4_aerod/meshes/Aileron_L.STL</uri>
+          </mesh>
+        </geometry>
+      </collision>
+      <visual name='Aileron_L_visual'>
+        <pose frame=''>0 0 0 0 -0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://vant_4_aerod/meshes/aileronL_yellow.dae</uri>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+    <joint name='Aileron_L_joint_name' type='revolute'>
+      <child>Aileron_L</child>
+      <parent>Main_Body</parent>
+      <axis>
+        <xyz>0.010487 0.996616 0.081532</xyz>
+        <limit>
+          <lower>-1.57</lower>
+          <upper>1.57</upper>
+          <effort>200</effort>
+          <velocity>100</velocity>
+        </limit>
+        <dynamics>
+          <spring_reference>0</spring_reference>
+          <spring_stiffness>0</spring_stiffness>
+        </dynamics>
+        <use_parent_model_frame>1</use_parent_model_frame>
+      </axis>
+    </joint>
+    <link name='Aileron_R'>
+      <pose frame=''>0.016127 -0.35273 0.10416 -0.082286 0.057788 0.000195</pose>
+      <inertial>
+        <pose frame=''>0 0 0 0 -0 0</pose>
+        <mass>0.000001</mass>
+        <inertia>
+          <ixx>0.00000001</ixx>
+          <ixy>0</ixy>
+          <ixz>0.0000000</ixz>
+          <iyy>0.00000001</iyy>
+          <iyz>0.0000000</iyz>
+          <izz>0.00000001</izz>
+        </inertia>
+      </inertial>
+      <collision name='Aileron_R_collision'>
+        <pose frame=''>0 0 0 0 -0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://vant_4_aerod/meshes/Aileron_R.STL</uri>
+          </mesh>
+        </geometry>
+      </collision>
+      <visual name='Aileron_R_visual'>
+        <pose frame=''>0 0 0 0 -0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://vant_4_aerod/meshes/aileronR_yellow.dae</uri>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+    <joint name='Aileron_R_joint_name' type='revolute'>
+      <child>Aileron_R</child>
+      <parent>Main_Body</parent>
+      <axis>
+        <xyz>-0.004942 0.996615 -0.082056</xyz>
+        <limit>
+          <lower>-1.57</lower>
+          <upper>1.57</upper>
+          <effort>200</effort>
+          <velocity>100</velocity>
+        </limit>
+        <dynamics>
+          <spring_reference>0</spring_reference>
+          <spring_stiffness>0</spring_stiffness>
+        </dynamics>
+        <use_parent_model_frame>1</use_parent_model_frame>
+      </axis>
+    </joint>
+    <link name='Rotor_L'>
+      <pose frame=''>0.0780 0.6073 0.1235 0.0524 0 0</pose>
+      <inertial>
+        <pose frame=''>0 0 0.02 0 0 0</pose>
+        <mass>0.3</mass>
+        <inertia>
+          <ixx>0.0007</ixx>
+          <ixy>3.4E-07</ixy>
+          <ixz>1.1E-05</ixz>
+          <iyy>0.0007</iyy>
+          <iyz>1.5E-05</iyz>
+          <izz>0.0002</izz>
+        </inertia>
+      </inertial>
+      <collision name='Rotor_L_collision'>
+        <pose frame=''>-0.077968 -0.60727 -0.12348 0 0.015432 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://vant_4_aerod/meshes/Rotor_L.STL</uri>
+          </mesh>
+        </geometry>
+      </collision>
+      <visual name='Rotor_L_visual'>
+        <pose frame=''>-0.077968 -0.60727 -0.12348 0 -0.015432 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://vant_4_aerod/meshes/RotorL_yellow.dae</uri>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+    <joint name='Rotor_L_joint_name' type='revolute'>
+      <child>Rotor_L</child>
+      <parent>Main_Body</parent>
+      <axis>
+        <xyz>0 1 0</xyz>
+        <limit>
+<!--          <lower>-3</lower>-->
+<!--          <upper>3</upper>-->
+          <lower>-1.57</lower>
+          <upper>1.57</upper>
+<!--          <effort>200</effort>-->
+<!--          <velocity>100</velocity>-->
+        </limit>
+        <dynamics>
+          <damping>0.005</damping>
+          <spring_reference>0</spring_reference>
+          <spring_stiffness>0</spring_stiffness>
+        </dynamics>
+        <use_parent_model_frame>1</use_parent_model_frame>
+      </axis>
+    </joint>
+   <link name='Hel_L'>
+      <pose frame=''>0.077968 0.60727 0.22 0 -0.083794 0</pose>
+      <inertial>
+        <pose frame=''>0 -0 0 0 -0 0</pose>
+        <mass>0.0000001</mass>
+        <inertia>
+         <ixx>0.00000001</ixx>
+          <ixy>0</ixy>
+          <ixz>0.0000000</ixz>
+          <iyy>0.00000001</iyy>
+          <iyz>0.0000000</iyz>
+          <izz>0.00000001</izz>
+        </inertia>
+      </inertial>
+      <collision name='Hel_L_collision'>
+        <pose frame=''>-0.077968 -0.60727 -0.22 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://vant_4_aerod/meshes/Hel_L.STL</uri>
+          </mesh>
+        </geometry>
+      </collision>
+      <visual name='Hel_L_visual'>
+        <pose frame=''>-0.077968 -0.60727 -0.22 -0 -0.015432 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://vant_4_aerod/meshes/HelL_black.dae</uri>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+    <joint name='Hel_L_joint_name' type='revolute'>
+      <child>Hel_L</child>
+      <parent>Rotor_L</parent>
+      <axis>
+        <xyz>-0.083694 -0.005508 0.996471</xyz>
+    <!--    <limit>
+          <lower>-6.2831</lower>
+          <upper>6.2831</upper>
+          <effort>200</effort>
+          <velocity>100</velocity>
+        </limit> -->
+        <dynamics>
+          <spring_reference>0</spring_reference>
+          <spring_stiffness>0</spring_stiffness>
+        </dynamics>
+        <use_parent_model_frame>1</use_parent_model_frame>
+      </axis>
+    </joint> 
+    <link name='Rotor_R'>
+      <pose frame=''>0.0780 -0.6073 0.1235 -0.0524 0 0 </pose>
+      <inertial>
+        <pose frame=''>0 0 0.02 0 0 0</pose>
+        <mass>0.3</mass>
+        <inertia>
+          <ixx>0.0007</ixx>
+          <ixy>3.4E-07</ixy>
+          <ixz>1.1E-05</ixz>
+          <iyy>0.0007</iyy>
+          <iyz>1.5E-05</iyz>
+          <izz>0.0002</izz>
+        </inertia>
+      </inertial>
+      <collision name='Rotor_R_collision'>
+        <pose frame=''>-0.077968 0.60727 -0.12348 -0 -0.015432 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://vant_4_aerod/meshes/Rotor_R.STL</uri>
+          </mesh>
+        </geometry>
+      </collision>
+      <visual name='Rotor_R_visual'>
+        <pose frame=''>-0.077968 0.60727 -0.12348 -0 -0.015432 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://vant_4_aerod/meshes/RotorR_yellow.dae</uri>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+    <joint name='Rotor_R_joint_name' type='revolute'>
+      <child>Rotor_R</child>
+      <parent>Main_Body</parent>
+      <axis>
+        <xyz>-0 1 0</xyz>
+        <limit>
+<!--          <lower>-3</lower>-->
+<!--          <upper>3</upper>-->
+          <lower>-1.57</lower>
+          <upper>1.57</upper>
+<!--          <effort>200</effort>-->
+<!--          <velocity>100</velocity>-->
+        </limit>
+        <dynamics>
+          <damping>0.005</damping>
+          <spring_reference>0</spring_reference>
+          <spring_stiffness>0</spring_stiffness>
+        </dynamics>
+        <use_parent_model_frame>1</use_parent_model_frame>
+      </axis>
+    </joint>
+    <link name='Hel_R'>
+      <pose frame=''>0.077968 -0.60727 0.22 0 -0.015432 0</pose>
+      <inertial>
+        <pose frame=''>0 -0 0 0 -0 0</pose>
+        <mass>0.0000001</mass>
+        <inertia>
+          <ixx>0.00000001</ixx>
+          <ixy>0</ixy>
+          <ixz>0.0000000</ixz>
+          <iyy>0.00000001</iyy>
+          <iyz>0.0000000</iyz>
+          <izz>0.00000001</izz>
+        </inertia>
+      </inertial>
+      <collision name='Hel_R_collision'>
+        <pose frame=''>0 0 0 0 -0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://vant_4_aerod/meshes/Hel_R.STL</uri>
+          </mesh>
+        </geometry>
+      </collision>
+      <visual name='Hel_R_visual'>
+        <pose frame=''>-0.077968 0.60727 -0.22 0 -0.015432 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://vant_4_aerod/meshes/HelR_black.dae</uri>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+    <joint name='Hel_R_joint_name' type='revolute'>
+      <child>Hel_R</child>
+      <parent>Rotor_R</parent>
+      <axis>
+        <xyz>-0.015431 0.005508 0.999861</xyz>
+        <dynamics>
+          <spring_reference>0</spring_reference>
+          <spring_stiffness>0</spring_stiffness>
+        </dynamics>
+        <use_parent_model_frame>1</use_parent_model_frame>
+      </axis>
+    </joint>
+    <link name='Rudder_L'>
+      <pose frame=''>-0.40846 -0.17214 0.14982 -0.52536 -0.24986 0.006644</pose>
+      <inertial>
+        <pose frame=''>0 -0 0 0 -0 0</pose>
+        <mass>0.000001</mass>
+        <inertia>
+          <ixx>0.00000001</ixx>
+          <ixy>0</ixy>
+          <ixz>0.0000000</ixz>
+          <iyy>0.00000001</iyy>
+          <iyz>0.0000000</iyz>
+          <izz>0.00000001</izz>
+        </inertia>
+      </inertial>
+      <collision name='Rudder_L_collision'>
+        <pose frame=''>0 0 0 0 -0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://vant_4_aerod/meshes/Rudder_L.STL</uri>
+          </mesh>
+        </geometry>
+      </collision>
+      <visual name='Rudder_L_visual'>
+        <pose frame=''>0 0 0 0 -0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://vant_4_aerod/meshes/rudderL_yellow.dae</uri>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+    <joint name='Rudder_L_joint_name' type='revolute'>
+      <child>Rudder_L</child>
+      <parent>Main_Body</parent>
+      <axis>
+        <xyz>0.118261 0.865948 -0.485951</xyz>
+        <limit>
+          <lower>-1.57</lower>
+          <upper>1.57</upper>
+          <effort>200</effort>
+          <velocity>100</velocity>
+        </limit>
+        <dynamics>
+          <spring_reference>0</spring_reference>
+          <spring_stiffness>0</spring_stiffness>
+        </dynamics>
+        <use_parent_model_frame>1</use_parent_model_frame>
+      </axis>
+    </joint>
+    <link name='Rudder_R'>
+      <pose frame=''>-0.40846 0.17214 0.14982 0.50904 -0.075537 0.093637</pose>
+      <inertial>
+        <pose frame=''>0 -0 0 0 -0 0</pose>
+        <mass>0.000001</mass>
+        <inertia>
+          <ixx>0.00000001</ixx>
+          <ixy>0</ixy>
+          <ixz>0.0000000</ixz>
+          <iyy>0.00000001</iyy>
+          <iyz>0.0000000</iyz>
+          <izz>0.00000001</izz>
+        </inertia>
+      </inertial>
+      <collision name='Rudder_R_collision'>
+        <pose frame=''>0 0 0 0 -0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://vant_4_aerod/meshes/Rudder_R.STL</uri>
+          </mesh>
+        </geometry>
+      </collision>
+      <visual name='Rudder_R_visual'>
+        <pose frame=''>0 0 0 0 -0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://vant_4_aerod/meshes/rudderR_yellow.dae</uri>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+    <joint name='Rudder_R_joint_name' type='revolute'>
+      <child>Rudder_R</child>
+      <parent>Main_Body</parent>
+      <axis>
+        <xyz>-0.118262 0.865949 0.48595</xyz>
+        <limit>
+          <lower>-1.57</lower>
+          <upper>1.57</upper>
+          <effort>200</effort>
+          <velocity>100</velocity>
+        </limit>
+        <dynamics>
+          <spring_reference>0</spring_reference>
+          <spring_stiffness>0</spring_stiffness>
+        </dynamics>
+        <use_parent_model_frame>1</use_parent_model_frame>
+      </axis>
+    </joint>
+		
+<link name="camera_link">
+         <pose>0 0 0.08 0 0 pi/2</pose>
+         <inertial>
+           <mass>0.0001</mass>
+           <inertia>
+             <ixx>0.000166667</ixx>
+             <iyy>0.000166667</iyy>
+             <izz>0.000166667</izz>
+           </inertia>
+         </inertial>
+         <collision name="collision">
+           <geometry>
+             <box>
+               <size>0.01 0.01 0.01</size>
+             </box>
+           </geometry>
+         </collision>
+         <visual name="visual">
+           <geometry>
+             <box>
+               <size>0.01 0.01 0.01</size>
+             </box>
+           </geometry>
+         </visual>
+         <sensor name="camera" type="depth">
+           <camera>
+             <horizontal_fov>1.047</horizontal_fov>
+             <image>
+               <width>320</width>
+               <height>240</height>
+             </image>
+             <clip>
+               <near>0.1</near>
+               <far>100</far>
+             </clip>
+           </camera>
+           <always_on>1</always_on>
+           <update_rate>30</update_rate>
+           <visualize>true</visualize>
+   <plugin name="camera_plugin" filename="libgazebo_ros_openni_kinect.so">
+             <baseline>0.2</baseline>
+             <alwaysOn>true</alwaysOn>
+             <!-- Keep this zero, update_rate in the parent <sensor> tag
+               will control the frame rate. -->
+             <updateRate>0.0</updateRate>
+             <cameraName>camera_ir</cameraName>
+             <imageTopicName>/camera/color/image_raw</imageTopicName>
+             <cameraInfoTopicName>/camera/color/camera_info</cameraInfoTopicName>
+             <depthImageTopicName>/camera/depth/image_raw</depthImageTopicName>
+             <depthImageCameraInfoTopicName>/camera/depth/camera_info</depthImageCameraInfoTopicName>
+             <pointCloudTopicName>/camera/depth/points</pointCloudTopicName>
+             <frameName>camera_link</frameName>
+             <pointCloudCutoff>0.5</pointCloudCutoff>
+             <pointCloudCutoffMax>3.0</pointCloudCutoffMax>
+             <distortionK1>0</distortionK1>
+             <distortionK2>0</distortionK2>
+             <distortionK3>0</distortionK3>
+             <distortionT1>0</distortionT1>
+             <distortionT2>0</distortionT2>
+             <CxPrime>0</CxPrime>
+             <Cx>0</Cx>
+             <Cy>0</Cy>
+             <focalLength>0</focalLength>
+             <hackBaseline>0</hackBaseline>
+           </plugin>
+         </sensor>
+       </link>
+       <joint name='camera_joint' type='fixed'>
+         <child>camera_link</child>
+         <parent>Main_Body</parent>
+         <axis>
+           <xyz>0 0 1</xyz>
+           <use_parent_model_frame>1</use_parent_model_frame>
+         </axis>
+       </joint>
+
+   <link name="laser_link">
+              <pose>0.35 0 0 0 0 0</pose>
+              <inertial>
+                <mass>0.0001</mass>
+                <inertia>
+                  <ixx>0.000166667</ixx>
+                  <iyy>0.000166667</iyy>
+                  <izz>0.000166667</izz>
+                </inertia>
+              </inertial>
+              <collision name="collision">
+                <geometry>
+                  <box>
+                    <size>0.001 0.001 0.001</size>
+                  </box>
+                </geometry>
+              </collision>
+              <visual name="visual">
+                <geometry>
+                  <box>
+                    <size>0.01 0.01 0.01</size>
+                  </box>
+                </geometry>
+              </visual>
+          <sensor type="ray" name="laser">
+     <pose>0 0 0 0 0 0</pose>
+     <visualize>true</visualize>
+     <update_rate>30</update_rate>
+     <ray>
+        <scan>
+           <horizontal>
+              <samples>40</samples>
+              <resolution>1.0</resolution>
+              <min_angle>-0.40</min_angle>
+              <max_angle>0.4</max_angle>
+           </horizontal>
+           <vertical>
+              <samples>40</samples>
+              <resolution>1.0</resolution>
+              <min_angle>-0.20</min_angle>
+              <max_angle>0.1</max_angle>
+           </vertical>
+        </scan>
+        <range>
+           <min>0.01</min>
+           <max>3.5</max>
+           <resolution>0.02</resolution>
+        </range>
+     </ray>
+     <plugin filename="libgazebo_ros_range.so" name="gazebo_ros_range">
+        <gaussianNoise>0.005</gaussianNoise>
+        <alwaysOn>true</alwaysOn>
+        <updateRate>5</updateRate>
+        <topicName>/sensor/laser</topicName>
+        <frameName>laser_link</frameName>
+        <visualize>true</visualize>
+        <radiation>infrared</radiation>
+        <fov>0.02</fov>
+     </plugin>
+  </sensor>
+    </link>
+    <joint name='laser_joint' type='fixed'>
+      <child>laser_link</child>
+      <parent>Main_Body</parent>
+      <axis>
+        <xyz>0 0 1</xyz>
+        <use_parent_model_frame>1</use_parent_model_frame>
+      </axis>
+    </joint>
+																		
+   <plugin name="VetorEstados"
+filename="libgazebo_ros_AllData_plugin.so">
+            <NameOfTopic>Estados</NameOfTopic>
+            <NameOfJointR>Rotor_R_joint_name</NameOfJointR>
+            <NameOfJointL>Rotor_L_joint_name</NameOfJointL>
+            <bodyName>Main_Body</bodyName>
+     </plugin>    
+     <plugin name="RotorRplugin"
+filename="libgazebo_ros_servo_motor_plugin.so">
+            <NameOfJoint>Rotor_R_joint_name</NameOfJoint>   
+            <TopicPublisher>RotorRpub</TopicPublisher>
+            <TopicSubscriber>RefRotorR</TopicSubscriber>
+            <Modo>Torque</Modo>
+            <tag>RotR</tag>
+            <Force_Saturation>1</Force_Saturation>
+            <Angle_Saturation>1</Angle_Saturation>
+     </plugin>
+      <plugin name="RotorLplugin"
+filename="libgazebo_ros_servo_motor_plugin.so">
+            <NameOfJoint>Rotor_L_joint_name</NameOfJoint>
+            <TopicPublisher>RotorLpub</TopicPublisher>
+            <TopicSubscriber>RefRotorL</TopicSubscriber>
+            <Modo>Torque</Modo>
+            <tag>RotL</tag>
+            <Force_Saturation>1</Force_Saturation>
+            <Angle_Saturation>1</Angle_Saturation>
+  </plugin>
+	<plugin name="AileronRplugin"
+filename="libgazebo_ros_servo_motor_plugin.so">
+            <NameOfJoint>Aileron_R_joint_name</NameOfJoint>
+            <TopicPublisher>AileronRpub</TopicPublisher>
+            <TopicSubscriber>RefAileronR</TopicSubscriber>
+            <Modo>Position</Modo> 
+             <tag>AilR</tag> 
+            <Force_Saturation>1</Force_Saturation> 
+            <Angle_Saturation>1</Angle_Saturation>          
+  </plugin>
+   	<plugin name="AileronLplugin"
+filename="libgazebo_ros_servo_motor_plugin.so">
+            <NameOfJoint>Aileron_L_joint_name</NameOfJoint>
+            <TopicPublisher>AileronLpub</TopicPublisher>
+            <TopicSubscriber>RefAileronL</TopicSubscriber>
+            <Modo>Position</Modo> 
+             <tag>AilL</tag> 
+            <Force_Saturation>1</Force_Saturation> 
+            <Angle_Saturation>1</Angle_Saturation>           
+  </plugin>
+  	<plugin name="RudderRplugin"
+filename="libgazebo_ros_servo_motor_plugin.so">
+            <NameOfJoint>Rudder_R_joint_name</NameOfJoint>
+            <TopicPublisher>RudderRpub</TopicPublisher>
+            <TopicSubscriber>RefRudderR</TopicSubscriber>
+            <Modo>Position</Modo> 
+            <tag>RudR</tag>
+            <Force_Saturation>1</Force_Saturation>
+            <Angle_Saturation>1</Angle_Saturation>>         
+  </plugin>
+   	<plugin name="RudderLplugin"
+filename="libgazebo_ros_servo_motor_plugin.so">
+            <NameOfJoint>Rudder_L_joint_name</NameOfJoint>
+            <TopicPublisher>RudderLpub</TopicPublisher>
+            <TopicSubscriber>RefRudderL</TopicSubscriber>
+            <Modo>Position</Modo>
+            <tag>RudL</tag>
+            <Force_Saturation>1</Force_Saturation>
+            <Angle_Saturation>1</Angle_Saturation>
+  	</plugin> 
+   <plugin name="empuxo" filename="libgazebo_ros_Aerodinamica4dot0_plugin.so">
+            <MainBody> Main_Body </MainBody>
+            <NameOfNode> Estados </NameOfNode>	
+            <NameOfJointR>Rotor_R_joint_name</NameOfJointR>
+            <NameOfJointL>Rotor_L_joint_name</NameOfJointL>			
+            <topic_Fr> ThrustR </topic_Fr> 
+            <LinkFr> Rotor_R </LinkFr>
+            <topic_Fl> ThrustL </topic_Fl>		
+            <LinkFl> Rotor_L </LinkFl>				
+	    <topic_AileronR> RefAileronR </topic_AileronR>
+	    <LinkAileronR>Aileron_R</LinkAileronR>
+	    <CentroAerod_F> Fuselage_aerodcenter </CentroAerod_F>		
+            <CentroAerod_Wr> WingR_aerodcenter </CentroAerod_Wr>
+            <topic_AileronL> RefAileronL </topic_AileronL>
+            <LinkAileronL>Aileron_L</LinkAileronL>	
+            <CentroAerod_Wl> WingL_aerodcenter </CentroAerod_Wl>
+            <CentroAerod_RudR> RudR_aerodcenter </CentroAerod_RudR>
+            <CentroAerod_RudL> RudL_aerodcenter </CentroAerod_RudL>
+           <topic_RudderR> RefRudderR </topic_RudderR>
+            <topic_RudderL> RefRudderL </topic_RudderL>	
+            <LinkRudderR>Rudder_R</LinkRudderR>
+            <LinkRudderL>Rudder_L</LinkRudderL>						
+        </plugin>	
+        
+        <plugin name="PathPlotter"
+filename="libgazebo_ros_PathPlotter.so">
+            <NameOfPathTopic>Path</NameOfPathTopic>
+            <NameOfMarkerTopic>marker</NameOfMarkerTopic>
+            <NameOfPathRefTopic>path_ref</NameOfPathRefTopic>
+            <bodyName>Main_Body</bodyName>
+            <uav>vant_4_aerod</uav>
+     </plugin>  
+        <plugin name="DataSave"
+filename="libgazebo_ros_DataSave.so">
+            <NameOfTopic>DataSaveTopic</NameOfTopic>
+            <NameOfJointR>Rotor_R_joint_name</NameOfJointR>
+            <NameOfJointL>Rotor_L_joint_name</NameOfJointL>
+            <bodyName>Main_Body</bodyName>
+     </plugin>
+     <plugin name="VisualPropellers"
+filename="libgazebo_ros_VisualPropellers.so">
+            <Propeller1>Hel_R_joint_name</Propeller1>
+            <Propeller2>Hel_L_joint_name</Propeller2>
+            <Propellers_Velocity>50</Propellers_Velocity>
+     </plugin>    
+     <plugin name = "DataSaveTiltRotor"
+     filename="libgazebo_ros_DataSaveTiltRotor.so">
+            <topic_Fr>ThrustR</topic_Fr>
+            <topic_Fl>ThrustL</topic_Fl>
+	    <topic_Rotr>RefRotorR</topic_Rotr>
+            <topic_Rotl>RefRotorL</topic_Rotl>
+            <topic_DAr>RefAileronR</topic_DAr>
+            <topic_DAl>RefAileronL</topic_DAl>
+            <topic_DRr>RefRudderR</topic_DRr>
+            <topic_DRl>RefRudderL</topic_DRl>
+            <Fr_sat>50</Fr_sat>
+            <Fl_sat>50</Fl_sat>
+	    <Rotr_sat>100</Rotr_sat>
+            <Rotl_sat>100</Rotl_sat>
+            <DAr_sat>10</DAr_sat>
+            <DAl_sat>10</DAl_sat>
+            <DRr_sat>10</DRr_sat>
+            <DRl_sat>10</DRl_sat>
+     </plugin> 
+  </model>
+</sdf>

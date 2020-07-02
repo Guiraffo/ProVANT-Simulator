@@ -33,7 +33,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
         ui->pushButton_2->setDisabled(true);
 
         // nome que será observado na parte superior da janela
-        const QString name("ProVANT Simulator");
+        const QString name("ProVANT Simulator v1");
         setWindowTitle(name);
     }
     catch(const CustomException& ex)

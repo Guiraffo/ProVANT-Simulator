@@ -117,7 +117,8 @@ catkin_package(
 include_directories(include)
 INCLUDE_DIRECTORIES (/usr/include/eigen3)
 include_directories( ${catkin_INCLUDE_DIRS})
-include_directories($ENV{TILT_PROJECT}/source/Structure/control_strategies/)
+include_directories("$ENV{TILT_PROJECT}/source/Structure/control_strategies/")
+
 
 ## Declare a C++ library
 # add_library(teste
