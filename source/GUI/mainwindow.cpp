@@ -8,6 +8,7 @@
 #include "mainwindow.h"
 #include <fcntl.h>
 
+
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
@@ -33,8 +34,8 @@ MainWindow::MainWindow(QWidget *parent) :
     // inicioalizar uma simulação
     ui->actionSave->setDisabled(true);
     ui->menuEdit->setDisabled(true);
-    ui->pushButton->setDisabled(true);
-    ui->pushButton_2->setDisabled(true);
+    ui->startGazeboPushButton->setDisabled(true);
+    ui->jointValuesPushButton->setDisabled(true);
 
     // nome que será observado na parte superior da janela
     const QString name("ProVANT Simulator v1");
@@ -46,7 +47,7 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-void MainWindow::on_pushButton_clicked()
+void MainWindow::on_startGazeboPushButton_clicked()
 {
     for(int i=0;i<ui->treeWidget->topLevelItemCount();i++)
     {
@@ -120,7 +121,7 @@ void MainWindow::on_pushButton_clicked()
         std::system(base.toStdString().c_str()); // comando de inicializar simulação
     }
 
-    ui->pushButton_2->setDisabled(false);
+    ui->jointValuesPushButton->setDisabled(false);
 }
 
 void MainWindow::on_actionNew_triggered()
@@ -161,11 +162,11 @@ void MainWindow::on_actionNew_triggered()
     QFileInfo fileInfo(ff);
     if (fileInfo.exists())
     {
-        QGraphicsScene * scene = new QGraphicsScene(ui->graphicsView_2);
+        QGraphicsScene * scene = new QGraphicsScene(ui->worldGraphicsView);
         QImage image(imagefile);
         scene->addPixmap(QPixmap::fromImage(image));
-        ui->graphicsView_2->setScene(scene);
-        ui->graphicsView_2->show();
+        ui->worldGraphicsView->setScene(scene);
+        ui->worldGraphicsView->show();
     }
 
     ui->treeWidget->clear();
@@ -177,7 +178,7 @@ void MainWindow::on_actionNew_triggered()
     ui->menuEdit->setEnabled(true);
     ui->actionSave->setEnabled(true);
     ui->menuEdit->setEnabled(true);
-    ui->pushButton->setEnabled(true);
+    ui->startGazeboPushButton->setEnabled(true);
 
     // informa que o arquivo ainda é template, então usuário
     // deve salvar os dados em outro arquivo com formato .world
@@ -269,95 +270,122 @@ void MainWindow::on_treeWidget_itemDoubleClicked(QTreeWidgetItem *item, int colu
     }
 }
 
+
 void MainWindow::on_treeWidget_itemClicked(QTreeWidgetItem *item, int column)
 {
     Q_UNUSED(column)
-    if(item->text(0) == "uri")
+    try
     {
-        QString env(getenv( "GAZEBO_MODEL_PATH" ));
-        QDir dir(env.toStdString().c_str());
-        QStringList list;
-        list = item->text(1).split("//");
-        // não há arquivo
-        if (!dir.cd(QString::fromStdString(list.at(1).toStdString()))) // "/tmp"
+        if(item->text(0) == "uri")
         {
-            QGraphicsScene * scene = new QGraphicsScene(ui->graphicsView);
-            ui->graphicsView->setScene(scene);
-            ui->graphicsView->show();
-        }
-        else // há arquivo
-        {
-            // plotando foto do vant
-            QString imagefile(env+"/"+list.at(1)+"/imagem.gif");
-            QFile ff(imagefile);
-            QFileInfo fileInfo(ff);
-            if (fileInfo.exists())
+            QString env(getenv( "GAZEBO_MODEL_PATH" ));
+            QDir dir(env.toStdString().c_str());
+            QStringList list;
+            list = item->text(1).split("//");
+            // não há arquivo
+            if (!dir.cd(QString::fromStdString(list.at(1).toStdString()))) // "/tmp"
             {
-                QGraphicsScene * scene = new QGraphicsScene(ui->graphicsView);
-                QImage image(imagefile);
-                scene->addPixmap(QPixmap::fromImage(image));
-                ui->graphicsView->setScene(scene);
-                ui->graphicsView->show();
+                QGraphicsScene * scene = new QGraphicsScene(ui->modelGraphicsView);
+                ui->modelGraphicsView->setScene(scene);
+                ui->modelGraphicsView->show();
+            }
+            else // há arquivo
+            {
+                // plotando foto do vant
+                QString imagefile(env+"/"+list.at(1)+"/imagem.gif");
+                QFile ff(imagefile);
+                QFileInfo fileInfo(ff);
+                if (fileInfo.exists())
+                {
+                    QGraphicsScene * scene = new QGraphicsScene(ui->modelGraphicsView);
+                    QImage image(imagefile);
+                    scene->addPixmap(QPixmap::fromImage(image));
+                    ui->modelGraphicsView->setScene(scene);
+                    ui->modelGraphicsView->show();
+                }
             }
         }
     }
+    catch(const CustomException& ex)
+    {
+        qDebug() << ex.get_info();
+        qDebug() << "Linha ";
+        qDebug() << ex.get_line();
+        qDebug() << "arquivo ";
+        qDebug() << ex.get_file();
+        exit(EXIT_FAILURE);
+    }
+
 }
 
 void MainWindow::on_actionOpen_triggered()
 {
-    QString env(getenv( "PROVANT_DATABASE" ));
-    env = env + "/worlds/worlds";
-    // escolhe do arquivo .world
-    QString filename = QFileDialog::getOpenFileName(this
-                                                    ,tr("Open World")
-                                                    , env.toStdString().c_str()
-                                                    , tr("World Files (*.world)"));
-    if(filename.isEmpty()) return;
-    // tratando nome do arquivo
-    QString dir;
-    QStringList splitvector;
-    QRegExp rx("\\/");
-    splitvector = filename.split(rx);
-    splitvector.removeLast();
-    // filter
-    foreach (const QString &str, splitvector)
+    try
     {
-        if (str.contains(" ")||str.size()==0)
+        QString env(getenv( "PROVANT_DATABASE" ));
+        env = env + "/worlds/worlds";
+        // escolhe do arquivo .world
+        QString filename = QFileDialog::getOpenFileName(this
+                                                            ,tr("Open World")
+                                                            , env.toStdString().c_str()
+                                                            , tr("World Files (*.world)"));
+        if(filename.isEmpty()) return;
+        // tratando nome do arquivo
+        QString dir;
+        QStringList splitvector;
+        QRegExp rx("\\/");
+        splitvector = filename.split(rx);
+        splitvector.removeLast();
+        // filter
+        foreach (const QString &str, splitvector)
         {
-            //faz nada
+            if (str.contains(" ")||str.size()==0)
+            {
+                //faz nada
+            }
+            else
+            {
+                dir = dir+"/"+str;
+            }
         }
-        else
+
+        // iamgem do cenário
+        QString imagefile(dir+"/imagem.gif");
+        QFile ff(imagefile);
+        QFileInfo fileInfo(ff);
+        if (fileInfo.exists())
         {
-            dir = dir+"/"+str;
+            QGraphicsScene * scene = new QGraphicsScene(ui->worldGraphicsView);
+            QImage image(imagefile);
+            scene->addPixmap(QPixmap::fromImage(image));
+            ui->worldGraphicsView->setScene(scene);
+            ui->worldGraphicsView->show();
         }
+        // limpando árvore para adicionar novos dados
+        ui->treeWidget->clear();
+        // adicionando dados na árvore de dados
+        mundo.getFirst(filename.toStdString(),ui->treeWidget);
+        // habilitando funções de menuu e inicialização da interface
+
+        hil = false;
+
+        ui->actionSave->setEnabled(true);
+        ui->menuEdit->setEnabled(true);
+        ui->actionSave->setEnabled(true);
+        ui->menuEdit->setEnabled(true);
+        ui->startGazeboPushButton->setEnabled(true);
+        istemplate = false; // não é template
+    }
+    catch(const CustomException& ex)
+    {
+        qDebug() << ex.get_info();
+        qDebug() << "Linha ";
+        qDebug() << ex.get_line();
+        qDebug() << "arquivo ";
+        qDebug() << ex.get_file();
+        exit(EXIT_FAILURE);
     }
 
-    // iamgem do cenário
-    QString imagefile(dir+"/imagem.gif");
-    QFile ff(imagefile);
-    QFileInfo fileInfo(ff);
-    if (fileInfo.exists())
-    {
-        QGraphicsScene * scene = new QGraphicsScene(ui->graphicsView_2);
-        QImage image(imagefile);
-        scene->addPixmap(QPixmap::fromImage(image));
-        ui->graphicsView_2->setScene(scene);
-        ui->graphicsView_2->show();
-    }
-    // limpando árvore para adicionar novos dados
-    ui->treeWidget->clear();
-    // adicionando dados na árvore de dados
-    mundo.getFirst(filename.toStdString(),ui->treeWidget);
-    // habilitando funções de menuu e inicialização da interface
-
-    hil = false;
-
-    ui->actionSave->setEnabled(true);
-    ui->menuEdit->setEnabled(true);
-    ui->actionSave->setEnabled(true);
-    ui->menuEdit->setEnabled(true);
-    ui->pushButton->setEnabled(true);
-    istemplate = false; // não é template
 }
 
 
@@ -397,7 +425,7 @@ void MainWindow::on_actionExit_triggered()
     this->close();
 }
 
-void MainWindow::on_actionNew_2_triggered()
+void MainWindow::on_actionNewModel_triggered()
 {
     Dialognewmodel newmodel(ui,this);
     newmodel.newModel();
@@ -410,17 +438,17 @@ void MainWindow::on_actionSave_triggered()
     SaveAs();
 }
 
-void MainWindow::on_actionAbout_ProVANT_Simulator_triggered()
+void MainWindow::on_actionAbout_triggered()
 {
     AboutDialog newform(this);
     newform.setModal(true);
     newform.exec();
 }
 
-void MainWindow::on_pushButton_2_clicked()
+void MainWindow::on_jointValuesPushButton_clicked()
 {
     JointsDialog newform(this);
     newform.setModal(true);
     newform.exec();
-    ui->pushButton_2->setDisabled(true);
+    ui->jointValuesPushButton->setDisabled(true);
 }

@@ -50,7 +50,7 @@ private slots:
      *        Botão para implementação de rotina de inicilização do Gazebo com cenário, modelo e
      *        malha de controle corretamente configuradas
      */
-    void on_pushButton_clicked();
+    void on_startGazeboPushButton_clicked();
     /*
      *        Opção para abertura de novo cenário de um template disponível pelo ambiente de simulação
      */
@@ -94,14 +94,14 @@ private slots:
     /*
      *        Opção para incluir um novo modelo de vant.
      */
-    void on_actionNew_2_triggered();
+    void on_actionNewModel_triggered();
 
     /*
      *       Mais informações sobre ProVANT
      */
-    void on_actionAbout_ProVANT_Simulator_triggered();
+    void on_actionAbout_triggered();
 
-    void on_pushButton_2_clicked();
+    void on_jointValuesPushButton_clicked();
 
 protected:
     Ui::MainWindow *ui;
