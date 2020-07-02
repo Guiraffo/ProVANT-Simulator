@@ -31,7 +31,7 @@ export QTDIR=/usr/share/qt5
 # Compilando código da interface gráfica
 mkdir -p ${TILT_PROJECT}/source/build
 cd ${TILT_PROJECT}/source/build 
-qmake ${TILT_PROJECT}/source/GUI/GUI.pro -r -spec linux-g++ CONFIG+=debug CONFIG+=qml_debug
+qtchooser -qt=5 -run-tool=qmake ${TILT_PROJECT}/source/GUI/GUI.pro -r -spec linux-g++ CONFIG+=debug CONFIG+=qml_debug
 make
 
 # criando link simbólico para fácil execução do ProVANT Simulator

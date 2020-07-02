@@ -443,7 +443,153 @@
         <use_parent_model_frame>1</use_parent_model_frame>
       </axis>
     </joint>
-																				
+		
+<link name="camera_link">
+         <pose>0 0 0.08 0 0 pi/2</pose>
+         <inertial>
+           <mass>0.0001</mass>
+           <inertia>
+             <ixx>0.000166667</ixx>
+             <iyy>0.000166667</iyy>
+             <izz>0.000166667</izz>
+           </inertia>
+         </inertial>
+         <collision name="collision">
+           <geometry>
+             <box>
+               <size>0.01 0.01 0.01</size>
+             </box>
+           </geometry>
+         </collision>
+         <visual name="visual">
+           <geometry>
+             <box>
+               <size>0.01 0.01 0.01</size>
+             </box>
+           </geometry>
+         </visual>
+         <sensor name="camera" type="depth">
+           <camera>
+             <horizontal_fov>1.047</horizontal_fov>
+             <image>
+               <width>320</width>
+               <height>240</height>
+             </image>
+             <clip>
+               <near>0.1</near>
+               <far>100</far>
+             </clip>
+           </camera>
+           <always_on>1</always_on>
+           <update_rate>30</update_rate>
+           <visualize>true</visualize>
+   <plugin name="camera_plugin" filename="libgazebo_ros_openni_kinect.so">
+             <baseline>0.2</baseline>
+             <alwaysOn>true</alwaysOn>
+             <!-- Keep this zero, update_rate in the parent <sensor> tag
+               will control the frame rate. -->
+             <updateRate>0.0</updateRate>
+             <cameraName>camera_ir</cameraName>
+             <imageTopicName>/camera/color/image_raw</imageTopicName>
+             <cameraInfoTopicName>/camera/color/camera_info</cameraInfoTopicName>
+             <depthImageTopicName>/camera/depth/image_raw</depthImageTopicName>
+             <depthImageCameraInfoTopicName>/camera/depth/camera_info</depthImageCameraInfoTopicName>
+             <pointCloudTopicName>/camera/depth/points</pointCloudTopicName>
+             <frameName>camera_link</frameName>
+             <pointCloudCutoff>0.5</pointCloudCutoff>
+             <pointCloudCutoffMax>3.0</pointCloudCutoffMax>
+             <distortionK1>0</distortionK1>
+             <distortionK2>0</distortionK2>
+             <distortionK3>0</distortionK3>
+             <distortionT1>0</distortionT1>
+             <distortionT2>0</distortionT2>
+             <CxPrime>0</CxPrime>
+             <Cx>0</Cx>
+             <Cy>0</Cy>
+             <focalLength>0</focalLength>
+             <hackBaseline>0</hackBaseline>
+           </plugin>
+         </sensor>
+       </link>
+       <joint name='camera_joint' type='fixed'>
+         <child>camera_link</child>
+         <parent>Main_Body</parent>
+         <axis>
+           <xyz>0 0 1</xyz>
+           <use_parent_model_frame>1</use_parent_model_frame>
+         </axis>
+       </joint>
+
+   <link name="laser_link">
+              <pose>0.35 0 0 0 0 0</pose>
+              <inertial>
+                <mass>0.0001</mass>
+                <inertia>
+                  <ixx>0.000166667</ixx>
+                  <iyy>0.000166667</iyy>
+                  <izz>0.000166667</izz>
+                </inertia>
+              </inertial>
+              <collision name="collision">
+                <geometry>
+                  <box>
+                    <size>0.001 0.001 0.001</size>
+                  </box>
+                </geometry>
+              </collision>
+              <visual name="visual">
+                <geometry>
+                  <box>
+                    <size>0.01 0.01 0.01</size>
+                  </box>
+                </geometry>
+              </visual>
+          <sensor type="ray" name="laser">
+     <pose>0 0 0 0 0 0</pose>
+     <visualize>true</visualize>
+     <update_rate>30</update_rate>
+     <ray>
+        <scan>
+           <horizontal>
+              <samples>40</samples>
+              <resolution>1.0</resolution>
+              <min_angle>-0.40</min_angle>
+              <max_angle>0.4</max_angle>
+           </horizontal>
+           <vertical>
+              <samples>40</samples>
+              <resolution>1.0</resolution>
+              <min_angle>-0.20</min_angle>
+              <max_angle>0.1</max_angle>
+           </vertical>
+        </scan>
+        <range>
+           <min>0.01</min>
+           <max>3.5</max>
+           <resolution>0.02</resolution>
+        </range>
+     </ray>
+     <plugin filename="libgazebo_ros_range.so" name="gazebo_ros_range">
+        <gaussianNoise>0.005</gaussianNoise>
+        <alwaysOn>true</alwaysOn>
+        <updateRate>5</updateRate>
+        <topicName>/sensor/laser</topicName>
+        <frameName>laser_link</frameName>
+        <visualize>true</visualize>
+        <radiation>infrared</radiation>
+        <fov>0.02</fov>
+     </plugin>
+  </sensor>
+    </link>
+    <joint name='laser_joint' type='fixed'>
+      <child>laser_link</child>
+      <parent>Main_Body</parent>
+      <axis>
+        <xyz>0 0 1</xyz>
+        <use_parent_model_frame>1</use_parent_model_frame>
+      </axis>
+    </joint>
+																		
    <plugin name="VetorEstados"
 filename="libgazebo_ros_AllData_plugin.so">
             <NameOfTopic>Estados</NameOfTopic>
@@ -560,12 +706,16 @@ filename="libgazebo_ros_VisualPropellers.so">
      filename="libgazebo_ros_DataSaveTiltRotor.so">
             <topic_Fr>ThrustR</topic_Fr>
             <topic_Fl>ThrustL</topic_Fl>
+	    <topic_Rotr>RefRotorR</topic_Rotr>
+            <topic_Rotl>RefRotorL</topic_Rotl>
             <topic_DAr>RefAileronR</topic_DAr>
             <topic_DAl>RefAileronL</topic_DAl>
             <topic_DRr>RefRudderR</topic_DRr>
             <topic_DRl>RefRudderL</topic_DRl>
             <Fr_sat>50</Fr_sat>
             <Fl_sat>50</Fl_sat>
+	    <Rotr_sat>100</Rotr_sat>
+            <Rotl_sat>100</Rotl_sat>
             <DAr_sat>10</DAr_sat>
             <DAl_sat>10</DAl_sat>
             <DRr_sat>10</DRr_sat>

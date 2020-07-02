@@ -1,0 +1,357 @@
+\chapter{ProVANT Simulator's existing plugins}
+\label{pluginsAp}
+
+\section{Model plugins}
+
+This section shows the configuration of the model plugins which don't work with data exchange between Gazebo and ROS. The configuration information is shown in Tables \ref{tab:Brushless}, \ref{tab:QuadForces}, \ref{tab:Servo}, \ref{tab:Statespace}, \ref{tab:Statespaceload},\ref{tab:QuadData}, \ref{tab:Aerodinamicav4}, \ref{tab:temperature}, \ref{tab:PathPlotter}, \ref{tab:VisualPropellers}, \ref{tab:UniversalJointSensor}, \ref{tab:UniversalLinkSensor},\ref{tab:UniversalLinkSensor2} and \ref{tab:DataSaveTiltRotor}.
+
+
+\newenvironment{plugintable}[5]{
+	\newcommand \field[2] {& \xmltag{##1} & ##2 \\}
+	\begin{table}[H]
+		\centering
+		\caption{\\#4}
+		\label{#5}
+		\begin{tabular}{|l|r|l|}
+			\hline
+			Description: & \multicolumn{2}{m{0.7\textwidth}|}{#1} \\ \hline
+			File: & \multicolumn{2}{l|}{\texttt{#2}} \\ \hline
+			\multirow{#3}{*}{Configuration:}	% #3: Número de campos no plugin
+}{
+			\hline
+		\end{tabular}
+	\end{table}
+}
+
+\begin{plugintable}
+	{Simulates lift forces due to the two blades' rotation driven by a tilt-rotor's brushless motors}
+	{libgazebo\_ros\_brushless\_plugin.so}
+	{4}
+	{Brushless motor plugin configuration}
+	{tab:Brushless}
+	\field{topic\_FR}{Topic with the value of the right blade's lift force}
+	\field{topic\_FL}{Topic with the value of the left blade's lift force}
+	\field{LinkDir}{Link corresponding to the right blade}
+	\field{LinkEsq}{Link corresponding to the left blade}
+\end{plugintable}
+
+	\begin{table}[h]
+	\centering
+	\begin{tabular}{|r|lrrr|}
+		\hline
+		\multicolumn{1}{|l|}{Description:} &  Simulates de resulting forces generated  &       &       &         \\
+		& by the Quadrotor propellers &       &       &           \\
+		\hline
+		\multicolumn{1}{|l|}{File:} &  libgazebo\_ros\_QuadForces\_plugin.so &       &       &            \\
+		\hline
+		\multicolumn{1}{|l|}{Configurations: } & \textcolor{blue}{<topic\_F1> </topic\_F1>}  name of the ros topic of the force applied in 
+		&       &       &      \\
+		& propeller 1 &       &       &        \\
+		&  \textcolor{blue}{<topic\_F2> </topic\_F2>} name of the ros topic of the force applied in &       &       &        \\
+		& propeller 2 &       &       &       \\
+		& \textcolor{blue}{<topic\_F3> </topic\_F3>}  name of the ros topic of the force applied in &       &       &        \\
+		& propeller 3 &       &       &        \\
+		& \textcolor{blue}{<topic\_F4> </topic\_F4>}   name of the ros topic of the force applied in   &       &       &       \\
+		& propeller 1&       &       &     \\
+		& \textcolor{blue}{<body> </body>}name of the ros topic of the force applied in &		&
+		&		\\
+		& \textcolor{blue}{<DragCte> </DragCte>} Drag constant value &		&
+		&		\\
+		\hline		
+	\end{tabular}%
+	\caption{Brushless motor plugin configuration for the Quadrotor.}
+	\label{tab:QuadForces}%
+\end{table}%
+
+
+
+
+
+\begin{plugintable}
+	{Simulates servomotors with torque or position operation modes}
+	{libgazebo\_servo\_motor\_plugin.so}
+	{4}
+	{Servomotor plugin configuration}
+	{tab:Servo}
+	\field{NameOfJoint}{Joint to be controlled by the servomotor}
+	\field{TopicSubscriber}{Topic with the reference values for the servomotor}
+	\field{TopicPublisher}{Topic with the servo's sensor data (position and speed)}
+	\field{Modo}{Servomotor's operation mode (options: \texttt{Torque} or \texttt{Posição})}
+\end{plugintable}
+
+\begin{plugintable}
+	{Senses the tilt-rotor UAV's state vector\par($x,y,z,\phi,\theta,\psi,\alpha_R,\alpha_L,\dot x,\do ty,\dot z,\dot\phi,\dot\theta,\dot\psi,\dot\alpha_R,\dot\alpha_L$)}
+	{libgazebo\_AllData\_plugin.so}
+	{4}
+	{State space plugin configuration}
+	{tab:Statespace}
+	\field{NameOfTopic}{Topic from which the user can obtain the information}
+	\field{NameOfJointR}{Right servomotor's joint}
+	\field{NameOfJointL}{Left servomotor's joint}
+	\field{bodyname}{Link corresponding to the servomotor's main body}
+\end{plugintable}
+
+\begin{plugintable}
+	{Senses the state vector for a tilt-rotor UAV with load transportation ($x,y,z,\phi,\theta,\psi,\alpha_R,\alpha_L,\lambda_x,\lambda_y,\dot x,\dot y,\dot z,\dot\phi,\dot\theta,\dot\psi,\dot\alpha_R,\dot\alpha_L,\dot\lambda_x,\dot\lambda_y$)}
+	{libgazebo\_AllData2\_plugin.so}
+	{6}
+	{State space load plugin configuration}
+	{tab:Statespaceload}
+	\field{NameOfTopic}{Topic from which the user can obtain the information}
+	\field{NameOfJointR}{Right servomotor's joint}
+	\field{NameOfJointL}{Left servomotor's joint}
+	\field{NameOfJoint\_X}{Joint corresponding to the load's degree of freedom around the X axis}
+	\field{NameOfJoint\_Y}{Joint corresponding to the load's degree of freedom around the Y axis}
+	\field{bodyname}{Link corresponding to the servomotor's main body}
+\end{plugintable}
+
+
+\begin{table}[h]
+	\centering
+	\begin{tabular}{|r|lr|}
+		\hline
+		\multicolumn{1}{|l|}{Description: } 
+		
+		& Senses the state vector for a Quadrotor UAV &         \\
+		&
+		(x,y,z, $\phi$,$\theta$,$\psi$,$\dot{x}$,$\dot{y}$,$\dot{z}$,$\dot{\phi}$,$\dot{\theta}$,$\dot{\psi}$   &  \\
+		\hline
+		\multicolumn{1}{|l|}{File: } & libgazebo\_QuadData\_plugin.so &          \\
+		\hline
+		\multicolumn{1}{|l|}{Configuration: } & \textcolor{blue}{<NameOfTopic> </NameOfTopic>} ros topic name to obtain information &         \\
+		& \textcolor{blue}{<bodyName> </bodyName>} link that the states are obtained with respect to &         \\
+		\hline
+	\end{tabular}%
+	\caption{QuadData plugin configuration.}
+	\label{tab:QuadData}%
+\end{table}%	
+
+
+
+\begin{table}[h]
+	\centering			
+	\begin{tabular}{|r|lr|}
+		\hline
+		\multicolumn{1}{|l|}{Description: } & Plugin to apply aerodynamic forces in UAV 4.0 &        \\
+		\hline
+		\multicolumn{1}{|l|}{File: } & libgazebo\_ros\_Aerodinamica4dot0.so &        \\
+		\hline
+		\multicolumn{1}{|l|}{Configuration:} & <topic\_AileronR>  </topic\_AileronR> Right aileron ros topic name  &         \\
+		& \textcolor{blue}{<topic\_AileronL> </topic\_AileronL>}Left aileron ros topic name &        \\
+		& \textcolor{blue}{<topic\_RudderR> </topic\_RudderR>} Right rudder ros topic name &        \\
+		& \textcolor{blue}{<topic\_RudderL> </topic\_RudderL>}  Left rudder ros topic name &        \\
+		& \textcolor{blue}{<topic\_Fr> </topic\_Fr>} Ros topic name for the user obtain data from   &         \\
+		& the right propeller &         \\
+		& \textcolor{blue}{<topic\_Fl> </topic\_Fl>} Ros topic name for the user obtain data from &    	\\
+		& the left propeller &		\\	
+		& \textcolor{blue}{<MainBody> </MainBody>} Main body link & \\
+		& \textcolor{blue}{<LinkFr> </LinkFr>} Link referent to the propellant group where the forces generated by the right propeller are applied &      \\
+		& \textcolor{blue}{<LinkFl> </LinkFl>}Link referent to the propellant group where the forces generated by the left propeller are applied &      \\
+		& \textcolor{blue}{<LinkAileronR> </LinkAileronR>} Right aileron link &     \\
+		& \textcolor{blue}{<LinkAileronL> </LinkAileronL>} Left aileron link &		\\
+		& \textcolor{blue}{<LinkRudderR> </LinkRudderR>} Right rudder link &		\\
+		& \textcolor{blue}{<LinkRudderL> </LinkRudderL>}Left rudder link &		\\
+		& \textcolor{blue}{<CentroAerod\_F> </CentroAerod\_F>} Fuselage aerodynamic center link &		\\
+		& \textcolor{blue}{<CentroAerod\_Wr> </CentroAerod\_Wr>} Right wing aerodynamic center link &		\\
+		& \textcolor{blue}{<CentroAerod\_Wl> </CentroAerod\_Wl>}Left wing aerodynamic center link &		\\
+		& \textcolor{blue}{<CentroAerod\_RudR> </CentroAerod\_RudR>} Right rudder aerodynamic center link &		\\
+		& \textcolor{blue}{<CentroAerod\_RudL> </CentroAerod\_RudL>} Left rudder aerodynamic center link &		\\
+		\hline
+	\end{tabular}%
+	\caption{Aerodynamic plugin configuration.}
+	\label{tab:Aerodinamicav4}%
+\end{table}%
+
+
+
+
+\begin{plugintable}
+	{Senses temperature and air pressure with noise}
+	{libgazebo\_ros\_temperature.so}
+	{10}
+	{Temperature plugin configuration}
+	{tab:temperature}
+	\field{Topic}{Topic from which the user can obtain the information}
+	\field{TempOffset}{Error offset for noisy temperature data}
+	\field{TempStandardDeviation}{Error standard deviation for noisy temperature data}
+	\field{BaroOffset}{Error offset for noisy pressure data}
+	\field{BaroStandardDeviation}{Error standard deviation for noisy pressure data}
+	\field{maxtemp}{Maximum temperature value}
+	\field{mintemp}{Minimum temperature value}
+	\field{maxbaro}{Maximum pressure value}
+	\field{minbaro}{Minimum pressure value}
+	\field{Nbits}{Number of bits used in the digitalization}
+\end{plugintable}
+
+
+\begin{table}[h]
+	\centering			
+	\begin{tabular}{|r|lr|}
+		\hline
+		\multicolumn{1}{|l|}{Description: } & Plugin to visualize the UAV trajectory in Rviz. &        \\
+		\hline
+		\multicolumn{1}{|l|}{File: } & libgazebo\_ros\_PathPlotter.so &        \\
+		\hline
+		\multicolumn{1}{|l|}{Configuration:} & \textcolor{blue}{<NameOfPathTopic> </NameOfPathTopic>} Ros topic name for the UAV real trajectory  &         \\
+		&  data to be published &        \\
+		& \textcolor{blue}{<NameOfPathRefTopic> </NameOfPathRefTopic>} Ros topic name for the UAV reference trajectory &        \\
+		& data to be published &		\\
+		& \textcolor{blue}{<NameOfMarkerTopic> </NameOfMarkerTopic>} Ros topic name to publish the UAV  &         \\
+		& visual data to Rviz &         \\
+		& \textcolor{blue}{<bodyName> </bodyName>} main body link used as reference to obtain necessary data  &        \\
+		& \textcolor{blue}{<uav> </uav>}Desired UAV &         \\
+		\hline
+	\end{tabular}%
+	\caption{PathPlotter plugin configuration.}
+	\label{tab:PathPlotter}%
+\end{table}%
+
+
+\begin{table}[h]
+	\centering			
+	\begin{tabular}{|r|lr|}
+		\hline
+		\multicolumn{1}{|l|}{Description: } & plugin to allow propellers motion &        \\
+		\hline
+		\multicolumn{1}{|l|}{File: } & libgazebo\_ros\_VisualPropellers.so &        \\
+		\hline
+		\multicolumn{1}{|l|}{Configuration:} & \textcolor{blue}{<Propeller1> </Propeller1>} Propeller 1 joint  &         \\
+		& \textcolor{blue}{<Propeller2> </Propeller2>} Propeller 2 joint &        \\
+		& \textcolor{blue}{<Propellers\_Velocity> </Propellers\_Velocity>} Desired propeller velocity value &         \\
+		\hline
+	\end{tabular}%
+	\caption{VisualPropellers plugin configuration.}
+	\label{tab:VisualPropellers}%
+\end{table}%
+
+
+
+\begin{plugintable}
+	{Senses all the data Gazebo provides for a joint (angle, angular velocity and torque)}
+	{libgazebo\_ros\_universaljoint.so}
+	{4}
+	{UniversalJointSensor plugin configuration}
+	{tab:UniversalJointSensor}
+	\field{NameOfTopic}{Topic from which the user can obtain the information}
+	\field{NameOfJoint}{Joint to be sensed}
+	\field{Axis}{Joint's (first) rotation axis}
+	& \xmltag{Axis2}$^*$ & Joint's second rotation axis (*used only for joints with two degrees of freedom) \\
+\end{plugintable}
+
+\begin{plugintable}
+	{Senses all data Gazebo provides for a link}
+	{libgazebo\_ros\_universallink.so}
+	{2}
+	{UniversalLinkSensor plugin configuration}
+	{tab:UniversalLinkSensor}
+	\field{NameOfTopic}{Topic from which the user can obtain the information}
+	\field{NameOfLink}{Link to be sensed}
+\end{plugintable}
+
+\begin{table}[H]
+	\centering
+	\caption{\\Order in which data is presented in plugin UniversalLinkSensor}
+	\label{tab:UniversalLinkSensor2}
+	\newcounter{pos}
+	\newcommand \info[4] {
+		\texttt{\thepos} & #1 in #2 \stepcounter{pos} \\ 
+		\texttt{\thepos} & #1 in #3 \stepcounter{pos} \\ 
+		\texttt{\thepos} & #1 in #4 \stepcounter{pos} \\
+	}
+	\begin{tabular}{r|l}
+		\info{Relative pose}{X}{Y}{Z}
+		\info{Relative pose}{$\phi$}{$\theta$}{$\psi$}
+		\info{Relative speed}{X}{Y}{Z}
+		\info{Relative linear acceleration}{X}{Y}{Z}
+		\info{Relative force}{X}{Y}{Z}
+		\info{Relative angular speed}{X}{Y}{Z}
+		\info{Relative angular acceleration}{X}{Y}{Z}
+		\info{Relative mechanical torque}{X}{Y}{Z}
+		\info{Global pose}{X}{Y}{Z}
+		\info{Global pose}{$\phi$}{$\theta$}{$\psi$}
+		\info{Global speed}{X}{Y}{Z}
+		\info{Global linear acceleration}{X}{Y}{Z}
+		\info{Global force}{X}{Y}{Z}
+		\info{Global angular speed}{X}{Y}{Z}
+		\info{Global angular acceleration}{X}{Y}{Z}
+		\info{Global mechanical torque}{X}{Y}{Z}
+		\info{Center of gravity's global linear speed}{X}{Y}{Z}
+		\info{Center of gravity's global linear pose}{X}{Y}{Z}
+	\end{tabular}
+\end{table}
+
+
+    \begin{table}[h]
+	\centering
+	\begin{tabular}{|rr|lrr|}
+		\hline
+		\multicolumn{1}{|l}{Description: } &       & PLugin to save data at the Matlab directory. &       &     \\
+		\hline
+		\multicolumn{1}{|l}{File: } &       & libgazebo\_ros\_DataSaveTiltRotor.so &       &         \\
+		\hline
+		\multicolumn{1}{|l}{Configuration: } &       & \textcolor{blue}{<topic\_Fr> </topic\_Fr>} Ros topic name for right propeller force data&           &  \\
+		&       & \textcolor{blue}{<topic\_Fl> </topic\_Fl>}Ros topic name for left propeller force data &        &  \\
+		&       & \textcolor{blue}{<topic\_DAr> </topic\_DAr>}Ros topic name for right aileron deflexion data &        &  \\
+		&       & \textcolor{blue}{<topic\_DAl> </topic\_DAl>}Ros topic name for left aileron deflexion data &        &  \\
+		&       & \textcolor{blue}{<topic\_DRr> </topic\_DRr>}Ros topic name for right rudder deflexion data &        &  \\
+		&       & \textcolor{blue}{<topic\_DRl> </topic\_DRl>}Ros topic name for left rudder deflexion data &        &  \\
+		&       & \textcolor{blue}{<Fr\_sat> </Fr\_sat>}Right propeller force saturation value &        &  \\
+		&       & \textcolor{blue}{<Fl\_satl> </Fl\_sat>}Left propeller force saturation value &        &  \\
+		&       & \textcolor{blue}{<DAr\_satl> </DAr\_satl>}Right rudder deflexion saturation value &        &  \\
+		&       & \textcolor{blue}{<DAl\_satl> </DAl\_satl>}Left aileron deflexion saturation value &        &  \\
+		&       & \textcolor{blue}{<DRr\_satl> </DRr\_satl>}Right rudder deflexion saturation value &        &  \\
+		&       & \textcolor{blue}{<DRl\_satl> </DRl\_satl>}Left rudder deflexion saturation value &        &  \\	
+		\hline
+	\end{tabular}%
+	\caption{DataSaveTiltRotor plugin configuration.}
+	\label{tab:DataSaveTiltRotor}%
+\end{table}%
+
+
+\section{Model plugins used along sensor plugins}
+
+This section shows the configuration of the model plugins which work with data exchange between Gazebo and ROS. The configuration information is shown in Tables \ref{tab:GPS}, \ref{tab:IMU}, \ref{tab:Sonar} and \ref{tab:magnetometro}.
+
+\begin{plugintable}
+	{Transmits GPS sensor data to ROS}
+	{libgazebo\_ros\_gps.so}
+	{3}
+	{Model plugin for transmitting GPS data from Gazebo topics to ROS topics}
+	{tab:GPS}
+	\field{gazebotopic}{Gazebo topic where the GPS publishes its data}
+	\field{rostopic}{ROS topic to be read by the controller}
+	\field{link}{Link to which the GPS is attached}
+\end{plugintable}
+
+\begin{plugintable}
+	{Transmits IMU data to ROS}
+	{libgazebo\_ros\_imu.so}
+	{3}
+	{Model plugin for transmitting IMU data from Gazebo topics to ROS topics}
+	{tab:IMU}
+	\field{gazebotopic}{Gazebo topic where the IMU publishes its data}
+	\field{rostopic}{ROS topic to be read by the controller}
+	\field{link}{Link to which the IMU is attached}
+\end{plugintable}
+
+\begin{plugintable}
+	{Transmits sonar data to ROS}
+	{libgazebo\_ros\_sonar.so}
+	{3}
+	{Model plugin for transmitting sonar data from Gazebo topics to ROS topics}
+	{tab:Sonar}
+	\field{gazebotopic}{Gazebo topic where the sonar publishes its data}
+	\field{rostopic}{ROS topic to be read by the controller}
+	\field{link}{Link to which the sonar is attached}
+\end{plugintable}
+
+\begin{plugintable}
+	{Transmits magnetometer data to ROS}
+	{libgazebo\_ros\_magnetometro.so}
+	{3}
+	{Model plugin for transmitting magnetometer data from Gazebo topics to ROS topics}
+	{tab:magnetometro}
+	\field{gazebotopic}{Gazebo topic where the magnetometer publishes its data}
+	\field{rostopic}{ROS topic to be read by the controller}
+	\field{link}{Link to which the magnetometer is attached}
+\end{plugintable}
