@@ -4,7 +4,6 @@
 #include "string"
 #include <cstdlib>
 #include "qstring.h"
-#include "Utils/environmentexception.h"
 
 
 class Tools

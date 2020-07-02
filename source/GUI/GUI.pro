@@ -97,7 +97,6 @@ HEADERS  += mainwindow.h \
     aboutdialog.h \
     DataAccess/GazeboElements/Items/multipleincludes.h \
     Utils/tools.h \
-    Utils/environmentexception.h \
     DataAccess/GazeboElements/Items/multipleplugins.h \
     jointsdialog.h
 
