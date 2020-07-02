@@ -235,23 +235,23 @@ namespace gazebo
 	void HilServer::GetStatesVANT20()
 	{
 			// dados da pose inicial
-			math::Pose pose = link->GetWorldPose();
-			x = pose.pos.x; // x
-			y = pose.pos.y; // y
-			z = pose.pos.z; // z
-			roll = pose.rot.GetAsEuler( ).x; // roll
-			pitch = pose.rot.GetAsEuler( ).y; // pitch
-			yaw = pose.rot.GetAsEuler( ).z; // yaw
-			alphar = juntaR->GetAngle(0).Radian(); // alphaR
-			alphal = juntaL->GetAngle(0).Radian(); // alphaL
-			math::Vector3 linear = link->GetWorldLinearVel();
-			vx = linear.x; // vx
-			vy = linear.y; // vy
-			vz = linear.z; // vz
-			math::Vector3 angular = link->GetWorldAngularVel( );
-			wx = angular.x; //wx
-			wy = angular.y; //wy
-			wz = angular.z; //wz
+			ignition::math::Pose3d pose = link->WorldPose();
+			x = pose.Pos().X(); // x
+			y = pose.Pos().Y(); // y
+			z = pose.Pos().Z(); // z
+			roll = pose.Rot().Euler( ).X(); // roll
+			pitch = pose.Rot().Euler( ).Y(); // pitch
+			yaw = pose.Rot().Euler( ).Z(); // yaw
+			alphar = juntaR->Position(0); // alphaR
+			alphal = juntaL->Position(0); // alphaL
+			ignition::math::Vector3d linear = link->WorldLinearVel();
+			vx = linear.X(); // vx
+			vy = linear.Y(); // vy
+			vz = linear.Z(); // vz
+			ignition::math::Vector3d angular = link->WorldAngularVel( );
+			wx = angular.X(); //wx
+			wy = angular.Y(); //wy
+			wz = angular.Z(); //wz
 			dalphar = juntaR->GetVelocity(0); // dalphaR
 			dalphal = juntaL->GetVelocity(0); // dalphaL	
 	}
@@ -260,14 +260,14 @@ namespace gazebo
 	{
 			
 			// Força de propulsão do motor direito
-			math::Vector3 forceR(0,0,Fr_);
-			math::Vector3 torqueR(0,0,0.0178947368*Fr_);
+			ignition::math::Vector3d forceR(0,0,Fr_);
+			ignition::math::Vector3d torqueR(0,0,0.0178947368*Fr_);
 			linkR->AddRelativeForce(forceR);
 			linkR->AddRelativeTorque(torqueR);
 			
 			// Força de propulsão do motor esquerdo
-			math::Vector3 forceL(0,0,Fl_);
-			math::Vector3 torqueL(0,0,-0.0178947368*Fl_);
+			ignition::math::Vector3d forceL(0,0,Fl_);
+			ignition::math::Vector3d torqueL(0,0,-0.0178947368*Fl_);
 			linkL->AddRelativeForce(forceL);
 			linkL->AddRelativeTorque(torqueL);
 	

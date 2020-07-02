@@ -35,7 +35,7 @@ namespace gazebo
       		this->model = _model; // save model pointer
 		// starts Gazebo's node
       		this->node = transport::NodePtr(new transport::Node());
-      		this->node->Init(this->model->GetWorld()->GetName());
+      		this->node->Init(this->model->GetWorld()->Name());
 		// subscriber      		
 		std::string topic = "/gazebo/default/" + this->model->GetName() + "/" + link + "/" + gazebotopic;
       		this->sub = this->node->Subscribe(topic, &sonar::OnUpdate, this);
