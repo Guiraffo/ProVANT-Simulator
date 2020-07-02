@@ -7,6 +7,25 @@
 #include "Utils/appsettings.h"
 #include "Widgets/filebrowserwidget.h"
 
+/*!
+ * \brief ApplicationSettingsDialog::ApplicationSettingsDialog
+ * \param parent The QWidget which contains this window.
+ *
+ * Constructs the ApplicationSettingsDialog and initializes the widgets
+ * contained in the user interface.
+ *
+ * The configuration of the current values of the properties and setup of the
+ * FileBrowserWidgets is done here.
+ *
+ * The following actions should be performed for each of the configuration
+ * parameters:
+ * * Set the text of the label using the constants defined in appsettings.h;
+ * * Set the caption text of the file browser widget;
+ * * Set the type of the file browser widget;
+ * * Set the tool tip of the file browser widget explaining what the parameter
+ * is and a good starting value for this paramter;
+ * * Set the current value of the parameter;
+ */
 ApplicationSettingsDialog::ApplicationSettingsDialog(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::ApplicationSettingsDialog)
@@ -89,11 +108,30 @@ ApplicationSettingsDialog::ApplicationSettingsDialog(QWidget *parent) :
     ui->dirRosWidget->setFilePath(settings.getRosPathUnchecked());
 }
 
+/**
+ * @brief ApplicationSettingsDialog::~ApplicationSettingsDialog
+ *
+ * Deletes the objects contained in this object user interface.
+ */
 ApplicationSettingsDialog::~ApplicationSettingsDialog()
 {
     delete ui;
 }
 
+/**
+ * @brief ApplicationSettingsDialog::showErrorOnSettingMessage
+ *
+ * Show a message informing the user that the value contained in a
+ * configuration parameter is invalid.
+ *
+ * @param key Text informing in which parameter the error ocurred.
+ *
+ * Shows a QMessageBox of the type critical informing the user that one
+ * parameter configuration is invalid.
+ *
+ * The text is followed by a brief explanation on how to fix this error and
+ * requesting that the user do the actions informed and try again.
+ */
 void ApplicationSettingsDialog::showErrorOnSettingMessage(const QString &key)
 const
 {
@@ -104,6 +142,21 @@ const
                    "Please provide a valid path and try again.").arg(key));
 }
 
+/**
+ * @brief ApplicationSettingsDialog::accept
+ * Method called when the user finishes modifying the parameters and cliks
+ * on the Ok button in the user interface.
+ *
+ * This function tries to update the value of the parameters using the
+ * apropriate set mehtods in the AppSettings class.
+ *
+ * If an error is detected in any parameter an error message is shown to the
+ * user informing about the error ocurrence and an orientation on how to fix
+ * the error, and no other action is performed.
+ *
+ * If all values are correctly configured, they are updated and the window
+ * is closed by calling the accept method of the base class.
+ */
 void ApplicationSettingsDialog::accept()
 {
     AppSettings settings;
@@ -142,6 +195,14 @@ void ApplicationSettingsDialog::accept()
     }
 }
 
+/**
+ * @brief ApplicationSettingsDialog::reject
+ * The action performed when the user closes the dialog without accepting the
+ * changes made.
+ *
+ * This function makes no action other than calling the reject method of the
+ * base class.
+ */
 void ApplicationSettingsDialog::reject()
 {
     QDialog::reject();
