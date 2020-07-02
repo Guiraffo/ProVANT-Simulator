@@ -5,9 +5,9 @@
 namespace gazebo
 {
 
-	Aerodinamica2::Aerodinamica2()//:SaveDataWind(6,1)
+	Aerodinamica2::Aerodinamica2():DBf(3),DBh(3),DBv(3)//:SaveDataWind(6,1)
 	{
-		rho = 1.21;	//densidade do ar
+		Ho = 1.21;	//densidade do ar
 		sf = 0.0146; //area da superficie da fuselagem
 		sh = 0.01437; //area da superficie do estabilizador horizontal
 		sv = 0.013635; //area da superficie do estabilizador vertical
@@ -15,12 +15,28 @@ namespace gazebo
 		R_IB.setZero(3,3);
 		wind_B.setZero(3,1); //vento no corpo
 		wind_I.setZero(3,1); //vento inercial
-        T = 0.0001;
+        	//T = 0.0001;
+        	T = 0.001;
 		
 		std::string relativeFile("Wind.txt");
 		std::string file = std::getenv("TILT_MATLAB") + relativeFile;
 
 		Wind.startFile(file,"wind");
+		
+		
+		//Position of the Aerodinamic centers w.r.t the Body frame expressed in Body frame
+		Eigen::VectorXd PosCG(3);
+		
+		PosCG << 0.008, 0, -0.043;
+		DBf  << -0.005, 0, 0.0326; // Position aerodynamic center of fuselage
+		DBh << -0.375547, 0, 0.030084; // Position aerodynamic center of vertical stabilizer
+		DBv << -0.42236, 0, 0.11569; // Position aerodynamic center of horizontal stabilizer
+		
+		
+		DBf  =  DBf - PosCG;
+		DBh = DBh - PosCG;	
+		DBv = DBv - PosCG;	
+		
 	}
 
 	Aerodinamica2::~Aerodinamica2()
@@ -52,22 +68,13 @@ namespace gazebo
 			
 			NameOfLinkBody_ = XMLRead::ReadXMLString("bodyName",_sdf);
 			NameOfLinkFr_ = XMLRead::ReadXMLString("LinkFr",_sdf);
-			NameOfLinkFl_ = XMLRead::ReadXMLString("LinkFl",_sdf);
-			NameOfLinkElev_ = XMLRead::ReadXMLString("LinkElev",_sdf);			
-			NameOfLinkRud_ = XMLRead::ReadXMLString("LinkRud",_sdf);
-			NameOfJointFr_ = XMLRead::ReadXMLString("JointFr",_sdf);			
-			NameOfJointFl_ = XMLRead::ReadXMLString("JointFl",_sdf);
+			NameOfLinkFl_ = XMLRead::ReadXMLString("LinkFl",_sdf);			
 		
 			world = _model->GetWorld();	
 			
 			linkFr = _model->GetLink(NameOfLinkFr_);
-			linkFl = _model->GetLink(NameOfLinkFl_);
-			linkE = _model->GetLink(NameOfLinkElev_);
-			linkR = _model->GetLink(NameOfLinkRud_);			
-			link = _model->GetLink(NameOfLinkBody_);		
-			
-			JointFr = _model->GetJoint(NameOfJointFr_);
-			JointFl = _model->GetJoint(NameOfJointFl_);	
+			linkFl = _model->GetLink(NameOfLinkFl_);			
+			link = _model->GetLink(NameOfLinkBody_);			
 			
 			// update timer
 		  	Reset();
@@ -104,7 +111,9 @@ namespace gazebo
 		try
 		{
 			math::Vector3 forceR(0,0,msg.data);
+			math::Vector3 torqueR(0,0,0.0178947368*msg.data); // drag torque
 			linkFr->AddRelativeForce(forceR);
+			linkFr->AddRelativeTorque(torqueR);
 		}
 		catch(std::exception& e)
 		{
@@ -116,7 +125,9 @@ namespace gazebo
 		try
 		{	
 			math::Vector3 forceL(0,0,msg.data);
+			math::Vector3 torqueL(0,0,-0.0178947368*msg.data); // drag torque
 			linkFl->AddRelativeForce(forceL);
+			linkFl->AddRelativeTorque(torqueL);
 		}
 		catch(std::exception& e)
 		{
@@ -162,13 +173,11 @@ namespace gazebo
 			double yp = linear.y;
 			double zp = linear.z; 
 
-			//std::cout << "linear: " << xp << yp << zp << std::endl;
 			math::Pose pose = link->GetWorldPose();			
 			phi = pose.rot.GetAsEuler().x;
 			theta = pose.rot.GetAsEuler().y;
 			psi = pose.rot.GetAsEuler().z;	
 			
-			//std::cout << "euler: " << phi << theta << psi << std::endl;
 			
 			R_IB << (cos(psi)*cos(theta)), (cos(psi)*sin(phi)*sin(theta) - cos(phi)*sin(psi)), (sin(phi)*sin(psi) + cos(phi)*cos(psi)*sin(theta)),
 				(cos(theta)*sin(psi)), (cos(phi)*cos(psi) + sin(phi)*sin(psi)*sin(theta)), (cos(phi)*sin(psi)*sin(theta) - cos(psi)*sin(phi)),
@@ -185,13 +194,13 @@ namespace gazebo
 			wb = uvw(2);
 			static double Tempo = 0;
 			Tempo = Tempo + T;
-		  	// Environment wind
-				wind_I << 3, 0, 0;
 			
-				wind_B = R_IB.transpose() * wind_I;
-				ua = wind_B(0,0);
-				va = wind_B(1,0);
-				wa = wind_B(2,0);
+		  	// Environment wind properties
+			wind_I << 0, 0, 0;
+			wind_B = R_IB.transpose() * wind_I;
+			ua = wind_B(0,0);
+			va = wind_B(1,0);
+			wa = wind_B(2,0);
 			std::vector<double> DataWind;
 			DataWind.push_back(ua);
 			DataWind.push_back(va);
@@ -201,78 +210,85 @@ namespace gazebo
 			DataWind.push_back(wind_I(2));
 			static int Contador = 0;
 			if(Contador%120 == 0){
-			Wind.printFile(DataWind);
+				Wind.printFile(DataWind);
 			}
 //			SaveDataWind << ua, va, wa, wind_I(0),  wind_I(1),  wind_I(2);
 //			std::vector<double> out(SaveDataWind.data(), SaveDataWind.data() + SaveDataWind.rows() * SaveDataWind.cols());
-			alpha = getAlpha(wb,wa,ub,ua);
-			beta = getBeta(vb,va,ub,ua);	
-			air_xy = getAirxy(vb,va,ub,ua);
-			air_xz = getAirxz(wb,wa,ub,ua);
-			v_xy = pow(air_xy,2);
-			v_xz = pow(air_xz,2);
+//			std::cout << std::endl << "ub: " << ub << "ua: " << ua << "vb: " << vb << "va: " << va << "wb: " << wb << "wa: " << wa << std::endl;
+			
+			Alpha = getAlpha(wb,wa,ub,ua);
+			Beta = getBeta(vb,va,ub,ua);	
+			
+			Eigen::MatrixXd RBAlpha(3,3), RBBeta(3,3);
+			RBAlpha <<   cos(-Alpha),  0,   sin(-Alpha),
+                       			       0,  1,             0,
+            		  	    -sin(-Alpha),  0,   cos(-Alpha);
 
-			double Val = ((alpha+3.1416)/0.1)+1.0;
+			RBBeta <<    cos(-Beta),  -sin(-Beta), 0,
+				     sin(-Beta),   cos(-Beta), 0,
+					      0,            0, 1;
+					      
+//			std::cout << "xp: " << xp << std::endl;
+//			std::cout << "yp: " << yp << std::endl;
+//			std::cout << "zp: " << zp << std::endl;
+//			std::cout << "ub: " << ub << std::endl;
+//			std::cout << "Alpha: " << Alpha << std::endl;
+//			std::cout << "Beta: " << Beta << std::endl;
+//			std::cout << "Phi: " << phi << std::endl;
+//			std::cout << "Theta: " << theta << std::endl;
+//			std::cout << "Psi: " << psi << std::endl;
+			Vxy = getAirxy(vb,va,ub,ua);
+			Vxz = getAirxz(wb,wa,ub,ua);
+
+			double Val = ((-Alpha+3.1416)/0.1);
 			int IndexA = floor(Val);
 			double ProporcaoA = Val - IndexA;
 
-			Val = ((beta+3.1416)/0.1)+1.0;
+			Val = ((-Beta+3.1416)/0.1);
 			int IndexS = floor(Val);
 			double ProporcaoS = Val - IndexS;
 
-			double CDfa = VetCDf[IndexA] + ProporcaoA*(VetCDf[IndexA+1] - VetCDf[IndexA]);
-			double CLfa = VetCLf[IndexA] + ProporcaoA*(VetCLf[IndexA+1] - VetCLf[IndexA]);
-			double CDfs = VetCDf[IndexS] + ProporcaoS*(VetCDf[IndexS+1] - VetCDf[IndexS]);
-			double CLfs = VetCLf[IndexS] + ProporcaoS*(VetCLf[IndexS+1] - VetCLf[IndexS]);
-			double CDh  = VetCDh[IndexA] + ProporcaoA*(VetCDh[IndexA+1] - VetCDh[IndexA]);
-			double CLh  = VetCLh[IndexA] + ProporcaoA*(VetCLh[IndexA+1] - VetCLh[IndexA]);
-			double CDv  = VetCDv[IndexS] + ProporcaoS*(VetCDv[IndexS+1] - VetCDv[IndexS]);
-			double CLv  = VetCLv[IndexS] + ProporcaoS*(VetCLv[IndexS+1] - VetCLv[IndexS]);
+			double CDfxz = VetCDf[IndexA] + ProporcaoA*(VetCDf[IndexA+1] - VetCDf[IndexA]);
+			double CLfxz = VetCLf[IndexA] + ProporcaoA*(VetCLf[IndexA+1] - VetCLf[IndexA]);
+			double CDfxy = VetCDf[IndexS] + ProporcaoS*(VetCDf[IndexS+1] - VetCDf[IndexS]);
+			double CLfxy = VetCLf[IndexS] + ProporcaoS*(VetCLf[IndexS+1] - VetCLf[IndexS]);
+			double CDh   = VetCDh[IndexA] + ProporcaoA*(VetCDh[IndexA+1] - VetCDh[IndexA]);
+			double CLh   = VetCLh[IndexA] + ProporcaoA*(VetCLh[IndexA+1] - VetCLh[IndexA]);
+			double CDv   = VetCDv[IndexS] + ProporcaoS*(VetCDv[IndexS+1] - VetCDv[IndexS]);
+			double CLv   = VetCLv[IndexS] + ProporcaoS*(VetCLv[IndexS+1] - VetCLv[IndexS]);
 
-
-			//Forças aerodinâmicas aplicadas à fuzelagem
-			Eigen::MatrixXd Ff_B(3,1), Ff_I(3,1);
-			Ff_B(0) = (0.5)*rho*sf*v_xz*( CLfa*sin(alpha) - CDfa*cos(alpha) ) +
-				   (0.5)*rho*sf*v_xy*( CLfs*sin(beta)  - CDfs*cos(beta) );
-			Ff_B(1) = (0.5)*rho*sf*v_xy*( CLfs*cos(beta)  + CDfs*sin(beta) );
-			Ff_B(2) = (0.5)*rho*sf*v_xz*( CLfa*cos(alpha) + CDfa*sin(alpha));
-			//std::cout << "Alpha: " << alpha << std::endl;
-			//std::cout << "Beta: " << beta << std::endl;
-			//link->AddRelativeForce(Ff);
-			Ff_I = R_IB*Ff_B; // Expressa forças no inercial
-			Ff.x = Ff_I(0);
-			Ff.y = Ff_I(1);
-			Ff.z = Ff_I(2);
-			link->AddForce(Ff); // AddForce -> Aplica forças com relação ao referencial inercial
-			//std::cout << "Fuzelagem" << "Forças: " << Ff << std::endl;
+			//Aerodynamic forces applied by the fuselage
+			Eigen::MatrixXd Ffxz(3,1), Ffxy(3,1), FIf(3,1);
 			
-			//Rudder		
-			Eigen::MatrixXd Fv_B(3,1), Fv_I(3,1);
-			Fv_B(0) = (0.5)*rho*sv*v_xy*( ( CLv + c_r(RudderDeflection) )*sin(beta) - CDv*cos(beta) );
-			Fv_B(1) = (0.5)*rho*sv*v_xy*( CDv*sin(beta) + ( CLv + c_r(RudderDeflection) )*cos(beta) );
-			Fv_B(2) = 0.0;
-			Fv_I = R_IB*Fv_B; // Expressa forças no inercial
-			Fv.x = Fv_I(0);
-			Fv.y = Fv_I(1);
-			Fv.z = Fv_I(2);
-
-			linkR->AddForce(Fv);	
-			//std::cout << "Rudder def: " << RudderDeflection << "Forças: " << Fv << std::endl;
+			double kfxy = 0.5 * Ho * sf * pow(Vxy,2);
+			double kfxz = 0.5 * Ho * sf * pow(Vxz,2);
 			
-			//Elevator
-
-			Eigen::MatrixXd Fh_B(3,1), Fh_I(3,1);
-			Fh_B(0) = (0.5)*rho*sh*v_xz*( ( CLh + c_e(ElevatorDeflection) )*sin(alpha) - CDh*cos(alpha) );
-			Fh_B(1) = 0.0;
-			Fh_B(2) = (0.5)*rho*sh*v_xz*( CDh*sin(alpha) + ( CLh + c_e(ElevatorDeflection) )*cos(alpha) );
-			Fh_I = R_IB*Fh_B; // Expressa forças no inercial
-			Fh.x = Fh_I(0);
-			Fh.y = Fh_I(1);
-			Fh.z = Fh_I(2);
-			linkE->AddForce(Fh);		
-			//std::cout << "Elevator def: " << ElevatorDeflection << "Forças: " << Fh << std::endl;
-
-
+			Ffxz << -kfxz * CDfxz,            0, kfxz * CLfxz;
+			Ffxy << -kfxy * CDfxy, kfxy * CLfxy,            0;
+			//std::cout << "Ffxy: " << Ffxy.transpose() << std::endl;
+			//std::cout << "kfxy: " << kfxy << std::endl;
+			
+			
+			
+			FIf = R_IB * (RBAlpha * Ffxz + RBBeta * Ffxy); // Expressa forças no inercial
+			link->AddForceAtRelativePosition( math::Vector3( FIf(0),  FIf(1),  FIf(2)), math::Vector3(  DBf(0),  DBf(1),  DBf(2))); // new
+			
+			
+			//Aerodynamic forces applied by the vertical stabilizer
+			double kvxy = 0.5 * Ho * sv * pow(Vxy,2);	
+			Eigen::MatrixXd FBv(3,1), FIv(3,1);
+			FBv << -kvxy * CDv, kvxy * (CLv + c_r(RudderDeflection)), 0;
+			FIv = R_IB*RBBeta*FBv; // Expressa forças no inercial
+			link->AddForceAtRelativePosition( math::Vector3( FIv(0),  FIv(1),  FIv(2)), math::Vector3(  DBv(0),  DBv(1),  DBv(2))); // new
+			//std::cout << "Vertical Stabilizer" << FIv.transpose() << std::endl;
+			
+			//Aerodynamic forces applied by the horizontal stabilizer
+			double khxz = 0.5 * Ho * sh * pow(Vxz,2);
+			Eigen::MatrixXd FBh(3,1), FIh(3,1);
+			FBh << -khxz * CDh, 0, khxz * (CLh + c_e(ElevatorDeflection));
+			FIh = R_IB*RBAlpha*FBh; // Expressa forças no inercial
+			link->AddForceAtRelativePosition( math::Vector3( FIh(0),  FIh(1),  FIh(2)), math::Vector3(  DBh(0),  DBh(1),  DBh(2))); // new	
+			//std::cout << "Horizontal Stabilizer" << FIh.transpose() << std::endl;
 		}
 		catch(std::exception& e)
 		{
@@ -285,7 +301,7 @@ namespace gazebo
 		try
 		{
 			double alpha;
-			alpha = -atan2((wb-wa),(ub-ua));
+			alpha = atan2((wb-wa),(ub-ua));
 			if(alpha > 3.0584)
 			{
 				alpha = 3.0584;
@@ -306,7 +322,7 @@ namespace gazebo
 		try
 		{
 			double beta;
-			beta = -atan2((vb-va),(ub-ua));
+			beta = atan2((vb-va),(ub-ua));
 			if(beta > 3.0584)
 			{
 				beta = 3.0584;
@@ -344,105 +360,6 @@ namespace gazebo
 			std::cout << e.what() << std::endl;
 		} 	
 	}
-
-//	double Aerodinamica2::cd_fxz(double alpha)
-//	{
-//		try
-//		{
-//	
-//			return 0.4566*pow(alpha,2)-0.0403*alpha+0.0601;
-//		}
-//		catch(std::exception& e)
-//		{
-//			std::cout << e.what() << std::endl;
-//		} 	
-
-//	}
-//	
-//	double Aerodinamica2::cl_fxz(double alpha)
-//	{
-//		try
-//		{
-//			return 0.5405*alpha-0.0353;
-//		}
-//		catch(std::exception& e)
-//		{
-//			std::cout << e.what() << std::endl;
-//		} 	
-//	}
-
-//	double Aerodinamica2::cd_fxy(double beta)
-//	{
-//		try
-//		{
-//			return 0.3513*pow(beta,2) + 0.0604;
-//		}
-//		catch(std::exception& e)
-//		{
-//			std::cout << e.what() << std::endl;
-//		} 	
-//	}
-
-//	double Aerodinamica2::cl_fxy(double beta)
-//	{
-//		try
-//		{
-//			return 0.3821*beta;
-//		}
-//		catch(std::exception& e)
-//		{
-//			std::cout << e.what() << std::endl;
-//		} 	
-//	}
-
-//	double Aerodinamica2::cd_vxy(double beta)
-//	{
-//		try
-//		{
-
-//			return 2.2019*pow(beta,2) + 0.0149;
-//		}
-//		catch(std::exception& e)
-//		{
-//			std::cout << e.what() << std::endl;
-//		} 	
-//	}
-
-//	double Aerodinamica2::cl_vxy(double beta)
-//	{
-//		try
-//		{
-//			return -45.392*pow(beta,3) + 0.0011*pow(beta,2) + 6.1126*beta;
-//		}
-//		catch(std::exception& e)
-//		{
-//			std::cout << e.what() << std::endl;
-//		} 	
-//	}	
-//	
-//	double Aerodinamica2::cd_hxz(double alpha)
-//	{
-//		try
-//		{
-//			return 1.9382*pow(alpha,2)+0.0088;
-//		}
-//		catch(std::exception& e)
-//		{
-//			std::cout << e.what() << std::endl;
-//		} 	
-//	}
-//	
-//	double Aerodinamica2::cl_hxz(double alpha)
-//	{
-//		try
-//		{
-//			return -35.216*pow(alpha,3) + 6.5360*alpha;
-//		}
-//		catch(std::exception& e)
-//		{
-//			std::cout << e.what() << std::endl;
-//		} 	
-//	}
 
 	double Aerodinamica2::c_r(double Dr)
 	{

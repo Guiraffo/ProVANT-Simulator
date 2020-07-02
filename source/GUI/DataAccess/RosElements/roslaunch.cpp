@@ -36,7 +36,7 @@ void roslaunch::WriteNew(QString worldname,QString worldbase,bool hil)
                    << "\t</include>"<< endl << endl;
             if(!hil)
             {
-                   stream << "\t<node name=\"controller\" pkg=\"controller\" type=\"controller\" />" << endl
+                   stream << "\t<node name=\"controller\" pkg=\"controller\" type=\"controller\" output=\"screen\" launch-prefix=\"xterm -e\"/>" << endl
                    << " </launch>" << endl;
             }
             else

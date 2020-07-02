@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <topicdata>data</topicdata>
+    <TopicoStep>Step</TopicoStep>
+    <Sampletime>12</Sampletime>
+    <Strategy>libvant4_Winf.so</Strategy>
+    <RefPath>ref.txt</RefPath>
+    <Outputfile>out.txt</Outputfile>
+    <InputPath>in.txt</InputPath>
+    <ErroPath>erro.txt</ErroPath>
+    <Sensors>
+        <Device>Estados</Device>
+    </Sensors>
+    <Actuators>
+        <Device>ThrustR</Device>
+        <Device>ThrustL</Device>
+        <Device>RefRotorR</Device>
+        <Device>RefRotorL</Device>
+        <Device>RefAileronR</Device>
+        <Device>RefAileronL</Device>
+        <Device>RefRudderR</Device>
+        <Device>RefRudderL</Device>
+    </Actuators>
+</config>

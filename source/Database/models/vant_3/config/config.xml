@@ -3,7 +3,7 @@
     <topicdata>data</topicdata>
     <TopicoStep>Step</TopicoStep>
     <Sampletime>12</Sampletime>
-    <Strategy>libvant3_adaptiveMixCtrl.so</Strategy>
+    <Strategy>libvant3_adaptiveMixCtrl2.so</Strategy>
     <RefPath>ref.txt</RefPath>
     <Outputfile>out.txt</Outputfile>
     <InputPath>in.txt</InputPath>

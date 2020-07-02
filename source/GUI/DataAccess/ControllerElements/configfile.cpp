@@ -42,6 +42,7 @@ std::string ConfigFile::GetLogOut(){return outFilename;}
 
 std::string ConfigFile::GetLogIn(){return inFilename;}
 
+
 void ConfigFile::SetLog(std::string erro,std::string ref,std::string out,std::string in)
 {
     erroFilename = erro;
@@ -102,7 +103,9 @@ std::string ConfigFile::Readitem(std::string tag)
     else
     {
         // TO DO: criar exceção
-        qDebug("Problemas com o arquivo xml");
+        std::string msg;
+        msg = "2 - Problemas com o arquivo xml"+tag;
+        qDebug(msg.c_str());
         file.close();
         exit(1);
     }
@@ -151,7 +154,9 @@ std::vector<std::string> ConfigFile::ReadAllItems (std::string tag)
     else
     {
         // TO DO: criar exceção
-        qDebug("Problemas com o arquivo xml");
+        std::string msg;
+        msg = "1 - Problemas com o arquivo xml"+tag;
+        qDebug(msg.c_str());
         file.close();
         exit(1);
     }
@@ -213,7 +218,7 @@ void ConfigFile::WriteFile()
     else
     {
         // TO DO: criar exceção
-        qDebug("Problemas com o arquivo xml");
+        qDebug("3- Problemas com o arquivo xml");
         file.close();
         exit(1);
     }

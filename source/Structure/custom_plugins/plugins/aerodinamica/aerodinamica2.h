@@ -50,14 +50,6 @@ namespace gazebo
 			double getBeta(double vb, double va, double ub, double ua);
 			double getAirxy(double wb, double wa, double ub, double ua);
 			double getAirxz(double vb, double va, double ub, double ua);
-			double cd_fxz(double alpha);
-			double cl_fxz(double alpha);
-			double cd_fxy(double beta);
-			double cl_fxy(double beta);
-			double cd_vxy(double beta);
-			double cl_vxy(double beta);	
-			double cd_hxz(double alpha);
-			double cl_hxz(double alpha);
 			double c_r(double Dr);
 			double c_e(double De);
 //			Eigen::VectorXd SaveDataWind;
@@ -87,8 +79,8 @@ namespace gazebo
 			
 			std::string NameOfLinkFr_;
 			std::string NameOfLinkFl_;	
-			std::string NameOfLinkElev_;
-			std::string NameOfLinkRud_;	
+			//std::string NameOfLinkElev_;
+			//std::string NameOfLinkRud_;	
 			std::string NameOfLinkBody_;
 			std::string NameOfJointFl_;	
 			std::string NameOfJointFr_;		
@@ -100,12 +92,12 @@ namespace gazebo
 			double T;
 						
 			// velocidades lineares decompostas do vento e corpo
-			double ua, va, wa, ub, vb, wb, phi, theta, psi, x, y, z;		
+			double ua, va, wa, ub, vb, wb, phi, theta, psi;//, x, y, z;		
 			double RudderDeflection;
 			double ElevatorDeflection;
 			// ângulo de ataque e derrapagem
-			double alpha, beta, rho, sf, sh, sv, kt, b;
-			double air_xy, air_xz, v_xz, v_xy, Fr, Fl;			
+			double Alpha, Beta, Ho, sf, sh, sv;//, kt, b;
+			double Vxz, Vxy, Fr, Fl;			
 			double VetCDv[63] = 
  					 {0.0071,  -0.11395,  0.10658,   0.45137,     0.711,   0.85029,  0.98929,
                       1.1324,    1.2382,   1.3224,    1.3995,    1.4579,    1.5009,   1.5443,
@@ -138,16 +130,24 @@ namespace gazebo
                          1.7438,    1.6823,    1.601,    1.5045,    1.3823,    1.2406,   1.0812,
                          0.8966,   0.69802,  0.49702,   0.35513,   0.25209,   0.14907, 0.051889};
 
-      		double VetCLf[63] = 
-					{0,0.74461,   0.81047,  0.64392,   0.70064,    0.8229,   0.90449,  0.94542,
-                       0.94146,   0.89219,  0.79445,    0.6682,    0.5406,    0.3852,  0.21348,
-                      0.043238,  -0.11908, -0.29265,   -0.4615,  -0.62107,  -0.75584, -0.88146,
-                      -0.98195,   -1.0618,   -1.083,   -1.0583,   -0.8989,  -0.92432, -0.65444,
-                      -0.91363,  -0.89073, -0.26214,   0.36812,    0.9726,   0.74113,  0.69509,
-                       0.97789,   0.91181,   1.0676,    1.0854,    1.0505,   0.96643,  0.86174,
-                        0.7343,   0.59556,  0.43358,   0.26364,  0.090584, -0.070567, -0.24276,
-                      -0.41334,  -0.56309, -0.68936,  -0.81442,  -0.90355,  -0.94545, -0.94099,
-                      -0.89544,  -0.80124, -0.68545,  -0.65111,  -0.83993, -0.67012};
+
+		double VetCLf[63] =  {0,0.74461,0.81047,0.64392,0.70064,0.8229,0.90449,0.94542,0.94146,
+				         0.89219,0.79445,0.6682,0.5406,0.3852,0.21348,
+				         0.043238,-0.11908,-0.29265,-0.4615,-0.62107,-0.75584,-0.88146,
+				         -0.98183,-1.0626,-1.0791,-1.082,-0.90438,-0.92431,-0.65444,-0.91363,
+			-0.89073,-0.26214,0.36812,0.9726,0.74113,0.69509,0.97793,0.92464,1.0841,1.0828,1.0509,0.96642,
+			0.86173,0.73431,0.59556,0.43358,0.26364,0.090584,-0.070567,-0.24276,-0.41334,-0.56309,-0.68936,
+			-0.81442,-0.90355,-0.94545,-0.94099,-0.89544,-0.80124,-0.68545,-0.65111,-0.83993,-0.67012};
+//      		double VetCLf[63] = 
+//					{0,0.74461,   0.81047,  0.64392,   0.70064,    0.8229,   0.90449,  0.94542,
+//                       0.94146,   0.89219,  0.79445,    0.6682,    0.5406,    0.3852,  0.21348,
+//                      0.043238,  -0.11908, -0.29265,   -0.4615,  -0.62107,  -0.75584, -0.88146,
+//                      -0.98195,   -1.0618,   -1.083,   -1.0583,   -0.8989,  -0.92432, -0.65444,
+//                      -0.91363,  -0.89073, -0.26214,   0.36812,    0.9726,   0.74113,  0.69509,
+//                       0.97789,   0.91181,   1.0676,    1.0854,    1.0505,   0.96643,  0.86174,
+//                        0.7343,   0.59556,  0.43358,   0.26364,  0.090584, -0.070567, -0.24276,
+//                      -0.41334,  -0.56309, -0.68936,  -0.81442,  -0.90355,  -0.94545, -0.94099,
+//                      -0.89544,  -0.80124, -0.68545,  -0.65111,  -0.83993, -0.67012};
 
 			double  VetCDh[63] = 
 					{   0.01, -0.014686, 0.039606,   0.14179,   0.26115,   0.37536,   0.4718,
@@ -172,9 +172,12 @@ namespace gazebo
                     -0.91178,  -0.77285,  -0.6198,  -0.63052,  -0.70076,   -0.5343};
 
 			// forças aerodinâmicas
-			math::Vector3 Ff, Fh, Fv;
+//			math::Vector3 Ff, Fh, Fv;
 			math::Pose pose;
 			Eigen::MatrixXd R_IB, wind_I, wind_B;
+			Eigen::VectorXd DBf;
+			Eigen::VectorXd DBh;
+			Eigen::VectorXd DBv;
 	};
 }
 
