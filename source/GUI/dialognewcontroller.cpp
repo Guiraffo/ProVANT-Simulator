@@ -33,6 +33,6 @@ DialogNewController::~DialogNewController()
  */
 void DialogNewController::accept()
 {
-    newstrategy::CreateProject(ui->lineEdit->text());
+    NewStrategy::createProject(ui->lineEdit->text());
     QDialog::accept();
 }
