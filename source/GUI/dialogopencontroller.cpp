@@ -1,6 +1,8 @@
 #include "dialogopencontroller.h"
 #include "ui_dialogopencontroller.h"
 
+#include "Utils/appsettings.h"
+
 DialogOpenController::DialogOpenController(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::DialogOpenController)
@@ -15,7 +17,8 @@ DialogOpenController::~DialogOpenController()
 
 void DialogOpenController::GetControllers()
 {
-    char const* tmp = getenv( "TILT_PROJECT" );
+    AppSettings settings;
+    char const* tmp = settings.getTiltProjectPath().toStdString().c_str();
     if ( tmp == NULL ) {
         qDebug() << "Problemas com variavel de ambiente ";
     } else {
@@ -39,7 +42,8 @@ void DialogOpenController::GetControllers()
 
 void DialogOpenController::on_buttonBox_accepted()
 {
-    char const* tmp = getenv( "TILT_PROJECT" );
+    AppSettings settings;
+    char const* tmp = settings.getTiltProjectPath().toStdString().c_str();
     if ( tmp == NULL ) {
         qDebug() << "Problemas com variavel de ambiente ";
     } else {

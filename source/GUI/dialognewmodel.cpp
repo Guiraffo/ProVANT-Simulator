@@ -3,6 +3,7 @@
 #include "qdebug.h"
 #include "qdir.h"
 #include"Business/treeitens.h"
+#include "Utils/appsettings.h"
 
 Dialognewmodel::Dialognewmodel(Ui::MainWindow* last,QWidget *parent) :
     QDialog(parent),
@@ -19,7 +20,8 @@ Dialognewmodel::~Dialognewmodel()
 
 void Dialognewmodel::newModel()
 {
-    char const* tmp = getenv( "GAZEBO_MODEL_PATH" );
+    AppSettings settings;
+    char const* tmp = settings.getGazeboModelPath().toStdString().c_str();
     if ( tmp == NULL ) {
         qDebug() << "Problemas com variavel de ambiente ";
     } else {
@@ -46,7 +48,9 @@ void Dialognewmodel::on_buttonBox_accepted()
           QTreeWidgetItem* item = parentUi->treeWidget->topLevelItem(i);
           if(item->text(0)=="Include")
           {
-              char const* tmp = getenv( "GAZEBO_MODEL_PATH" );
+              AppSettings settings;
+              char const* tmp = settings.getGazeboModelPath()
+                      .toStdString().c_str();
               if ( tmp == NULL ) {
                   qDebug() << "Problemas com variavel de ambiente ";
               } else {

@@ -17,9 +17,6 @@
 //#include "qdebug.h"
 #include "jointsdialog.h"
 
-#include "Utils/tools.h"
-
-
 namespace Ui {
 class MainWindow;
 }
@@ -102,6 +99,8 @@ private slots:
     void on_actionAbout_triggered();
 
     void on_jointValuesPushButton_clicked();
+
+    void on_actionOptions_triggered();
 
 protected:
     Ui::MainWindow *ui;

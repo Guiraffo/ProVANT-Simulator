@@ -1,6 +1,8 @@
 #include "world.h"
 #include "QMessageBox"
 
+#include "Utils/appsettings.h"
+
 world::world()
 {
 
@@ -215,7 +217,8 @@ void world::ToTreeWidget(QTreeWidget* root)
         TreeItens::AddChild(element,"isStatic",list.at(i).GetIsStatic());
         TreeItens::AddChild(element,"uri",list.at(i).GetUri());
 
-        char const* tmp = getenv( "GAZEBO_MODEL_PATH" );
+        AppSettings settings;
+        char const *tmp = settings.getGazeboModelPath().toStdString().c_str();
         if ( tmp == NULL )
         {
                 qDebug() << "Problemas com variavel de ambiente ";

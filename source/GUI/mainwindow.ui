@@ -120,7 +120,7 @@
      <x>0</x>
      <y>0</y>
      <width>939</width>
-     <height>36</height>
+     <height>29</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuSimulation">
@@ -150,9 +150,16 @@
     </property>
     <addaction name="actionAbout"/>
    </widget>
+   <widget class="QMenu" name="menuTools">
+    <property name="title">
+     <string>Tools</string>
+    </property>
+    <addaction name="actionOptions"/>
+   </widget>
    <addaction name="menuSimulation"/>
    <addaction name="menuEdit"/>
    <addaction name="menuAbout"/>
+   <addaction name="menuTools"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <action name="actionNew">
@@ -303,6 +310,11 @@
   <action name="actionAbout">
    <property name="text">
     <string>&amp;About ProVANT Simulator</string>
+   </property>
+  </action>
+  <action name="actionOptions">
+   <property name="text">
+    <string>Options</string>
    </property>
   </action>
  </widget>

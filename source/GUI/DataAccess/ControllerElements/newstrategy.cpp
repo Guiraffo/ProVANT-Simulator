@@ -1,13 +1,16 @@
 #include "newstrategy.h"
 #include "QDebug"
 
+#include "Utils/appsettings.h"
+
 newstrategy::newstrategy()
 {
 }
 
 void newstrategy::CreateProject(QString name)
 {
-    char const* tmp = getenv( "TILT_PROJECT" );
+    AppSettings settings;
+    char const* tmp = settings.getTiltProjectPath().toStdString().c_str();
     if ( tmp == NULL ) {
         qDebug() << "Problemas com variavel de ambiente ";
     } else {

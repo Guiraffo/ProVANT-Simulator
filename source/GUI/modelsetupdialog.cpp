@@ -3,6 +3,8 @@
 #include"qdebug.h"
 #include"Business/treeitens.h"
 
+#include "Utils/appsettings.h"
+
 ModelSetupDialog::ModelSetupDialog(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::ModelSetupDialog)
@@ -28,7 +30,8 @@ void ModelSetupDialog::setModel(std::string modelfile,std::string controllerfile
     controller.get(controllerfile,ui->sensorsListWidget,ui->actuatorsListWidget);
 
     // adiciona no combobox todos os controladores existentes
-    char const* tmp = getenv( "TILT_PROJECT" );
+    AppSettings settings;
+    char const* tmp = settings.getTiltProjectPath().toStdString().c_str();
     if ( tmp == NULL ) {
         qDebug() << "Problemas com variavel de ambiente ";
     } else {
@@ -77,7 +80,8 @@ void ModelSetupDialog::on_newControllerButton_clicked()
     window.exec();
 
     // colocando novo projeto de controle no listbox
-    char const* tmp = getenv( "TILT_PROJECT" );
+    AppSettings settings;
+    char const* tmp = settings.getTiltProjectPath().toStdString().c_str();
     if ( tmp == NULL ) {
         qDebug() << "Problemas com variavel de ambiente ";
     } else {
@@ -111,7 +115,8 @@ void ModelSetupDialog::on_newControllerButton_clicked()
 void ModelSetupDialog::on_compileControllerButton_clicked()
 {
     // obtendo caminho da pasta catkin_ws
-    char const* tmp = getenv( "DIR_ROS" );
+    AppSettings settings;
+    char const* tmp = settings.getRosPath().toStdString().c_str();
     if ( tmp == NULL )
     {
         qDebug() << "Problemas com variavel de ambiente ";
@@ -128,7 +133,8 @@ void ModelSetupDialog::on_compileControllerButton_clicked()
 
 void ModelSetupDialog::on_openControllerButton_clicked()
 {
-    char const* tmp = getenv( "TILT_PROJECT" );
+    AppSettings settings;
+    char const* tmp = settings.getTiltProjectPath().toStdString().c_str();
     if ( tmp == NULL ) {
         qDebug() << "Problemas com variavel de ambiente ";
     } else {

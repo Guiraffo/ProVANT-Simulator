@@ -6,8 +6,12 @@
   */
 
 #include "mainwindow.h"
+
 #include <fcntl.h>
 
+#include "Utils/appsettings.h"
+
+#include "applicationsettingsdialog.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -55,8 +59,9 @@ void MainWindow::on_startGazeboPushButton_clicked()
         if(ui->treeWidget->topLevelItem(i)->text(0)=="Include")
         {
             // adquire a URL onde estão armazenados todos os modelos de vant do ambiente de simulação
-            QString env(getenv( "TILT_PROJECT" ));
-            QDir dir(env.toStdString().c_str());
+            AppSettings settings;
+            QString env = settings.getGazeboModelPath();
+            QDir dir(env);
 
             // Listando Modelos
             QFileInfoList files = dir.entryInfoList();
@@ -128,7 +133,8 @@ void MainWindow::on_actionNew_triggered()
 {
     hil = false;
     // Diretório onde está os templates
-    QString env(getenv( "TILT_PROJECT" ));
+    AppSettings settings;
+    QString env = settings.getTiltProjectPath();
     env = env + "/worlds/templates";
 
     // Abertura de caixa de diálogo para selecionar arquivo template
@@ -195,9 +201,9 @@ void MainWindow::on_treeWidget_itemDoubleClicked(QTreeWidgetItem *item, int colu
     // se campo for do tipo uri, abrir diálogo de configuração do modelo
     if(item->text(0) == "uri")
     {
-        QString env(getenv( "GAZEBO_MODEL_PATH" ));
-
-        QDir dir(env.toStdString().c_str());
+        AppSettings settings;
+        QString env = settings.getGazeboModelPath();
+        QDir dir(env);
         QStringList list;
         list = item->text(1).split("//");
         if (!dir.cd(QString::fromStdString(list.at(1).toStdString()))) // "/tmp"
@@ -275,39 +281,41 @@ void MainWindow::on_treeWidget_itemClicked(QTreeWidgetItem *item, int column)
 {
     Q_UNUSED(column)
     if(item->text(0) == "uri")
+    {
+        AppSettings settings;
+        QString env = settings.getGazeboModelPath();
+        QDir dir(env);
+        QStringList list;
+        list = item->text(1).split("//");
+        // não há arquivo
+        if (!dir.cd(QString::fromStdString(list.at(1).toStdString()))) // "/tmp"
         {
-            QString env(getenv( "GAZEBO_MODEL_PATH" ));
-            QDir dir(env.toStdString().c_str());
-            QStringList list;
-            list = item->text(1).split("//");
-            // não há arquivo
-            if (!dir.cd(QString::fromStdString(list.at(1).toStdString()))) // "/tmp"
+            QGraphicsScene * scene = new QGraphicsScene(ui->modelGraphicsView);
+            ui->modelGraphicsView->setScene(scene);
+            ui->modelGraphicsView->show();
+        }
+        else // há arquivo
+        {
+            // plotando foto do vant
+            QString imagefile(env+"/"+list.at(1)+"/imagem.gif");
+            QFile ff(imagefile);
+            QFileInfo fileInfo(ff);
+            if (fileInfo.exists())
             {
                 QGraphicsScene * scene = new QGraphicsScene(ui->modelGraphicsView);
+                QImage image(imagefile);
+                scene->addPixmap(QPixmap::fromImage(image));
                 ui->modelGraphicsView->setScene(scene);
                 ui->modelGraphicsView->show();
             }
-            else // há arquivo
-            {
-                // plotando foto do vant
-                QString imagefile(env+"/"+list.at(1)+"/imagem.gif");
-                QFile ff(imagefile);
-                QFileInfo fileInfo(ff);
-                if (fileInfo.exists())
-                {
-                    QGraphicsScene * scene = new QGraphicsScene(ui->modelGraphicsView);
-                    QImage image(imagefile);
-                    scene->addPixmap(QPixmap::fromImage(image));
-                    ui->modelGraphicsView->setScene(scene);
-                    ui->modelGraphicsView->show();
-                }
-            }
         }
+    }
 }
 
 void MainWindow::on_actionOpen_triggered()
 {
-    QString env(getenv( "PROVANT_DATABASE" ));
+    AppSettings settings;
+    QString env = settings.getProvantDatabasePath();
     env = env + "/worlds/worlds";
     // escolhe do arquivo .world
     QString filename = QFileDialog::getOpenFileName(this
@@ -425,4 +433,10 @@ void MainWindow::on_jointValuesPushButton_clicked()
     newform.setModal(true);
     newform.exec();
     ui->jointValuesPushButton->setDisabled(true);
+}
+
+void MainWindow::on_actionOptions_triggered()
+{
+    ApplicationSettingsDialog dialog(this);
+    dialog.exec();
 }

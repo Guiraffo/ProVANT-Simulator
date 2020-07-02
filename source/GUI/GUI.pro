@@ -17,6 +17,9 @@ TEMPLATE = app
 CONFIG += c++11
 
 SOURCES += main.cpp\
+    Utils/appsettings.cpp \
+    Widgets/filebrowserwidget.cpp \
+    applicationsettingsdialog.cpp \
         mainwindow.cpp \
     DataAccess/ControllerElements/configfile.cpp \
     DataAccess/GazeboElements/Items/include_da.cpp \
@@ -58,7 +61,6 @@ SOURCES += main.cpp\
     DataAccess/GazeboElements/Items/multipleincludes.cpp \
     DataAccess/GazeboElements/Items/multipleplugins.cpp \
     jointsdialog.cpp
-    #Utils/tools.cpp
 
 HEADERS  += mainwindow.h \
     DataAccess/ControllerElements/configfile.h \
@@ -85,6 +87,9 @@ HEADERS  += mainwindow.h \
     DataAccess/GazeboElements/modelfile.h \
     DataAccess/GazeboElements/Items/axis.h \
     Business/treeitens.h \
+    Utils/appsettings.h \
+    Widgets/filebrowserwidget.h \
+    applicationsettingsdialog.h \
     dialognewcontroller.h \
     DataAccess/ControllerElements/newstrategy.h \
     dialogopencontroller.h \
@@ -95,12 +100,13 @@ HEADERS  += mainwindow.h \
 #    aboutform.h \
     aboutdialog.h \
     DataAccess/GazeboElements/Items/multipleincludes.h \
-    Utils/tools.h \
     DataAccess/GazeboElements/Items/multipleplugins.h \
     jointsdialog.h \
     modelsetupdialog.h
 
 FORMS    += mainwindow.ui \
+    Widgets/filebrowserwidget.ui \
+    applicationsettingsdialog.ui \
     modelsetupdialog.ui \
     dialognewcontroller.ui \
     dialogopencontroller.ui \
