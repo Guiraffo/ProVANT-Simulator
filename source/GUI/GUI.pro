@@ -20,7 +20,7 @@ SOURCES += main.cpp\
     Utils/appsettings.cpp \
     Widgets/filebrowserwidget.cpp \
     applicationsettingsdialog.cpp \
-        mainwindow.cpp \
+    mainwindow.cpp \
     DataAccess/ControllerElements/configfile.cpp \
     DataAccess/GazeboElements/Items/include_da.cpp \
     DataAccess/GazeboElements/Items/plugin_da.cpp \
@@ -31,7 +31,6 @@ SOURCES += main.cpp\
     Business/model.cpp \
     Business/world.cpp \
     Business/controller.cpp \
-#    Business/simulation.cpp \
     DataAccess/GazeboElements/worldfile.cpp \
     DataAccess/GazeboElements/Items/model_da.cpp \
     DataAccess/GazeboElements/Items/modelplugin.cpp \
@@ -49,12 +48,6 @@ SOURCES += main.cpp\
     DataAccess/RosElements/roslaunch.cpp \
     dialognewmodel.cpp \
     DataAccess/GazeboElements/Items/scene.cpp \
-#    DataAccess/GazeboElements/Items/Instruments/sensor.cpp \
-#    DataAccess/GazeboElements/Items/Instruments/sonar.cpp \
-#    DataAccess/GazeboElements/Items/Instruments/gps.cpp \
-#    DataAccess/GazeboElements/Items/Instruments/imu.cpp \
-#    DataAccess/GazeboElements/Items/Instruments/magnetometer.cpp \
-#    aboutform.cpp \
     aboutdialog.cpp \
     DataAccess/GazeboElements/Items/multipleincludes.cpp \
     DataAccess/GazeboElements/Items/multipleplugins.cpp \
@@ -72,7 +65,6 @@ HEADERS  += mainwindow.h \
     Business/model.h \
     Business/world.h \
     Business/controller.h \
-#    Business/simulation.h \
     DataAccess/GazeboElements/worldfile.h \
     DataAccess/GazeboElements/Items/model_da.h \
     DataAccess/GazeboElements/Items/modelplugin.h \
@@ -93,8 +85,6 @@ HEADERS  += mainwindow.h \
     DataAccess/RosElements/roslaunch.h \
     dialognewmodel.h \
     DataAccess/GazeboElements/Items/scene.h \
-#    DataAccess/GazeboElements/Items/Instruments/sensor.h \
-#    aboutform.h \
     aboutdialog.h \
     DataAccess/GazeboElements/Items/multipleincludes.h \
     DataAccess/GazeboElements/Items/multipleplugins.h \
@@ -108,7 +98,6 @@ FORMS    += mainwindow.ui \
     modelsetupdialog.ui \
     dialognewcontroller.ui \
     dialognewmodel.ui \
-#    aboutform.ui \
     aboutdialog.ui \
     jointsdialog.ui \
     jointsdialog.ui \
