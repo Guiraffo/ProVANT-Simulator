@@ -7,7 +7,6 @@
 
 #include"Business/treeitens.h"
 #include "dialognewcontroller.h"
-#include "dialogopencontroller.h"
 #include "Utils/appsettings.h"
 #include "processoutputwindow.h"
 

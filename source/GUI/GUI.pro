@@ -34,7 +34,6 @@ SOURCES += main.cpp\
 #    Business/simulation.cpp \
     DataAccess/GazeboElements/worldfile.cpp \
     DataAccess/GazeboElements/Items/model_da.cpp \
-    DataAccess/GazeboElements/Items/worldplugin.cpp \
     DataAccess/GazeboElements/Items/modelplugin.cpp \
     DataAccess/GazeboElements/Items/geometrymesh.cpp \
     DataAccess/GazeboElements/Items/inertial.cpp \
@@ -76,7 +75,6 @@ HEADERS  += mainwindow.h \
 #    Business/simulation.h \
     DataAccess/GazeboElements/worldfile.h \
     DataAccess/GazeboElements/Items/model_da.h \
-    DataAccess/GazeboElements/Items/worldplugin.h \
     DataAccess/GazeboElements/Items/modelplugin.h \
     DataAccess/GazeboElements/Items/geometry.h \
     DataAccess/GazeboElements/Items/geometrymesh.h \
