@@ -1,33 +1,58 @@
 #include "controller.h"
 
+/**
+ * @brief Controller::Controller
+ * Initializes the controller object.
+ */
 Controller::Controller()
 {
 
 }
 
-void Controller::get(std::string filename,QListWidget* sensor,QListWidget* actuator)
+/**
+ * @brief Controller::~Controller
+ * Frees the content of the config member variable.
+ */
+Controller::~Controller()
+{
+    if(config != nullptr) delete config;
+}
+
+/**
+ * @brief Controller::get Read the contents of the controller and fills the
+ * QListWidgets with the sensors and controllers.
+ * @param filename The path to the file containing the controller that will
+ * be read.
+ * @param sensors The widget that displays the sensors contained in the
+ * controller.
+ * @param actuators The widget that displays the actuators contained in the
+ * controller.
+ */
+void Controller::open(const QString &filename,
+                     QListWidget *sensors,
+                     QListWidget *actuators)
 {
     config = new ConfigFile(filename);
-    config->ReadFile();
+    config->readFile();
 
-    std::vector<std::string> listsensors = config->GetSensors();
-    std::vector<std::string> listactuators =  config->GetActuators();
-    ToListWidget(sensor,listsensors);
-    ToListWidget(actuator,listactuators);
+    toListWidget(sensors, config->getSensors());
+    toListWidget(actuators, config->getActuators());
 }
 
-void Controller::Write()
+/**
+ * @brief Controller::toListWidget Reads the content of a string list and
+ * inserts then into a QListWidget.
+ * @param element The list widget in which the elements will be inserted.
+ * @param items The list of items to insert.
+ */
+void Controller::toListWidget(QListWidget *element, const QStringList &items)
 {
-
-}
-
-void Controller::ToListWidget(QListWidget* root,std::vector<std::string> list)
-{
-    for(uint i=0;i<list.size();i++)
+    for(QStringList::const_iterator i = items.constBegin();
+        i != items.constEnd();
+        i++)
     {
-        QListWidgetItem* item = new QListWidgetItem(QString::fromStdString(list.at(i)));
-        root->addItem(item);
-        item->setFlags(Qt::ItemIsEditable|Qt::ItemIsEnabled);
+        QListWidgetItem *listItem = new QListWidgetItem(*i);
+        listItem->setFlags(Qt::ItemIsEditable | Qt::ItemIsEnabled);
+        element->addItem(listItem);
     }
 }
-
