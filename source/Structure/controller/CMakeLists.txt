@@ -1,32 +1,34 @@
-cmake_minimum_required(VERSION 2.8.3)
+# This file is part of the ProVANT simulator project.
+# Licensed under the terms of the MIT open source license. More details at
+# https://github.com/Guiraffo/ProVANT-Simulator/blob/master/LICENSE.md
+
+cmake_minimum_required(VERSION 3.0.2)
 project(controller)
 
-
+find_package(cmake_modules REQUIRED)
 find_package(catkin REQUIRED COMPONENTS
   roscpp
-  cmake_modules
   simulator_msgs
 )
-
-include_directories(include ${catkin_INCLUDE_DIRS})
-
+find_package(Eigen3 3.3 REQUIRED NO_MODULE)
 find_package(TinyXML REQUIRED) 
 
+include_directories(include ${catkin_INCLUDE_DIRS})
 include_directories( ${TinyXML_INCLUDE_DIRS})
 include_directories("$ENV{TILT_PROJECT}/source/Structure/control_strategies/")
-message(" teste $ENV{TILT_PROJECT}/source/Structure/control_strategies/")
 
 catkin_package(
    INCLUDE_DIRS include
    LIBRARIES Tilt_controller
    CATKIN_DEPENDS roscpp
-   DEPENDS Eigen TinyXML
+   DEPENDS EIGEN3 TinyXML
 )
 
-add_executable(controller src/tilt_controller2.cpp )
-target_link_libraries(controller ${catkin_LIBRARIES} ${TinyXML_LIBRARIES} ${CMAKE_DL_LIBS})
-
-
-
-
-
+add_executable(controller src/tilt_controller2.cpp)
+target_link_libraries(
+  controller 
+  ${catkin_LIBRARIES} 
+  ${TinyXML_LIBRARIES} 
+  ${CMAKE_DL_LIBS}
+  Eigen3::Eigen
+)
