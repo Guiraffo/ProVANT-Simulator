@@ -24,9 +24,9 @@
 int main (int argc, char **argv)
 {
 	// Initialize ROS
-	Controller2::init(argc, argv);
+	ControllerNode::init(argc, argv);
   // Create an instance of the Controller2 class and configure it.
-	Controller2 Instance;
+	ControllerNode Instance;
 	Instance.Start();
 
   // Keep this node running until ROS finishes execution.

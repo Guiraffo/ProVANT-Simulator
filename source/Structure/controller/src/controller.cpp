@@ -12,12 +12,12 @@
 
 #include "controller/controller.h"
 
-void Controller2::init(int argc, char** argv)
+void ControllerNode::init(int argc, char** argv)
 {
   ros::init(argc, argv, "controller");
 }
 
-Controller2::Controller2()
+ControllerNode::ControllerNode()
 {
   cont = 0;
   decimador = 0;
@@ -26,7 +26,7 @@ Controller2::Controller2()
     data.values.push_back(t);
 }
 
-Controller2::~Controller2()
+ControllerNode::~ControllerNode()
 {
   outfile.endFile();
   infile.endFile();
@@ -35,7 +35,7 @@ Controller2::~Controller2()
   dlclose(teste);
 }
 
-void Controller2::Start()
+void ControllerNode::Start()
 {
   // XML FILE with the control configurations
   if (std::getenv("TILT_CONFIG") == NULL)
@@ -49,7 +49,7 @@ void Controller2::Start()
   while (i < array_sensors.size())
   {
     mapOfWords.insert(std::make_pair(array_sensors.at(i), i));                               // save order
-    ros::Subscriber sub = nh.subscribe(array_sensors.at(i), 1, &Controller2::Sensor, this);  // create callback
+    ros::Subscriber sub = nh.subscribe(array_sensors.at(i), 1, &ControllerNode::Sensor, this);  // create callback
     subarray.push_back(sub);                                                                 // save callback
     i++;
   }
@@ -81,7 +81,7 @@ void Controller2::Start()
 }
 
 // Sensor Callback
-void Controller2::Sensor(simulator_msgs::Sensor msg)
+void ControllerNode::Sensor(simulator_msgs::Sensor msg)
 {
   mtx.lock();  // lock mutex
   cont++;
@@ -97,7 +97,7 @@ void Controller2::Sensor(simulator_msgs::Sensor msg)
 }
 
 // Printing setup
-void Controller2::configPrint()
+void ControllerNode::configPrint()
 {
   // get localization of output file
   if (std::getenv("TILT_MATLAB") == NULL)
@@ -121,7 +121,7 @@ void Controller2::configPrint()
   erfile.startFile(ErroPath, "Erro");
 }
 
-void Controller2::control_law(simulator_msgs::SensorArray msg)
+void ControllerNode::control_law(simulator_msgs::SensorArray msg)
 {
   try
   {
@@ -168,7 +168,7 @@ void Controller2::control_law(simulator_msgs::SensorArray msg)
   }
 }
 
-void Controller2::Step()
+void ControllerNode::Step()
 {
   std_msgs::String msgpub;
   std::stringstream ss;
@@ -177,7 +177,7 @@ void Controller2::Step()
   Step_pub.publish(msgpub);
 }
 
-void Controller2::configPlugin()
+void ControllerNode::configPlugin()
 {
   destroy_t* destroy_obj = NULL;
   create_t* create_obj = NULL;

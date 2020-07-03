@@ -27,13 +27,13 @@
 #include "simulator_msgs/SensorArray.h"
 #include "Icontroller.hpp"
 
-class Controller2
+class ControllerNode
 {
 public:
 	static void init(int argc, char** argv);
 
-	Controller2();
-	virtual ~Controller2();
+	ControllerNode();
+	virtual ~ControllerNode();
 
   void Start();
 	void configPrint();
