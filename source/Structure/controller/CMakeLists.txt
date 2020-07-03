@@ -12,10 +12,14 @@ find_package(catkin REQUIRED COMPONENTS
 )
 find_package(Eigen3 3.3 REQUIRED NO_MODULE)
 find_package(TinyXML REQUIRED) 
+find_package(Boost REQUIRED COMPONENTS thread)
 
-include_directories(include ${catkin_INCLUDE_DIRS})
-include_directories( ${TinyXML_INCLUDE_DIRS})
-include_directories("$ENV{TILT_PROJECT}/source/Structure/control_strategies/")
+include_directories(
+  include
+  ${catkin_INCLUDE_DIRS}
+  ${TinyXML_INCLUDE_DIRS}
+  "$ENV{TILT_PROJECT}/source/Structure/control_strategies/"
+)
 
 catkin_package(
    INCLUDE_DIRS include
@@ -24,11 +28,15 @@ catkin_package(
    DEPENDS EIGEN3 TinyXML
 )
 
-add_executable(controller src/controller_node.cpp)
+add_executable(controller src/nodes/controller_node.cpp)
 target_link_libraries(
   controller 
   ${catkin_LIBRARIES} 
   ${TinyXML_LIBRARIES} 
   ${CMAKE_DL_LIBS}
+  ${Boost_LIBRARIES}
   Eigen3::Eigen
 )
+
+install(TARGETS controller
+        RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})

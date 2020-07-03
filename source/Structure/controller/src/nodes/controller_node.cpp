@@ -11,7 +11,7 @@
  */
 
 #include <iostream>
-#include "controller/Controller2.cpp"
+#include "controller/controller.h"
 
 /**
  * @brief Entry point for the controller package node.
