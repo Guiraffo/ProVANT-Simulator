@@ -28,7 +28,7 @@ catkin_package(
    DEPENDS EIGEN3 TinyXML
 )
 
-add_executable(controller src/nodes/controller_node.cpp)
+add_executable(controller src/nodes/controller_node.cpp src/controller.cpp)
 target_link_libraries(
   controller 
   ${catkin_LIBRARIES} 
