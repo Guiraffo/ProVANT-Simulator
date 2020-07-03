@@ -11,8 +11,7 @@ find_package(catkin REQUIRED COMPONENTS
   simulator_msgs
 )
 find_package(Eigen3 3.3 REQUIRED NO_MODULE)
-find_package(TinyXML REQUIRED) 
-find_package(Boost REQUIRED COMPONENTS thread)
+find_package(TinyXML REQUIRED)
 
 include_directories(
   include
@@ -34,7 +33,6 @@ target_link_libraries(
   ${catkin_LIBRARIES} 
   ${TinyXML_LIBRARIES} 
   ${CMAKE_DL_LIBS}
-  ${Boost_LIBRARIES}
   Eigen3::Eigen
 )
 

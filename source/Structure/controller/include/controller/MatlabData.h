@@ -23,9 +23,10 @@ class MatlabData
 
 	}
 	// open file to print data with desired name
-	public: void startFile(std::string namefile, std::string varname)
+	public: bool startFile(std::string namefile, std::string varname)
 	{
 		file.open (namefile.c_str(), std::fstream::out);
+		return file.good();
 	}
 	
 	// close file

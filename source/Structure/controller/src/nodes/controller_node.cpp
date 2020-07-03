@@ -27,7 +27,7 @@ int main (int argc, char **argv)
 	ControllerNode::init(argc, argv);
   // Create an instance of the Controller2 class and configure it.
 	ControllerNode Instance;
-	Instance.Start();
+	Instance.startSimulation();
 
   // Keep this node running until ROS finishes execution.
 	while(ros::ok())
