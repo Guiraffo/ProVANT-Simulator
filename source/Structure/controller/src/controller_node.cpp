@@ -1,34 +1,37 @@
 /*
-* File: tilt_controller2.cpp
-* Author: Arthur Viana Lara
-* Project: ProVANT
-* Company: Federal University of Minas Gerais
-* Version: 1.0
-* Date: 29/01/18
-* Description: This file is the startup file of the UAV model's control software
-*/
-
+ * This file is part of the ProVANT simulator project.
+ * Licensed under the terms of the MIT open source license. More details at
+ * https://github.com/Guiraffo/ProVANT-Simulator/blob/master/LICENSE.md
+ */
+/**
+ * @file This file contains the entry point for the controller node.
+ *
+ * @author Arthur Viana Lara
+ * @author Júnio Eduardo de Morais Aquino
+ */
 
 #include <iostream>
- #include "controller/Controller2.cpp"
-#include <exception>
+#include "controller/Controller2.cpp"
 
-
+/**
+ * @brief Entry point for the controller package node.
+ * 
+ * @param argc Number of received arguments.
+ * @param argv Vector of received arguments as strings.
+ * @return int Execution status. Returns 0 in case of success and a negative
+ * integer otherwise.
+ */
 int main (int argc, char **argv)
 {
-	try
-	{
-		// Call a header and starts it
-		 Controller2::init(argc,argv);
-		 Controller2 Instance;
-		 Instance.Start();
-		return 0;
-	}
-	catch(std::exception& e)
-	{
-		std::cout << e.what() << std::endl;
-		return 1;
-	}
+	// Initialize ROS
+	Controller2::init(argc, argv);
+  // Create an instance of the Controller2 class and configure it.
+	Controller2 Instance;
+	Instance.Start();
+
+  // Keep this node running until ROS finishes execution.
+	while(ros::ok())
+    ros::spin();
+
+	return 0;
 }
-
-
