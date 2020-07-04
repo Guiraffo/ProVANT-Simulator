@@ -328,9 +328,10 @@ void ControllerNode::setupControlStrategy()
 
   // Loads the create function from the control strategy library
   create_obj = (create_t*)dlsym(dllHandle, "create");
+  ROS_DEBUG_STREAM("Creating a handle for the create function");
   // Check if any error was returned while trying to locate the create function.
-  std::string err = dlerror();
-  if (!err.empty())
+  const char* err = dlerror();
+  if (err != NULL)
   {
     ROS_FATAL_STREAM("Error while trying to open the create function in the "
                      << controlStrategy << ". The control node cannot be loaded. dlerror response = " << err);
