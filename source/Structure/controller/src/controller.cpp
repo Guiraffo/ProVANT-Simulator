@@ -299,6 +299,7 @@ void ControllerNode::step()
 
 void ControllerNode::setupControlStrategy()
 {
+  ROS_DEBUG("Initializing the control strategy DLL");
   create_t* create_obj = NULL;
 
   const char* TILT_STRATEGIES = std::getenv("TILT_STRATEGIES");
@@ -317,6 +318,7 @@ void ControllerNode::setupControlStrategy()
     strategiesLibFolder += "/";
 
   std::string file = strategiesLibFolder + controlStrategy;
+  ROS_DEBUG_STREAM("Creating a handle for the " << file << " DLL");
   dllHandle = dlopen(file.c_str(), RTLD_LAZY);
   if (dllHandle == NULL)
   {
@@ -340,6 +342,7 @@ void ControllerNode::setupControlStrategy()
 
   // Call the create function to create an instance of the control strategy
   // and configures the instance.
+  ROS_DEBUG("Initializing the control strategy instance");
   controller = create_obj();
   controller->config();
 }
