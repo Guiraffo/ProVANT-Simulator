@@ -21,6 +21,7 @@ void ControllerNode::init(int argc, char** argv)
 
 ControllerNode::ControllerNode() : sensorCounter(0), stepCounter(0)
 {
+  ROS_DEBUG_STREAM("ControllerNode instance constructed, starting node configuration");
   setupNode();
 }
 
@@ -38,15 +39,16 @@ ControllerNode::~ControllerNode()
 
 void ControllerNode::setupNode()
 {
-  // Check the value of the TILT_CONFIG environment variable
-  std::string configFilePath = std::getenv("TILT_CONFIG");
-  if (configFilePath.empty())
+  const char* TILT_CONFIG = std::getenv("TILT_CONFIG");
+  ROS_DEBUG("Checking the value of TILT_CONFIG environment variable: %s", TILT_CONFIG);
+  if (TILT_CONFIG == NULL)
   {
-    ROS_FATAL_STREAM("The value of the TILT_CONFIG environment variable is invalid. This variable should contain the "
-                     "path to the config.xml file for the desired model for this simulation, but it is empty or the "
-                     "variable does not exist.");
+    ROS_FATAL("Error while trying to read the value of the TILT_CONFIG environment variable, this environament "
+              "variable has null value or does not exist, but should point to the config.xml file of the "
+              "model used for this simulation. Please correct the TILT_CONFIG value and try again.");
     exit(-1);
   }
+  std::string configFilePath(TILT_CONFIG);
 
   // Create a XML file handle for the configuration file
   XMLRead xmlDoc(configFilePath);
@@ -183,15 +185,18 @@ void openAndVerifyFile(MatlabData* file, std::string dir, std::string filePath, 
 // Printing setup
 void ControllerNode::setupLogging()
 {
-  std::string logOutputFolder = std::getenv("TILT_MATLAB");
-  if (logOutputFolder.empty())
+  const char* TILT_MATLAB = std::getenv("TILT_MATLAB");
+  ROS_DEBUG("Checking the value of the TILT_MATLAB environment variable: %s", TILT_MATLAB);
+  if (TILT_MATLAB == NULL)
   {
-    ROS_FATAL_STREAM("Error while trying to configure the simulation logging."
-                     << "The current value of the TILT_MATLAB function is " << logOutputFolder
-                     << ". Please correct the value of this environment variable and try again.");
+    ROS_FATAL("Error while trying to read the value of the TILT_MATLAB environment variable, this environament "
+              "variable has null value or does not exist, but should point to the a valid folder to write "
+              "to simulation logs. Please correct the TILT_MATLAB value and try again.");
     exit(-1);
   }
 
+  std::string logOutputFolder(TILT_MATLAB);
+  // Ensure that TILT_MATLAB ends with a /
   if (logOutputFolder.back() != '/')
   {
     logOutputFolder += "/";
@@ -268,7 +273,22 @@ void ControllerNode::setupControlStrategy()
 {
   create_t* create_obj = NULL;
 
-  std::string file = std::getenv("TILT_STRATEGIES") + controlStrategy;
+  const char* TILT_STRATEGIES = std::getenv("TILT_STRATEGIES");
+  ROS_DEBUG("Checking the value of TILT_STRATEGIES environment variable: %s", TILT_STRATEGIES);
+  if (TILT_STRATEGIES == NULL)
+  {
+    ROS_FATAL("Error while trying to read the value of the TILT_STRATEGIES environment variable, this environament "
+              "variable has null value or does not exist, but should point to the lib folder under "
+              "your catkin workspace build destination. Please correct the TILT_STRATEGIES value and try again.");
+    exit(-1);
+  }
+
+  std::string strategiesLibFolder(TILT_STRATEGIES);
+  // If the TILT_STRATEGIES does not end with a /, add one
+  if (strategiesLibFolder.back() != '/')
+    strategiesLibFolder += "/";
+
+  std::string file = strategiesLibFolder + controlStrategy;
   dllHandle = dlopen(file.c_str(), RTLD_LAZY);
   if (dllHandle == NULL)
   {
@@ -295,6 +315,7 @@ void ControllerNode::setupControlStrategy()
   controller->config();
 }
 
-void ControllerNode::startSimulation() {
+void ControllerNode::startSimulation()
+{
   step();
 }

@@ -15,23 +15,28 @@
 
 /**
  * @brief Entry point for the controller package node.
- * 
+ *
  * @param argc Number of received arguments.
  * @param argv Vector of received arguments as strings.
  * @return int Execution status. Returns 0 in case of success and a negative
  * integer otherwise.
  */
-int main (int argc, char **argv)
+int main(int argc, char** argv)
 {
-	// Initialize ROS
-	ControllerNode::init(argc, argv);
-  // Create an instance of the Controller2 class and configure it.
-	ControllerNode Instance;
-	Instance.startSimulation();
+  // Initialize ROS
+  ControllerNode::init(argc, argv);
+  ROS_INFO_STREAM("Starting Controller Node");
 
+  // Create an instance of the Controller2 class and configure it.
+  ControllerNode Instance;
+
+  ROS_DEBUG_STREAM("Starting first step");
+  Instance.startSimulation();
+
+  ROS_INFO_STREAM("Control strategy instance finalized, spinning.");
   // Keep this node running until ROS finishes execution.
-	while(ros::ok())
+  while (ros::ok())
     ros::spin();
 
-	return 0;
+  return 0;
 }
