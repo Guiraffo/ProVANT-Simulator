@@ -50,6 +50,8 @@ void ControllerNode::setupNode()
   }
   std::string configFilePath(TILT_CONFIG);
 
+  ROS_DEBUG("Config file %s opened with sucess.", TILT_CONFIG);
+
   // Create a XML file handle for the configuration file
   XMLRead xmlDoc(configFilePath);
   configFile = xmlDoc;
@@ -57,9 +59,23 @@ void ControllerNode::setupNode()
 
   // Stores the name of the control strategy
   controlStrategy = configFile.GetItem("Strategy");
+  ROS_DEBUG_STREAM("Verifying the control strategy name: " << controlStrategy);
+  if (controlStrategy.empty())
+  {
+    ROS_FATAL("Error while reading the control strategy for the selected model. Please check the value of the "
+              "\"Strategy\" tag on the config.xml file and try again.");
+    exit(-1);
+  }
 
   // Read the values of the configured sensors in the config file
   std::vector<std::string> listOfSensors = xmlDoc.GetAllItems("Sensors");
+  ROS_DEBUG("Configuring the simulation sensors");
+  if (listOfSensors.empty())
+  {
+    ROS_FATAL("At least one sensor is necessary in order to run the simulation. Please the value of the \"Sensors\" "
+              "tag in the config.xml file of the selected model and try again.");
+    exit(-1);
+  }
 
   // Subscribe to a ROS topic for each of the sensors, and configure the
   // callback for the sensor update.
@@ -75,6 +91,7 @@ void ControllerNode::setupNode()
     sensorIndexMap.insert(std::make_pair(listOfSensors.at(i), i));
     // Subscribe to the ROS node relative to the sensor and configure the
     // sensor update callback.
+    ROS_DEBUG_STREAM("Subscribing to the " << listOfSensors.at(i) << " topic.");
     ros::Subscriber sub = nh.subscribe(listOfSensors.at(i), 1, &ControllerNode::stateUpdateCallback, this);
     sensorSubscribers.push_back(sub);
 
@@ -85,8 +102,17 @@ void ControllerNode::setupNode()
   // Read the list of actuators from the config file and setup a ROS publisher
   // for the topic relative to each actuator.
   std::vector<std::string> listOfActuators = configFile.GetAllItems("Actuators");
+  ROS_DEBUG("Configuring the actuators for the simulation");
+  if (listOfActuators.empty())
+  {
+    ROS_FATAL("At least one actuator is necessary in order to run the simulation. Please check the value of the "
+              "\"Actuators\" tag of the config.xml file of the selected model and try again.");
+    exit(-1);
+  }
+
   for (int i = 0; i < listOfActuators.size(); i++)
   {
+    ROS_DEBUG_STREAM("Advertising the " << listOfActuators.at(i) << " topic");
     ros::Publisher pub = nh.advertise<std_msgs::Float64>(listOfActuators.at(i), 1);
     actuatorPublishersArray.push_back(pub);
   }
@@ -103,6 +129,7 @@ void ControllerNode::setupNode()
 
   // Read the value of the controlLawExectuionRatio
   controlLawExecutionRatio = atoi(configFile.GetItem("Sampletime").c_str());
+  ROS_DEBUG("Checking the value of the control law execution ratio: %d", controlLawExecutionRatio);
   if (controlLawExecutionRatio < 1)
   {
     ROS_FATAL_STREAM("The value for the control law exectuion ratio (" << controlLawExecutionRatio
@@ -114,6 +141,7 @@ void ControllerNode::setupNode()
   }
 
   // Initialize the ROS topic to advance the simulation step.
+  ROS_DEBUG("Advertising the Step topic");
   stepPublisher = nh.advertise<std_msgs::String>("Step", 1);
 
   // Setup the control law DLL
