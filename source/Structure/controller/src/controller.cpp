@@ -234,7 +234,7 @@ void ControllerNode::setupLogging()
   openAndVerifyFile(&referenceLog, logOutputFolder, configFile.GetItem("RefPath"), "reference log");
   openAndVerifyFile(&stateLog, logOutputFolder, configFile.GetItem("InputPath"), "states log");
   openAndVerifyFile(&trackingErrorLog, logOutputFolder, configFile.GetItem("ErroPath"), "tracking error log");
-  openAndVerifyFile(&controlInputsLog, logOutputFolder, configFile.GetItem("OutputFile"), "control inputs log");
+  openAndVerifyFile(&controlInputsLog, logOutputFolder, configFile.GetItem("Outputfile"), "control inputs log");
 }
 
 void ControllerNode::controlLaw()
