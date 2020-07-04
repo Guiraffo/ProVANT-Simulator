@@ -16,5 +16,5 @@
 		<arg name="verbose" value="true"/>
 	</include>
 
-	<node name="controller" pkg="controller" type="controller" />
+	<node name="controller" pkg="controller" type="controller" required="true" output="screen"/>
  </launch>
