@@ -266,16 +266,17 @@ void MainWindow::on_startGazeboPushButton_clicked()
 
     // Creates the process to execute the simulation
     QProcess *gazeboSimulationProcess = new QProcess(this);
-    gazeboSimulationProcess->setProcessEnvironment(gazeboProcessEnv);
     gazeboSimulationProcess->setWorkingDirectory(
                 settings.getCatkinWorkspacePath());
     gazeboSimulationProcess->setProgram(gazeboProcessCmd);
     gazeboSimulationProcess->setArguments(gazeboProcessArgs);
-
+    gazeboSimulationProcess->setProcessEnvironment(gazeboProcessEnv);
     ProcessOutputWindow *gazeboProcessWindow = new ProcessOutputWindow(
                 gazeboSimulationProcess, this);
+    gazeboProcessWindow->setProcessName(tr("ProVANT Simulator Instance"));
     gazeboProcessWindow->show();
-    gazeboProcessWindow->start();
+    gazeboProcessWindow->start(gazeboProcessEnv);
+    qDebug() << "Started process id: " << gazeboSimulationProcess->processId();
 
     ui->jointValuesPushButton->setDisabled(false);
 }

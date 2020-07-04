@@ -84,6 +84,18 @@ ProcessOutputWindow::ProcessOutputWindow(QProcess *process,
  */
 ProcessOutputWindow::~ProcessOutputWindow()
 {
+    qDebug("Deleting ProcessOutputWindow object");
+
+    if(_pid != 0)
+        _idsToKill.insert(QString::number(_pid));
+
+    QStringList killIds = _idsToKill.toList();
+    if(!killIds.empty()){
+        QProcess killChildProcess;
+        killChildProcess.start("kill", killIds);
+        killChildProcess.waitForFinished();
+    }
+
     if(_process != nullptr)
     {
         if(_process->state() != QProcess::NotRunning)
@@ -210,6 +222,17 @@ void ProcessOutputWindow::start()
 }
 
 /**
+ * @brief ProcessOutputWindow::start
+ * Starts the process execution setting its environment variables.
+ * @param env Environment variables for the new process.
+ */
+void ProcessOutputWindow::start(const QProcessEnvironment &env)
+{
+    _process->setProcessEnvironment(env);
+    _process->start();
+}
+
+/**
  * @brief ProcessOutputWindow::setProcessName
  * Defines the name of the process being handled by this window.
  * @param name The name of the process.
@@ -228,7 +251,7 @@ void ProcessOutputWindow::setProcessName(const QString &name)
 }
 
 /**
- * @brief ProcessOutputWindow::setSaveOutputStartingDir
+ * @brief ProcessOutputWindow::setSaveOutput Dir
  * @param dirPath The path to starting directory of the save output action
  * file browser.
  */
@@ -364,13 +387,16 @@ void ProcessOutputWindow::onProcessStart()
                "parameters: \n"
                "Program: \t%2\n"
                "Arguments: \t%3\n"
-               "Working directory: \t%4\n")
+               "Working directory: \t%4\n"
+               "Process PID: \t%5\n")
             .arg(_processName)
             .arg(_process->program())
             .arg(args)
-            .arg(_process->workingDirectory()),
+            .arg(_process->workingDirectory())
+            .arg(_process->processId()),
             applicationOutputColor);
 
+    _pid = _process->processId();
     emit processStarted();
 }
 
@@ -682,19 +708,25 @@ bool ProcessOutputWindow::actionOnClosingWhithProcessRunning()
         _process->waitForFinished(timeout);
         proceed = true;
     }
-    else if(confirmationBox.clickedButton() == terminateButton)
-    {
-        _process->terminate();
-        proceed = true;
-    }
-    else if(confirmationBox.clickedButton() == killButton)
-    {
-        _process->kill();
-        proceed = true;
-    }
     else if(confirmationBox.clickedButton() == cancelButton)
     {
         proceed = false;
+    }
+    else
+    {
+        // Store the set of child process ids
+        _idsToKill = getChildProcessPID(_pid);
+
+        if(confirmationBox.clickedButton() == terminateButton)
+        {
+            _process->terminate();
+            proceed = true;
+        }
+        else if(confirmationBox.clickedButton() == killButton)
+        {
+            _process->kill();
+            proceed = true;
+        }
     }
 
     delete waitButton;
@@ -702,6 +734,42 @@ bool ProcessOutputWindow::actionOnClosingWhithProcessRunning()
     delete terminateButton;
     return proceed;
 }
+
+QSet<QString> ProcessOutputWindow::getChildProcessPID(int pid,
+                                                      QSet<QString> ids)
+{
+    // Result
+    QProcess getChildProcess;
+    QStringList getChildCmds;
+    getChildCmds << "--ppid"
+                 << QString::number(pid)
+                 << "-o"
+                 << "pid"
+                 << "--no-heading";
+    getChildProcess.start("ps", getChildCmds);
+    getChildProcess.waitForFinished();
+    QString processOutput(getChildProcess.readAllStandardOutput());
+
+    // Check if any pid was returned by the ps process
+    if(processOutput.length() != 0)
+    {
+        QStringList returnedPids = processOutput.split("\n");
+
+        foreach(const QString &id, returnedPids)
+        {
+            // For each pid that is not in the ids set, run the process again
+            if(id.length() != 0 && !ids.contains(id))
+            {
+                ids.insert(id);
+                QSet<QString> resSet = getChildProcessPID(id.toInt(), ids);
+                ids.unite(resSet);
+            }
+        }
+    }
+
+    return ids;
+}
+
 
 /**
  * @brief ProcessOutputWindow::closeEvent

@@ -6,6 +6,8 @@
 #include <QColor>
 #include <QDir>
 #include <QProcess>
+#include <QProcessEnvironment>
+#include <QSet>
 
 namespace Ui {
 class ProcessOutputWindow;
@@ -86,6 +88,7 @@ public slots:
     void addData(const QStringList &data);
     void clearOutput();
     void start();
+    void start(const QProcessEnvironment &env);
 
     void setProcessName(const QString &name);
 
@@ -126,6 +129,8 @@ private:
     QString _prevSaveOutputDir = QDir::homePath();
     //! Stores the file filter in which the file will be saved.
     QString _prevSelectedFilter = tr("HTML File") + "(*.html);;";
+    //! Stores the pid of the parent QProcess
+    qint64 _pid = 0;
 
     /*
      * The colors were added as constants here, but withtout addition of getter
@@ -145,6 +150,9 @@ private:
 
     void populateToolbar();
     bool actionOnClosingWhithProcessRunning();
+    QSet<QString> getChildProcessPID(int pid,
+                                     QSet<QString> ids = QSet<QString>());
+    QSet<QString> _idsToKill;
 };
 
 #endif // PROCESSOUTPUTWINDOW_H
