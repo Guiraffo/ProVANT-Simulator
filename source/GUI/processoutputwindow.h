@@ -152,6 +152,17 @@ private:
     bool actionOnClosingWhithProcessRunning();
     QSet<QString> getChildProcessPID(int pid,
                                      QSet<QString> ids = QSet<QString>());
+
+    /**
+     * @brief _idsToKill Store a list of the child processes PIDs to allow the
+     * destructor to emit a kill signal to each child process.
+     *
+     * This is necessary because killing the parent process does not kill the
+     * entire process tree in the Linux OS, so in order to guarantee that no
+     * process remain open after a forced closing of the ProcessOutputWindow,
+     * it was necessary to create this set of pids and the getChildProcessPID()
+     * method.
+     */
     QSet<QString> _idsToKill;
 };
 

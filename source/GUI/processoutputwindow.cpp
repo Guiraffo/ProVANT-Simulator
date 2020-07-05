@@ -735,6 +735,17 @@ bool ProcessOutputWindow::actionOnClosingWhithProcessRunning()
     return proceed;
 }
 
+/**
+ * @brief ProcessOutputWindow::getChildProcessPID Find the pid of every child
+ * process in the process tree of the parent process with a given PID.
+ *
+ * This method recursively finds the PID of all child processes of a given
+ * parent and returns these values in a set.
+ *
+ * @param pid PID of the parent process.
+ * @param ids Set of previosuly inserted ids
+ * @return Set of child processes id of the given parent process.
+ */
 QSet<QString> ProcessOutputWindow::getChildProcessPID(int pid,
                                                       QSet<QString> ids)
 {
