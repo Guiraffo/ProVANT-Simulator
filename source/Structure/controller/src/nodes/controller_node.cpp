@@ -27,13 +27,21 @@ int main(int argc, char** argv)
   ControllerNode::init(argc, argv);
   ROS_INFO_STREAM("Starting Controller Node");
 
+  if (argc < 2)
+  {
+    ROS_FATAL("Error while starting the node. Please provide the path to the config.xml file to setup this simulation "
+              "as a program argument. Usage example: rosrun controller controller /path/to/config.xml");
+    return -1;
+  }
+
   // Create an instance of the Controller2 class and configure it.
-  ControllerNode Instance;
+  ROS_INFO("Creating control strategy instance with configuration file: %s", argv[1]);
+  ControllerNode Instance(argv[1]);
 
   ROS_DEBUG_STREAM("Starting first step");
   Instance.startSimulation();
 
-  ROS_INFO_STREAM("Control strategy instance finalized, spinning.");
+  ROS_INFO_STREAM("Control strategy instance setup finalized, spinning.");
   // Keep this node running until ROS finishes execution.
   while (ros::ok())
     ros::spin();

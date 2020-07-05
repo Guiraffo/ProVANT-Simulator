@@ -261,8 +261,10 @@ void MainWindow::on_startGazeboPushButton_clicked()
     QString gazeboProcessCmd = "roslaunch";
     QStringList gazeboProcessArgs;
     gazeboProcessArgs << "Database" << launchFile;
-    gazeboProcessArgs << QString("world:=%1").arg(QString::fromStdString(
-                                              mundo.word->Filename));
+    gazeboProcessArgs << QString("world:=%1")
+                         .arg(QString::fromStdString(mundo.word->Filename));
+    gazeboProcessArgs << QString("control_strategy:=%1")
+                         .arg(modelConfigFilePath);
 
     // Creates the process to execute the simulation
     QProcess *gazeboSimulationProcess = new QProcess(this);

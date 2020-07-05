@@ -4,7 +4,8 @@
 	<arg name="gui" default="true"/>
 	<arg name="headless" default="false"/>
 	<arg name="debug" default="false"/>
-	<arg name="world" default="$(find Database)/worlds/worlds/empty/quad.world" />
+	<arg name="world" default="$(find Database)/worlds/worlds/empty/quad.world" doc="Path to the world file used to load the model on Gazebo"/>
+	<arg name="control_strategy" default="$(find Database)/models/quadcopter/config/config.xml" doc="Path the config.xml file of the model selected for the simulation."/>
 
 	<include file="$(find Database)/launch/empty_world.launch">
 		<arg name="world_name" value="$(arg world)"/>
@@ -16,5 +17,5 @@
 		<arg name="verbose" value="true"/>
 	</include>
 
-	<node name="controller" pkg="controller" type="controller" required="true" output="screen"/>
+	<node name="controller" pkg="controller" type="controller" required="true" output="screen" args="$(arg control_strategy)"/>
  </launch>

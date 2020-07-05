@@ -32,26 +32,26 @@ class ControllerNode
 public:
   /**
    * @brief Initializes ROS.
-   * 
+   *
    * @param argc Number of arguments received by the program.
    * @param argv List of arugments recevied by the program.
    */
-	static void init(int argc, char** argv);
+  static void init(int argc, char** argv);
 
   /**
    * @brief Construct a new Controller Node object.
    */
-	ControllerNode();
+  ControllerNode(std::string configFilePath);
 
   /**
    * @brief Destroy the Controller Node object and release the handles to the
    * DLLs.
    */
-	virtual ~ControllerNode();
+  virtual ~ControllerNode();
 
   /**
    * @brief Start the simulation.
-   * 
+   *
    * This method emits the first step message, and thus allows the start of the
    * simulation.
    */
@@ -59,22 +59,27 @@ public:
 
 private:
   /**
+   * @brief Stores the path to the configuration file for this simulation.
+   */
+  std::string _configFilePath;
+
+  /**
    * @brief XML file containing the configuration of this simulation.
-   * 
+   *
    * This object is used to read the value of the XML tags containing the
    * desired parameters for the simulation, such as the control law execution
    * ratio, path to the log files, and the desired control strategy.
    */
-	XMLRead configFile;
+  XMLRead configFile;
 
   /**
    * @brief Handle for the ROS node.
    */
-	ros::NodeHandle nh;
+  ros::NodeHandle nh;
 
   /**
    * @brief Store the ROS publishers for the topics of the actuators.
-   * 
+   *
    * @todo Convert this to a std::list after the refactoring of the XMLRead
    * class.
    */
@@ -82,30 +87,30 @@ private:
 
   /**
    * @brief Stores the list of ROS subscribers to the topics of the sensors.
-   * 
+   *
    * OBS: Storing the references to the subscribers is necessary because ROS
    * remvoes the subscription as soon as a subscriber object goes out of scope.
-   * 
+   *
    * @todo Convert this to a std::list after the refactoring of the XMLRead
    * class.
    */
-	std::vector<ros::Subscriber> sensorSubscribers;
+  std::vector<ros::Subscriber> sensorSubscribers;
 
   /**
-   * @brief This value determines how many steps must pass before a new 
+   * @brief This value determines how many steps must pass before a new
    * execution of the control law.
-   * 
+   *
    * For example, for a controlLawExecutionRatio with value 10, the control law
    * will only be executed once at every 10 steps.
-   * 
+   *
    * For a controlLawExecutionRatio with value 12, the control law will only
-   * be executed once at every 12 steps, and os for. 
+   * be executed once at every 12 steps, and os for.
    */
-	int controlLawExecutionRatio;
+  int controlLawExecutionRatio;
 
   /**
    * @brief Counter that stores the number of steps during each execution cyle.
-   * 
+   *
    * This counter is used to determine when the control law must be executed
    * in order ot update the control input values.
    */
@@ -119,9 +124,9 @@ private:
   /**
    * @brief Map from the name of a sensor to the index in the sensor array
    * passed to the control law.
-   * 
+   *
    * This variable is necessary to ensure that the order of the sensors
-   * is always the same in the message sent to the control law execute 
+   * is always the same in the message sent to the control law execute
    * method.
    */
   std::map<std::string, int> sensorIndexMap;
@@ -140,17 +145,17 @@ private:
   /**
    * @brief File to log the value of the model states.
    */
-	MatlabData stateLog;
+  MatlabData stateLog;
 
   /**
    * @brief File to log the reference values.
    */
-	MatlabData referenceLog;
+  MatlabData referenceLog;
 
   /**
    * @brief File to log the tracking error values.
    */
-	MatlabData trackingErrorLog;
+  MatlabData trackingErrorLog;
 
   /**
    * @brief Mutex used by the states update callback.
@@ -169,50 +174,50 @@ private:
    */
   simulator_msgs::SensorArray sensorData;
 
-	/**
-	 * @brief ROS topic to advance one simulation step in gazebo.
-	 */
-	ros::Publisher stepPublisher;
-	
+  /**
+   * @brief ROS topic to advance one simulation step in gazebo.
+   */
+  ros::Publisher stepPublisher;
+
   /**
    * @brief Handle to the instance of the dynamicly loaded library that contains
    * the instance of the control strategy.
    */
   void* dllHandle = NULL;
-  
+
   /**
    * @brief Instance of the control strategy executed by this node.
    */
   Icontroller* controller = NULL;
 
-	/**
-	 * @brief Advance one step in the simulation.
-	 * 
-	 * This method publishes a message in the step topic, that has the function
-	 * to inform gazebo that the simulation must be advanced in one step, with
-	 * duration equal to the configured sample time.
-	 */
-	void step();
+  /**
+   * @brief Advance one step in the simulation.
+   *
+   * This method publishes a message in the step topic, that has the function
+   * to inform gazebo that the simulation must be advanced in one step, with
+   * duration equal to the configured sample time.
+   */
+  void step();
 
   /**
    * @brief Creates and initializes an instance of the control strategy dynamic
    * library.
-   * 
-   * This method constructs an instance of the control strategy DLL, and the 
-   * create function contained in the DLL, stores their handles, and 
+   *
+   * This method constructs an instance of the control strategy DLL, and the
+   * create function contained in the DLL, stores their handles, and
    * initializes an instance of the control strategy control loop.
-   * 
+   *
    * If an error is encountered at any step, an appropriate log message is
    * sent and an the execution of the node is halted with a failure status.
    */
-	void setupControlStrategy();
+  void setupControlStrategy();
 
   /**
    * @brief Create and verify the dat files for the simulation log.
-   * 
+   *
    * This method create the files for the logs of the references, states,
    * tracking error and applied control inputs generated during the simulation.
-   * 
+   *
    * The methods also verify that all of the files were successfully open and
    * emits appropriate log messages and halts the node execution with a failure
    * status otherwise.
@@ -220,31 +225,31 @@ private:
   void setupLogging();
 
   /**
-   * @brief Callback method called when a sensor message is received by the 
+   * @brief Callback method called when a sensor message is received by the
    * node.
-   * 
+   *
    * This function checks if a sensor with a valid name was configured in the
    * sensor list of the config.xml file, and inserts it under the appropriate
    * index of a SensorArray message that is passes to the control strategy.
-   * 
-   * If a sensor with a unrecognized name is recevied, an appropriate log 
+   *
+   * If a sensor with a unrecognized name is recevied, an appropriate log
    * message is emitted.
-   * 
-   * @param msg 
+   *
+   * @param msg
    */
   void stateUpdateCallback(simulator_msgs::Sensor msg);
 
   /**
    * @brief Method that executes the control law and apply the resulting control
    * inputs to the actuators.
-   * 
+   *
    * To enhance the value read from the sensors during the simulation, the
    * control law is only executed once at each execution cycle.
-   * 
+   *
    * The execution cycle is a positive integer value set by the
    * controlLawExecutionRatio member variable, for more details about this see
    * the documentation of this variable.
-   * 
+   *
    * After executing the control law, the control inputs are updated and sent
    * to configured topic for each actuator.
    */
@@ -253,7 +258,7 @@ private:
   /**
    * @brief Configures the ROS node, subscribe to the nodes to receive updates
    * from the sensor and the publishers to update the control input values.
-   * 
+   *
    * This method performs the initialization fo the ROS node and reads the
    * parameters from the config.xml file indiating what the selected control
    * strategy is, and what is the value for the controlLawExecutionRatio.
@@ -261,4 +266,4 @@ private:
   void setupNode();
 };
 
-#endif // CONTROLLER_H
+#endif  // CONTROLLER_H

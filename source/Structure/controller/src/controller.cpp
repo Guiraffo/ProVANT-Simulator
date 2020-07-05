@@ -19,7 +19,8 @@ void ControllerNode::init(int argc, char** argv)
   ros::init(argc, argv, "controller");
 }
 
-ControllerNode::ControllerNode() : sensorCounter(0), stepCounter(0)
+ControllerNode::ControllerNode(std::string configFilePath)
+  : _configFilePath(configFilePath), sensorCounter(0), stepCounter(0)
 {
   ROS_DEBUG_STREAM("ControllerNode instance constructed, starting node configuration");
   setupNode();
@@ -39,21 +40,8 @@ ControllerNode::~ControllerNode()
 
 void ControllerNode::setupNode()
 {
-  const char* TILT_CONFIG = std::getenv("TILT_CONFIG");
-  ROS_DEBUG("Checking the value of TILT_CONFIG environment variable: %s", TILT_CONFIG);
-  if (TILT_CONFIG == NULL)
-  {
-    ROS_FATAL("Error while trying to read the value of the TILT_CONFIG environment variable, this environament "
-              "variable has null value or does not exist, but should point to the config.xml file of the "
-              "model used for this simulation. Please correct the TILT_CONFIG value and try again.");
-    exit(-1);
-  }
-  std::string configFilePath(TILT_CONFIG);
-
-  ROS_DEBUG("Config file %s opened with sucess.", TILT_CONFIG);
-
   // Create a XML file handle for the configuration file
-  XMLRead xmlDoc(configFilePath);
+  XMLRead xmlDoc(_configFilePath);
   configFile = xmlDoc;
   /// @todo Add verification for the XML file.
 
@@ -204,7 +192,7 @@ void openAndVerifyFile(MatlabData* file, std::string dir, std::string filePath, 
   {
     ROS_FATAL_STREAM("Error while trying to create the "
                      << fileName << " log file for the simulation. Please check that the configured " << fileName
-                     << " on the model config.xml file and the TILT_MATLAB environemtn variable"
+                     << " tag on the model config.xml file and the TILT_MATLAB environemtn variable"
                      << " both point to valid locations.");
     exit(-1);
   }
