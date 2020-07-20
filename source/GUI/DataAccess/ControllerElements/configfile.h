@@ -35,6 +35,9 @@ public:
     const QString  &getControlStrategy() const;
     void setStrategy(const QString &strategy);
 
+    const QString  &getTurbulanceModel() const;
+    void setTurbulanceModel(const QString &turbulance);
+
     const QString &getSampleTime() const;
     void setSampleTime(const QString &sampleTime);
 
@@ -67,6 +70,7 @@ private:
     QStringList _sensors;
     QStringList _actuators;
     QString _controlStrategy;
+    QString _turbulanceModel;
     QString _sampleTime;
     QString _communication;
     QString _errorFilename;

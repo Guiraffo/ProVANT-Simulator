@@ -86,6 +86,24 @@ void ConfigFile::setStrategy(const QString &strategy)
 }
 
 /**
+ * @brief ConfigFile::getTurbulanceModel
+ * @return The name of the turbulance model selected by this model.
+ */
+const QString &ConfigFile::getTurbulanceModel() const
+{
+    return _turbulanceModel;
+}
+
+/**
+ * @brief ConfigFile::setTurbulanceModel
+ * @param turbulance The name of the turbulance model.
+ */
+void ConfigFile::setTurbulanceModel(const QString &turbulance)
+{
+    _turbulanceModel = turbulance;
+}
+
+/**
  * @brief ConfigFile::getSampleTime
  * @return The sample time to this controller.
  */
@@ -206,6 +224,7 @@ void ConfigFile::setStepTopic(const QString &topic)
 void ConfigFile::readFile()
 {
      _controlStrategy = readItem("Strategy");
+     _turbulanceModel = readItem("Turbulance");
      _sampleTime = readItem("Sampletime");
      _communication = readItem("topicdata");
      _errorFilename = readItem("ErroPath");
@@ -235,6 +254,7 @@ bool ConfigFile::createFile()
         xml.writeTextElement("TopicoStep", "");
         xml.writeTextElement("Sampletime", "");
         xml.writeTextElement("Strategy", "");
+        xml.writeTextElement("Turbulance", "");
         xml.writeTextElement("RefPath", "");
         xml.writeTextElement("Outputfile", "");
         xml.writeTextElement("InputPath", "");
@@ -272,6 +292,7 @@ bool ConfigFile::createFile()
         xml.writeTextElement("TopicoStep", _stepTopic);
         xml.writeTextElement("Sampletime", _sampleTime);
         xml.writeTextElement("Strategy", _controlStrategy);
+        xml.writeTextElement("Turbulance", _turbulanceModel);
         xml.writeTextElement("RefPath", _refFilename);
         xml.writeTextElement("Outputfile", _outFilename);
         xml.writeTextElement("InputPath", _inFilename);
@@ -447,6 +468,7 @@ void ConfigFile::print() const
 {
     qDebug() << "Filename: " << qUtf8Printable(_filename);
     qDebug() << "Control Strategy" << qUtf8Printable(_controlStrategy);
+    qDebug() << "Turbulance Model" << qUtf8Printable(_turbulanceModel);
     qDebug() << "Sample Time: " << qUtf8Printable(_sampleTime);
     qDebug() << "Communication: " << qUtf8Printable(_communication);
     qDebug() << "Error Filename: " << qUtf8Printable(_errorFilename);

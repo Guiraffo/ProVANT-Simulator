@@ -82,6 +82,8 @@ private slots:
     //! Enables the Hardware on  the Loop mode.
     void on_hilCheckBox_clicked(bool checked);
 
+    void on_turbulanceCheckBox_clicked();
+
 protected:
     //! Pointer the elements of the user interface
     Ui::ModelSetupDialog *ui;

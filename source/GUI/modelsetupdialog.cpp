@@ -421,3 +421,8 @@ void ModelSetupDialog::setHil(bool hil)
         emit hilFlagChanged(hil);
     }
 }
+
+void ModelSetupDialog::on_turbulanceCheckBox_clicked()
+{
+_controller.config->setTurbulanceModel(ui->turbulanceComboBox->currentText());
+}
