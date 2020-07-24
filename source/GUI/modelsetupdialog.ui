@@ -246,7 +246,7 @@
           <widget class="QComboBox" name="turbulanceComboBox">
            <item>
             <property name="text">
-             <string>Turbulance Model 1</string>
+             <string>Von_Karman</string>
             </property>
            </item>
            <item>
