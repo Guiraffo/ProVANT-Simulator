@@ -46,6 +46,7 @@ include_directories(plugins/DataSave)
 include_directories(plugins/QuadForces)
 include_directories(plugins/VisualPropellers)
 include_directories(plugins/DataSaveTiltRotor)
+include_directories(plugins/Turbulance)
 
 
 
@@ -164,6 +165,8 @@ target_link_libraries(gazebo_ros_VisualPropellers ${catkin_LIBRARIES} ${GAZEBO_L
 add_library(gazebo_ros_DataSaveTiltRotor plugins/DataSaveTiltRotor/DataSaveTiltRotor.cpp) 
 target_link_libraries(gazebo_ros_DataSaveTiltRotor ${catkin_LIBRARIES} ${GAZEBO_LIBRARIES})
 
+add_library(gazebo_ros_turbulance plugins/Turbulance/turbulance.cpp) 
+target_link_libraries(gazebo_ros_turbulance ${catkin_LIBRARIES} ${GAZEBO_LIBRARIES})
 
 
 install(DIRECTORY include/${PROJECT_NAME}/
@@ -199,6 +202,7 @@ install(TARGETS
   gazebo_ros_QuadForces
   gazebo_ros_VisualPropellers
   gazebo_ros_DataSaveTiltRotor
+  gazebo_ros_turbulance
   
   ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}

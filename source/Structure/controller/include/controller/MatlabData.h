@@ -8,6 +8,8 @@
 * Description: This library is responsable to implement code to print some data in a file with Matlab form
 */
 
+#include <fstream>
+
 class MatlabData
 {
 	private: std::fstream file;	
@@ -23,9 +25,10 @@ class MatlabData
 
 	}
 	// open file to print data with desired name
-	public: void startFile(std::string namefile, std::string varname)
+	public: bool startFile(std::string namefile, std::string varname)
 	{
 		file.open (namefile.c_str(), std::fstream::out);
+		return file.good();
 	}
 	
 	// close file

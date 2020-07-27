@@ -16,7 +16,7 @@
           <izz>0.3011</izz>
         </inertia>
       </inertial>
-      <collision name='Main_Body_collision'>    
+      <collision name='Main_Body_collision'>
         <pose frame=''>0 0 0 0 -0 0</pose>
         <geometry>
           <mesh>
@@ -34,7 +34,7 @@
           </mesh>
         </geometry>
       </visual>
-    </link>										
+    </link>
     <link name='Aileron_L'>
       <pose frame=''>0.015778 0.35336 0.10425 0.082272 0.12555 -0.000197</pose>
       <inertial>
@@ -241,7 +241,7 @@
         </dynamics>
         <use_parent_model_frame>1</use_parent_model_frame>
       </axis>
-    </joint> 
+    </joint>
     <link name='Rotor_R'>
       <pose frame=''>0.0780 -0.6073 0.1235 -0.0524 0 0 </pose>
       <inertial>
@@ -443,7 +443,6 @@
         <use_parent_model_frame>1</use_parent_model_frame>
       </axis>
     </joint>
-		
 <link name="camera_link">
          <pose>0 0 0.08 0 0 pi/2</pose>
          <inertial>
@@ -485,7 +484,7 @@
            <visualize>true</visualize>
    <plugin name="camera_plugin" filename="libgazebo_ros_openni_kinect.so">
              <baseline>0.2</baseline>
-             <alwaysOn>true</alwaysOn>
+             <alwaysOn>true</alwaysOn>  -->
              <!-- Keep this zero, update_rate in the parent <sensor> tag
                will control the frame rate. -->
              <updateRate>0.0</updateRate>
@@ -519,7 +518,6 @@
            <use_parent_model_frame>1</use_parent_model_frame>
          </axis>
        </joint>
-
    <link name="laser_link">
               <pose>0.35 0 0 0 0 0</pose>
               <inertial>
@@ -589,17 +587,16 @@
         <use_parent_model_frame>1</use_parent_model_frame>
       </axis>
     </joint>
-																		
    <plugin name="VetorEstados"
 filename="libgazebo_ros_AllData_plugin.so">
             <NameOfTopic>Estados</NameOfTopic>
             <NameOfJointR>Rotor_R_joint_name</NameOfJointR>
             <NameOfJointL>Rotor_L_joint_name</NameOfJointL>
             <bodyName>Main_Body</bodyName>
-     </plugin>    
+     </plugin>
      <plugin name="RotorRplugin"
 filename="libgazebo_ros_servo_motor_plugin.so">
-            <NameOfJoint>Rotor_R_joint_name</NameOfJoint>   
+            <NameOfJoint>Rotor_R_joint_name</NameOfJoint>
             <TopicPublisher>RotorRpub</TopicPublisher>
             <TopicSubscriber>RefRotorR</TopicSubscriber>
             <Modo>Torque</Modo>
@@ -622,30 +619,30 @@ filename="libgazebo_ros_servo_motor_plugin.so">
             <NameOfJoint>Aileron_R_joint_name</NameOfJoint>
             <TopicPublisher>AileronRpub</TopicPublisher>
             <TopicSubscriber>RefAileronR</TopicSubscriber>
-            <Modo>Position</Modo> 
-             <tag>AilR</tag> 
-            <Force_Saturation>1</Force_Saturation> 
-            <Angle_Saturation>1</Angle_Saturation>          
+            <Modo>Position</Modo>
+             <tag>AilR</tag>
+            <Force_Saturation>1</Force_Saturation>
+            <Angle_Saturation>1</Angle_Saturation>
   </plugin>
    	<plugin name="AileronLplugin"
 filename="libgazebo_ros_servo_motor_plugin.so">
             <NameOfJoint>Aileron_L_joint_name</NameOfJoint>
             <TopicPublisher>AileronLpub</TopicPublisher>
             <TopicSubscriber>RefAileronL</TopicSubscriber>
-            <Modo>Position</Modo> 
-             <tag>AilL</tag> 
-            <Force_Saturation>1</Force_Saturation> 
-            <Angle_Saturation>1</Angle_Saturation>           
+            <Modo>Position</Modo>
+             <tag>AilL</tag>
+            <Force_Saturation>1</Force_Saturation>
+            <Angle_Saturation>1</Angle_Saturation>
   </plugin>
   	<plugin name="RudderRplugin"
 filename="libgazebo_ros_servo_motor_plugin.so">
             <NameOfJoint>Rudder_R_joint_name</NameOfJoint>
             <TopicPublisher>RudderRpub</TopicPublisher>
             <TopicSubscriber>RefRudderR</TopicSubscriber>
-            <Modo>Position</Modo> 
+            <Modo>Position</Modo>
             <tag>RudR</tag>
             <Force_Saturation>1</Force_Saturation>
-            <Angle_Saturation>1</Angle_Saturation>>         
+            <Angle_Saturation>1</Angle_Saturation>>
   </plugin>
    	<plugin name="RudderLplugin"
 filename="libgazebo_ros_servo_motor_plugin.so">
@@ -656,31 +653,35 @@ filename="libgazebo_ros_servo_motor_plugin.so">
             <tag>RudL</tag>
             <Force_Saturation>1</Force_Saturation>
             <Angle_Saturation>1</Angle_Saturation>
-  	</plugin> 
+  	</plugin>
    <plugin name="empuxo" filename="libgazebo_ros_Aerodinamica4dot0_plugin.so">
             <MainBody> Main_Body </MainBody>
-            <NameOfNode> Estados </NameOfNode>	
+            <NameOfNode> Estados </NameOfNode>
             <NameOfJointR>Rotor_R_joint_name</NameOfJointR>
-            <NameOfJointL>Rotor_L_joint_name</NameOfJointL>			
-            <topic_Fr> ThrustR </topic_Fr> 
+            <NameOfJointL>Rotor_L_joint_name</NameOfJointL>
+            <topic_Fr> ThrustR </topic_Fr>
             <LinkFr> Rotor_R </LinkFr>
-            <topic_Fl> ThrustL </topic_Fl>		
-            <LinkFl> Rotor_L </LinkFl>				
+            <topic_Fl> ThrustL </topic_Fl>
+            <LinkFl> Rotor_L </LinkFl>
 	    <topic_AileronR> RefAileronR </topic_AileronR>
 	    <LinkAileronR>Aileron_R</LinkAileronR>
-	    <CentroAerod_F> Fuselage_aerodcenter </CentroAerod_F>		
+	    <CentroAerod_F> Fuselage_aerodcenter </CentroAerod_F>
             <CentroAerod_Wr> WingR_aerodcenter </CentroAerod_Wr>
             <topic_AileronL> RefAileronL </topic_AileronL>
-            <LinkAileronL>Aileron_L</LinkAileronL>	
+            <LinkAileronL>Aileron_L</LinkAileronL>
             <CentroAerod_Wl> WingL_aerodcenter </CentroAerod_Wl>
             <CentroAerod_RudR> RudR_aerodcenter </CentroAerod_RudR>
             <CentroAerod_RudL> RudL_aerodcenter </CentroAerod_RudL>
            <topic_RudderR> RefRudderR </topic_RudderR>
-            <topic_RudderL> RefRudderL </topic_RudderL>	
+            <topic_RudderL> RefRudderL </topic_RudderL>
             <LinkRudderR>Rudder_R</LinkRudderR>
-            <LinkRudderL>Rudder_L</LinkRudderL>						
-        </plugin>	
-        
+            <LinkRudderL>Rudder_L</LinkRudderL>
+        </plugin>
+
+    <plugin name="turbulance" filename="libgazebo_ros_turbulance.so">
+      <NameOfTopic>TurbulanceTopic</NameOfTopic>
+    </plugin>
+
         <plugin name="PathPlotter"
 filename="libgazebo_ros_PathPlotter.so">
             <NameOfPathTopic>Path</NameOfPathTopic>
@@ -688,7 +689,7 @@ filename="libgazebo_ros_PathPlotter.so">
             <NameOfPathRefTopic>path_ref</NameOfPathRefTopic>
             <bodyName>Main_Body</bodyName>
             <uav>vant_4_aerod</uav>
-     </plugin>  
+     </plugin>
         <plugin name="DataSave"
 filename="libgazebo_ros_DataSave.so">
             <NameOfTopic>DataSaveTopic</NameOfTopic>
@@ -701,7 +702,7 @@ filename="libgazebo_ros_VisualPropellers.so">
             <Propeller1>Hel_R_joint_name</Propeller1>
             <Propeller2>Hel_L_joint_name</Propeller2>
             <Propellers_Velocity>50</Propellers_Velocity>
-     </plugin>    
+     </plugin>
      <plugin name = "DataSaveTiltRotor"
      filename="libgazebo_ros_DataSaveTiltRotor.so">
             <topic_Fr>ThrustR</topic_Fr>
@@ -720,6 +721,6 @@ filename="libgazebo_ros_VisualPropellers.so">
             <DAl_sat>10</DAl_sat>
             <DRr_sat>10</DRr_sat>
             <DRl_sat>10</DRl_sat>
-     </plugin> 
+     </plugin>
   </model>
 </sdf>

@@ -8,16 +8,12 @@ ModelFile::ModelFile(std::string value):file(value.c_str())
 
 void ModelFile::Read()
 {
-    if(file.exists()) qDebug() << "existe";
     if(file.open(QIODevice::ReadOnly | QIODevice::Text))
     {
-         qDebug() << "teste 1";
         QString erro;
         int line, column;
         if(doc.setContent(&file,&erro,&line,&column))
         {
-
-             qDebug() << "teste 2";
             file.close();
 
             sdfVersion = doc.firstChildElement("sdf")
