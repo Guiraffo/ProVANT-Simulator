@@ -443,8 +443,7 @@
         <use_parent_model_frame>1</use_parent_model_frame>
       </axis>
     </joint>
-
-<!--<link name="camera_link">
+<link name="camera_link">
          <pose>0 0 0.08 0 0 pi/2</pose>
          <inertial>
            <mass>0.0001</mass>
@@ -488,7 +487,7 @@
              <alwaysOn>true</alwaysOn>  -->
              <!-- Keep this zero, update_rate in the parent <sensor> tag
                will control the frame rate. -->
-    <!--         <updateRate>0.0</updateRate>
+             <updateRate>0.0</updateRate>
              <cameraName>camera_ir</cameraName>
              <imageTopicName>/camera/color/image_raw</imageTopicName>
              <cameraInfoTopicName>/camera/color/camera_info</cameraInfoTopicName>
@@ -587,7 +586,7 @@
         <xyz>0 0 1</xyz>
         <use_parent_model_frame>1</use_parent_model_frame>
       </axis>
-    </joint> -->
+    </joint>
    <plugin name="VetorEstados"
 filename="libgazebo_ros_AllData_plugin.so">
             <NameOfTopic>Estados</NameOfTopic>
