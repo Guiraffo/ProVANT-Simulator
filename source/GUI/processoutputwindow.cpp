@@ -717,6 +717,16 @@ bool ProcessOutputWindow::actionOnClosingWhithProcessRunning()
         // Store the set of child process ids
         _idsToKill = getChildProcessPID(_pid);
 
+        // Kill all of the ROS Nodes
+        QStringList args;
+        args << "kill" << "-a";
+        QProcess rosNodeKillProcess;
+        qDebug() << "Finishing ROS Nodes";
+        rosNodeKillProcess.start("rosnode", args);
+        rosNodeKillProcess.waitForFinished(60000);
+        qDebug() << "Nodes finished with result "
+                 << rosNodeKillProcess.readAllStandardOutput();
+
         if(confirmationBox.clickedButton() == terminateButton)
         {
             _process->terminate();
