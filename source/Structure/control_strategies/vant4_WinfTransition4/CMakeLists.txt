@@ -1,6 +1,6 @@
- 
 cmake_minimum_required(VERSION 2.8.3)
 project(vant4_WinfTransition4)
+option(USE_CPLEX "help string describing option"  OFF)
 find_package(catkin REQUIRED COMPONENTS
 roscpp
 rospy
@@ -15,13 +15,14 @@ include_directories($ENV{TILT_PROJECT}/source/Structure/control_strategies/)
 
 set(CMAKE_CXX_FLAGS "-std=c++0x ${CMAKE_CXX_FLAGS}")
 
-
+if(USE_CPLEX)
+ #if(EXISTS "/nao/existe/esse/caminho")
 #Includes, links and compiler flags for CPLEX (based on the Makefile provided with the CPLEX examples)
 set(SYSTEM "x86-64_linux")
 set(LIBFORMAT "static_pic")
 
 #if(EXISTS "/opt/ibm/ILOG/CPLEX_Studio_Community129") 
- if(EXISTS "/nao/existe/esse/caminho")       
+       
 #set(CPLEXDIR "$ENV{HOME}/CPLEX/cplex")
 #set(CONCERTDIR  "$ENV{HOME}/CPLEX/concert")
 set(CPLEXDIR "/opt/ibm/ILOG/CPLEX_Studio_Community129/cplex")
@@ -56,5 +57,6 @@ RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})
 else()
 MESSAGE(WARNING "CPLEX not found in path /opt/ibm/ILOG/CPLEX_Studio_Community129")
 #endif(EXISTS "/opt/ibm/ILOG/CPLEX_Studio_Community129")
-endif(EXISTS "/nao/existe/esse/caminho")
-unset(EXISTS CACHE)
+#endif(EXISTS "/nao/existe/esse/caminho")
+endif(USE_CPLEX)
+unset(USE_CPLEX CACHE) #clears data from cache

@@ -3,7 +3,7 @@
     <topicdata>data</topicdata>
     <TopicoStep>Step</TopicoStep>
     <Sampletime>3</Sampletime>
-    <Strategy>libvant4_Winf.so</Strategy>
+    <Strategy>libvant4_WinfTransition4.so</Strategy>
     <Turbulance>Von_Karman</Turbulance>
     <RefPath>ref.txt</RefPath>
     <Outputfile>out.txt</Outputfile>
