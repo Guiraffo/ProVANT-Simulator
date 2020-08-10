@@ -353,3 +353,6 @@ TSWLatexianTemp*
 
 source/Structure/Matlab/
 !source/Structure/Matlab/empty
+
+third_party/
+!third_party/README.md
