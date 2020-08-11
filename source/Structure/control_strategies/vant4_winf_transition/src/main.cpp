@@ -5,7 +5,7 @@
 #include "vant4_winf_transition/CoriolisMatrix.h"
 #include "vant4_winf_transition/GravitationalVector.h"
 #include "vant4_winf_transition/input_coupling.h"
-#include "vant4_winf_transition/InputCouplingAero.h"
+#include "vant4_winf_transition/input_coupling_aero.h"
 #include "vant4_winf_transition/cplexutils.h"
 
 class vant4_WinfTransition4 : public Icontroller

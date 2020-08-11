@@ -80,6 +80,7 @@ if(EXISTS ${CPLEXBASEDIR})
         src/cplexutils.cpp
         src/inertia_matrix.cpp
         src/input_coupling.cpp
+        src/input_coupling_aero.cpp
     )
 
     link_directories(
