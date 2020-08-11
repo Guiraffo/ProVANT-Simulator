@@ -1,3 +1,14 @@
+/*
+ * This file is part of the ProVANT simulator project.
+ * Licensed under the terms of the MIT open source license. More details at
+ * https://github.com/Guiraffo/ProVANT-Simulator/blob/master/LICENSE.md
+ */
+/**
+ * @brief This file contains the implementation for the function that returns 
+ * the inertia matrix for the UAV 4.0.
+ * @author Daniel Cardoso
+ */
+
 #include "vant4_winf_transition/inertia_matrix.h"
 #include "vant4_winf_transition/uav4_parameters.h"
 

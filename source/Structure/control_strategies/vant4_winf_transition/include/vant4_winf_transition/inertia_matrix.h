@@ -6,6 +6,7 @@
 /**
  * @brief This file contains the declaration for the function that returns the
  * inertia matrix for the UAV 4.0.
+ * @author Daniel Cardoso
  */
 
 #ifndef INERTIA_MATRIX
