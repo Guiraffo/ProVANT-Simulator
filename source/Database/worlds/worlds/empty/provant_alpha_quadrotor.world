@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sdf version="1.6">
+    <world name="provant_alpha_quadrotor">
+        <gravity>0 0 -9.8</gravity>
+        <physics type="ode">
+            <max_step_size>0.004</max_step_size>
+            <real_time_factor>1</real_time_factor>
+            <real_time_update_rate>250</real_time_update_rate>
+        </physics>
+        <plugin name="gazebo_tutorials" filename="libgazebo_ros_world_plugin.so">
+            <ok>nothil</ok>
+        </plugin>
+        <include>
+            <uri>model://ground_plane</uri>
+            <static>false</static>
+        </include>
+        <include>
+            <uri>model://sun</uri>
+            <static>false</static>
+        </include>
+        <include>
+            <uri>model://provant_alpha_quadrotor</uri>
+            <name>newmodel</name>
+        </include>
+        <scene>
+            <sky>
+                <time>18</time>
+                <clouds>
+                    <speed>0</speed>
+                </clouds>
+            </sky>
+        </scene>
+    </world>
+</sdf>
