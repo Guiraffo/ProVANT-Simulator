@@ -3,7 +3,7 @@
 #include <cmath>
 
 #include "vant4_winf_transition/uav4_parameters.h"
-#include "vant4_winf_transition/SkewSymmetricMatrix.h"
+#include "vant4_winf_transition/skew_symmetric_matrix.h"
 
 Eigen::MatrixXd InputCouplingMatrixAero(Eigen::VectorXd q, Eigen::VectorXd qp, double* ub)
 {
