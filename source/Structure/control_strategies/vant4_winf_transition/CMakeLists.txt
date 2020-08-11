@@ -82,6 +82,7 @@ if(EXISTS ${CPLEXBASEDIR})
         src/input_coupling.cpp
         src/input_coupling_aero.cpp
         src/skew_symmetric_matrix.cpp
+        src/gravitational_vector.cpp
     )
 
     link_directories(
