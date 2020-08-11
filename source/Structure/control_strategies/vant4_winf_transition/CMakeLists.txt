@@ -1,27 +1,47 @@
+# This file is part of the ProVANT simulator project.
+# Licensed under the terms of the MIT open source license. More details at
+# https://github.com/Guiraffo/ProVANT-Simulator/blob/master/LICENSE.md
+
 cmake_minimum_required(VERSION 3.0.2)
+
 project(vant4_winf_transition)
-option(USE_CPLEX "help string describing option"  OFF)
+
+find_package(cmake_modules REQUIRED)
 find_package(catkin REQUIRED COMPONENTS
-roscpp
-rospy
-std_msgs
-simulator_msgs)
+    roscpp
+    std_msgs
+    simulator_msgs
+)
+find_package(Eigen3 3.3 REQUIRED NO_MODULE)
 
-catkin_package()
-include_directories(include)
-INCLUDE_DIRECTORIES (/usr/include/eigen3)
-include_directories( ${catkin_INCLUDE_DIRS})
-include_directories($ENV{TILT_PROJECT}/source/Structure/control_strategies/)
+include_directories(
+    include
+    ${catkin_INCLUDE_DIRS}
+    "$ENV{TILT_PROJECT}/source/Structure/control_strategies/"
+)
 
-set(CMAKE_CXX_FLAGS "-std=c++0x ${CMAKE_CXX_FLAGS}")
+catkin_package(
+    INCLUDE_DIRS include
+    LIBRARIES ${PROJECT_NAME}
+    CATKIN_DEPENDS 
+        roscpp
+        std_msgs
+        simulator_msgs
+    DEPENDS
+        Eigen
+)
 
+# Defines the C++ version as C++11
+set(CMAKE_CXX_FLAGS "-std=c++11 ${CMAKE_CXX_FLAGS}")
+
+option(USE_CPLEX "help string describing option"  OFF)
 if(USE_CPLEX)
  #if(EXISTS "/nao/existe/esse/caminho")
 #Includes, links and compiler flags for CPLEX (based on the Makefile provided with the CPLEX examples)
 set(SYSTEM "x86-64_linux")
 set(LIBFORMAT "static_pic")
 
-#if(EXISTS "/opt/ibm/ILOG/CPLEX_Studio_Community129") 
+#if(EXISTS "/opt/ibm/ILOG/CPLEX_Studio_Community129")
        
 #set(CPLEXDIR "$ENV{HOME}/CPLEX/cplex")
 #set(CONCERTDIR  "$ENV{HOME}/CPLEX/concert")
@@ -42,18 +62,34 @@ link_directories(${CPLEXLIBDIR} ${CONCERTLIBDIR})
 set(CMAKE_CXX_FLAGS "${CPLEXCCOPT} ${CMAKE_CXX_FLAGS}")
 set(CMAKE_SHARED_LINKER_FLAGS "-Wl,--no-undefined ${CMAKE_SHARED_LINKER_FLAGS}")
 
-add_library(vant4_WinfTransition4 src/main.cpp include/cplexutils.cpp)
+add_library(${PROJECT_NAME} 
+    src/main.cpp 
+    include/cplexutils.cpp
+)
 
+link_directories(
+    ${CPLEXLIBDIR} 
+    ${CONCERTLIBDIR}
+)
 
-link_directories(${CPLEXLIBDIR} ${CONCERTLIBDIR})
-target_link_libraries(vant4_WinfTransition4 ${catkin_LIBRARIES} ${CPLEXLIBTARGETS})
+target_link_libraries(${PROJECT_NAME} 
+    ${catkin_LIBRARIES} 
+    Eigen3::Eigen
+    ${CPLEXLIBTARGETS}
+)
 
 #Padrao do simulador
 install(TARGETS
-vant4_WinfTransition4
-ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
-LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
-RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})
+    ${PROJECT_NAME}
+    ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+    LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+    RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+)
+install(DIRECTORY include
+    DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION}
+    PATTERN ".svn" EXCLUDE
+)
+
 else()
 MESSAGE(WARNING "CPLEX not found in path /opt/ibm/ILOG/CPLEX_Studio_Community129")
 #endif(EXISTS "/opt/ibm/ILOG/CPLEX_Studio_Community129")
