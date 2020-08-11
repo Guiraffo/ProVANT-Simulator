@@ -15,7 +15,7 @@ find_package(catkin REQUIRED COMPONENTS
 find_package(Eigen3 3.3 REQUIRED NO_MODULE)
 
 include_directories(
-    include
+    "include"
     ${catkin_INCLUDE_DIRS}
     "$ENV{TILT_PROJECT}/source/Structure/control_strategies/"
 )
@@ -27,72 +27,83 @@ catkin_package(
         roscpp
         std_msgs
         simulator_msgs
-    DEPENDS
-        Eigen
+    #DEPENDS
 )
 
 # Defines the C++ version as C++11
 set(CMAKE_CXX_FLAGS "-std=c++11 ${CMAKE_CXX_FLAGS}")
 
-option(USE_CPLEX "help string describing option"  OFF)
-if(USE_CPLEX)
- #if(EXISTS "/nao/existe/esse/caminho")
-#Includes, links and compiler flags for CPLEX (based on the Makefile provided with the CPLEX examples)
-set(SYSTEM "x86-64_linux")
-set(LIBFORMAT "static_pic")
-
-#if(EXISTS "/opt/ibm/ILOG/CPLEX_Studio_Community129")
-       
-#set(CPLEXDIR "$ENV{HOME}/CPLEX/cplex")
-#set(CONCERTDIR  "$ENV{HOME}/CPLEX/concert")
-set(CPLEXDIR "/opt/ibm/ILOG/CPLEX_Studio_Community129/cplex")
-set(CONCERTDIR  "/opt/ibm/ILOG/CPLEX_Studio_Community129/concert")
-set(CPLEXCCOPT "-m64 -O -fPIC -fno-strict-aliasing -fexceptions -DIL_STD")
-
-set(CPLEXLIBDIR "${CPLEXDIR}/lib/${SYSTEM}/${LIBFORMAT}")
-set(CONCERTLIBDIR "${CONCERTDIR}/lib/${SYSTEM}/${LIBFORMAT}")
-set(CPLEXLIBTARGETS ilocplex concert cplex m pthread dl)
-
-set(CPLEXINCDIR "${CPLEXDIR}/include")
-set(CONCERTINCDIR "${CONCERTDIR}/include")
-
-include_directories(${CPLEXINCDIR})
-include_directories(${CONCERTINCDIR})
-link_directories(${CPLEXLIBDIR} ${CONCERTLIBDIR})
-set(CMAKE_CXX_FLAGS "${CPLEXCCOPT} ${CMAKE_CXX_FLAGS}")
-set(CMAKE_SHARED_LINKER_FLAGS "-Wl,--no-undefined ${CMAKE_SHARED_LINKER_FLAGS}")
-
-add_library(${PROJECT_NAME} 
-    src/main.cpp 
-    include/cplexutils.cpp
+if(DEFINED CPLEXDIR)
+else()
+# Defines an option for the CPLEX base path
+set(
+    CPLEXBASEDIR
+    $ENV{HOME}/catkin_ws/src/ProVANT-Simulator_Developer/third_party/ibm/ILOG/CPLEX_Studio1210/
+    CACHE
+    PATH
+    "Path for the root directory of the Cplex installation"
+    FORCE
 )
+endif() #DEFINED CPLEXDIR
 
-link_directories(
-    ${CPLEXLIBDIR} 
-    ${CONCERTLIBDIR}
-)
+# Test if the base path for the CPLEXDIR is found
+if(EXISTS ${CPLEXBASEDIR})
+    message(STATUS "Cplex found at " ${CPLEXDIR}, " building the " ${PROJECT_NAME} " control strategy")
 
-target_link_libraries(${PROJECT_NAME} 
-    ${catkin_LIBRARIES} 
-    Eigen3::Eigen
-    ${CPLEXLIBTARGETS}
-)
+    #Includes, links and compiler flags for CPLEX (based on the Makefile provided with the CPLEX examples)
+    set(SYSTEM "x86-64_linux")
+    set(LIBFORMAT "static_pic")
+    
+    set(CPLEXDIR "${CPLEXBASEDIR}/cplex")
+    set(CONCERTDIR  "${CPLEXBASEDIR}/concert")
+    set(CPLEXCCOPT "-m64 -O -fPIC -fno-strict-aliasing -fexceptions -DIL_STD")
+    
+    set(CPLEXLIBDIR "${CPLEXDIR}/lib/${SYSTEM}/${LIBFORMAT}")
+    set(CONCERTLIBDIR "${CONCERTDIR}/lib/${SYSTEM}/${LIBFORMAT}")
+    set(CPLEXLIBTARGETS ilocplex concert cplex m pthread dl)
 
-#Padrao do simulador
-install(TARGETS
-    ${PROJECT_NAME}
-    ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
-    LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
-    RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
-)
-install(DIRECTORY include
-    DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION}
-    PATTERN ".svn" EXCLUDE
-)
+    set(CPLEXINCDIR "${CPLEXDIR}/include")
+    set(CONCERTINCDIR "${CONCERTDIR}/include")
+
+    include_directories(
+        ${CPLEXINCDIR}
+        ${CONCERTINCDIR}
+    )
+    link_directories(
+        ${CPLEXLIBDIR} ${CONCERTLIBDIR}
+    )
+    set(CMAKE_CXX_FLAGS "${CPLEXCCOPT} ${CMAKE_CXX_FLAGS}")
+    set(CMAKE_SHARED_LINKER_FLAGS "-Wl,--no-undefined ${CMAKE_SHARED_LINKER_FLAGS}")
+
+    add_library(${PROJECT_NAME} 
+        src/main.cpp 
+        src/cplexutils.cpp
+        src/inertia_matrix.cpp
+    )
+
+    link_directories(
+        ${CPLEXLIBDIR} 
+        ${CONCERTLIBDIR}
+    )
+
+    target_link_libraries(${PROJECT_NAME} 
+        ${catkin_LIBRARIES} 
+        Eigen3::Eigen
+        ${CPLEXLIBTARGETS}
+    )
+
+    #Padrao do simulador
+    install(TARGETS
+        ${PROJECT_NAME}
+        ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+        LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+        RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+    )
+    install(DIRECTORY include
+        DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION}
+        PATTERN ".svn" EXCLUDE
+    )
 
 else()
-MESSAGE(WARNING "CPLEX not found in path /opt/ibm/ILOG/CPLEX_Studio_Community129")
-#endif(EXISTS "/opt/ibm/ILOG/CPLEX_Studio_Community129")
-#endif(EXISTS "/nao/existe/esse/caminho")
-endif(USE_CPLEX)
-unset(USE_CPLEX CACHE) #clears data from cache
+    message(WARNING "Cplex was not found at " ${CPLEXDIR})
+endif()
