@@ -4,7 +4,7 @@
 #include "vant4_winf_transition/inertia_matrix.h"
 #include "vant4_winf_transition/CoriolisMatrix.h"
 #include "vant4_winf_transition/GravitationalVector.h"
-#include "vant4_winf_transition/InputCoupling.h"
+#include "vant4_winf_transition/input_coupling.h"
 #include "vant4_winf_transition/InputCouplingAero.h"
 #include "vant4_winf_transition/cplexutils.h"
 
