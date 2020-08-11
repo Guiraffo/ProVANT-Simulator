@@ -387,7 +387,7 @@ https://github.com/Guiraffo/ProVANT-Simulator/blob/master/LICENSE.md
   
   <!-- Loading the state and actuators plugins -->
   <gazebo>
-    <!-- <plugin name="empuxo" filename="libgazebo_ros_QuadForces.so">
+    <plugin name="empuxo" filename="libgazebo_ros_QuadForces.so">
       <topic_F1>Empuxoh1</topic_F1>
       <topic_F2>Empuxoh2</topic_F2>
       <topic_F3>Empuxoh3</topic_F3>
@@ -398,8 +398,8 @@ https://github.com/Guiraffo/ProVANT-Simulator/blob/master/LICENSE.md
       <Motor3>prop3</Motor3>
       <Motor4>prop4</Motor4>
       <DragCte>0.0179</DragCte>
-    </plugin>  -->
-    <plugin name="forces_1" filename="libgazebo_ros_brushless_plugin.so">
+    </plugin>
+    <!--<plugin name="forces_1" filename="libgazebo_ros_brushless_plugin.so">
       <topic_FR>Empuxoh1</topic_FR>
       <LinkDir>prop1</LinkDir>
       <topic_FL>Empuxoh2</topic_FL>
@@ -416,7 +416,7 @@ https://github.com/Guiraffo/ProVANT-Simulator/blob/master/LICENSE.md
     <plugin name="vetor_estados" filename="libgazebo_ros_QuadData.so">
       <NameOfTopic>Estados</NameOfTopic>
       <bodyName>base_link</bodyName>
-    </plugin>
+      </plugin>-->
   </gazebo>
 
 </robot>
