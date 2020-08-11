@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.0.2)
-project(vant4_WinfTransition4)
+project(vant4_winf_transition)
 option(USE_CPLEX "help string describing option"  OFF)
 find_package(catkin REQUIRED COMPONENTS
 roscpp
