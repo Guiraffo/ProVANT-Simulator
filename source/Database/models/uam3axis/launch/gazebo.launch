@@ -1,0 +1,45 @@
+<launch>
+  <arg name="x" default="0.5" />
+  <arg name="y" default="3" />
+  <arg name="z" default="0.0" />
+  <arg name="yaw" default="1.570796" />
+  <arg name="rviz" default="True" />
+
+  <include file="$(find gazebo_ros)/launch/empty_world.launch">
+    <arg name="paused" value="true"/>
+    <arg name="world_name" value="$(find uam3axis)/worlds/test_world.world" />
+    <arg name="verbose" value="true"/>
+  </include>
+  <param
+     name="robot_description"
+     textfile="$(find uam3axis)/urdf/uam3axis.urdf" />
+  <node
+    name="tf_footprint_base"
+    pkg="tf"
+    type="static_transform_publisher"
+    args="0 0 0 0 0 0 base_link base_footprint 40" />
+  <node
+    name="spawn_model"
+    pkg="gazebo_ros"
+    type="spawn_model"
+    args="-file $(find uam3axis)/urdf/uam3axis.urdf -x $(arg x) -y $(arg y) -Y $(arg yaw) -urdf -model uam3axis"
+    output="screen" />
+  <node
+    name="spawn_model_cenario"
+    pkg="gazebo_ros"
+    type="spawn_model"
+    args="-file $(find uam3axis)/urdf/cenario.urdf -urdf -model cenario"
+    output="screen" />
+  <node
+    name="fake_joint_calibration"
+    pkg="rostopic"
+    type="rostopic"
+    args="pub /calibrated std_msgs/Bool true" />
+  <node
+    if="$(arg rviz)"
+    name="rviz"
+    pkg="rviz"
+    type="rviz"
+    args="-d $(find uam3axis)/rviz/path_plotter.rviz"
+    output="screen" />
+</launch>
