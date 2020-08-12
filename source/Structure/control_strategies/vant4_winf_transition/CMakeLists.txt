@@ -33,7 +33,7 @@ catkin_package(
 # Defines the C++ version as C++11
 set(CMAKE_CXX_FLAGS "-std=c++11 ${CMAKE_CXX_FLAGS}")
 
-if(DEFINED CPLEXDIR)
+if((DEFINED CPLEXBASEDIR) AND (EXISTS ${CPLEXBASEDIR}))
 else()
 # Defines an option for the CPLEX base path
 set(
@@ -48,7 +48,7 @@ endif() #DEFINED CPLEXDIR
 
 # Test if the base path for the CPLEXDIR is found
 if(EXISTS ${CPLEXBASEDIR})
-    message(STATUS "Cplex found at " ${CPLEXDIR}, " building the " ${PROJECT_NAME} " control strategy")
+    message(STATUS "Cplex found at " ${CPLEXBASEDIR}, " building the " ${PROJECT_NAME} " control strategy")
 
     #Includes, links and compiler flags for CPLEX (based on the Makefile provided with the CPLEX examples)
     set(SYSTEM "x86-64_linux")
@@ -110,5 +110,5 @@ if(EXISTS ${CPLEXBASEDIR})
     )
 
 else()
-    message(WARNING "Cplex was not found at " ${CPLEXDIR})
+    message(WARNING "Cplex was not found at " ${CPLEXBASEDIR})
 endif()
