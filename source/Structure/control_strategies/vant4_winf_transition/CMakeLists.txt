@@ -110,5 +110,5 @@ if(EXISTS ${CPLEXBASEDIR})
     )
 
 else()
-    message(WARNING "Cplex was not found at " ${CPLEXBASEDIR})
+    message(WARNING "Cplex was not found at " ${CPLEXBASEDIR} " and therefore the " ${PROJECT_NAME} " control strategy will not be compiled.")
 endif()
