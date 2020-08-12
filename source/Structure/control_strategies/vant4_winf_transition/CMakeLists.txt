@@ -33,6 +33,10 @@ catkin_package(
 # Defines the C++ version as C++11
 set(CMAKE_CXX_FLAGS "-std=c++11 ${CMAKE_CXX_FLAGS}")
 
+if(DEFINED ENV{CPLEX_PATH})
+    set(CPLEXBASEDIR $ENV{CPLEX_PATH})
+endif() # DEFINED ENV{CPLEX_PATH}
+
 if((DEFINED CPLEXBASEDIR) AND (EXISTS ${CPLEXBASEDIR}))
 else()
 # Defines an option for the CPLEX base path
