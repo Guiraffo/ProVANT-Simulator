@@ -1,6 +1,7 @@
 #include "vant4_winf_transition/input_coupling.h"
 
 #include <cmath>
+#include <iostream>
 
 #include "vant4_winf_transition/uav4_parameters.h"
 #include "vant4_winf_transition/skew_symmetric_matrix.h"
@@ -162,9 +163,9 @@ Eigen::MatrixXd InputCouplingMatrixAero(Eigen::VectorXd q, Eigen::VectorXd qp, d
   // fprintf (stderr, "Vfxz: %f Vfxy: %f Alphaf: %f Betaf: %f \n", Vfxz, Vfxy, Alphaf, Betaf);
   *ub = UVWf(0) - UVWfa(0);
   // plot everything in order to evaluate the results
-  std::cout << std::endl << std::endl << std::endl << std::endl << std::endl;
-  std::cout << std::endl << std::endl << std::endl << std::endl << std::endl;
-  std::cout << std::endl << std::endl << std::endl << std::endl << std::endl;
+  //std::cout << std::endl << std::endl << std::endl << std::endl << std::endl;
+  //std::cout << std::endl << std::endl << std::endl << std::endl << std::endl;
+  //std::cout << std::endl << std::endl << std::endl << std::endl << std::endl;
   //	std::cout << std::endl << "Vfxz:" << Vfxz << "  Vfxy:" << Vfxy << std::endl;
   //	std::cout << "Alphaf:" << Alphaf << "  Betaf:" << Betaf << std::endl;
 
