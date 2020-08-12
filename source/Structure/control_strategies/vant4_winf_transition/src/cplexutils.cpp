@@ -1,13 +1,21 @@
-#include "cplexutils.h"
+/*
+ * This file is part of the ProVANT simulator project.
+ * Licensed under the terms of the MIT open source license. More details at
+ * https://github.com/Guiraffo/ProVANT-Simulator/blob/master/LICENSE.md
+ */
+/**
+ * @brief This file contains the implementation
+ * @author Daniel Cardoso
+ * @author Brenner Santana Rego
+ * @todo Document this block.
+ * 
+ * E-mail: brennersr7@ufmg.br
+ */
 
-//using namespace Eigen;
+#include "vant4_winf_transition/cplexutils.h"
 
-/* A first implementation of constrained zonotopes in C++.
-
-   Author: Brenner Santana Rego
-   E-mail: brennersr7@ufmg.br   */
-
-
+#include <cmath>
+#include <ilcplex/ilocplex.h>
 
 void cplexutils::lp_old(Eigen::MatrixXd f, Eigen::MatrixXd A, Eigen::MatrixXd b, Eigen::MatrixXd Aeq, Eigen::MatrixXd beq, Eigen::MatrixXd lb, Eigen::MatrixXd ub, double& objvalue, Eigen::MatrixXd& xstar, int& exitflag)
 {
