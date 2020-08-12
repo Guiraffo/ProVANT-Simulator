@@ -2,7 +2,7 @@
 
 #include "Icontroller.hpp"
 #include "vant4_winf_transition/inertia_matrix.h"
-#include "vant4_winf_transition/CoriolisMatrix.h"
+#include "vant4_winf_transition/coriolis_matrix.h"
 #include "vant4_winf_transition/gravitational_vector.h"
 #include "vant4_winf_transition/input_coupling.h"
 #include "vant4_winf_transition/input_coupling_aero.h"
