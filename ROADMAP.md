@@ -1,6 +1,3 @@
-# Version 1.2
-    - Finish and publish the features developed at LEX.
-
 # Version 2
     - Add ROS Melodic Morenia Support
 
