@@ -14,7 +14,7 @@
 #include <fcntl.h>
 
 #include "applicationsettingsdialog.h"
-#include "processoutputwindow.h"
+#include "ProcessOutput/processoutputwindow.h"
 #include "Utils/appsettings.h"
 
 MainWindow::MainWindow(QWidget *parent) :

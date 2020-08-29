@@ -52,7 +52,7 @@ SOURCES += main.cpp\
     DataAccess/GazeboElements/Items/multipleincludes.cpp \
     DataAccess/GazeboElements/Items/multipleplugins.cpp \
     jointsdialog.cpp \
-    processoutputwindow.cpp \
+    ProcessOutput/processoutputwindow.cpp \
     ProcessOutput/processoutputformatter.cpp \
     ProcessOutput/terminalcolortable.cpp
 
@@ -92,7 +92,7 @@ HEADERS  += mainwindow.h \
     DataAccess/GazeboElements/Items/multipleplugins.h \
     jointsdialog.h \
     modelsetupdialog.h \
-    processoutputwindow.h \
+    ProcessOutput/processoutputwindow.h \
     ProcessOutput/processoutputformatter.h \
     ProcessOutput/terminalcolortable.h
 
@@ -105,7 +105,6 @@ FORMS    += mainwindow.ui \
     aboutdialog.ui \
     jointsdialog.ui \
     ProcessOutput/processoutputwindow.ui
-    processoutputwindow.ui
 
 RESOURCES += \
     icons.qrc \

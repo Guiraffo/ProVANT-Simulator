@@ -8,7 +8,7 @@
 #include"Business/treeitens.h"
 #include "dialognewcontroller.h"
 #include "Utils/appsettings.h"
-#include "processoutputwindow.h"
+#include "ProcessOutput/processoutputwindow.h"
 
 /**
  * @brief ModelSetupDialog::ModelSetupDialog
