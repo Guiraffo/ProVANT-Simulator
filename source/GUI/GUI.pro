@@ -104,7 +104,7 @@ FORMS    += mainwindow.ui \
     dialognewmodel.ui \
     aboutdialog.ui \
     jointsdialog.ui \
-    jointsdialog.ui \
+    ProcessOutput/processoutputwindow.ui
     processoutputwindow.ui
 
 RESOURCES += \
