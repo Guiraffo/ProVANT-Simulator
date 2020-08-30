@@ -53,8 +53,8 @@ SOURCES += main.cpp\
     DataAccess/GazeboElements/Items/multipleplugins.cpp \
     jointsdialog.cpp \
     ProcessOutput/processoutputwindow.cpp \
-    ProcessOutput/processoutputformatter.cpp \
-    ProcessOutput/terminalcolortable.cpp
+    ProcessOutput/terminalcolortable.cpp \
+    ProcessOutput/terminaltextedit.cpp
 
 HEADERS  += mainwindow.h \
     DataAccess/ControllerElements/configfile.h \
@@ -93,8 +93,8 @@ HEADERS  += mainwindow.h \
     jointsdialog.h \
     modelsetupdialog.h \
     ProcessOutput/processoutputwindow.h \
-    ProcessOutput/processoutputformatter.h \
-    ProcessOutput/terminalcolortable.h
+    ProcessOutput/terminalcolortable.h \
+    ProcessOutput/terminaltextedit.h
 
 FORMS    += mainwindow.ui \
     Widgets/filebrowserwidget.ui \

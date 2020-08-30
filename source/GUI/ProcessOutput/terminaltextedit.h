@@ -1,10 +1,8 @@
-#ifndef PROCESSOUTPUTFORMATTER_H
-#define PROCESSOUTPUTFORMATTER_H
+#ifndef TERMINALTEXTEDIT_H
+#define TERMINALTEXTEDIT_H
 
-#include <QObject>
-
-#include <QList>
 #include <QTextEdit>
+#include <QScopedPointer>
 
 #include "terminalcolortable.h"
 
@@ -14,27 +12,73 @@ enum class BufferMode {
     EscapedCode
 };
 
-class ProcessOutputFormatter : public QObject
+class TerminalTextEdit : public QTextEdit
 {
     Q_OBJECT
 public:
-    ProcessOutputFormatter(QTextEdit *outputWidget,
-                           const TerminalColorTable &colorTable);
-    virtual ~ProcessOutputFormatter();
-    void update(QChar chr);
-    void update(QString &str);
+    explicit TerminalTextEdit(QWidget *parent = nullptr);
+
+public slots:
+    void append(const QString &text);
+    void insertPlainText(const QString &text);
+    void enableInteraction();
+    void disableInteraction();
+    void setTextInteractionState(bool enabled = true);
 
 protected:
     void applyOutputFormat();
+    void appendInternal(QChar chr);
+    void appendInternal(const QString &str);
 
 private:
-    QTextEdit *_outputWidget;
     TerminalColorTable _colorTable;
     QString _buffer;
     QList<int> _formatCodeBuffer;
     enum BufferMode _mode;
 
+    /**
+     * @brief parseFormatBuffer Convert the string in the reading
+     * buffer to an integer and adds it to the formatting code buffer.
+     *
+     * If the conversion fails, a warning message is emitted, the buffer is
+     * cleared and execution proceeds as normal.
+     */
+    void parseFormatBuffer();
+
+    /**
+     * @brief calculateColor Helper method to determine a RGB color from the
+     * parameters of a SGR formatting code.
+     *
+     * This method supports both the method of indexed colors (256 and a
+     * compatibility mode with a 88 colors table), and the method wich specifies
+     * the color based on a color space, with support to RGB, CMY and CMYK color
+     * spaces.
+     *
+     * Optional support to HSL, HSV and RGBA can be added if necessary (but at
+     * this time, since no terminal implements this, these modes are not
+     * available).
+     *
+     * @param buffer Buffer with the formatting options to calculate the color.
+     * @return
+     */
     QColor calculateColor(QList<int> *buffer);
+
+    /**
+     * @brief resetOutputFormat Revert the text formatting to the default.
+     *
+     * The default options are black text color on white background, with no
+     * underline, overline, italic, kerning, capitalization, with normal
+     * alignment of text (not subscripted nor sobrescripted), with normal font
+     * weight (not bold) and with black underline color.
+     *
+     * The default mode also disables framing, encircling, and hiding of the
+     * text.
+     *
+     * The underline color is reverted to black to allow the correct usage
+     * of the SGR parameters 58 and 59 that allow for setting the color of the
+     * underline. This is not a standard but was copied from mintty.
+     */
+    void resetOutputFormat();
 
     /**
      * @brief getRGBFromBuffer Reads 3 numbers from the formatting code buffer,
@@ -119,6 +163,30 @@ private:
      * table or an empty color if validation fails.
      */
     QColor getIndexed88ColorFromBuffer(QList<int> *buffer);
+
+    /**
+     * @brief _textHidden Indicates if text should be output or not.
+     * Part of the implementation for the hidden text mode;
+     */
+    bool _textHidden = false;
+
+    /**
+     * @brief _textFramed Indciates if the text should be put inside a frame
+     * or not.
+     */
+    bool _textFramed = false;
+
+    /**
+     * @brief _textEncircled Indicates if the text should be put inside circles
+     * or not (this mode could not be implemented without signficative changes
+     * to Qt Rich Text Engine, so it is implemented as an framed mode with
+     * inverted colors.
+     */
+    bool _textEncircled = false;
+
+
+    QFont _defaultFont;
+    QString _defaultFontFamily;
 };
 
-#endif // PROCESSOUTPUTFORMATTER_H
+#endif // TERMINALTEXTEDIT_H

@@ -33,6 +33,10 @@ ProcessOutputWindow::ProcessOutputWindow(QProcess *process,
     _process(process)
 {
     ui->setupUi(this);
+
+    _textOutput = new TerminalTextEdit(this);
+    ui->outputLayout->addWidget(_textOutput, 10);
+
     /*
      * Setup this window to be deleted after its closing.
      * This needs to be done to ensure proper deletion of the process pointer
@@ -104,6 +108,11 @@ ProcessOutputWindow::~ProcessOutputWindow()
         }
         delete _process;
     }
+
+    if(_textOutput != nullptr) {
+        delete _textOutput;
+    }
+
     delete ui;
 }
 
@@ -177,9 +186,9 @@ const QString &ProcessOutputWindow::processName() const
 void ProcessOutputWindow::addData(const QString &data)
 {
     if(!data.isEmpty()) {
-        ui->textOutput->append(data);
+        _textOutput->append(data);
         emit dataAdded(data);
-        emit contentChanged(ui->textOutput->toPlainText());
+        emit contentChanged(_textOutput->toPlainText());
     }
 }
 
@@ -204,9 +213,9 @@ void ProcessOutputWindow::addData(const QStringList &data)
  */
 void ProcessOutputWindow::clearOutput()
 {
-    if(!ui->textOutput->toPlainText().isEmpty())
+    if(!_textOutput->toPlainText().isEmpty())
     {
-        ui->textOutput->clear();
+        _textOutput->clear();
         emit outputCleared();
         emit contentChanged("");
     }
@@ -278,7 +287,7 @@ void ProcessOutputWindow::setSaveOutputStartingDir(const QDir &dir)
  */
 bool ProcessOutputWindow::savePlaintextOutputToFile(const QString &filePath)
 {
-    return saveToFile(ui->textOutput->toPlainText(), filePath);
+    return saveToFile(_textOutput->toPlainText(), filePath);
 }
 
 /**
@@ -289,7 +298,7 @@ bool ProcessOutputWindow::savePlaintextOutputToFile(const QString &filePath)
  */
 bool ProcessOutputWindow::saveHtmlOutputToFile(const QString &filePath)
 {
-    return saveToFile(ui->textOutput->toHtml(), filePath);
+    return saveToFile(_textOutput->toHtml(), filePath);
 }
 
 /**
@@ -302,7 +311,7 @@ bool ProcessOutputWindow::saveHtmlOutputToFile(const QString &filePath)
  */
 bool ProcessOutputWindow::saveMarkdwonOutputToFile(const QString &filePath)
 {
-    return saveToFile(ui->textOutput->toHtml(), filePath);
+    return saveToFile(_textOutput->toHtml(), filePath);
 }
 
 /**
@@ -311,7 +320,7 @@ bool ProcessOutputWindow::saveMarkdwonOutputToFile(const QString &filePath)
  */
 QString ProcessOutputWindow::output() const
 {
-    return ui->textOutput->toPlainText();
+    return _textOutput->toPlainText();
 }
 
 /**
@@ -320,7 +329,7 @@ QString ProcessOutputWindow::output() const
  */
 QString ProcessOutputWindow::outputHtml() const
 {
-    return ui->textOutput->toHtml();
+    return _textOutput->toHtml();
 }
 
 /**
@@ -331,7 +340,7 @@ QString ProcessOutputWindow::outputHtml() const
  */
 QString ProcessOutputWindow::outputMarkdown() const
 {
-    return ui->textOutput->toHtml();
+    return _textOutput->toHtml();
 }
 
 /**
@@ -427,6 +436,7 @@ void ProcessOutputWindow::onProcessFinish(int exitCode,
     }
 
     emit processFinished(exitCode, status);
+    _textOutput->enableInteraction();
 }
 
 /**
@@ -561,12 +571,12 @@ void ProcessOutputWindow::saveOutputAction()
  */
 void ProcessOutputWindow::copyOutpuAction()
 {
-    QTextCursor prevCursor = ui->textOutput->textCursor();
+    QTextCursor prevCursor = _textOutput->textCursor();
     // Select everythin and copy to clipboard
-    ui->textOutput->selectAll();
-    ui->textOutput->copy();
+    _textOutput->selectAll();
+    _textOutput->copy();
     // Restore previous cursor
-    ui->textOutput->setTextCursor(prevCursor);
+    _textOutput->setTextCursor(prevCursor);
 }
 
 /**
@@ -583,12 +593,12 @@ void ProcessOutputWindow::copyOutpuAction()
 void ProcessOutputWindow::addText(const QString &text, const QColor &color)
 {
     // Stores the previous color and sets the new color
-    QColor prevColor = ui->textOutput->textColor();
-    ui->textOutput->setTextColor(color);
+    QColor prevColor = _textOutput->textColor();
+    _textOutput->setTextColor(color);
     // Adds the text
     addData(text);
     // Restore previous value
-    ui->textOutput->setTextColor(prevColor);
+    _textOutput->setTextColor(prevColor);
 }
 
 /**
