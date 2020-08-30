@@ -9,6 +9,8 @@
 #include <QProcessEnvironment>
 #include <QSet>
 
+#include "terminaltextedit.h"
+
 namespace Ui {
 class ProcessOutputWindow;
 }
@@ -164,6 +166,13 @@ private:
      * method.
      */
     QSet<QString> _idsToKill;
+
+    /**
+     * @brief _textOutput Specialized QTextEdit widget to ouput the text
+     * returned by the proccess in a way compliant with what is expect from
+     * a terminal application.
+     */
+    TerminalTextEdit *_textOutput = nullptr;
 };
 
 #endif // PROCESSOUTPUTWINDOW_H

@@ -63,17 +63,6 @@ find_package(Boost REQUIRED COMPONENTS thread)
 
 
 
-generate_messages(
-   DEPENDENCIES
-   std_msgs  # Or other packages containing msgs
-   sensor_msgs 
-   geometry_msgs
-   nav_msgs
-   visualization_msgs
-)
-
-
-
 catkin_package(
     #DEPENDS gazebo 
     #CATKIN_DEPENDS roscpp std_msgs geometry_msgs 
