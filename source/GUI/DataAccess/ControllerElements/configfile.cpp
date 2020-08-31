@@ -1,6 +1,7 @@
 #include "configfile.h"
 
 #include <QtGlobal>
+#include <QDebug>
 
 /**
  * @brief ConfigFile::setSensors Override the list of sensors.
@@ -434,10 +435,17 @@ QStringList ConfigFile::readAllItems(const QString &tag)
     }
     else
     {
-        //! @todo Criar exceção
-        const QString msg = "1 - Problemas com o arquivo xml" + tag;
-        qFatal("An error ocurred when trying to read the file %s.",
-               qUtf8Printable(_file.fileName()));
+        QFileInfo finfo(_file);
+        qFatal("%s%s%s",
+               qUtf8Printable(
+                   QObject::tr("An error ocurred while trying to read the "
+                               "config.xml file for this model. Please "
+                               "make sure that the file with path ")),
+               qUtf8Printable(finfo.absoluteFilePath()),
+               qUtf8Printable(
+                       QObject::tr(" exists and is readable to the current "
+                                   "user.")
+        ));
 
         _file.close();
         QCoreApplication::exit(1);

@@ -81,15 +81,15 @@ void Dialognewmodel::on_buttonBox_accepted()
               }
           }
     }
-    QTreeWidgetItem* element,*elementPose,*edit;
-    element = TreeItens::AddRoot("Include","",parentUi->treeWidget);
-    edit = TreeItens::AddChild(element,"name","newmodel");
+    QTreeWidgetItem *element, *elementPose, *edit;
+    element = addRoot("Include", "", parentUi->treeWidget);
+    edit = addChild(element,"name","newmodel");
     edit->setFlags(Qt::ItemIsEditable|Qt::ItemIsEnabled);
-    elementPose = TreeItens::AddChild(element,"pose","");
+    elementPose = addChild(element,"pose","");
     std::string vector("0 0 0 0 0 0");
     splitvector(vector,elementPose);
-    TreeItens::AddChild(element,"isStatic","false");
-    TreeItens::AddChild(element,"uri","model://"+ui->comboBox->currentText().toStdString());
+    addChild(element,"isStatic","false");
+    addChild(element,"uri","model://"+ui->comboBox->currentText());
 }
 
 void Dialognewmodel::splitvector(std::string data,QTreeWidgetItem* Element)
@@ -114,17 +114,17 @@ void Dialognewmodel::splitvector(std::string data,QTreeWidgetItem* Element)
             }
         }
         QTreeWidgetItem* edit;
-        edit = TreeItens::AddChild(Element,"X",result.at(0).toStdString());
+        edit = addChild(Element, "X", result.at(0));
         edit->setFlags(Qt::ItemIsEditable|Qt::ItemIsEnabled);
-        edit = TreeItens::AddChild(Element,"Y",result.at(1).toStdString());
+        edit = addChild(Element, "Y", result.at(1));
         edit->setFlags(Qt::ItemIsEditable|Qt::ItemIsEnabled);
-        edit = TreeItens::AddChild(Element,"Z",result.at(2).toStdString());
+        edit = addChild(Element, "Z", result.at(2));
         edit->setFlags(Qt::ItemIsEditable|Qt::ItemIsEnabled);
-        edit = TreeItens::AddChild(Element,"Roll",result.at(3).toStdString());
+        edit = addChild(Element, "Roll", result.at(3));
         edit->setFlags(Qt::ItemIsEditable|Qt::ItemIsEnabled);
-        edit = TreeItens::AddChild(Element,"Pitch",result.at(4).toStdString());
+        edit = addChild(Element, "Pitch", result.at(4));
         edit->setFlags(Qt::ItemIsEditable|Qt::ItemIsEnabled);
-        edit = TreeItens::AddChild(Element,"Yaw",result.at(5).toStdString());
+        edit = addChild(Element, "Yaw", result.at(5));
         edit->setFlags(Qt::ItemIsEditable|Qt::ItemIsEnabled);
     }
 }

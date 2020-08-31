@@ -104,6 +104,8 @@ private slots:
 protected:
     Ui::MainWindow *ui;
 
+    QString getModelName(QTreeWidgetItem *item);
+
 private:
     world mundo; // classe para leitura e escrita de dados do cenário
     Model model; // classe para leitura e escrita de dados do cenário

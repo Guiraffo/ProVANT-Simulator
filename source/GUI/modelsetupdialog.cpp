@@ -50,7 +50,7 @@ void ModelSetupDialog::setModel(QString modelFile,
                                 QString controllerFile)
 {
     // Get model and the controller from the file.
-    _model.getFirst(modelFile.toStdString(), ui->treeWidget);
+    _model.getFirst(modelFile, ui->treeWidget);
     _controller.open(controllerFile,
                    ui->sensorsListWidget,
                    ui->actuatorsListWidget);

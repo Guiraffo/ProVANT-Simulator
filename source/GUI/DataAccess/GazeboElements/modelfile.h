@@ -1,20 +1,29 @@
 #ifndef MODELFILE_H
 #define MODELFILE_H
-#include "string"
+
+#include <QString>
 #include "Items/model_da.h"
 
+/**
+ * @brief The ModelFile class
+ *
+ * @todo Document this class
+ * @todo Make properties private.
+ * @todo Create getters and setters
+ */
 class ModelFile
 {
 public:
-    ModelFile(std::string);
+    ModelFile(const QString &modelFilePath);
     void Read();
     void Write();
     void print();
-    std::string filename;
+
+    QString filename;
     Model_DA model;
     QDomDocument doc;
     QFile file;
-    std::string sdfVersion;
+    QString sdfVersion;
 };
 
 #endif // MODELFILE_H

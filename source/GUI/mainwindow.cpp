@@ -376,6 +376,38 @@ void MainWindow::on_treeWidget_itemDoubleClicked(QTreeWidgetItem *item,
                     env + QDir::separator() + list.at(1) + QDir::separator() +
                     "config" + QDir::separator() + "config.xml");
 
+        QFileInfo localConfigInfo(localConfig);
+        QFileInfo modelFileInfo(localModelPath);
+
+        if(!localConfigInfo.exists()) {
+            QString modelName = getModelName(item);
+            QMessageBox::critical(this,
+                                  tr("Error"),
+                                  tr("Error while trying to open the model "
+                                     "config.xml file.\nPlease make sure that "
+                                     "the model has a directory named config "
+                                     "under its root directory and a config.xml "
+                                     "file."));
+            qCritical("%s%s. %s",
+                      qUtf8Printable(tr("Error while trying to find the "
+                                        "config.xml for the ")),
+                      qUtf8Printable(modelName),
+                      qUtf8Printable(tr("Please make sure this model exists "
+                                        "and has a config.xml file.")));
+            return;
+        }
+        if(!modelFileInfo.exists()) {
+            QMessageBox::critical(this,
+                                  tr("Error"),
+                                  tr("Error while trying to open the SDF file "
+                                     "for the selected model. Please make sure "
+                                     "the file exists, is under the correct"
+                                     " path and is named robot.sdf."));
+            qCritical("Error while trying to open the SDF file for the "
+                      "selected model. Please make sure this model exists.");
+            return;
+        }
+
         // Opens the window
         ModelSetupDialog modelsetup;
         modelsetup.setModel(localModelPath, localConfig);
@@ -628,4 +660,18 @@ void MainWindow::on_actionOptions_triggered()
 {
     ApplicationSettingsDialog dialog(this);
     dialog.exec();
+}
+
+QString MainWindow::getModelName(QTreeWidgetItem *item)
+{
+    QTreeWidgetItem *parent = item->parent();
+    if(parent != nullptr) {
+        for(int i = 0; i < parent->childCount(); i++) {
+            QTreeWidgetItem *child = parent->child(i);
+            if(child->text(0).toLower() == "name") {
+                return child->text(1);
+            }
+        }
+    }
+    return QString();
 }
