@@ -630,8 +630,7 @@ void MainWindow::on_actionExit_triggered()
 
 void MainWindow::on_actionNewModel_triggered()
 {
-    Dialognewmodel newmodel(ui,this);
-    newmodel.newModel();
+    DialogNewModel newmodel(ui,this);
     newmodel.setModal(true);
     newmodel.exec();
 }
