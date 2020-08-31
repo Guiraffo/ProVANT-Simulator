@@ -1,41 +1,52 @@
-<package>
+<?xml version="1.0"?>
+<!--
+This file is part of the ProVANT simulator project.
+Licensed under the terms of the MIT open source license. More details at
+https://github.com/Guiraffo/ProVANT-Simulator/blob/master/LICENSE.md
+-->
+<package format="2">
   <name>custom_plugins</name>
-  <version>0.3.7</version>
-  <description>hector_gazebo_plugins provides gazebo plugins from Team Hector.
-     Currently it contains a 6wd differential drive plugin, an IMU sensor plugin,
-     an earth magnetic field sensor plugin, a GPS sensor plugin and a
-     sonar ranger plugin.</description>
-  <maintainer email="meyer@fsr.tu-darmstadt.de">Johannes Meyer</maintainer>
+  <version>1.0.0</version>
+  <description>This package provides a set of Gazebo plugins that allow the use
+  of the ProVANT simulator, such as the stepping plugin, plugins for simulation
+  a servo motor, brushless motors and plugins that allow the publication of the
+  UAV states.</description>
+  
+  <maintainer email="jeduardo@ufmg.br">Júnio Eduardo de Morais Aquino</maintainer>
+  
+  <license>MIT</license>
 
-  <license>BSD</license>
+  <url type="website">http://provant.eng.ufmg.br/provantsimulator</url>
+  <url type="repository">https://github.com/Guiraffo/ProVANT-Simulator.git</url>
+  <url type="bugtracker">https://github.com/Guiraffo/ProVANT-Simulator/issues</url>
 
-  <url type="website">http://ros.org/wiki/hector_gazebo_plugins</url>
-  <!-- <url type="bugtracker"></url> -->
+  <author email="avlara@hotmail.com">Arthur Viana Lara</author>
+  <author email="jonatan@todo.com">Jonatan Campos</author>
+  <author email="jeduardo@ufmg.br">Júnio Eduardo de Morais Aquino</author>
 
-  <author email="kohlbrecher@sim.tu-darmstadt.de">Stefan Kohlbrecher</author>
-  <author email="meyer@fsr.tu-darmstadt.de">Johannes Meyer</author>
-
-  <!-- Dependencies which this package needs to build itself. -->
   <buildtool_depend>catkin</buildtool_depend>
-
-  <!-- Dependencies needed to compile this package. -->
   <build_depend>roscpp</build_depend>
-  <build_depend>gazebo</build_depend>
+  <build_depend>gazebo_ros</build_depend>
   <build_depend>std_msgs</build_depend>
   <build_depend>geometry_msgs</build_depend>
+  <build_depend>nav_msgs</build_depend>
+  <build_depend>visualization_msgs</build_depend>
   <build_depend>simulator_msgs</build_depend>
-  <build_depend>tinyxml</build_depend>       <!-- Added 24/07/2020 to turb plugin-->
-<!--  <build_depend>tinyxml</build_depend>	-->
- 
+  <build_depend>tinyxml</build_depend>
+  <build_depend>eigen</build_depend>
 
-  <!-- Dependencies needed after this package is compiled. -->
-  <run_depend>roscpp</run_depend>
-  <run_depend>gazebo_ros</run_depend>
-  <run_depend>std_msgs</run_depend>
-  <run_depend>geometry_msgs</run_depend>
-  <run_depend>simulator_msgs</run_depend>
-  <run_depend>tinyxml</run_depend>
- <!-- <run_depend>tinyxml</run_depend>	-->
+  <exec_depend>roscpp</exec_depend>
+  <exec_depend>gazebo_ros</exec_depend>
+  <exec_depend>std_msgs</exec_depend>
+  <exec_depend>geometry_msgs</exec_depend>
+  <exec_depend>nav_msgs</exec_depend>
+  <exec_depend>visualization_msgs</exec_depend>
+  <exec_depend>simulator_msgs</exec_depend>
+  <exec_depend>tinyxml</exec_depend>
+  <exec_depend>eigen</exec_depend>
 
-
+  <export>
+    <!-- From gazebo documentation http://gazebosim.org/tutorials/?tut=ros_plugins-->
+    <gazebo_ros plugin_path="${prefix}/../../lib" gazebo_media_path="${prefix}"/>
+  </export>
 </package>
