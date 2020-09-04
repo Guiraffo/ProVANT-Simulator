@@ -5,8 +5,9 @@ namespace gazebo
 
   turbulance::turbulance(): v(3),Ad(8,8),Bd(8,3),Cd(3,8)
   {
-    const char* _pathconfig = "/home/jonatas/catkin_ws/src/ProVANT-Simulator_Developer/source/Database/models/vant_4_aerod/config/config.xml";
-		XMLRead2 docme(_pathconfig); // start read XML data at the address placed in an environment variable
+    
+    const char* _pathconfig = std::getenv("TILT_CONFIG");
+    XMLRead2 docme(_pathconfig); // start read XML data at the address placed in an environment variable
 		TurbTag = docme.GetItem("Turbulance").c_str();
 
     //Defines the Ad,Bd and Cd matrices for Von Karman turbulance ss model
