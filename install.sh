@@ -1,8 +1,13 @@
 #!/bin/bash
-# Entrando na pasta Home
+#
+# This file is part of the ProVANT simulator project.
+# Licensed under the terms of the MIT open source license. More details at
+# https://github.com/Guiraffo/ProVANT-Simulator/blob/master/LICENSE.md
+#
+# Change directory to the current user home dir
 cd ~
 
-#criando variáveis de ambiente locais
+# Append environment variables to the current user .bashrc file.
 export PROVANT_ROS=${HOME}/catkin_ws/src
 echo "export PROVANT_ROS=${HOME}/catkin_ws/src" >> ${HOME}/.bashrc
 export TILT_STRATEGIES=${HOME}/catkin_ws/devel/lib/
@@ -18,20 +23,17 @@ echo "export GAZEBO_MODEL_PATH=${PROVANT_DATABASE}/models" >> ${HOME}/.bashrc
 export DIR_ROS=${HOME}/catkin_ws
 echo "export DIR_ROS=${HOME}/catkin_ws" >> ${HOME}/.bashrc
 
-# Entrando no espaço de trabalho do ROS
+# Enter ROS workspace folder
 cd catkin_ws
-#Compilando demais pacotes existentes no ambiente de trabalho do ROS
+# Compile the packages in the ROS workspace
 catkin_make
 
-# Apontando computador para biblioteca qt5 caso haja outras versão de qt
-export QTDIR=/usr/share/qt5
-
-# Compilando código da interface gráfica
+# Compile the ProVANT Simulator GUI
 mkdir -p ${TILT_PROJECT}/source/build
 cd ${TILT_PROJECT}/source/build 
 qtchooser -qt=5 -run-tool=qmake ${TILT_PROJECT}/source/GUI/GUI.pro -r -spec linux-g++ CONFIG+=debug CONFIG+=qml_debug
 make
 
-# criando link simbólico para fácil execução do ProVANT Simulator
+# Crate symbolic link to allow launching of the GUI from the terminal
 sudo ln -s ${TILT_PROJECT}/source/build/GUI /usr/local/bin/provant_gui
 
