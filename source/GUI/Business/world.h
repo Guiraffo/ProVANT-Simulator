@@ -4,14 +4,17 @@
 #include "QTreeWidgetItem"
 #include "treeitens.h"
 
+/**
+ * @brief The world class
+ * @todo Refactor this class.
+ */
 class world
 {
 public:
     world();
-    void getTemplate(std::string,QTreeWidget*);
-    void getLast(QTreeWidget*);
-    void getFirst(std::string,QTreeWidget*);
-    void getActual(QTreeWidget*);
+    void getFirst(std::string,QTreeWidget*) __attribute__((deprecated));
+    void getFirst(const QString &filename, QTreeWidget *root);
+
     void Write(QTreeWidget* root);
     void ToTreeWidget(QTreeWidget*);
     void splitvector(std::string ,QTreeWidgetItem* );

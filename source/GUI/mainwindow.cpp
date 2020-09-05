@@ -1,9 +1,14 @@
+/*
+ * This file is part of the ProVANT simulator project.
+ * Licensed under the terms of the MIT open source license. More details at
+ * https://github.com/Guiraffo/ProVANT-Simulator/blob/master/LICENSE.md
+ */
 /**
-  * @file mainwindow.cpp
-  * @author Arthur Viana Lara
-  * @date 18/05/2018
-  * Projeto: ProVANT
-  */
+ * @file This file contains the implementation of the MainWindow GUI class.
+ *
+ * @author Arthur Viana Lara
+ * @author Júnio Eduardo de Morais Aquino
+ */
 
 #include "mainwindow.h"
 
@@ -30,7 +35,7 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    // Inserindo Logo
+    // Insert logos
     QPixmap provantLogo(":/logos/logos/provant_ufmg_ufsc_fundoalpha.png");
     int w = ui->provantLogoDisplay->width();
     int h = ui->provantLogoDisplay->height();
@@ -38,26 +43,27 @@ MainWindow::MainWindow(QWidget *parent) :
                 provantLogo.scaled(w,h,Qt::KeepAspectRatio)
     );
 
-    // Configurando árvore de dados
-    // arvore de dados terá duas colunas
+    // Setup tree widget to display the simulation parameters
     ui->treeWidget->setColumnCount(2);
-    // inicialmente não se pode editar árvore de dados
     ui->treeWidget->setEditTriggers(QTreeWidget::NoEditTriggers);
 
-    // quando a interface é aberta, não há cenário selecionado
-    // então não é permitido adicionar modelo, salvar cenário e nem
-    // inicioalizar uma simulação
+    /*
+     * Disables the relevant menus until the user creates a new simulation
+     * world from a template, or opens a world.
+     */
     ui->actionSave->setDisabled(true);
     ui->menuEdit->setDisabled(true);
     ui->startGazeboPushButton->setDisabled(true);
     ui->jointValuesPushButton->setDisabled(true);
 
-    // nome que será observado na parte superior da janela
-    const QString name("ProVANT Simulator v1");
-    setWindowTitle(name);
+    // Set window title
+    setWindowTitle("ProVANT Simulator");
 
-    // Verifica se todas as configurações de parametros está correta e em caso
-    // contrário, exibe mensagens de erro para o usuaŕio
+    /**
+     * @brief settings Checks if all the relevant settings are correctly
+     * configured. If an errror is detected, the default values are set and
+     * a message is shown to the user informing about the detected errors.
+     */
     AppSettings settings;
     if(settings.checkAllParametersSet()) {
         settings.applyValuesToEnvironmentVariables();
@@ -221,11 +227,9 @@ void MainWindow::on_startGazeboPushButton_clicked()
      * Further modification will be nedded to add a feature allowing the user
      * to select the USB port on the GUI.
      */
+    //! @todo Refactor this section.
     if(hil)
     {
-        std::system("kill `pgrep gzclient`");
-        std::system("kill  `pgrep gzserver`");
-
         // verificar se o dispositivo está conectado em /dev/ttyUSB0
         int open_result = open("/dev/ttyUSB0", O_RDWR | O_NOCTTY);
         if(open_result == -1)
@@ -292,99 +296,109 @@ void MainWindow::on_startGazeboPushButton_clicked()
 
 void MainWindow::on_actionNew_triggered()
 {
-    hil = false;
-    // Diretório onde está os templates
+    // Get template directory path
     AppSettings settings;
-    QString env = settings.getTiltProjectPath();
-    env = env + "/worlds/templates";
+    QString tiltProjectPath = settings.getTiltProjectPath();
+    QString templatesFolderPath = QDir::cleanPath(tiltProjectPath
+                                                  +
+                                                  QDir::separator()
+                                                  +
+                                                  "worlds"
+                                                  +
+                                                  QDir::separator()
+                                                  +
+                                                  "templates");
 
-    // Abertura de caixa de diálogo para selecionar arquivo template
-    QString filename = QFileDialog::getOpenFileName(this
-                                                    ,tr("New World")
-                                                    , env.toStdString().c_str()
-                                                    , tr("Template Files (*.tpl)"));
+    // Opens a dialog box to allow the user to select the template file
+    QString filename = QFileDialog::getOpenFileName(
+                this,
+                tr("Select New Simulation World Template"),
+                templatesFolderPath,
+                tr("World Template File (*.tpl)"));
+    // Checks if the user cancelled the opertaion (ie. the filename is empty)
     if(filename.isEmpty()) return;
 
-    // filtrando string obtida
-    QString dir;
-    QStringList splitvector;
-    QRegExp rx("\\/");
-    splitvector = filename.split(rx);
-    splitvector.removeLast();
-    foreach (const QString &str, splitvector)
-    {
-        if (str.contains(" ")||str.size()==0)
-        {
-            //faz nada
-        }
-        else
-        {
-            dir = dir+"/"+str;
-        }
-    }
+    // Get the directory of the selected file
+    QFileInfo templateFileInfo(filename);
+    QString dir = templateFileInfo.absoluteDir().absolutePath();
 
     // colocando imagem do mundo fornecida pelo usuário  na interface gráfica
-    QString imagefile(dir+"/imagem.gif");
-    QFile ff(imagefile);
-    QFileInfo fileInfo(ff);
+    QString imagefile(QDir::cleanPath(dir + QDir::separator() + "imagem.gif"));
+    QFileInfo fileInfo(imagefile);
     if (fileInfo.exists())
     {
-        QGraphicsScene * scene = new QGraphicsScene(ui->worldGraphicsView);
-        QImage image(imagefile);
-        scene->addPixmap(QPixmap::fromImage(image));
-        ui->worldGraphicsView->setScene(scene);
-        ui->worldGraphicsView->show();
+        setWorldPreviewImage(imagefile);
     }
 
+    // Populates the settings in the tree view
     ui->treeWidget->clear();
-    // lê dados do arquivo .tpl informado anteriormnete
-    mundo.getFirst(filename.toStdString(),ui->treeWidget);
+    mundo.getFirst(filename, ui->treeWidget);
 
-    // habilitando funções de menuu e inicialização da interface
+    // Enables menu functions
     ui->actionSave->setEnabled(true);
     ui->menuEdit->setEnabled(true);
     ui->actionSave->setEnabled(true);
     ui->menuEdit->setEnabled(true);
     ui->startGazeboPushButton->setEnabled(true);
 
-    // informa que o arquivo ainda é template, então usuário
-    // deve salvar os dados em outro arquivo com formato .world
+    // Setup internal class state to indicate that a template was opened.
     istemplate = true;
+    hil = false;
 }
 
 void MainWindow::on_treeWidget_itemDoubleClicked(QTreeWidgetItem *item,
                                                  int column)
 {
-    // permite edição de dados na segunda coluna da árvore de dados
-    if (column == 1 && item->text(0) != "uri") {
-            ui->treeWidget->editItem(item, column);
-        }
+    // If the text in the first column is not URI, there is no allowed action.
+    if(item->text(0).toLower() != "uri") {
+        return;
+    }
 
-    // If the field is of URI type, start the model editor.
-    if(item->text(0) == "uri")
+    // Allows the edition of the itens in the second column
+    if (column == 1) {
+        item->setFlags(Qt::ItemIsEditable |
+                       Qt::ItemIsEnabled |
+                       Qt::ItemIsSelectable);
+        ui->treeWidget->editItem(item, column);
+    }
+    else
     {
         AppSettings settings;
-        QString env = settings.getGazeboModelPath();
-        QDir dir(env);
-        QStringList list;
-        list = item->text(1).split("//");
+        QString gazeboModelPath = settings.getGazeboModelPath();
 
         // Model description file
-        QString localModelPath = QDir::cleanPath(env +
+        QStringList modelURI = item->text(1).split("//");
+        if(modelURI.length() < 2) {
+            showInvalidURIMessage();
+            return;
+        }
+        QString modelName = modelURI.at(1);
+
+        QString localModelPath = QDir::cleanPath(gazeboModelPath +
                                                  QDir::separator() +
-                                                 list.at(1) +
+                                                 modelName +
                                                  QDir::separator() +
                                                  "robot" +
                                                  QDir::separator() +
                                                  "model.sdf");
+        QFileInfo modelFileInfo(localModelPath);
+        QDir modelDir = modelFileInfo.absoluteDir();
+        // Access model parent dir
+        modelDir.cdUp();
 
         // Controller configuration file path
-        QString localConfig = QDir::cleanPath(
-                    env + QDir::separator() + list.at(1) + QDir::separator() +
-                    "config" + QDir::separator() + "config.xml");
+        QString localConfig = QDir::cleanPath(modelDir.absolutePath()
+                                              +
+                                              QDir::separator()
+                                              +
+                                              "config"
+                                              +
+                                              QDir::separator()
+                                              +
+                                              "config.xml");
 
+        // Check if the SDF and config.xml files exists
         QFileInfo localConfigInfo(localConfig);
-        QFileInfo modelFileInfo(localModelPath);
 
         if(!localConfigInfo.exists()) {
             QString modelName = getModelName(item);
@@ -421,22 +435,19 @@ void MainWindow::on_treeWidget_itemDoubleClicked(QTreeWidgetItem *item,
         modelsetup.setModal(true);
         modelsetup.exec();
 
+        // Checks if hill is enabled
         hil = modelsetup.hil();
-        QString s = QString::number(hil);
-
         if(hil)
         {
-
-            // Setando valores padronizados da simumlação para permitir bom
-            // funcionamento do HIL
+            /* Set adequate values to allow correct working of the HIL
+             * simulation.
+             */
             for(int i = 0; i< ui->treeWidget->topLevelItemCount();i++)
             {
                 QTreeWidgetItem* item = ui->treeWidget->topLevelItem(i);
-
                 if(item->text(0) == "Physics")
                 {
                     QTreeWidgetItemIterator it(item);
-
                     while(*it)
                     {
                         // Set step time
@@ -465,24 +476,21 @@ void MainWindow::on_treeWidget_itemDoubleClicked(QTreeWidgetItem *item,
                     //item->child(2)->setText(1, QString("hil"));
 
                     QTreeWidgetItemIterator it(item);
-
                     while(*it)
                     {
                         if((*it)->text(0) == "ok")
                         {
                             (*it)->setText(1, "hil");
                         }
-
                         ++it;
                     }
                 }
             }
-
         }
         else
         {
             // Disables the hil
-            for(int i = 0; i< ui->treeWidget->topLevelItemCount();i++)
+            for(int i = 0; i< ui->treeWidget->topLevelItemCount(); i++)
             {
                 QTreeWidgetItem* item = ui->treeWidget->topLevelItem(i);
                 if(item->text(0)=="Plugin")
@@ -495,7 +503,6 @@ void MainWindow::on_treeWidget_itemDoubleClicked(QTreeWidgetItem *item,
                         {
                             (*it)->setText(1, "nothil");
                         }
-
                         ++it;
                     }
                 }
@@ -504,38 +511,40 @@ void MainWindow::on_treeWidget_itemDoubleClicked(QTreeWidgetItem *item,
     }
 }
 
-
 void MainWindow::on_treeWidget_itemClicked(QTreeWidgetItem *item, int column)
 {
     Q_UNUSED(column)
-    if(item->text(0) == "uri")
+    if(item->text(0).toLower() == "uri")
     {
         AppSettings settings;
-        QString env = settings.getGazeboModelPath();
-        QDir dir(env);
-        QStringList list;
-        list = item->text(1).split("//");
-        // não há arquivo
-        if (!dir.cd(QString::fromStdString(list.at(1).toStdString()))) // "/tmp"
-        {
-            QGraphicsScene * scene = new QGraphicsScene(ui->modelGraphicsView);
+        QString gazeboModelPath = settings.getGazeboModelPath();
+        // Split the selected model URI
+        QStringList list = item->text(1).split("//");
+        if(list.length() < 2) {
+            showInvalidURIMessage();
+            return;
+        }
+        QString currentModelname = list.at(1);
+
+        QDir modelDir(QDir::cleanPath(gazeboModelPath
+                                      +
+                                      QDir::separator()
+                                      +
+                                      currentModelname));
+        QFileInfo imageFileInfo(modelDir.absoluteFilePath("imagem.gif"));
+
+        // Checks if there exists an image for the current model
+        if(imageFileInfo.exists()) {
+            QGraphicsScene *scene = new QGraphicsScene(ui->modelGraphicsView);
+            scene->addPixmap(QPixmap(imageFileInfo.absoluteFilePath()));
             ui->modelGraphicsView->setScene(scene);
             ui->modelGraphicsView->show();
         }
-        else // há arquivo
+        else
         {
-            // plotando foto do vant
-            QString imagefile(env+"/"+list.at(1)+"/imagem.gif");
-            QFile ff(imagefile);
-            QFileInfo fileInfo(ff);
-            if (fileInfo.exists())
-            {
-                QGraphicsScene * scene = new QGraphicsScene(ui->modelGraphicsView);
-                QImage image(imagefile);
-                scene->addPixmap(QPixmap::fromImage(image));
-                ui->modelGraphicsView->setScene(scene);
-                ui->modelGraphicsView->show();
-            }
+            QGraphicsScene *scene = new QGraphicsScene(ui->modelGraphicsView);
+            ui->modelGraphicsView->setScene(scene);
+            ui->modelGraphicsView->show();
         }
     }
 }
@@ -570,7 +579,7 @@ void MainWindow::on_actionOpen_triggered()
     // Clean the display widget tree
     ui->treeWidget->clear();
     // Adds new world information
-    mundo.getFirst(filename.toStdString(), ui->treeWidget);
+    mundo.getFirst(filename, ui->treeWidget);
 
     // Enables the menu itens
     hil = false;
@@ -617,7 +626,7 @@ void MainWindow::on_actionExit_triggered()
 
 void MainWindow::on_actionNewModel_triggered()
 {
-    DialogNewModel newmodel(ui,this);
+    DialogNewModel newmodel(ui, this);
     newmodel.setModal(true);
     newmodel.exec();
 }
@@ -636,10 +645,22 @@ void MainWindow::on_actionAbout_triggered()
 
 void MainWindow::on_jointValuesPushButton_clicked()
 {
-    JointsDialog newform(this);
-    newform.setModal(true);
-    newform.exec();
-    ui->jointValuesPushButton->setDisabled(true);
+    QMessageBox::information(this,
+                             tr("Functionality not implemented"),
+                             tr("Dear user, the starting values for the model "
+                                "joints cannot be selected in the GUI at this "
+                                "point, check again in future versions to "
+                                "check that this function has been implemented!"
+                                ));
+    /*
+     * Note: This functionallity was never correctly implemented.
+     * As a limitation of time, I included a message informing this and
+     * commented out the original code that is shown below this message.
+     */
+//    JointsDialog newform(this);
+//    newform.setModal(true);
+//    newform.exec();
+//    ui->jointValuesPushButton->setDisabled(true);
 }
 
 void MainWindow::on_actionOptions_triggered()
@@ -660,4 +681,20 @@ QString MainWindow::getModelName(QTreeWidgetItem *item)
         }
     }
     return QString();
+}
+
+void MainWindow::setWorldPreviewImage(const QString &path)
+{
+    QGraphicsScene *scene = new QGraphicsScene(ui->worldGraphicsView);
+    scene->addPixmap(QPixmap(path));
+    ui->worldGraphicsView->setScene(scene);
+    ui->worldGraphicsView->show();
+}
+
+void MainWindow::showInvalidURIMessage()
+{
+    QMessageBox::critical(this,
+                          tr("Error"),
+                          tr("Invalid model URI selected. Please check "
+                             "its value and try again."));
 }
