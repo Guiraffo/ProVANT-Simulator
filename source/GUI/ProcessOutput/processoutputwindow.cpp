@@ -537,8 +537,8 @@ void ProcessOutputWindow::saveOutputAction()
                 this,
                 tr("Export the %1 process output to").arg(_processName),
                 _prevSaveOutputDir,
-                tr("HTML File") + "*.html);;" +
-                tr("Markdown File") + "*.md);;" +
+                tr("HTML File") + "(*.html);;" +
+                tr("Markdown File") + "(*.md);;" +
                 tr("Text File") + "(*.txt);;" +
                 tr("All Files") + ("*.*"),
                 &_prevSelectedFilter);
@@ -548,12 +548,12 @@ void ProcessOutputWindow::saveOutputAction()
         QFileInfo info(path);
         if(info.suffix() == "html")
         {
-            _prevSelectedFilter = tr("HTML File") + "*.html);;";
+            _prevSelectedFilter = tr("HTML File") + "(*.html);;";
             res = saveHtmlOutputToFile(path);
         }
         else if(info.suffix() == "md")
         {
-            _prevSelectedFilter = tr("Markdown File") + "*.md);;";
+            _prevSelectedFilter = tr("Markdown File") + "(*.md);;";
             res = saveMarkdwonOutputToFile(path);
         }
         else
