@@ -34,6 +34,9 @@ static const QString CONTROL_STRATEGIES_SOURCE_KEY =
 static const QString ROS_VERSION_KEY = "ROS_VERSION";
 //! The path to the ros installation
 static const QString ROS_PATH_KEY = "ROS_PATH";
+//! The key used to access the path to the package containg the simulation
+//! worlds
+static const QString WORLS_PACKAGE_KEY = "PROVANT_SIMULATOR_WORLDS";
 
 /*!
  * \brief The AppSettings class is used to access all the paths used in the
@@ -134,6 +137,37 @@ public:
     const QString getRosPath() const;
     const QString getRosPathDefault() const;
     bool setRosPath(const QString &path);
+
+
+    /**
+     * @brief getWorldsPackagePathUnchecked
+     * This function doesn't check if the currently configured value is valid.
+     * Use this method only when extremamely necessary, such as in displaying
+     * the current configured value for user modification, otherwise prefer
+     * the getWorldsPackagePath() method.
+     *
+     * @return Path to the ROS package containg the Gazebo worlds
+     */
+    const QString getWorldsPackagePathUnchecked() const;
+    /**
+     * @brief getWorldsPackagePath Returns the path to the ROS package
+     * containing the gazebo worlds contained in the ProVANT simulator.
+     * @return
+     */
+    const QString getWorldsPackagePath() const;
+    /**
+     * @brief getWorldsPackagePathDefault Returns the default path to the
+     * ROS package that contains the worlds.
+     * @return Path to the ROS package containg the Gazebo worlds.
+     */
+    const QString getWorldsPackagePathDefault() const;
+    /**
+     * @brief setWorldsPackagePath Update the value for the path of the package
+     * containg the simulation worlds.
+     * @param path New path value to the worlds package.
+     * @return True if the package was succesfully updated and false otherwise.
+     */
+    bool setWorldsPackagePath(const QString &path);
 
     bool checkAllParametersSet() const;
     void applyValuesToEnvironmentVariables();

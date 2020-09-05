@@ -578,6 +578,49 @@ bool AppSettings::setRosPath(const QString &path)
     return setDirectoryPath(ROS_PATH_KEY, path);
 }
 
+const QString AppSettings::getWorldsPackagePathUnchecked() const
+{
+    QString databasePath = getProvantDatabasePathUnchecked();
+    return QDir::cleanPath(databasePath
+                           +
+                           QDir::separator()
+                           +
+                           "worlds"
+                           +
+                           QDir::separator()
+                           +
+                           "worlds");
+}
+
+const QString AppSettings::getWorldsPackagePath() const
+{
+    return checkDirectoryPath(WORLS_PACKAGE_KEY,
+                              getWorldsPackagePathDefault(),
+                              tr("The path to the directory containing the "
+                                 "Gazebo worlds could bot be open. Please "
+                                 "check the value of the PROVANT_DATABASE "
+                                 "environment variable and try again."));
+}
+
+const QString AppSettings::getWorldsPackagePathDefault() const
+{
+    QString databasePath = getProvantDatabasePathDefault();
+    return QDir::cleanPath(databasePath
+                           +
+                           QDir::separator()
+                           +
+                           "worlds"
+                           +
+                           QDir::separator()
+                           +
+                           "worlds");
+}
+
+bool AppSettings::setWorldsPackagePath(const QString &path)
+{
+    return setDirectoryPath(WORLS_PACKAGE_KEY, path);
+}
+
 /**
  * @brief AppSettings::checkAllParametersSet
  * @return True if all options are correctly configured and false otherwise.

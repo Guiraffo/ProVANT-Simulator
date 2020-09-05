@@ -3,18 +3,9 @@
 
 #include <QMainWindow>
 #include "ui_mainwindow.h"
-#include "QApplication"
-#include "QDesktopWidget"
-#include "QFileDialog"
+
 #include "Business/world.h"
 #include "Business/model.h"
-#include "DataAccess/RosElements/roslaunch.h"
-#include "modelsetupdialog.h"
-#include "dialognewmodel.h"
-#include "aboutdialog.h"
-#include <libusb-1.0/libusb.h>
-//#include "qdebug.h"
-#include "jointsdialog.h"
 
 namespace Ui {
 class MainWindow;
@@ -75,7 +66,7 @@ private slots:
     /*
      *        Método que encapsula lógica para salvar como dado cenário aberto na interface gráfica
      */
-    bool SaveAs();
+    bool saveAs();
 
     /*
      *        Opção para salvar cenário aberto.
