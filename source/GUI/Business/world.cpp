@@ -8,31 +8,19 @@ world::world()
 
 }
 
-void world::getTemplate(std::string template_filename,QTreeWidget* root)
+void world::getFirst(std::string first_filename, QTreeWidget*root)
 {
-    /*lastword = actualword;
-    templateword = new WorldFile(template_filename);
-    actualword = templateword;
-    if(actualword->Read());//ToTreeWidget(root);*/
+    getFirst(QString::fromStdString(first_filename), root);
 }
-void world::getLast(QTreeWidget* root)
+
+void world::getFirst(const QString &filename, QTreeWidget *root)
 {
-    /*actualword = lastword;
-    ToTreeWidget(root);*/
-}
-void world::getFirst(std::string first_filename,QTreeWidget*root)
-{
-    word = new WorldFile(first_filename);
+    word = new WorldFile(filename.toStdString());
     if(word->Read()) ToTreeWidget(root);
 }
-void world::getActual(QTreeWidget* root)
-{
-    //ToTreeWidget(root);
-}
+
 void world::Write(QTreeWidget* root)
 {
-
-
     Include_DA* include;
     plugin_DA* plugin;
     WorldFile* newMundo;

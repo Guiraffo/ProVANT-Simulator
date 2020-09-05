@@ -1,6 +1,7 @@
 #include "terminaltextedit.h"
 
 #include <QDebug>
+#include <QScrollBar>
 #include <QTextCharFormat>
 
 TerminalTextEdit::TerminalTextEdit(QWidget *parent) :
@@ -22,6 +23,7 @@ void TerminalTextEdit::append(const QString &text)
 //        moveCursor(QTextCursor::End, QTextCursor::MoveAnchor);
 //    }
     appendInternal(text);
+    verticalScrollBar()->setValue(verticalScrollBar()->maximum());
 }
 
 void TerminalTextEdit::insertPlainText(const QString &text)
