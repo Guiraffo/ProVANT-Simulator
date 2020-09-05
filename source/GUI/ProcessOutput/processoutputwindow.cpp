@@ -71,6 +71,10 @@ ProcessOutputWindow::ProcessOutputWindow(QProcess *process,
                   &QProcess::errorOccurred,
                   this,
                   &ProcessOutputWindow::onProcessError);
+    connect(ui->pushButton,
+            SIGNAL(clicked(bool)),
+            this,
+            SLOT(onPushButtonClicked()));
 
     // Keeps the error and ouput exits separated.
     _process->setProcessChannelMode(QProcess::SeparateChannels);
@@ -377,6 +381,9 @@ void ProcessOutputWindow::readStandardErrorFromProcess()
  */
 void ProcessOutputWindow::onProcessStart()
 {
+    // Updates the button text to Stop
+    ui->pushButton->setText(tr("Stop"));
+
     // Logs the action
     qInfo() << "Starting the " << _processName << " process with program "
             << _process->program() << " and parameters "
@@ -435,6 +442,8 @@ void ProcessOutputWindow::onProcessFinish(int exitCode,
         break;
     }
 
+    ui->pushButton->setText(tr("Close"));
+
     emit processFinished(exitCode, status);
     _textOutput->enableInteraction();
 }
@@ -488,10 +497,12 @@ void ProcessOutputWindow::onProcessError(QProcess::ProcessError error)
     }
 
     // Creates a message box informing the user
-    QMessageBox::critical(
-                this,
-                tr("An error ocurred during process execution"),
-                errorMsg);
+    if(showErrorMessageBox) {
+        QMessageBox::critical(
+                    this,
+                    tr("An error ocurred during process execution"),
+                    errorMsg);
+    }
 
     // Adds data to the window
     QString details = "\n" + tr("An error ocurred during process execution.") +
@@ -526,9 +537,9 @@ void ProcessOutputWindow::saveOutputAction()
                 this,
                 tr("Export the %1 process output to").arg(_processName),
                 _prevSaveOutputDir,
-                tr("Text File") + "(*.txt);;" +
                 tr("HTML File") + "*.html);;" +
                 tr("Markdown File") + "*.md);;" +
+                tr("Text File") + "(*.txt);;" +
                 tr("All Files") + ("*.*"),
                 &_prevSelectedFilter);
     if(!path.isEmpty())
@@ -577,6 +588,11 @@ void ProcessOutputWindow::copyOutpuAction()
     _textOutput->copy();
     // Restore previous cursor
     _textOutput->setTextCursor(prevCursor);
+}
+
+void ProcessOutputWindow::onPushButtonClicked()
+{
+    close();
 }
 
 /**
@@ -724,6 +740,9 @@ bool ProcessOutputWindow::actionOnClosingWhithProcessRunning()
     }
     else
     {
+        // Stops the error messages
+        showErrorMessageBox = false;
+
         // Store the set of child process ids
         _idsToKill = getChildProcessPID(_pid);
 
@@ -827,14 +846,8 @@ void ProcessOutputWindow::closeEvent(QCloseEvent *event)
 {
     if(_process->state() != QProcess::NotRunning)
     {
-        if(actionOnClosingWhithProcessRunning())
-        {
-            event->accept();
-        }
-        else
-        {
-            event->ignore();
-        }
+        actionOnClosingWhithProcessRunning();
+        event->ignore();
     }
     else {
         QMainWindow::closeEvent(event);
