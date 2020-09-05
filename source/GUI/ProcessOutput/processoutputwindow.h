@@ -112,6 +112,8 @@ private slots:
     void saveOutputAction();
     void copyOutpuAction();
 
+    void onPushButtonClicked();
+
 protected:
     void addText(const QString &text, const QColor &color = Qt::black);
     virtual void closeEvent(QCloseEvent *event) override;
@@ -133,6 +135,9 @@ private:
     QString _prevSelectedFilter = tr("HTML File") + "(*.html);;";
     //! Stores the pid of the parent QProcess
     qint64 _pid = 0;
+    //! Indicates if a message box should be shown to the user in case of an
+    //! error
+    bool showErrorMessageBox = false;
 
     /*
      * The colors were added as constants here, but withtout addition of getter
