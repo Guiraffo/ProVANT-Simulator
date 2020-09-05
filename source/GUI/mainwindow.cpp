@@ -8,14 +8,21 @@
 #include "mainwindow.h"
 
 #include <QDebug>
+#include <QFileDialog>
 #include <QMessageBox>
 #include <QTreeWidgetItemIterator>
 
 #include <fcntl.h>
+#include <libusb-1.0/libusb.h>
 
+#include "aboutdialog.h"
 #include "applicationsettingsdialog.h"
+#include "DataAccess/RosElements/roslaunch.h"
+#include "dialognewmodel.h"
+#include "jointsdialog.h"
 #include "ProcessOutput/processoutputwindow.h"
 #include "Utils/appsettings.h"
+#include "modelsetupdialog.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -241,7 +248,7 @@ void MainWindow::on_startGazeboPushButton_clicked()
     // If it is. Saves the file.
     if(istemplate)
     {
-        if(!SaveAs())
+        if(!saveAs())
         {
             qCritical() << "Error, the template file must be saved before "
                            "running the simulation.";
@@ -536,89 +543,69 @@ void MainWindow::on_treeWidget_itemClicked(QTreeWidgetItem *item, int column)
 void MainWindow::on_actionOpen_triggered()
 {
     AppSettings settings;
-    QString env = settings.getProvantDatabasePath();
-    env = env + "/worlds/worlds";
-    // escolhe do arquivo .world
-    QString filename = QFileDialog::getOpenFileName(this
-                                                        ,tr("Open World")
-                                                        , env.toStdString().c_str()
-                                                        , tr("World Files (*.world)"));
+    QString worldsPackagePath = settings.getWorldsPackagePath();
+    // Open dialog to select the world file
+    QString filename = QFileDialog::getOpenFileName(this,
+                                                    tr("Open World"),
+                                                    worldsPackagePath,
+                                                    tr("World Files (*.world)")
+                                                    );
+    // Check if the user cancelled the operation (i.e. the filename is empty)
     if(filename.isEmpty()) return;
-    // tratando nome do arquivo
-    QString dir;
-    QStringList splitvector;
-    QRegExp rx("\\/");
-    splitvector = filename.split(rx);
-    splitvector.removeLast();
-    // filter
-    foreach (const QString &str, splitvector)
-    {
-        if (str.contains(" ")||str.size()==0)
-        {
-            //faz nada
-        }
-        else
-        {
-            dir = dir+"/"+str;
-        }
-    }
 
-    // iamgem do cenário
-    QString imagefile(dir+"/imagem.gif");
-    QFile ff(imagefile);
-    QFileInfo fileInfo(ff);
-    if (fileInfo.exists())
+    // Get the directory of the file
+    QFileInfo worldFileInfo(filename);
+    QString dir = worldFileInfo.absoluteDir().absolutePath();
+
+    // Get the file path for the scenary image
+    QString imagefile(QDir::cleanPath(dir + QDir::separator() + "imagem.gif"));
+    QFileInfo imageFileInfo(imagefile);
+    if (imageFileInfo.exists())
     {
         QGraphicsScene * scene = new QGraphicsScene(ui->worldGraphicsView);
-        QImage image(imagefile);
-        scene->addPixmap(QPixmap::fromImage(image));
+        scene->addPixmap(QPixmap(imagefile));
         ui->worldGraphicsView->setScene(scene);
         ui->worldGraphicsView->show();
     }
-    // limpando árvore para adicionar novos dados
+    // Clean the display widget tree
     ui->treeWidget->clear();
-    // adicionando dados na árvore de dados
-    mundo.getFirst(filename.toStdString(),ui->treeWidget);
-    // habilitando funções de menuu e inicialização da interface
+    // Adds new world information
+    mundo.getFirst(filename.toStdString(), ui->treeWidget);
 
+    // Enables the menu itens
     hil = false;
-
     ui->actionSave->setEnabled(true);
     ui->menuEdit->setEnabled(true);
     ui->actionSave->setEnabled(true);
     ui->menuEdit->setEnabled(true);
     ui->startGazeboPushButton->setEnabled(true);
-    istemplate = false; // não é template
+    istemplate = false;
 }
 
-
-bool MainWindow::SaveAs()
+bool MainWindow::saveAs()
 {
-    QString sf;
-    // escolher nome do arquivo e diretório
+    AppSettings settings;
+    QString worldsFolderPath = settings.getWorldsPackagePath();
+
+    // Open a dialog to let the user select the save file name
     QString filename = QFileDialog::getSaveFileName(this,
-                                 tr("Save Word"),
-                                 "/home/macro/catkin_ws/src/provant_simulator/source/Database",
-                                 tr("World Files (*.world)"),
-                                 &sf);
+                                                    tr("Save World"),
+                                                    worldsFolderPath,
+                                                    tr("World Files (*.world)")
+                                                    );
+
+    // Check if the user canceled the operation (i.e. the filename is empty)
     if(filename.isEmpty()) return false;
 
-    // geraciamneto de sufixo
-    QFileInfo f( filename );
-    if (f.suffix().isEmpty())
-    {
-        // http://www.qtcentre.org/forum/f-qt-programming-2/t-qfiledialoggetsavefilename-default-extension-8503.html
+    // Ensure that the file is terminated with a .world suffix
+    if(!filename.endsWith(".world")) {
         filename += ".world";
-    }
-    else
-    {
-        if(f.suffix()!=".world")filename += ".world";
     }
 
     mundo.word->Filename = filename.toStdString();
-    // atualizar arquivo
+    // Update file
     mundo.Write(ui->treeWidget);
-    // não é template
+    // Update template state
     istemplate = false;
     return true;
 }
@@ -637,7 +624,7 @@ void MainWindow::on_actionNewModel_triggered()
 
 void MainWindow::on_actionSave_triggered()
 {
-    SaveAs();
+    saveAs();
 }
 
 void MainWindow::on_actionAbout_triggered()
