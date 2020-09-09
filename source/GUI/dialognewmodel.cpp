@@ -1,127 +1,119 @@
 #include "dialognewmodel.h"
 #include "ui_dialognewmodel.h"
-#include "qdebug.h"
-#include "qdir.h"
-#include"Business/treeitens.h"
 
-Dialognewmodel::Dialognewmodel(Ui::MainWindow* last,QWidget *parent) :
+#include "Business/treeitens.h"
+#include "Utils/appsettings.h"
+
+#include <QDebug>
+#include <QDir>
+#include <QMessageBox>
+#include <QString>
+
+DialogNewModel::DialogNewModel(Ui::MainWindow* mainWindow, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::Dialognewmodel),
-    parentUi(last)
+    parentUi(mainWindow)
 {
     ui->setupUi(this);
+    findModels();
 }
 
-Dialognewmodel::~Dialognewmodel()
+DialogNewModel::~DialogNewModel()
 {
     delete ui;
 }
 
-void Dialognewmodel::newModel()
+void DialogNewModel::findModels()
 {
-    char const* tmp = getenv( "GAZEBO_MODEL_PATH" );
-    if ( tmp == NULL ) {
-        qDebug() << "Problemas com variavel de ambiente ";
-    } else {
-        std::string env(tmp);
-        QDir dir(env.c_str());
-        QFileInfoList files = dir.entryInfoList();
+    AppSettings settings;
+    QString gazeboModelPath = settings.getGazeboModelPath();
+    QDir gazeboModelsDir(gazeboModelPath);
+    if(gazeboModelsDir.exists()) {
+        QFileInfoList files = gazeboModelsDir.entryInfoList(
+                    QDir::Dirs | QDir::NoDotAndDotDot | QDir::Readable);
         foreach (QFileInfo file, files)
         {
-            if (file.isDir())
-            {
-                if(file.fileName().size()>2)
-                {
-                    ui->comboBox->addItem(file.fileName());
-                }
+            QDir modelDir(file.absoluteFilePath());
+            // Check that the model has a config.xml file
+            QFileInfo configFile(
+                        modelDir.absoluteFilePath(
+                            QDir::cleanPath(QString("config")
+                                            + QDir::separator()
+                                            + QString("config.xml"))));
+            if(!configFile.exists()) {
+                // Skip models that don't have a config file
+                continue;
             }
+            // Check that the model has a SDF file
+            QFileInfo sdfFile(
+                        modelDir.absoluteFilePath(
+                            QDir::cleanPath(QString("robot")
+                                            + QDir::separator()
+                                            + QString("model.sdf")))
+                        );
+            if(!sdfFile.exists()) {
+                // Skip models that don't have a SDF file
+                continue;
+            }
+
+            ui->comboBox->addItem(modelDir.dirName());
         }
+    }
+    else {
+        QMessageBox::critical(this,
+                              tr("Error"),
+                              tr("Error while trying to open the gazebo model "
+                                 "path direcotry. Please make sure the "
+                                 "GAZEBO_MODEL_PATH environment variable is "
+                                 "correctly set. To check this value access "
+                                 "the Tools -> Options menu in the main "
+                                 "window."));
+        qCritical("Error while trying to open the GAZEBO_MODEL_PATH with "
+                  "value %s.",
+                  qUtf8Printable(gazeboModelPath));
     }
 }
 
-void Dialognewmodel::on_buttonBox_accepted()
+void DialogNewModel::on_buttonBox_accepted()
 {
-    for(int i = 0; i< parentUi->treeWidget->topLevelItemCount();i++)
-    {
-          QTreeWidgetItem* item = parentUi->treeWidget->topLevelItem(i);
-          if(item->text(0)=="Include")
-          {
-              char const* tmp = getenv( "GAZEBO_MODEL_PATH" );
-              if ( tmp == NULL ) {
-                  qDebug() << "Problemas com variavel de ambiente ";
-              } else {
-                  std::string env(tmp);
-                  QDir dir(env.c_str());
-                  QFileInfoList files = dir.entryInfoList();
-                  foreach (QFileInfo file, files)
-                  {
-                      if (file.isDir())
-                      {
-                          QStringList list;
-                          list = item->child(3)->text(1).split("//");
-                          if(list.at(1)==file.fileName())
-                          {
-                              item->child(0)->setText(1,"newmodel");
-                              item->child(1)->child(0)->setText(1,"0");
-                              item->child(1)->child(1)->setText(1,"0");
-                              item->child(1)->child(2)->setText(1,"0");
-                              item->child(1)->child(3)->setText(1,"0");
-                              item->child(1)->child(4)->setText(1,"0");
-                              item->child(1)->child(5)->setText(1,"0");
-                              item->child(2)->setText(1,"false");
-                              item->child(3)->setText(1,"model://"+ui->comboBox->currentText());
-                              return;
-                          }
-                      }
-                  }
-              }
-          }
-    }
-    QTreeWidgetItem* element,*elementPose,*edit;
-    element = TreeItens::AddRoot("Include","",parentUi->treeWidget);
-    edit = TreeItens::AddChild(element,"name","newmodel");
+    AppSettings settings;
+    QString gazeboModelpath = settings.getGazeboModelPath();
+
+    // Add the new model to the tree widget item of the world configuration
+    QTreeWidgetItem *element, *elementPose, *edit;
+
+    element = addRoot("Include", "", parentUi->treeWidget);
+    edit = addChild(element, "name", "newmodel");
     edit->setFlags(Qt::ItemIsEditable|Qt::ItemIsEnabled);
-    elementPose = TreeItens::AddChild(element,"pose","");
-    std::string vector("0 0 0 0 0 0");
-    splitvector(vector,elementPose);
-    TreeItens::AddChild(element,"isStatic","false");
-    TreeItens::AddChild(element,"uri","model://"+ui->comboBox->currentText().toStdString());
+
+    elementPose = addChild(element, "Pose", "");
+    QString pose("0 0 0 0 0 0");
+    parsePoseVector(pose, elementPose);
+
+    addChild(element, "isStatic", "false");
+    addChild(element, "uri", "model://"+ui->comboBox->currentText());
 }
 
-void Dialognewmodel::splitvector(std::string data,QTreeWidgetItem* Element)
+void DialogNewModel::parsePoseVector(const QString &data,
+                                     QTreeWidgetItem *element)
 {
-    if(data != "")
+    if(!data.isEmpty())
     {
-        QStringList splitvector;
-        QString vector;
-        vector = QString::fromStdString(data);
-        QRegExp rx("(\\ |\\  |\\   |\\    |\\     |\\        |\\         |\\          |\\           |\\n|\\t)");
-        splitvector = vector.split(rx);
-        QStringList result;
-        foreach (const QString &str, splitvector)
-        {
-            if (str.contains(" ")||str.size()==0)
-            {
-                //faz nada
-            }
-            else
-            {
-                result += str;
-            }
+        QStringList pose = data.split(" ", QString::SkipEmptyParts);
+        if(pose.length() == 6) {
+            QTreeWidgetItem* edit;
+            edit = addChild(element, "X", pose.at(0).trimmed());
+            edit->setFlags(Qt::ItemIsEditable|Qt::ItemIsEnabled);
+            edit = addChild(element, "Y", pose.at(1).trimmed());
+            edit->setFlags(Qt::ItemIsEditable|Qt::ItemIsEnabled);
+            edit = addChild(element, "Z", pose.at(2).trimmed());
+            edit->setFlags(Qt::ItemIsEditable|Qt::ItemIsEnabled);
+            edit = addChild(element, "Roll", pose.at(3).trimmed());
+            edit->setFlags(Qt::ItemIsEditable|Qt::ItemIsEnabled);
+            edit = addChild(element, "Pitch", pose.at(4).trimmed());
+            edit->setFlags(Qt::ItemIsEditable|Qt::ItemIsEnabled);
+            edit = addChild(element, "Yaw", pose.at(5).trimmed());
+            edit->setFlags(Qt::ItemIsEditable|Qt::ItemIsEnabled);
         }
-        QTreeWidgetItem* edit;
-        edit = TreeItens::AddChild(Element,"X",result.at(0).toStdString());
-        edit->setFlags(Qt::ItemIsEditable|Qt::ItemIsEnabled);
-        edit = TreeItens::AddChild(Element,"Y",result.at(1).toStdString());
-        edit->setFlags(Qt::ItemIsEditable|Qt::ItemIsEnabled);
-        edit = TreeItens::AddChild(Element,"Z",result.at(2).toStdString());
-        edit->setFlags(Qt::ItemIsEditable|Qt::ItemIsEnabled);
-        edit = TreeItens::AddChild(Element,"Roll",result.at(3).toStdString());
-        edit->setFlags(Qt::ItemIsEditable|Qt::ItemIsEnabled);
-        edit = TreeItens::AddChild(Element,"Pitch",result.at(4).toStdString());
-        edit->setFlags(Qt::ItemIsEditable|Qt::ItemIsEnabled);
-        edit = TreeItens::AddChild(Element,"Yaw",result.at(5).toStdString());
-        edit->setFlags(Qt::ItemIsEditable|Qt::ItemIsEnabled);
     }
 }
-

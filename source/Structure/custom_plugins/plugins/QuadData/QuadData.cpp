@@ -113,21 +113,21 @@ namespace gazebo
 			newmsg.name = NameOfNode_;
 			newmsg.header.stamp = ros::Time::now(); // time stamp
 			newmsg.header.frame_id = "1";
-			math::Pose pose = link->GetWorldPose();
-			newmsg.values.push_back(pose.pos.x); // x
-			newmsg.values.push_back(pose.pos.y); // y
-			newmsg.values.push_back(pose.pos.z); // z
-			newmsg.values.push_back(pose.rot.GetAsEuler( ).x); //roll
-			newmsg.values.push_back(pose.rot.GetAsEuler( ).y); // pitch
-			newmsg.values.push_back(pose.rot.GetAsEuler( ).z); // yaw
+			ignition::math::Pose3d pose = link->WorldPose();
+			newmsg.values.push_back(pose.Pos().X()); // x
+			newmsg.values.push_back(pose.Pos().Y()); // y
+			newmsg.values.push_back(pose.Pos().Z()); // z
+			newmsg.values.push_back(pose.Rot().Euler( ).X()); //roll
+			newmsg.values.push_back(pose.Rot().Euler( ).Y()); // pitch
+			newmsg.values.push_back(pose.Rot().Euler( ).Z()); // yaw
 
 			//compute the generalized velocities
-			math::Vector3 linear = link->GetWorldLinearVel();
-			math::Vector3 angular = link->GetWorldAngularVel( );
+			ignition::math::Vector3d linear = link->WorldLinearVel();
+			ignition::math::Vector3d angular = link->WorldAngularVel( );
 			
-			Phi = pose.rot.GetAsEuler( ).x;
-			Theta = pose.rot.GetAsEuler( ).y;
-			Psi = pose.rot.GetAsEuler( ).z;
+			Phi = pose.Rot().Euler( ).X();
+			Theta = pose.Rot().Euler( ).Y();
+			Psi = pose.Rot().Euler( ).Z();
 			
 			RIB <<  (cos(Psi)*cos(Theta)), (cos(Psi)*sin(Phi)*sin(Theta) - cos(Phi)*sin(Psi)), (sin(Phi)*sin(Psi) + cos(Phi)*cos(Psi)*sin(Theta)),
 				(cos(Theta)*sin(Psi)), (cos(Phi)*cos(Psi) + sin(Phi)*sin(Psi)*sin(Theta)), (cos(Phi)*sin(Psi)*sin(Theta) - cos(Psi)*sin(Phi)), 
@@ -138,19 +138,19 @@ namespace gazebo
 	  	               0.0, -sin(Phi),  cos(Phi)*cos(Theta);
 	  	               
 			//Get the angular velocity w.r.t I expressed in I and maps to obtain the time derivative of Euler angles
-			WIIB << angular.x, angular.y, angular.z;
+			WIIB << angular.X(), angular.Y(), angular.Z();
 			PhipThetapPsip = W_n.inverse() * (RIB.transpose() * WIIB);
-			XpYpZp << linear.x, linear.y, linear.z;
+			XpYpZp << linear.X(), linear.Y(), linear.Z();
 			
 
-			newmsg.values.push_back(linear.x); // dx
-			newmsg.values.push_back(linear.y); //dy
-			newmsg.values.push_back(linear.z); //dz
+			newmsg.values.push_back(linear.X()); // dx
+			newmsg.values.push_back(linear.Y()); //dy
+			newmsg.values.push_back(linear.Z()); //dz
 			newmsg.values.push_back(PhipThetapPsip(0));
 			newmsg.values.push_back(PhipThetapPsip(1));
 			newmsg.values.push_back(PhipThetapPsip(2));
 		
-			std::cout << pose.pos.x << ";"<< pose.pos.y << ";"<< pose.pos.z << ";"<< pose.rot.GetAsEuler( ).x << ";" << pose.rot.GetAsEuler( ).y << ";" << pose.rot.GetAsEuler( ).z << ";" << std::endl;
+			std::cout << pose.Pos().X() << ";"<< pose.Pos().Y() << ";"<< pose.Pos().Z() << ";"<< pose.Rot().Euler( ).X() << ";" << pose.Rot().Euler( ).Y() << ";" << pose.Rot().Euler().Z() << ";" << std::endl;
 		
 			// publish data
 			publisher_.publish(newmsg);					

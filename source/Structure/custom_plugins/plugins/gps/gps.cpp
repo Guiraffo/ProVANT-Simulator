@@ -37,7 +37,7 @@ void gps::Load(physics::ModelPtr _model, sdf::ElementPtr _sdf)
 	// Gazebo subscriber
 	this->model = _model;
         this->node = transport::NodePtr(new transport::Node());
-        this->node->Init(this->model->GetWorld()->GetName());
+        this->node->Init(this->model->GetWorld()->Name());
         std::string topic = "/gazebo/default/" + this->model->GetName() + "/" + link + "/" + gazebotopic;
         this->sub = this->node->Subscribe(topic, &gps::OnUpdate, this);
 

@@ -74,8 +74,8 @@ namespace gazebo
 		try
 		{
 			Fr = msg.data;
-			math::Vector3 forceR(0,0,Fr); // Right force in the left brushless
-			math::Vector3 torqueR(0,0,0.0178947368*Fr); // drag torque
+			ignition::math::Vector3d forceR(0,0,Fr); // Right force in the left brushless
+			ignition::math::Vector3d torqueR(0,0,0.0178947368*Fr); // drag torque
 			// Applying			
 			linkR->AddRelativeForce(forceR);
 			linkR->AddRelativeTorque(torqueR);
@@ -91,8 +91,8 @@ namespace gazebo
 		try
 		{	
 			Fl = msg.data;
-			math::Vector3 forceL(0,0,Fl); // Lift force in the left brushless
-			math::Vector3 torqueL(0,0,-0.0178947368*Fl); // drag torque
+			ignition::math::Vector3d forceL(0,0,Fl); // Lift force in the left brushless
+			ignition::math::Vector3d torqueL(0,0,-0.0178947368*Fl); // drag torque
 			// Applying			
 			linkL->AddRelativeForce(forceL);
 			linkL->AddRelativeTorque(torqueL);
