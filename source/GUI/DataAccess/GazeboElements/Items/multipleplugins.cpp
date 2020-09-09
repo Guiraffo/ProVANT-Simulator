@@ -27,7 +27,7 @@ void multipleplugins::Read(QDomNode document){
             item.SetFilename(document.toElement().attribute("filename").toStdString());
 
             QDomNodeList list = document.childNodes();
-            for(uint i = 0; i<list.count();i++)
+            for(int i = 0; i<list.count();i++)
             {
                 item.parameters.push_back(list.at(i).toElement().tagName().toStdString());
                 item.values.push_back(list.at(i).toElement().text().toStdString());

@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>ApplicationSettingsDialog</class>
+ <widget class="QDialog" name="ApplicationSettingsDialog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>956</width>
+    <height>551</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Dialog</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout_2">
+   <item>
+    <widget class="QScrollArea" name="scrollArea">
+     <property name="widgetResizable">
+      <bool>true</bool>
+     </property>
+     <widget class="QWidget" name="scrollAreaWidgetContents">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>919</width>
+        <height>494</height>
+       </rect>
+      </property>
+      <layout class="QVBoxLayout" name="verticalLayout">
+       <item>
+        <widget class="QLabel" name="provantRosLabel">
+         <property name="text">
+          <string>PROVANT_ROS</string>
+         </property>
+         <property name="buddy">
+          <cstring>provantROSWidget</cstring>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="FileBrowserWidget" name="provantROSWidget" native="true"/>
+       </item>
+       <item>
+        <widget class="QLabel" name="tiltStrategiesLabel">
+         <property name="text">
+          <string>TILT_STRATEGIES</string>
+         </property>
+         <property name="buddy">
+          <cstring>tiltStrategiesWidget</cstring>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="FileBrowserWidget" name="tiltStrategiesWidget" native="true"/>
+       </item>
+       <item>
+        <widget class="QLabel" name="tiltProjectLabel">
+         <property name="text">
+          <string>TILT_PROJECT</string>
+         </property>
+         <property name="buddy">
+          <cstring>tiltProjectWidget</cstring>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="FileBrowserWidget" name="tiltProjectWidget" native="true"/>
+       </item>
+       <item>
+        <widget class="QLabel" name="tiltMatlabLabel">
+         <property name="text">
+          <string>TILT_MATLAB</string>
+         </property>
+         <property name="buddy">
+          <cstring>tiltMatlabWidget</cstring>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="FileBrowserWidget" name="tiltMatlabWidget" native="true"/>
+       </item>
+       <item>
+        <widget class="QLabel" name="provantDatabaseLabel">
+         <property name="text">
+          <string>PROVANT_DATABASE</string>
+         </property>
+         <property name="buddy">
+          <cstring>provantDatabaseWidget</cstring>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="FileBrowserWidget" name="provantDatabaseWidget" native="true"/>
+       </item>
+       <item>
+        <widget class="QLabel" name="gazeboModelPathLabel">
+         <property name="text">
+          <string>GAZEBO_MODEL_PATH</string>
+         </property>
+         <property name="buddy">
+          <cstring>gazeboModelWidget</cstring>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="FileBrowserWidget" name="gazeboModelWidget" native="true"/>
+       </item>
+       <item>
+        <widget class="QLabel" name="dirRosLabel">
+         <property name="text">
+          <string>DIR_ROS</string>
+         </property>
+         <property name="buddy">
+          <cstring>dirRosWidget</cstring>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="FileBrowserWidget" name="dirRosWidget" native="true"/>
+       </item>
+       <item>
+        <widget class="QLabel" name="controlStrategiesSourceLabel">
+         <property name="text">
+          <string>CONTROL_STRATEGIES_SOURCE</string>
+         </property>
+         <property name="buddy">
+          <cstring>controlStrategiesSourceWidget</cstring>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="FileBrowserWidget" name="controlStrategiesSourceWidget" native="true"/>
+       </item>
+       <item>
+        <widget class="QLabel" name="rosPathLabel">
+         <property name="text">
+          <string>ROS_PATH</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="FileBrowserWidget" name="rosPathWidget" native="true"/>
+       </item>
+       <item>
+        <widget class="QLabel" name="rosVersionLabel">
+         <property name="text">
+          <string>ROS_VERSION</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QComboBox" name="rosVersionWidget"/>
+       </item>
+      </layout>
+     </widget>
+    </widget>
+   </item>
+   <item>
+    <widget class="QDialogButtonBox" name="buttonBox">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="standardButtons">
+      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+     </property>
+     <property name="centerButtons">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>FileBrowserWidget</class>
+   <extends>QWidget</extends>
+   <header>Widgets/filebrowserwidget.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>accepted()</signal>
+   <receiver>ApplicationSettingsDialog</receiver>
+   <slot>accept()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>227</x>
+     <y>523</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>157</x>
+     <y>274</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>rejected()</signal>
+   <receiver>ApplicationSettingsDialog</receiver>
+   <slot>reject()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>295</x>
+     <y>529</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>286</x>
+     <y>274</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>

@@ -4,6 +4,7 @@
     <TopicoStep>Step</TopicoStep>
     <Sampletime>3</Sampletime>
     <Strategy>liblqr_quadcopter.so</Strategy>
+    <Turbulance>Turbulance Model 1</Turbulance>
     <RefPath>ref.txt</RefPath>
     <Outputfile>out.txt</Outputfile>
     <InputPath>in.txt</InputPath>

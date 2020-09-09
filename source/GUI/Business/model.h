@@ -2,25 +2,43 @@
 #define MODEL_H
 
 #include"DataAccess/GazeboElements/modelfile.h"
-#include"DataAccess/ControllerElements/configfile.h"
-#include "QTreeWidgetItem"
-#include "treeitens.h"
+
+#include <QTreeWidgetItem>
 
 class Model
 {
 public:
     Model();
-    void getTemplate(std::string,QTreeWidget*);
-    void getLast(QTreeWidget*);
-    void getFirst(std::string,QTreeWidget*);
-    void getActual(QTreeWidget*);
-    void Write(QTreeWidget*);
-    void ToTreeWidget(QTreeWidget*);
-    void splitvector(std::string,QTreeWidgetItem*,bool);
+
+    /**
+     * @brief getFirst
+     * @todo Deprecate in next version, maintained for compatibility.
+     */
+    void getFirst(std::string, QTreeWidget*) __attribute__((deprecated));
+    void getFirst(const QString &filename, QTreeWidget *treeWidget);
+
+    void toTreeWidget(QTreeWidget *tree);
+
+    /**
+     * @brief splitvector
+     * @todo Deprecate in next version.
+     */
+    void splitvector(std::string, QTreeWidgetItem*, bool)
+    __attribute__((deprecated));
+
+    /**
+     * @brief splitVector Receives a vector with a string with 6 elements
+     * containing the pose of a model in the order x, y, z, roll, pitch and yaw
+     * and creates tree widget itens filled with their respective values to
+     * allow presentation in the GUI.
+     *
+     * @param data String containing the pose data.
+     * @param item Parent tree item to add the newly created itens containg the
+     * pose.
+     */
+    void splitVector(const QString &data, QTreeWidgetItem *item);
+
     ModelFile* model;
-
-
-
 };
 
 #endif // MODEL_H
