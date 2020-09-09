@@ -350,3 +350,9 @@ TSWLatexianTemp*
 # Temporary files from vim and other IDEs
 *~$
 
+
+source/Structure/Matlab/
+!source/Structure/Matlab/empty
+
+third_party/
+!third_party/README.md

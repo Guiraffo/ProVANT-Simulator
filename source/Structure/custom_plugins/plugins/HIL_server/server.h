@@ -4,10 +4,13 @@
 #include <gazebo/common/Time.hh>
 #include <gazebo/common/Plugin.hh>
 #include <gazebo/common/Events.hh>
-#include <gazebo/math/Vector3.hh>
+#include <ignition/math/Vector3.hh>
 #include "XMLRead.h" // biblioteca para acesso a dados do xml
 #include <update_timer.h>
 #include "protocol.hpp"
+#include "frame.hpp"
+#include "serial.hpp"
+#include "MatlabData.h"
 
 
 
@@ -60,6 +63,8 @@ namespace gazebo
 		double x,y,z,roll,pitch,yaw,gama1,gama2,alphar,alphal,vx,vy,vz,wx,wy,wz,dalphar,dalphal,dgama1,dgama2;
 		// sinais de entrada
 		double Fr, Fl, Tr, Tl;
+		MatlabData file;		
+		std::vector<double> out = {0, 0, 0, 0, 0};	
 		
 		// configuração de temporizador
 		UpdateTimer updateTimer;
@@ -72,7 +77,7 @@ namespace gazebo
   		boost::thread *t;	
   		
   		physics::ModelPtr model;			
-
+		int netfail;
 	};
 }
 

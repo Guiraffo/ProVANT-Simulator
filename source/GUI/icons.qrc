@@ -1,0 +1,7 @@
+<RCC>
+    <qresource prefix="/themify-icons">
+        <file>resources/icons/save.svg</file>
+        <file>resources/icons/eraser.svg</file>
+        <file>resources/icons/share.svg</file>
+    </qresource>
+</RCC>

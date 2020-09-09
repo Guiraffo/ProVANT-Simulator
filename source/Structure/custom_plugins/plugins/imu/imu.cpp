@@ -84,25 +84,25 @@ namespace gazebo
 		try
 		{
 			// GET DATA
-			common::Time sim_time = world->GetSimTime(); // simulation time
-			math::Pose pose = link->GetWorldPose(); // world pose
-			math::Vector3 angular = link->GetWorldAngularVel( ); // angular velocity
-			math::Vector3 AccelLinear = link->GetRelativeLinearAccel(); // linear acceleration						
+			common::Time sim_time = world->SimTime(); // simulation time
+			ignition::math::Pose3d pose = link->WorldPose(); // world pose
+			ignition::math::Vector3d angular = link->WorldAngularVel( ); // angular velocity
+			ignition::math::Vector3d AccelLinear = link->RelativeLinearAccel(); // linear acceleration						
 
 			// FILL MSG
 			simulator_msgs::Sensor newmsg;
 			newmsg.name = Topic_;
 			newmsg.header.stamp = ros::Time::now();
 			newmsg.header.frame_id = "1";
-			newmsg.values.push_back(fmod(pose.rot.GetAsEuler( ).x,360)); // data range -pi to pi
-			newmsg.values.push_back(fmod(pose.rot.GetAsEuler( ).y,360)); // data range -pi to pi
-			newmsg.values.push_back(fmod(pose.rot.GetAsEuler( ).z,360)); // data range -pi to pi
-			newmsg.values.push_back(angular.x);
-			newmsg.values.push_back(angular.y);
-			newmsg.values.push_back(angular.z);
-			newmsg.values.push_back(AccelLinear.x);
-			newmsg.values.push_back(AccelLinear.y);
-			newmsg.values.push_back(AccelLinear.z);
+			newmsg.values.push_back(fmod(pose.Rot().Euler().X(),360)); // data range -pi to pi
+			newmsg.values.push_back(fmod(pose.Rot().Euler().Y(),360)); // data range -pi to pi
+			newmsg.values.push_back(fmod(pose.Rot().Euler().Z(),360)); // data range -pi to pi
+			newmsg.values.push_back(angular.X());
+			newmsg.values.push_back(angular.Y());
+			newmsg.values.push_back(angular.Z());
+			newmsg.values.push_back(AccelLinear.X());
+			newmsg.values.push_back(AccelLinear.Y());
+			newmsg.values.push_back(AccelLinear.Z());
 	
 			// SEND MSG
 			imu_pub.publish(newmsg);	

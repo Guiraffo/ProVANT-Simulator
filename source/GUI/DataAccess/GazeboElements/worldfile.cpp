@@ -1,5 +1,7 @@
 #include "worldfile.h"
 
+#include <QFileInfo>
+
 WorldFile::WorldFile(std::string filename):file(filename.c_str())
 {
     Filename = filename;
@@ -85,7 +87,10 @@ void WorldFile::Write()
         xml.writeStartElement("sdf");
         xml.writeAttribute("version",sdfVersion.c_str());
         xml.writeStartElement("world");
-        xml.writeAttribute("name",Filename.c_str());
+
+        QFileInfo info(QString::fromStdString(Filename));
+        QString fileName = info.fileName().section(".", 0, 0);
+        xml.writeAttribute("name", fileName);
 
         //g.Write(xml);
         xml.writeTextElement("gravity",g.GetGravity().c_str());

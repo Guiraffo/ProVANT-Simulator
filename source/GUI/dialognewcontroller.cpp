@@ -1,7 +1,14 @@
 #include "dialognewcontroller.h"
 #include "ui_dialognewcontroller.h"
-#include "qdebug.h"
 
+#include "DataAccess/ControllerElements/newstrategy.h"
+
+/*!
+ * \brief DialogNewController::DialogNewController
+ * \param parent Window wich contains this dialog.
+ *
+ * Initialize a new DialogNewController object and setup the user interface.
+ */
 DialogNewController::DialogNewController(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::DialogNewController)
@@ -9,12 +16,23 @@ DialogNewController::DialogNewController(QWidget *parent) :
     ui->setupUi(this);
 }
 
+/*!
+ * \brief DialogNewController::~DialogNewController
+ * Deletes the objects contained in the user interface.
+ */
 DialogNewController::~DialogNewController()
 {
     delete ui;
 }
 
-void DialogNewController::on_buttonBox_accepted()
+/*!
+ * \brief DialogNewController::accept
+ *
+ * Create a new controller strategy and calls the base class accept method
+ * to allow for correct propagation of signals and other behaviors.
+ */
+void DialogNewController::accept()
 {
-    newstrategy::CreateProject(ui->lineEdit->text()); // criando novo projeto de controle
+    NewStrategy::createProject(ui->lineEdit->text());
+    QDialog::accept();
 }

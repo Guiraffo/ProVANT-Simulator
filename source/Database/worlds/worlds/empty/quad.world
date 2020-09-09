@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <sdf version="1.6">
-    <world name="/home/jonatas/catkin_ws/src/ProVANT-Simulator_Developer/source/Database/worlds/worlds/empty/quad.world">
+    <world name="quad">
         <gravity>0 0 -9.8</gravity>
         <physics type="ode">
             <max_step_size>0.004</max_step_size>

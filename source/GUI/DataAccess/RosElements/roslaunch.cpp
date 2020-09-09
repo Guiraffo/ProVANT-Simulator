@@ -1,5 +1,7 @@
 #include "roslaunch.h"
 
+#include "Utils/appsettings.h"
+
 roslaunch::roslaunch()
 {
 
@@ -7,7 +9,8 @@ roslaunch::roslaunch()
 
 void roslaunch::WriteNew(QString worldname,QString worldbase,bool hil)
 {
-    char const* tmp = getenv( "TILT_PROJECT" );
+    AppSettings settings;
+    char const* tmp = settings.getTiltProjectPath().toStdString().c_str();
     if ( tmp == NULL ) {
         qDebug() << "Problemas com variavel de ambiente ";
     } else {
