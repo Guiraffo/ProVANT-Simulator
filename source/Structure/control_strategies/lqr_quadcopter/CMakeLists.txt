@@ -13,6 +13,7 @@ include_directories( ${catkin_INCLUDE_DIRS})
 include_directories($ENV{TILT_PROJECT}/source/Structure/control_strategies/)
 
 add_library(lqr_quadcopter src/main.cpp)
+add_dependencies(lqr_quadcopter ${catkin_EXPORTED_TARGETS})
 target_link_libraries(lqr_quadcopter ${catkin_LIBRARIES})
 install(TARGETS
 lqr_quadcopter
