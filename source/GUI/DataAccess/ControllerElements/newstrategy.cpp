@@ -122,7 +122,7 @@ void NewStrategy::createProject(const QString &name)
                    << " package...</description>\n\n"
 
                    << "\t<maintainer email=\"jeduardo@ufmg.br\">"
-                      "Júnio Eduardo de Morais Aquino</maintainer>\n\n"
+                      "Junio Eduardo de Morais Aquino</maintainer>\n\n"
 
                    << "\t<license>MIT</license>\n\n"
 
