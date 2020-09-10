@@ -36,7 +36,7 @@ static const QString ROS_VERSION_KEY = "ROS_VERSION";
 static const QString ROS_PATH_KEY = "ROS_PATH";
 //! The key used to access the path to the package containg the simulation
 //! worlds
-static const QString WORLS_PACKAGE_KEY = "PROVANT_SIMULATOR_WORLDS";
+static const QString WORLDS_PACKAGE_KEY = "PROVANT_SIMULATOR_WORLDS";
 
 /*!
  * \brief The AppSettings class is used to access all the paths used in the
