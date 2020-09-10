@@ -90,6 +90,8 @@ if(EXISTS ${CPLEXBASEDIR})
         src/coriollis_matrix.cpp
     )
 
+    add_dependencies(${PROJECT_NAME} ${catkin_EXPORTED_TARGETS})
+    
     link_directories(
         ${CPLEXLIBDIR} 
         ${CONCERTLIBDIR}
