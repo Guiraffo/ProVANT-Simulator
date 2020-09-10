@@ -16,3 +16,5 @@ cd ${TILT_PROJECT}/source/build
 qtchooser -qt=5 -run-tool=qmake ${TILT_PROJECT}/source/GUI/GUI.pro -r -spec linux-g++ CONFIG+=debug CONFIG+=qml_debug
 make
 
+# Update the symbolic link to allow launching of the GUI from the terminal
+sudo ln -sf ${TILT_PROJECT}/source/build/GUI /usr/local/bin/provant_gui
