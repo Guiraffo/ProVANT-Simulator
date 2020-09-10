@@ -7,6 +7,9 @@
 # Change directory to the current user home dir
 cd ~
 
+# Source .bashrc script
+source $HOME/.bashrc
+
 # Append environment variables to the current user .bashrc file.
 export PROVANT_ROS=${HOME}/catkin_ws/src
 echo "export PROVANT_ROS=${HOME}/catkin_ws/src" >> ${HOME}/.bashrc

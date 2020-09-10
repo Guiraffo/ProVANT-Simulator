@@ -6,6 +6,9 @@
 #
 cd ~
 
+# Source .bashrc script
+source $HOME/.bashrc
+
 # Enter ROS Workspace and compile the existing packages
 cd catkin_ws
 catkin_make
