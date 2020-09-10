@@ -5,11 +5,26 @@
 # https://github.com/Guiraffo/ProVANT-Simulator/blob/master/LICENSE.md
 #
 
+# Stop execution if any command fail
+set -e
+
+# Print debugging messages
+echo -e "\e[92mStarting ProVANT-Simulator installation process\e[0m"
+
+# Print an error message informing which command failed
+trap 'last_command=$current_command; current_command=$BASH_COMMAND' DEBUG
+trap 'echo -e "\e[91m\"${last_command}\" command failed with exit code $?.\e[0m"' EXIT
+
 # Get current dir
 CUR_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
+# Echo current directory
+echo "Running install.sh script from the directory $CUR_DIR"
+
 # Source .bashrc script
 source $HOME/.bashrc
+
+echo -e "\e[92mChecking and creating environment variables\e[0m"
 
 # Append environment variables to the current user .bashrc file.
  
@@ -58,7 +73,7 @@ then
 fi
 
 # Verify if the models of the simulador are in the GAZEBO_MODEL_PATH
-PROVANT_MODELS_PATH=$CUR_DIR/source/Database/models/
+PROVANT_MODELS_PATH=$CUR_DIR/source/Database/models
 
 if [[ ${GAZEBO_MODEL_PATH} == *$PROVANT_MODELS_PATH* ]]
 then
@@ -66,6 +81,30 @@ then
 else
     # This variable should point to the folder containing the Gazebo models distributed with the simulator
     # For example ${HOME}/catkin_ws/src/ProVANT_Simulator/source/Database/models/
+    
+    gazebo_model_str=`echo $GAZEBO_MODEL_PATH | tr : " "`
+    read -r -d '' -a gz_paths < <(printf '%s\0' "$gazebo_model_str")
+    declare -A SeenPaths
+    UniquePaths=()
+    for w in "${gz_paths[@]}"; do
+        [[ ${SeenPaths[$w]} ]] && continue
+        UniquePaths+=( "$w" )
+        SeenPaths[$w]=x
+    done
+    IFS=: eval 'GAZEBO_MODEL_PATH="${UniquePaths[*]}":'
+    
+    echo '# Ensure that GAZEBO_MODEL_PATH has only unique paths' >> ${HOME}/.bashrc
+    echo 'gazebo_model_str=`echo $GAZEBO_MODEL_PATH | tr : " "`' >> ${HOME}/.bashrc
+    echo 'read -r -d '"''"' -a gz_paths < <(printf '"'"'%s\0'"'"' "$gazebo_model_str")' >> ${HOME}/.bashrc
+    echo 'declare -A SeenPaths' >> ${HOME}/.bashrc
+    echo 'UniquePaths=()' >> ${HOME}/.bashrc
+    echo 'for w in "${gz_paths[@]}"; do' >> ${HOME}/.bashrc
+    echo -e '\t[[ ${SeenPaths[$w]} ]] && continue' >> ${HOME}/.bashrc
+    echo -e '\tUniquePaths+=( "$w" )' >> ${HOME}/.bashrc
+    echo -e '\tSeenPaths[$w]=x' >> ${HOME}/.bashrc
+    echo 'done' >> ${HOME}/.bashrc
+    echo -e 'IFS=: eval '"'"'GAZEBO_MODEL_PATH="${UniquePaths[*]}":'"'" >> ${HOME}/.bashrc
+    
     export GAZEBO_MODEL_PATH=$GAZEBO_MODEL_PATH$PROVANT_MODELS_PATH:
     echo "export GAZEBO_MODEL_PATH=\${GAZEBO_MODEL_PATH}$PROVANT_MODELS_PATH:" >> ${HOME}/.bashrc
     echo "Creating \$GAZEBO_MODEL_PATH environment variable with value $GAZEBO_MODEL_PATH"
@@ -80,20 +119,47 @@ then
     echo "Creating \$DIR_ROS environment variable with value $DIR_ROS"
 fi
 
+# Print environment variables
+echo "Compiling the project with the following environment variables values"
+echo "\$PROVANT_ROS = $PROVANT_ROS"
+echo "\$TILT_STRATEGIES = $TILT_STRATEGIES"
+echo "\$TILT_PROJECT = $TILT_PROJECT"
+echo "\$TILT_MATLAB = $TILT_MATLAB"
+echo "\$PROVANT_DATABASE = $PROVANT_DATABASE"
+echo "\$GAZEBO_MODEL_PATH = ${GAZEBO_MODEL_PATH}"
+echo "\$DIR_ROS = $DIR_ROS"
+
+echo -e "\nEnvironment variables resolved paths"
+echo "\$PROVANT_ROS = `cd $PROVANT_ROS;pwd`"
+echo "\$TILT_STRATEGIES = `cd $TILT_STRATEGIES;pwd`"
+echo "\$TILT_PROJECT = `cd $TILT_PROJECT;pwd`"
+echo "\$TILT_MATLAB = `cd $TILT_MATLAB;pwd`"
+echo "\$PROVANT_DATABASE = `cd $PROVANT_DATABASE;pwd`"
+echo "\$DIR_ROS = `cd $DIR_ROS;pwd`"
+
+echo -e "\n"
+
 # Change directory to the current user home dir
 cd ${HOME}
 
-# Enter ROS workspace folder
-#cd catkin_ws
 # Compile the packages in the ROS workspace
-#catkin_make
+echo -e "\e[92mStarting compilation of the ROS workspace packages\e[0m"
+catkin_make --directory ${DIR_ROS}
+echo -e "\e[92mCompilation of the ROS workspace packages finished with success.\e[0m"
 
 # Compile the ProVANT Simulator GUI
-#mkdir -p ${TILT_PROJECT}/source/build
-#cd ${TILT_PROJECT}/source/build 
-#qtchooser -qt=5 -run-tool=qmake ${TILT_PROJECT}/source/GUI/GUI.pro -r -spec linux-g++ CONFIG+=debug CONFIG+=qml_debug
-#make
+echo -e "\e[92mStarting GUI compilation\e[0m"
+mkdir -p ${TILT_PROJECT}/source/build
+cd ${TILT_PROJECT}/source/build 
+qtchooser -qt=5 -run-tool=qmake ${TILT_PROJECT}/source/GUI/GUI.pro -r -spec linux-g++ CONFIG+=debug CONFIG+=qml_debug
+make
+echo -e "\e[92mGUI compilation finished successfully.\e[0m"
 
-# Crate symbolic link to allow launching of the GUI from the terminal
-#sudo ln -sf ${TILT_PROJECT}/source/build/GUI /usr/local/bin/provant_gui
+# Create symbolic link to allow launching of the GUI from the terminal
+echo -e "\e[92mCreating symbolic link to the GUI\e[0m"
+sudo ln -sf ${TILT_PROJECT}/source/build/GUI /usr/local/bin/provant_gui
 
+echo -e "\e[94mInstallation finished! Have fun!\e[0m"
+
+# Remove EXIT trap if everything worked fine
+trap - EXIT
