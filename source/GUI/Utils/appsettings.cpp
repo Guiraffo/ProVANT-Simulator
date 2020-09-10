@@ -594,7 +594,7 @@ const QString AppSettings::getWorldsPackagePathUnchecked() const
 
 const QString AppSettings::getWorldsPackagePath() const
 {
-    return checkDirectoryPath(WORLS_PACKAGE_KEY,
+    return checkDirectoryPath(WORLDS_PACKAGE_KEY,
                               getWorldsPackagePathDefault(),
                               tr("The path to the directory containing the "
                                  "Gazebo worlds could bot be open. Please "
@@ -618,7 +618,7 @@ const QString AppSettings::getWorldsPackagePathDefault() const
 
 bool AppSettings::setWorldsPackagePath(const QString &path)
 {
-    return setDirectoryPath(WORLS_PACKAGE_KEY, path);
+    return setDirectoryPath(WORLDS_PACKAGE_KEY, path);
 }
 
 /**

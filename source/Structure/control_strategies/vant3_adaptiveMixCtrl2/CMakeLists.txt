@@ -13,6 +13,7 @@ include_directories( ${catkin_INCLUDE_DIRS})
 include_directories($ENV{TILT_PROJECT}/source/Structure/control_strategies/)
 
 add_library(vant3_adaptiveMixCtrl2 src/main.cpp)
+add_dependencies(vant3_adaptiveMixCtrl2 ${catkin_EXPORTED_TARGETS})
 target_link_libraries(vant3_adaptiveMixCtrl2 ${catkin_LIBRARIES})
 install(TARGETS
 vant3_adaptiveMixCtrl2

@@ -13,6 +13,7 @@ include_directories( ${catkin_INCLUDE_DIRS})
 include_directories($ENV{TILT_PROJECT}/source/Structure/control_strategies/)
 
 add_library(vant4_Winf src/main.cpp)
+add_dependencies(vant4_Winf ${catkin_EXPORTED_TARGETS})
 target_link_libraries(vant4_Winf ${catkin_LIBRARIES})
 install(TARGETS
 vant4_Winf

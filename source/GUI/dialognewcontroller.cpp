@@ -30,9 +30,13 @@ DialogNewController::~DialogNewController()
  *
  * Create a new controller strategy and calls the base class accept method
  * to allow for correct propagation of signals and other behaviors.
+ *
+ * @todo Refactor this method to force verification of the ROS naming
+ * conventions for a new package. For now, this method only foces that the
+ * package name be lowercase.
  */
 void DialogNewController::accept()
 {
-    NewStrategy::createProject(ui->lineEdit->text());
+    NewStrategy::createProject(ui->lineEdit->text().toLower());
     QDialog::accept();
 }

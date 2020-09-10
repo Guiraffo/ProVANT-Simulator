@@ -28,6 +28,7 @@ catkin_package(
 )
 
 add_executable(controller src/nodes/controller_node.cpp src/controller.cpp)
+add_dependencies(controller ${catkin_EXPORTED_TARGETS})
 target_link_libraries(
   controller 
   ${catkin_LIBRARIES} 
