@@ -594,12 +594,25 @@ const QString AppSettings::getWorldsPackagePathUnchecked() const
 
 const QString AppSettings::getWorldsPackagePath() const
 {
-    return checkDirectoryPath(WORLS_PACKAGE_KEY,
-                              getWorldsPackagePathDefault(),
-                              tr("The path to the directory containing the "
-                                 "Gazebo worlds could bot be open. Please "
-                                 "check the value of the PROVANT_DATABASE "
-                                 "environment variable and try again."));
+    // Get ProVANT database path
+    QString databasePath = getProvantDatabasePath();
+    QString worldsPackagePath = QDir::cleanPath(databasePath
+                                                +
+                                                QDir::separator()
+                                                +
+                                                "worlds"
+                                                +
+                                                QDir::separator()
+                                                +
+                                                "worlds");
+
+    QDir worldsDir(worldsPackagePath);
+    if(!worldsDir.exists())
+    {
+        return QString();
+    }
+
+    return worldsDir.absolutePath();
 }
 
 const QString AppSettings::getWorldsPackagePathDefault() const
@@ -618,7 +631,7 @@ const QString AppSettings::getWorldsPackagePathDefault() const
 
 bool AppSettings::setWorldsPackagePath(const QString &path)
 {
-    return setDirectoryPath(WORLS_PACKAGE_KEY, path);
+    return setDirectoryPath(WORLDS_PACKAGE_KEY, path);
 }
 
 /**

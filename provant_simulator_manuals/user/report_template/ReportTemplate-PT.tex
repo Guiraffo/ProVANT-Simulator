@@ -1,0 +1,77 @@
+\newcommand{\macroheader}[4]{MACRO/#1--\the\year /#2/#3+Version-#4}
+
+
+\lfoot{\noindent \macroheader{\surname}{\initials}{\reportnumber}{\reportversion}}
+
+
+\cfoot{}
+
+
+\rhead{\noindent \includegraphics[width=0.15\textwidth]{report_template/macro_inline}}
+
+
+\rfoot{\thepage}
+
+
+\lhead{\leftmark}
+
+\thispagestyle{empty}
+
+\noindent \begin{center}
+\textbf{}%
+\begin{minipage}[t]{1\columnwidth}%
+\noindent \begin{center}
+\textbf{}%
+\begin{minipage}[c]{0.3\columnwidth}%
+\noindent \begin{flushleft}
+\includegraphics[width=1\textwidth]{report_template/macro_inline_name}
+\par\end{flushleft}%
+\end{minipage}\textbf{}%
+\begin{minipage}[b]{0.7\textwidth}%
+\noindent \begin{flushright}
+\textbf{\macroheader{\surname}{\initials}{\reportnumber}{\reportversion}}
+\par\end{flushright}%
+\end{minipage}
+\par\end{center}%
+\end{minipage}
+\par\end{center}
+
+\noindent \rule[0.5ex]{1\textwidth}{1pt}
+
+\bigskip{}
+
+
+\begin{center}
+\textbf{\Large{}Universidade Federal de Minas Gerais - UFMG}
+\par\end{center}{\Large \par}
+
+\begin{center}
+\textbf{\large{}}
+\par\end{center}{\large \par}
+
+\vspace{6cm}
+
+
+\begin{center}
+{\LARGE{}\reporttitle}
+\par\end{center}{\LARGE \par}
+
+\vfill{}
+
+
+%\textit{\emph{\large{}Student registration number: \registrationnumber}}{\large \par}
+
+\textit{\emph{\large{}Autor: \autor}}{\large \par}
+
+%\textit{\emph{\large{}Advisor: \advisorname}}{\large \par}
+
+\textit{\emph{\large{}Versão: \version}}{\large \par}
+
+\vspace{1cm}
+
+
+\begin{flushright}
+\textit{\emph{\today}}
+\par\end{flushright}
+
+\pagebreak{}

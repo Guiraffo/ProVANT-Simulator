@@ -202,6 +202,7 @@ include_directories($ENV{TILT_PROJECT}/source/Structure/control_strategies/)
 # catkin_add_nosetests(test)
 
 add_library(vant2load_hinfinity src/hinfinity.cpp)
+add_dependencies(vant2load_hinfinity ${catkin_EXPORTED_TARGETS})
 target_link_libraries(vant2load_hinfinity ${catkin_LIBRARIES})
 install(TARGETS
   vant2load_hinfinity

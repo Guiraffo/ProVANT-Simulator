@@ -1,0 +1,129 @@
+\chapter{Installation}
+
+ProVANT Simulator is a simulation environment developed in order to validate and evaluate the performance of control strategies. The simulator version addressed in this guide was develop on top of Gazebo 7, a simulation platform, and ROS (Robot Operating System), a framework for developing robot applications, under the Kinetic distribution. In order to use it, a computer running the \textbf{operating system Ubuntu 16.04} is needed.
+
+ROS offers a programming interface for robotics applications and features repositories with several software modules, and Gazebo is a 3D simulation software under free license, maintained and developed under responsibility of the Open Source Robotics Foundation (OSRF). It's able to simulate the dynamic behavior of rigid, articulated bodies, and includes features such as collision detection and graphical visualization.
+
+This chapter presents the steps required for installation of ProVANT Simulator. It first presents the installation procedures for the platforms used by the simulator, such as Qt5, Git and ROS, and then those for the ProVANT simulation environment.
+
+\section{Installation procedures}
+
+In the steps described here it is assumed that the computer in which the simulator is being installed runs a clean, recently installed copy of Ubuntu 16.04.
+
+\subsection{Installing Git}
+
+She source code for ProVANT simulator is hosted on GitHub. In order to access the source code flies for ProVANT hosted on this GitHub repository, Git must be installed in the user's computer. In case it's not, open a new terminal and run the following commands:
+
+\begin{bashcode}
+sudo apt update
+sudo apt install git
+\end{bashcode}
+
+\subsection{Installing and configuring ROS}
+
+ROS offers a programming interface for robotics applications and several software modules, among which is simulator Gazebo, version 7, used by ProVANT Simulator. This subsection details the instructions needed for installing the ROS Kinetic Kame distribution\footnote{More details and help can be found on \href{wiki.ros.org}{ROS's homepage}}.\\
+\bigskip
+\bigskip
+\bigskip
+
+\textbf{Configure the Ubuntu repositories}\\
+
+Before starting installation, the Ubuntu repositories must be configured to allow \textit{restricted}, \textit{universe} and \textit{multiverse}. Note: Usually, this options are already set upon installation of Ubuntu 16.04. In case they're not, follow the \href{https://help.ubuntu.com/community/Repositories/Ubuntu}{Ubuntu guide} for instructions on doing this.
+
+\textbf{Setup sources.list}\\
+
+The computer must also be set up to accept software from packages.ros.org. To do that, open a new terminal and run the following command:
+
+\begin{bashcode}
+sudo sh -c 'echo "deb http://packages.ros.org/ros/ubuntu $(lsb_release -sc) main"
+>/etc/apt/sources.list.d/ros-latest.list'
+\end{bashcode}
+
+\textbf{Setup access keys for ROS repositories}\\
+
+Run the following command:
+
+\begin{bashcode}
+sudo apt-key adv --keyserver hkp://ha.pool.sks-keyservers.net:80 --recv-key 
+421C365BD9FF1F717815A3895523BAEEB01FA116
+\end{bashcode}
+
+\textbf{Installation}\\
+
+First, make sure the Debian package index is up-to-date:
+
+\begin{bashcode}
+sudo apt update
+\end{bashcode}
+
+After updating the packages, download the binary files:
+
+\begin{bashcode}
+sudo apt install ros-kinetic-desktop-full
+\end{bashcode}
+
+\textbf{Initialize rosdep}\\
+
+Before using ROS, rosdep must be initialized. This system installs the system dependencies for the source code to be compiled. It is required in order to run some core components in ROS.
+
+\begin{bashcode}
+sudo rosdep init
+rosdep update
+\end{bashcode}
+
+\textbf{Environment setup}\\
+
+To have the ROS environment variables automatically added to the bash session every time a new shell is launched:
+
+\begin{bashcode}
+echo "source /opt/ros/kinetic/setup.bash" >> $HOME/.bashrc
+source $HOME/.bashrc
+\end{bashcode}
+
+\textbf{Create a ROS workspace}\\
+
+Finally, a ROS workspace must be created. To do that, run the following command sequence:
+
+\begin{bashcode}
+mkdir -p $HOME/catkin_ws/src
+cd $HOME/catkin_ws/
+catkin_make
+source $HOME/catkin_ws/devel/setup.bash
+echo "source $HOME/catkin_ws/devel/setup.bash" >> $HOME/.bashrc
+\end{bashcode}
+
+\subsection{Installing Qt Framework}
+
+In order to appropriately install ProVANT Simulator's graphical setup environment, QtCreator 5 IDE must be installed. To do that, run the following commands:
+
+\small
+\begin{bashcode}
+cd $HOME/Downloads
+wget http://download.qt.io/official_releases/online_installers/qt-unified-linux-x64-online.run
+sudo chmod +x qt-unified-linux-x64-online.run
+./qt-unified-linux-x64-online.run
+\end{bashcode}
+\normalsize
+
+
+\subsection{Dowloading and installing the simulation environment}
+
+The source code for ProVANT Simulator is located in \href{https://github.com/Guiraffo/ProVANT-Simulator}{this GitHub repository}. Since it's currently private, access must be requested from Professor Guilherme Vianna Raffo\footnote{raffo@ufmg.br}.
+
+Once it's been granted, the current version of the simulation environment can be downloaded by cloning the repository into the user's computer:
+
+\begin{bashcode}
+cd $HOME/catkin_ws/src
+git clone https://github.com/Guiraffo/ProVANT-Simulator.git
+\end{bashcode}
+
+Once cloned, the simulation environment can be installed and configured by running the following commands:
+
+\begin{bashcode}
+cd $HOME/catkin_ws/src/ProVANT-Simulator
+sudo chmod +x install.sh
+./install.sh
+\end{bashcode}
+
+
+Provided that all the procedures described above were executed successfully, the user will be ready to proceed to the next chapter, regarding ProVANT Simulator's workflow.

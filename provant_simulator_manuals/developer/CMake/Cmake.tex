@@ -1,0 +1,461 @@
+
+
+
+\chapter{CMakeLists.txt}
+\label{cmake}
+
+Esta seção foi extraída da página \url{http://wiki.ros.org/catkin/CMakeLists.txt} no dia 25/08/2017, visite-a para mais informações.
+
+\section{Visão geral e estrutura do arquivo CMakeLists.txt}
+
+O arquivo CMakeLists.txt armazena comandos de compilação e instalação de pacotes de software. Necessariamente, o arquivo \textbf{deve seguir formato e a ordem a seguir}. 
+
+\begin{enumerate}
+	\setlength{\itemsep}{1pt}
+	\setlength{\parskip}{0pt}
+	\setlength{\parsep}{0pt}
+	\item Versão CMake necessária (cmake\_minimum\_required)
+	\item Nome do pacote (project())
+	\item Encontrar outros pacotes CMake/Catkin necessários para compilação (find\_package())
+	\item Habilitação de suporte para módulos Python (catkin\_python\_setup())
+	\item Geradores de Mensagens/Serviços/Ações do ROS (add\_message\_files(), add\_service\_files(), add\_action\_files())
+	\item Invocar geração de Mensagem/Serviço/Ação (generate\_messages())
+	\item Especificar pacote  de compilação, informação e exportação (catkin\_package())
+	\item Bibliotecas/Executáveis para compilação (add\_library()/add\_executable()/target\_link\_libraries())
+	\item Testes de construção (catkin\_add\_gtest())
+	\item Regras de instalação (install())	
+\end{enumerate}
+
+\section{Versão CMake}
+
+Todo arquivo CMakeLists.txt deve começar com a declaração da versão do sistema. A versão requisitada é a 2.8.3 ou superior.
+
+\begin{minted}{xml} 
+cmake_minimum_required(VERSION 2.8.3)
+\end{minted}
+
+\section{Nome do Pacote}
+
+O próximo item corresponde ao o nome do pacote do ROS. No exemplo a seguir, o pacote é chamado \textit{robot\_brain}.
+
+\begin{minted}{xml} 
+project(robot_brain)
+\end{minted}
+
+Obs.: Após esse comando, é possível fazer referência do nome do projeto em qualquer outro lugar através do uso da variável \${PROJECT\_NAME}.
+
+\section{Encontrando dependências de pacotes CMake}
+
+É necessário especificar quais outros pacotes que precisam ser localizados para compilar o projeto. Essa especificação é realizada com o comando find\_package e sempre há ao menos uma dependência pelo pacote catkin:
+
+\begin{minted}{xml} 
+find_package(catkin REQUIRED)
+\end{minted}
+
+Se o projeto depende de outros pacotes, eles são convertidos automaticamente em componentes do sistema catkin. Em vez de usar o comando  find\_package naqueles pacotes, é possível especificá-los como componentes para melhorar a legibilidade do script. O exemplo a seguir utiliza pacote 'nodelet'' como componente.
+
+\begin{minted}{xml} 
+find_package(catkin REQUIRED COMPONENTS nodelet)
+\end{minted}
+
+Obs: É necessário usar somente o comando find\_package para encontrar componentes. Não deve-se adicionar dependência de tempo de execução.
+
+\subsection{O find\_package()}
+
+Se um pacote é localizado através do comando find\_package, então resultará na criação de várias variáveis de ambiente do script CMakeLists que fornecem informação sobre o pacote encontrado. As variáveis de ambiente descrevem onde os arquivos dos pacotes exportados estão, quais bibliotecas o pacote depende e os caminhos destas bibliotecas. Os nomes seguem a convenção <PACKAGE NAME>\_<PROPERTY>:
+
+\begin{itemize}
+	\setlength{\itemsep}{1pt}
+	\setlength{\parskip}{0pt}
+	\setlength{\parsep}{0pt}
+	\item[]<NAME>\_FOUND - configurado como verdadeiro caso a biblioteca é encontrada, caso contrário, falso
+	\item[]<NAME>\_INCLUDE\_DIRS ou <NAME>\_INCLUDES - Caminhos de inclusão exportados pelo pacote
+	\item[]<NAME>\_LIBRARIES ou <NAME>\_LIBS - Bibliotecas exportadas pelo pacote
+	\item[]<NAME>\_DEFINITIONS - Definições exportadas pelo pacote
+\end{itemize}
+
+
+\subsection{Por que os pacotes são especificados como componentes?}
+
+Pacotes não são realmente componentes catkin. Em vez disso, a característica de componentes foi utilizada no desenvolvimento do script para economizar tempo de digitação significativo.
+
+Para pacotes, será vantajoso utilizar o comando find\_package para encontrá-los como componentes. Eles estão em um conjunto de variáveis criado com o prefixo catkin\_. Por exemplo, quando você estiver usando um pacote denominado ''nodelet'' no seu código, sugere-se utilizar:
+
+\begin{minted}{xml} 
+find_package(catkin REQUIRED COMPONENTS nodelet)
+\end{minted}
+
+Isto significa que os caminhos incluídos, bibliotecas, etc. exportados pelo pacote ''nodelet'' são também anexadas às variáveis catkin\_. Por exemplo, catkin\_INCLUDE\_DIRS contém os caminhos de inclusão não somente para pacote catkin mas também para para o pacote ''nodelet''. 
+
+Podemos de maneira alternativa achar o pacote ''nodelet'' com o comando:
+
+\begin{minted}{xml} 
+find_package(nodelet)
+\end{minted}
+
+Isto significa que os caminhos, bibliotecas e demais características do pacote ''nodelet'' não seriam adicionados às variáveis catkin\_ . O que resulta em nodelet\_INCLUDE\_DIRS, nodelet\_LIBRARIES, e etc. 
+
+As mesmas variáveis também são criadas usando
+
+\begin{minted}{xml} 
+find_package(catkin REQUIRED COMPONENTS nodelet)
+\end{minted}
+
+\subsection{Boost}
+
+Caso esteja usando C++ e Boost, você necessita de invocar o comando find\_package() para Boost e especificar quais aspectos da Boost que você está usando como componentes. Por exemplo, se você quiser usar threads da biblioteca Boost, você utilizaria o seguinte comando:
+
+\begin{minted}{xml} 
+find_package(Boost REQUIRED COMPONENTS thread)
+\end{minted}
+
+\section{catkin\_package()}
+
+O comando catkin\_package() especifica informações do sistema catkin para o compilador.
+
+Esta função deve ser utilizada antes de declarar quaisquer alvos com comandos add\_library() ou add\_executable(). A função tem 5 argumentos opcionais:
+
+\begin{itemize}
+	\setlength{\itemsep}{1pt}
+	\setlength{\parskip}{0pt}
+	\setlength{\parsep}{0pt}
+	\item[]INCLUDE\_DIRS - Caminhos de inclusão exportados pelo pacote
+	\item[]LIBRARIES - Bibliotecas exportadas do projeto
+	\item[]CATKIN\_DEPENDS - Outros projetos catkin que este projeto depende
+	\item[]DEPENDS - Projetos não-catkin que este projeto depende
+	\item[]CFG\_EXTRAS - Opções de configuração adicional
+\end{itemize}
+
+Observe o exemplo:
+
+\begin{minted}{xml} 
+catkin_package(INCLUDE_DIRS include
+LIBRARIES \${PROJECT_NAME}
+CATKIN_DEPENDS roscpp nodelet
+DEPENDS eigen opencv)
+\end{minted}
+
+Isto indica que o diretório "include" dentro do diretório do pacote é o local que os cabeçalhos serão direcionados. A variável de ambiente \${PROJECT\_NAME} avalia informação passada para a função project(), neste caso será ''robot\_brain''. ''roscpp'' e ''nodelet'' são pacotes que necessitam estar presentes durante a compilação/execução deste pacote, já ''eigen'' e ''opencv'' são dependências do sistema que necessitam estar presentes para compilação/execução deste pacote.
+
+\section{Especificando alvos de compilação}
+
+Construir alvos pode ser realizadas de diversas formas, mas normalmente representam um das duas possibilidades:
+
+\begin{itemize}
+	\setlength{\itemsep}{1pt}
+	\setlength{\parskip}{0pt}
+	\setlength{\parsep}{0pt}
+	\item[]Executable Target - programas a serem executados
+	\item[]Library Target - bibliotecas que podem ser usadas por alvos executáveis durante a compilação e/ou tempo de execução
+\end{itemize}
+
+\subsection{Nomeando alvos}
+
+É muito importante notar que os nomes dos alvos de compilação no sistema catkin devem ser únicos sem considerar os diretórios que eles foram compilados/instalados. Este é um requisito do CMake. Entretanto, nomes únicos são apenas necessários internamente para CMake. Alguém pode obter um alvo renomeado como outro nome usando o comando set\_target\_properties():
+
+Exemplo:
+
+\begin{minted}{xml}
+set_target_properties(rviz_image_view
+PROPERTIES OUTPUT_NAME image_view
+PREFIX "")
+\end{minted}
+
+Isto irá trocar o nome do alvo rviz\_image\_view para image\_view na compilação e instalação de saídas.
+
+\subsection{Diretório customizado de saída}
+
+Enquanto o diretório de saída padrão para executáveis e bibliotecas é comum a um valor razoável, ele deve ser personalizado em certos casos. Isto é, uma biblioteca contendo ligações de Python deve ser realocada em um diretório diferente a fim de ser importável no Python.:
+
+Exemplo:
+
+\begin{minted}{xml}
+set_target_properties(python_module_library
+PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${CATKIN_DEVEL_PREFIX}${CATKIN_PACKAGE_PYTHON_DESTINATION})
+\end{minted}
+
+\subsection{Caminhos de inclusão e caminhos de bibliotecas}
+
+Antes de especificar alvos, você precisa especificar onde os recursos como arquivos de cabeçalho e bibliotecas podem ser localizados:
+
+\begin{itemize}
+	\setlength{\itemsep}{1pt}
+	\setlength{\parskip}{0pt}
+	\setlength{\parsep}{0pt}
+	\item[]Caminhos de inclusão  
+	\item[]Caminhos de biblioteca
+	\item[]include\_directories(<dir1>, <dir2>, ..., <dirN>)
+	\item[]link\_directories(<dir1>, <dir2>, ..., <dirN>)
+\end{itemize}
+
+\textbf{a) include\_directories()} \\
+
+O argumento para o comando include\_directories deve ser as variáveis \_INCLUDE\_DIRS  geradas pelo chamada do comando find\_package e qualquer diretório adicional que necessita ser incluído. Se você estiver usando o sistema catkin e Boost, a chamada de include\_directories() deve ser parecer:
+
+\begin{minted}{xml}
+include_directories(include ${Boost_INCLUDE_DIRS} ${catkin_INCLUDE_DIRS})
+\end{minted}
+
+O primeiro argumento ''include'' indica que o diretório include dentro do pacote faz parte também da caminho. \\
+
+\textbf{b) link\_directories()} \\
+
+O comando link\_directories() pode ser usada para adicionar novos caminhos de bibliotecas, no entanto, isto não é recomendado. Todos os pacotes catkin e CMake automaticamente tem sua informação de ligação adicionado quando são encontrados pelo find\_package. 
+Basta ligar as bibliotecas no target\_link\_libraries()
+
+Exemplo:
+
+\begin{minted}{xml}
+link_directories(~/my_libs)
+\end{minted}
+
+\subsection{Alvos executáveis}
+
+Para especificar um alvo executável que deve ser construído, deve-se usar o comando CMake add\_executable().
+
+\begin{minted}{xml}
+add_executable(myProgram src/main.cpp src/some_file.cpp src/another_file.cpp)
+\end{minted}
+
+Isto irá construir um alvo executável denominado "myProgram" que, por sua vez, é constituídos de 3 arquivos fonte: src/main.cpp, src/some\_file.cpp e src/another\_file.cpp.
+
+\subsection{Alvos de bibliotecas}
+
+O comando CMake add\_library() é usado para especificar bibliotecas para serem construídas. Por padrão o sistema catkin constrói bibliotecas dinâmicas.
+
+\begin{minted}{xml}
+add_library(${PROJECT_NAME} ${${PROJECT_NAME}_SRCS})
+\end{minted}
+
+\subsection{target\_link\_libraries}
+
+Use o comando target\_link\_libraries() para especificar quais bibliotecas um alvo executável é ligado. Isto é feito tipicamente depois da chamada add\_executable(). Adicione \$\{catkin\_LIBRARIES\} se o ROS não for encontrado.
+
+Sintaxe:
+
+\begin{minted}{xml}
+target_link_libraries(<executableTargetName>, <lib1>, <lib2>, ... <libN>)
+\end{minted}
+
+Exemplo:
+
+\begin{minted}{xml}
+add_executable(foo src/foo.cpp)
+add_library(moo src/moo.cpp)
+target_link_libraries(foo moo)  -- This links foo against libmoo.so
+\end{minted}
+
+Observe que não há necessidade para uso de link\_directories() na maioria dos casos, pois a informação é automaticamente enviada via find\_package().
+
+\section{Mensagens alvos, Serviços alvos e Ações alvos}
+
+Arquivos de mensagens (.msg), serviços (.srv), e ações (.action) no ROS requerem um passo de construção especial antes de serem construídas e usadas por pacotes do ROS. O objetivo destas macros é gerar arquivos de linguagem específica de programação de maneira que alguém utilize mensagens, serviços e ações na linguagem de programação desejada. O sistema de compilação gerará ligações usando todos os geradores disponíveis (ex. gencpp, genpy, genlisp, etc).
+
+Estas são três macros fornecidos para tratar de mensagens, serviços e ações respectivamente:
+
+\begin{minted}{xml}
+add_message_files
+add_service_files
+add_action_files
+\end{minted}
+
+Estas macros devem ser seguidas por uma chamada que invoca a geração:
+
+\begin{minted}{xml}
+generate_messages()
+\end{minted}
+
+\subsubsection{Restrições/Pré-requisitos importantes}
+
+Estas macros devem vir antes do comando catkin\_package() para correta geração.
+
+\begin{minted}{xml}
+find_package(catkin REQUIRED COMPONENTS ...)
+add_message_files(...)
+add_service_files(...)
+add_action_files(...)
+generate_messages(...)
+catkin_package(...)
+...
+\end{minted}
+
+O comando catkin\_package() deve ter dependência (CATKIN\_DEPENDS) do pacote message\_runtime.
+
+\begin{minted}{xml}
+catkin_package(
+...
+CATKIN_DEPENDS message_runtime ...
+...)
+\end{minted}
+
+Você deve usar find\_package() para o pacote message\_generation, seja sozinho ou como um componente do sistema catkin:
+
+\begin{minted}{xml}
+find_package(catkin REQUIRED COMPONENTS message_generation)
+\end{minted}
+
+Seu arquivo package.xml deve conter uma dependência de construção do message\_generation e uma dependência de tempo de execução message\_runtime. Isso não é necessário se as dependências forem puxadas indiretamente de outros pacotes.
+Se você tem um alvo que (mesmo indiretamente) depende de algum outro alvo que precise de mensagens/serviços/ações a serem construídas, você precisa adicionar uma dependência explícita no alvo catkin\_EXPORTED\_TARGETS, para que eles sejam construídos na ordem correta. Este caso aplica-se quase sempre, a menos que seu pacote realmente não use nenhuma parte do ROS. Infelizmente, essa dependência não pode ser propagada automaticamente. (some\_target correspondem ao nome do alvo definido por add \_executable()):
+
+\begin{minted}{xml}
+add_dependencies(some_target ${catkin_EXPORTED_TARGETS})
+\end{minted}
+
+Se você tem um pacote que cria mensagens e/ou serviços, bem como executáveis que usam estes, você precisa criar uma dependência explícita no alvo da mensagem gerada automaticamente para que eles sejam construídos na ordem correta. (some\_target correspondem ao nome do alvo definido por add\_executable ()):
+
+\begin{minted}{xml}
+add_dependencies(some_target ${${PROJECT_NAME}_EXPORTED_TARGETS})
+\end{minted}
+
+Se o seu pacote satisfizer as duas condições acima, você precisa adicionar ambas as dependências, ou seja:
+
+\begin{minted}{xml}
+add_dependencies(some_target ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+\end{minted}
+
+\subsection{Exemplo}
+
+Suponha que o seu pacote tenha duas mensagens em um diretório chamado "msg" chamadas "MyMessage1.msg" e "MyMessage2.msg" que dependem de std\_msgs e sensor\_msgs. Além disso, possui um serviço em um diretório chamado "srv" chamado "MyService.srv". O pacote define um executável que usa essas mensagens e serviços e um executável que usa algumas partes do ROS, mas não mensagens/serviços definidos neste pacote. Tal exemplo precisará do seguinte CMakeLists.txt:
+
+\begin{minted}{xml}
+# Obter informação sobre as dependências de compilação do pacote
+find_package(catkin REQUIRED
+COMPONENTS message_generation std_msgs sensor_msgs)
+
+# Declaras arquivos mensagens para serem construídos
+add_message_files(FILES
+MyMessage1.msg
+MyMessage2.msg
+)
+
+# Declara arquivos de serviços a serem construídos
+add_service_files(FILES
+MyService.srv
+)
+
+# Gera as mensagens e serviços com as linguagems específica de programação
+generate_messages(DEPENDENCIES std_msgs sensor_msgs)
+
+# Declara as dependências de tempo de execução do pacote
+catkin_package(
+CATKIN_DEPENDS message_runtime std_msgs sensor_msgs
+)
+
+# Define executáveis que usam mensagens.
+add_executable(message_program src/main.cpp)
+add_dependencies(message_program ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+
+# Define executável que não utiliza quaisquer mensagens/serviços fornecidos pelo pacote
+add_executable(does_not_use_local_messages_program src/main.cpp)
+add_dependencies(does_not_use_local_messages_program ${catkin_EXPORTED_TARGETS})
+\end{minted}
+
+Além disso, se você quer criar ações e tenha um arquivo de especificação de ação chamado "MyAction.action" no diretório "ação", você deve adicionar actionlib\_msgs à lista de componentes que são encontrados com o sistema catkin e adicionar a seguinte chamada antes da chamada do comando generate\_messages (...):
+
+\begin{minted}{xml}
+add_action_files(FILES
+MyAction.action
+)
+\end{minted}
+
+
+Além disso, o pacote deve ter uma dependência de compilação em actionlib\_msgs.
+
+\section{Habilitando suporte a módulos de Python}
+
+
+Se o seu pacote ROS fornecer alguns módulos Python, você deve criar um arquivo setup.py e chamar
+
+\begin{minted}{xml}
+catkin_python_setup()
+\end{minted}
+
+
+Antes da chamada para generate\_messages() e catkin\_package().
+
+\section{Testes unitários}
+
+Há uma macro específica de catkin para manipulação de testes unitários baseados em gtest chamado catkin\_add\_gtest ().
+
+\begin{minted}{xml}
+catkin_add_gtest(myUnitTest test/utest.cpp)
+\end{minted}
+
+\section{Passo opcional: Especificando alvos instaláveis}
+
+
+Após o tempo de compilação, os alvos são colocados no espaço de desenvolvimento do espaço de trabalho catkin. No entanto, muitas vezes queremos instalar alvos no sistema para que eles possam ser usados por outros ou para uma pasta local para testar uma instalação no nível do sistema. Em outras palavras, se você quer ser capaz de fazer uma "instalação" do seu código, você precisa especificar onde os objetivos devem acabar.
+
+Este é realizado usando o comando CMake install() que possui como argumentos:
+
+\begin{itemize}
+	\setlength{\itemsep}{1pt}
+	\setlength{\parskip}{0pt}
+	\setlength{\parsep}{0pt}
+	\item[] TARGETS - alvos para instalar
+	\item[] ARCHIVE DESTINATION - bibliotecas estáticas e DLL (Windows) .stub
+	\item[] LIBRARY DESTINATION - bibliotecas dinâmicas não DLL e módulos
+	\item[] RUNTIME DESTINATION - Alvos executáveis e DLL (Windows) com estilo de bibliotecas compartilhadas
+\end{itemize}
+
+Observe o exemplo:
+
+\begin{minted}{xml}
+install(TARGETS ${PROJECT_NAME}
+ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+)\end{minted}
+
+
+
+Além desses destinos padrão, alguns arquivos devem ser instalados em pastas especiais. Isto é, uma biblioteca contendo módulos Python deve ser instalada em uma pasta diferente para ser importável no Python:
+
+\begin{minted}{xml}
+install(TARGETS python_module_library
+ARCHIVE DESTINATION ${CATKIN_PACKAGE_PYTHON_DESTINATION}
+LIBRARY DESTINATION ${CATKIN_PACKAGE_PYTHON_DESTINATION}
+))\end{minted}
+
+
+\subsection{Instalando scripts executáveis de Python}
+
+Para o código Python, a regra de instalação parece diferente, pois não há uso das funções add\_library() e add\_executable(), de modo que o CMake determina quais arquivos são alvos e que tipo de alvos eles são. Em vez disso, use o seguinte em seu arquivo CMakeLists.txt:
+
+\begin{minted}{xml}
+catkin_install_python(PROGRAMS scripts/myscript
+DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})
+))\end{minted}
+
+
+Informações detalhadas sobre a instalação de scripts e módulos de python, bem como as melhores práticas para layout de pastas podem ser encontradas no manual catkin.
+
+Se você instala apenas scripts Python e não fornece módulos, não precisa criar o arquivo setup.py acima mencionado, nem chamar catkin\_python\_setup().
+
+\subsection{Instalando arquivos de cabeçalho}
+
+Os arquivos de cabeçalho também devem ser instalados na pasta ''incluir'', isso geralmente é feito instalando os arquivos de uma pasta inteira (opcionalmente filtrada por padrões de nomes de arquivos e excluindo subpastas SVN). Isso pode ser feito com uma regra de instalação que é a seguinte:
+
+\begin{minted}{xml}
+install(DIRECTORY include/${PROJECT_NAME}/
+DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION}
+PATTERN ".svn" EXCLUDE
+)))\end{minted}
+
+Ou se a subpasta localizada na pasta incluir não corresponde ao nome do pacote:
+
+\begin{minted}{xml}
+install(DIRECTORY include/
+DESTINATION ${CATKIN_GLOBAL_INCLUDE_DESTINATION}
+PATTERN ".svn" EXCLUDE
+)))\end{minted}
+
+\subsubsection{Instalando arquivos roslaunch Files ou outros recursos}
+
+Outros recursos são arquivos launch que podem ser instalados em \${CATKIN\_PACKAGE\_SHARE\_DESTINATION}:
+
+\begin{minted}{xml}
+install(DIRECTORY launch/
+DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/launch
+PATTERN ".svn" EXCLUDE)
+\end{minted}
