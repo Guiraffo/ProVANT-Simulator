@@ -5,10 +5,11 @@ Licensed under the terms of the MIT open source license. More details at
 https://github.com/Guiraffo/ProVANT-Simulator/blob/master/LICENSE.md
 -->
 <package format="2">
-	<name>lqr_quadcopter</name>
+	<name>vant3_adaptive_mix_ctrl</name>
 	<version>1.0.0</version>
-	<description> The lqr_quadcopter implements a Linear Quadratic Regulator
-	control strategy designed for a quadrotor.</description>
+	<description>The vant3_adaptiveMixCtrl2 package implments an adpative 
+	mixing control strategy designed for the UAV3.</description>
+	
 	<maintainer email="jeduardo@ufmg.br">Júnio Eduardo de Morais Aquino</maintainer>
 
 	<license>MIT</license>
@@ -17,21 +18,21 @@ https://github.com/Guiraffo/ProVANT-Simulator/blob/master/LICENSE.md
 	<url type="repository">https://github.com/Guiraffo/ProVANT-Simulator.git</url>
 	<url type="bugtracker">https://github.com/Guiraffo/ProVANT-Simulator/issues</url>
 
-	<author email="jonatan29campo@gmail.com">Jonatan Campos</author>
-
 	<buildtool_depend>catkin</buildtool_depend>
 
 	<build_depend>roscpp</build_depend>
+	<build_depend>std_msgs</build_depend>
 	<build_depend>simulator_msgs</build_depend>
 	<build_depend>control_strategies_base</build_depend>
 	<build_depend>eigen</build_depend>
 
 	<exec_depend>roscpp</exec_depend>
+	<exec_depend>std_msgs</exec_depend>
 	<exec_depend>simulator_msgs</exec_depend>
 	<exec_depend>control_strategies_base</exec_depend>
 	<exec_depend>eigen</exec_depend>
-
+	
 	<export>
-
+	
 	</export>
 </package>

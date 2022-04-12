@@ -1,22 +1,46 @@
-cmake_minimum_required(VERSION 2.8.3)
-project(vant4_Winf)
+# This file is part of the ProVANT simulator project.
+# Licensed under the terms of the MIT open source license. More details at
+# https://github.com/Guiraffo/ProVANT-Simulator/blob/master/LICENSE.md
+
+cmake_minimum_required(VERSION 3.0.2)
+project(vant4_winf)
+
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
 find_package(catkin REQUIRED COMPONENTS
-roscpp
-rospy
-std_msgs
-simulator_msgs)
+    roscpp
+    std_msgs
+    simulator_msgs
+    control_strategies_base
+)
+find_package(Eigen3 3.3 REQUIRED NO_MODULE)
 
-catkin_package()
-include_directories(include)
-INCLUDE_DIRECTORIES (/usr/include/eigen3)
-include_directories( ${catkin_INCLUDE_DIRS})
-include_directories($ENV{TILT_PROJECT}/source/Structure/control_strategies/)
+catkin_package(
+	# INCLUDE_DIRS
+	LIBRARIES
+		${PROJECT_NAME}
+	CATKIN_DEPENDS
+		roscpp
+		std_msgs
+        simulator_msgs
+        control_strategies_base
+	# DEPENDS
+)
 
-add_library(vant4_Winf src/main.cpp)
-add_dependencies(vant4_Winf ${catkin_EXPORTED_TARGETS})
-target_link_libraries(vant4_Winf ${catkin_LIBRARIES})
+include_directories(${catkin_INCLUDE_DIRS})
+
+add_library(${PROJECT_NAME} src/main.cpp)
+add_dependencies(${PROJECT_NAME} ${catkin_EXPORTED_TARGETS})
+target_link_libraries(${PROJECT_NAME} 
+    ${catkin_LIBRARIES}
+    Eigen3::Eigen
+)
+
 install(TARGETS
-vant4_Winf
-ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
-LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
- RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})
+    ${PROJECT_NAME}
+    
+    ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+    LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+    RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+)

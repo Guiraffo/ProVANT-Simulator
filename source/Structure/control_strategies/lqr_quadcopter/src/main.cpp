@@ -9,8 +9,7 @@
  * @author Jonatan Campos
  */
 
-#include "Icontroller.hpp"
-#include <iostream>
+#include <control_strategies_base/icontroller.hpp>
 #include <Eigen/Eigen>
 #include "simulator_msgs/Sensor.h"
 #include <ros/ros.h>
@@ -59,7 +58,7 @@ private:
   Eigen::MatrixXd K;
   //! Stores the state vector
   Eigen::VectorXd X;
-  
+
 public:
   /**
    * @brief Construct a new LQRQuadcopter object and initialize the size of
@@ -151,11 +150,17 @@ public:
     Input = -K * Erro;
 
     // Add equilibirium forces to the outputs.
-    Input(0) = Input(0) + 5.5;
-    Input(1) = Input(1) + 5.5;
-    Input(2) = Input(2) + 5.5;
-    Input(3) = Input(3) + 5.5;
 
+    Input(0) = Input(0) + 5.77611;
+    Input(1) = Input(1) + 5.77611;
+    Input(2) = Input(2) + 5.77611;
+    Input(3) = Input(3) + 5.77611;
+
+    ROS_DEBUG_STREAM_NAMED("lqr_quadcopter", "[LQRQuadcopter]: F1: " << Input(0));
+    ROS_DEBUG_STREAM_NAMED("lqr_quadcopter", "[LQRQuadcopter]: F2: " << Input(1));
+    ROS_DEBUG_STREAM_NAMED("lqr_quadcopter", "[LQRQuadcopter]: F3: " << Input(2));
+    ROS_DEBUG_STREAM_NAMED("lqr_quadcopter", "[LQRQuadcopter]: F4: " << Input(3));
+    
     // Copy the control inputs values to the output vector
     std::vector<double> out(Input.data(), Input.data() + Input.size());
     return out;

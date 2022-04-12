@@ -8,7 +8,7 @@
 * Description: This file is responsable to implement H2/Hinifinity control law to VANT2.0 with load
 */
 
-#include "Icontroller.hpp"
+#include <control_strategies_base/icontroller.hpp>
 #include <iostream>
 #include <Eigen/Eigen>
 #include "simulator_msgs/Sensor.h"

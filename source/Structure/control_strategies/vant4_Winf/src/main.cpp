@@ -1,4 +1,4 @@
-#include "Icontroller.hpp"
+#include <control_strategies_base/icontroller.hpp>
 #include <Eigen/Eigen>
 #include "InertiaMatrix.h"
 #include "CoriolisMatrix.h"
