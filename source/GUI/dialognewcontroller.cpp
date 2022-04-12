@@ -9,11 +9,10 @@
  *
  * Initialize a new DialogNewController object and setup the user interface.
  */
-DialogNewController::DialogNewController(QWidget *parent) :
-    QDialog(parent),
-    ui(new Ui::DialogNewController)
+DialogNewController::DialogNewController(QWidget* parent)
+  : QDialog(parent), ui(new Ui::DialogNewController)
 {
-    ui->setupUi(this);
+  ui->setupUi(this);
 }
 
 /*!
@@ -22,7 +21,7 @@ DialogNewController::DialogNewController(QWidget *parent) :
  */
 DialogNewController::~DialogNewController()
 {
-    delete ui;
+  delete ui;
 }
 
 /*!
@@ -37,6 +36,6 @@ DialogNewController::~DialogNewController()
  */
 void DialogNewController::accept()
 {
-    NewStrategy::createProject(ui->lineEdit->text().toLower());
-    QDialog::accept();
+  NewStrategy::createProject(ui->lineEdit->text().toLower());
+  QDialog::accept();
 }

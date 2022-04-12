@@ -5,7 +5,8 @@
 
 #include "mainwindow.h"
 
-namespace Ui {
+namespace Ui
+{
 class Dialognewmodel;
 }
 
@@ -20,53 +21,53 @@ class Dialognewmodel;
  */
 class DialogNewModel : public QDialog
 {
-    Q_OBJECT
+  Q_OBJECT
 public:
-    /**
-     * @brief DialogNewModel Creates and configures a new DialogNewModel
-     * object.
-     * @param mainWindow Pointer to the MainWindow user interface elements.
-     * @param parent Pointer to the paret widget.
-     */
-    explicit DialogNewModel(Ui::MainWindow *mainWindow, QWidget *parent = 0);
-    /**
-     * @brief ~Dialognewmodel Destroys the user interface.
-     */
-    virtual ~DialogNewModel();
+  /**
+   * @brief DialogNewModel Creates and configures a new DialogNewModel
+   * object.
+   * @param mainWindow Pointer to the MainWindow user interface elements.
+   * @param parent Pointer to the paret widget.
+   */
+  explicit DialogNewModel(Ui::MainWindow* mainWindow, QWidget* parent = 0);
+  /**
+   * @brief ~Dialognewmodel Destroys the user interface.
+   */
+  virtual ~DialogNewModel();
 
 private slots:
-    /**
-     * @brief on_buttonBox_accepted Called when the dialog box is accepted.
-     * Add the selected model to the world configuration.
-     */
-    void on_buttonBox_accepted();
+  /**
+   * @brief on_buttonBox_accepted Called when the dialog box is accepted.
+   * Add the selected model to the world configuration.
+   */
+  void on_buttonBox_accepted();
 
 protected:
-    /**
-     * @brief findModels Search trough the directories under the gazebo model
-     * path for folder of models.
-     *
-     * Every model that has a config.xml file and a SDF file is added to the
-     * selection combobox.
-     */
-    void findModels();
+  /**
+   * @brief findModels Search trough the directories under the gazebo model
+   * path for folder of models.
+   *
+   * Every model that has a config.xml file and a SDF file is added to the
+   * selection combobox.
+   */
+  void populateModelList();
 
 private:
-    /**
-     * @brief parsePoseVector Parse the pose elements from a SDF string from a
-     * pose element and creates appropriate elements in the tree widget to allow
-     * configuration of those values.
-     *
-     * @param data Pose string.
-     * @param element Tree widget item to add the child itens.
-     */
-    void parsePoseVector(const QString &data, QTreeWidgetItem *element);
+  /**
+   * @brief parsePoseVector Parse the pose elements from a SDF string from a
+   * pose element and creates appropriate elements in the tree widget to allow
+   * configuration of those values.
+   *
+   * @param data Pose string.
+   * @param element Tree widget item to add the child itens.
+   */
+  void parsePoseVector(const QString& data, QTreeWidgetItem* element);
 
-    //! Pointer to the user interface elemetns.
-    Ui::Dialognewmodel *ui;
+  //! Pointer to the user interface elemetns.
+  Ui::Dialognewmodel* ui;
 
-    //! Pointer to the mainwindow UI elements.
-    Ui::MainWindow* parentUi;
+  //! Pointer to the mainwindow UI elements.
+  Ui::MainWindow* parentUi;
 };
 
-#endif // DIALOGNEWMODEL_H
+#endif  // DIALOGNEWMODEL_H

@@ -26,58 +26,40 @@
  * Please note that the process needs to be in separate channels mode to work
  * correctly.
  */
-ProcessOutputWindow::ProcessOutputWindow(QProcess *process,
-                                         QWidget *parent) :
-    QMainWindow(parent),
-    ui(new Ui::ProcessOutputWindow),
-    _process(process)
+ProcessOutputWindow::ProcessOutputWindow(QProcess* process, QWidget* parent)
+  : QMainWindow(parent), ui(new Ui::ProcessOutputWindow), _process(process)
 {
-    ui->setupUi(this);
+  ui->setupUi(this);
 
-    _textOutput = new TerminalTextEdit(this);
-    ui->outputLayout->addWidget(_textOutput, 10);
+  _textOutput = new TerminalTextEdit(this);
+  ui->outputLayout->addWidget(_textOutput, 10);
 
-    /*
-     * Setup this window to be deleted after its closing.
-     * This needs to be done to ensure proper deletion of the process pointer
-     * and also the of the user interface elements.
-     */
-    setAttribute(Qt::WA_DeleteOnClose, true);
+  /*
+   * Setup this window to be deleted after its closing.
+   * This needs to be done to ensure proper deletion of the process pointer
+   * and also the of the user interface elements.
+   */
+  setAttribute(Qt::WA_DeleteOnClose, true);
 
-    // Adds the buttons to the toolbar
-    populateToolbar();
+  // Adds the buttons to the toolbar
+  populateToolbar();
 
-    // Connect the process signals to the appropriate slots.
-    QObject::connect(
-                _process,
-                &QProcess::readyReadStandardOutput,
-                this,
-                &ProcessOutputWindow::readStandardOutFromProcess);
-    QObject::connect(
-                _process,
-                &QProcess::readyReadStandardError,
-                this,
-                &ProcessOutputWindow::readStandardErrorFromProcess);
-    QObject::connect(
-                _process,
-                &QProcess::started,
-                this,
-                &ProcessOutputWindow::onProcessStart);
-    connect(_process,
-                  SIGNAL(finished(int, QProcess::ExitStatus)),
-                  this,
-                  SLOT(onProcessFinish(int, QProcess::ExitStatus)));
-    connect(_process,
-                  &QProcess::errorOccurred,
-                  this,
-                  &ProcessOutputWindow::onProcessError);
-    connect(ui->pushButton,
-            SIGNAL(clicked(bool)),
-            this,
-            SLOT(onPushButtonClicked()));
+  // Connect the process signals to the appropriate slots.
+  QObject::connect(_process, &QProcess::readyReadStandardOutput, this,
+                   &ProcessOutputWindow::readStandardOutFromProcess);
+  QObject::connect(_process, &QProcess::readyReadStandardError, this,
+                   &ProcessOutputWindow::readStandardErrorFromProcess);
+  QObject::connect(_process, &QProcess::started, this,
+                   &ProcessOutputWindow::onProcessStart);
+  connect(_process, SIGNAL(finished(int, QProcess::ExitStatus)), this,
+          SLOT(onProcessFinish(int, QProcess::ExitStatus)));
+  connect(_process, &QProcess::errorOccurred, this,
+          &ProcessOutputWindow::onProcessError);
+  connect(ui->pushButton, SIGNAL(clicked(bool)), this,
+          SLOT(onPushButtonClicked()));
 
-    // Keeps the error and ouput exits separated.
-    _process->setProcessChannelMode(QProcess::SeparateChannels);
+  // Keeps the error and ouput exits separated.
+  _process->setProcessChannelMode(QProcess::SeparateChannels);
 }
 
 /**
@@ -92,41 +74,43 @@ ProcessOutputWindow::ProcessOutputWindow(QProcess *process,
  */
 ProcessOutputWindow::~ProcessOutputWindow()
 {
-    qDebug("Deleting ProcessOutputWindow object");
+  qDebug("Deleting ProcessOutputWindow object");
 
-    if(_pid != 0)
-        _idsToKill.insert(QString::number(_pid));
+  if (_pid != 0)
+    _idsToKill.insert(QString::number(_pid));
 
-    QStringList killIds = _idsToKill.toList();
-    if(!killIds.empty()){
-        QProcess killChildProcess;
-        killChildProcess.start("kill", killIds);
-        killChildProcess.waitForFinished();
-    }
+  QStringList killIds = _idsToKill.toList();
+  if (!killIds.empty())
+  {
+    QProcess killChildProcess;
+    killChildProcess.start("kill", killIds);
+    killChildProcess.waitForFinished();
+  }
 
-    if(_process != nullptr)
+  if (_process != nullptr)
+  {
+    if (_process->state() != QProcess::NotRunning)
     {
-        if(_process->state() != QProcess::NotRunning)
-        {
-            _process->kill();
-        }
-        delete _process;
+      _process->kill();
     }
+    delete _process;
+  }
 
-    if(_textOutput != nullptr) {
-        delete _textOutput;
-    }
+  if (_textOutput != nullptr)
+  {
+    delete _textOutput;
+  }
 
-    delete ui;
+  delete ui;
 }
 
 /**
  * @brief ProcessOutputWindow::process
  * @return The pointer to the process object managed by this window.
  */
-QProcess *ProcessOutputWindow::process()
+QProcess* ProcessOutputWindow::process()
 {
-    return _process;
+  return _process;
 }
 
 /**
@@ -147,11 +131,11 @@ QProcess *ProcessOutputWindow::process()
  *
  * To check if the process is still running, see the method isProcessRunning().
  */
-QProcess *ProcessOutputWindow::resetProcess()
+QProcess* ProcessOutputWindow::resetProcess()
 {
-    QProcess *temp = _process;
-    _process = nullptr;
-    return temp;
+  QProcess* temp = _process;
+  _process = nullptr;
+  return temp;
 }
 
 /**
@@ -163,20 +147,20 @@ QProcess *ProcessOutputWindow::resetProcess()
  */
 bool ProcessOutputWindow::isProcessRunning() const
 {
-    if(_process != nullptr)
-    {
-        return _process->state() != QProcess::NotRunning;
-    }
-    return true;
+  if (_process != nullptr)
+  {
+    return _process->state() != QProcess::NotRunning;
+  }
+  return true;
 }
 
 /**
  * @brief ProcessOutputWindow::processName
  * @return
  */
-const QString &ProcessOutputWindow::processName() const
+const QString& ProcessOutputWindow::processName() const
 {
-    return _processName;
+  return _processName;
 }
 
 /**
@@ -187,13 +171,14 @@ const QString &ProcessOutputWindow::processName() const
  * This function adds the user informed data to the screen and emits the
  * relevant signals.
  */
-void ProcessOutputWindow::addData(const QString &data)
+void ProcessOutputWindow::addData(const QString& data)
 {
-    if(!data.isEmpty()) {
-        _textOutput->append(data);
-        emit dataAdded(data);
-        emit contentChanged(_textOutput->toPlainText());
-    }
+  if (!data.isEmpty())
+  {
+    _textOutput->append(data);
+    emit dataAdded(data);
+    emit contentChanged(_textOutput->toPlainText());
+  }
 }
 
 /**
@@ -201,14 +186,13 @@ void ProcessOutputWindow::addData(const QString &data)
  * Slot to add data to the output panel.
  * @param data A list of new lines of text to add to the output window.
  */
-void ProcessOutputWindow::addData(const QStringList &data)
+void ProcessOutputWindow::addData(const QStringList& data)
 {
-    for(QStringList::const_iterator i = data.constBegin();
-        i != data.constEnd();
-        i++)
-    {
-        addData(*i);
-    }
+  for (QStringList::const_iterator i = data.constBegin(); i != data.constEnd();
+       i++)
+  {
+    addData(*i);
+  }
 }
 
 /**
@@ -217,12 +201,12 @@ void ProcessOutputWindow::addData(const QStringList &data)
  */
 void ProcessOutputWindow::clearOutput()
 {
-    if(!_textOutput->toPlainText().isEmpty())
-    {
-        _textOutput->clear();
-        emit outputCleared();
-        emit contentChanged("");
-    }
+  if (!_textOutput->toPlainText().isEmpty())
+  {
+    _textOutput->clear();
+    emit outputCleared();
+    emit contentChanged("");
+  }
 }
 
 /**
@@ -231,7 +215,7 @@ void ProcessOutputWindow::clearOutput()
  */
 void ProcessOutputWindow::start()
 {
-    _process->start();
+  _process->start();
 }
 
 /**
@@ -239,10 +223,10 @@ void ProcessOutputWindow::start()
  * Starts the process execution setting its environment variables.
  * @param env Environment variables for the new process.
  */
-void ProcessOutputWindow::start(const QProcessEnvironment &env)
+void ProcessOutputWindow::start(const QProcessEnvironment& env)
 {
-    _process->setProcessEnvironment(env);
-    _process->start();
+  _process->setProcessEnvironment(env);
+  _process->start();
 }
 
 /**
@@ -253,14 +237,14 @@ void ProcessOutputWindow::start(const QProcessEnvironment &env)
  * The process name is used in the window title, the actions performed by the
  * window and in the logging and other messages shown to the user.
  */
-void ProcessOutputWindow::setProcessName(const QString &name)
+void ProcessOutputWindow::setProcessName(const QString& name)
 {
-    if(name != _processName)
-    {
-        _processName = name;
-        setWindowTitle(name);
-        emit processNameChanged(name);
-    }
+  if (name != _processName)
+  {
+    _processName = name;
+    setWindowTitle(name);
+    emit processNameChanged(name);
+  }
 }
 
 /**
@@ -268,9 +252,9 @@ void ProcessOutputWindow::setProcessName(const QString &name)
  * @param dirPath The path to starting directory of the save output action
  * file browser.
  */
-void ProcessOutputWindow::setSaveOutputStartingDir(const QString &dirPath)
+void ProcessOutputWindow::setSaveOutputStartingDir(const QString& dirPath)
 {
-    _prevSaveOutputDir = dirPath;
+  _prevSaveOutputDir = dirPath;
 }
 
 /**
@@ -278,9 +262,9 @@ void ProcessOutputWindow::setSaveOutputStartingDir(const QString &dirPath)
  * @param dir The directory in which the save output action file browser
  * should be opened in.
  */
-void ProcessOutputWindow::setSaveOutputStartingDir(const QDir &dir)
+void ProcessOutputWindow::setSaveOutputStartingDir(const QDir& dir)
 {
-    setSaveOutputStartingDir(dir.absolutePath());
+  setSaveOutputStartingDir(dir.absolutePath());
 }
 
 /**
@@ -289,9 +273,9 @@ void ProcessOutputWindow::setSaveOutputStartingDir(const QDir &dir)
  * @param filePath The path of the file to save the content to.
  * @return True if the content was saved and false if an error ocurred.
  */
-bool ProcessOutputWindow::savePlaintextOutputToFile(const QString &filePath)
+bool ProcessOutputWindow::savePlaintextOutputToFile(const QString& filePath)
 {
-    return saveToFile(_textOutput->toPlainText(), filePath);
+  return saveToFile(_textOutput->toPlainText(), filePath);
 }
 
 /**
@@ -300,9 +284,9 @@ bool ProcessOutputWindow::savePlaintextOutputToFile(const QString &filePath)
  * @param filePath The path of the file to save the content to.
  * @return True if the content was saved and false if an error ocurred.
  */
-bool ProcessOutputWindow::saveHtmlOutputToFile(const QString &filePath)
+bool ProcessOutputWindow::saveHtmlOutputToFile(const QString& filePath)
 {
-    return saveToFile(_textOutput->toHtml(), filePath);
+  return saveToFile(_textOutput->toHtml(), filePath);
 }
 
 /**
@@ -313,9 +297,9 @@ bool ProcessOutputWindow::saveHtmlOutputToFile(const QString &filePath)
  * @todo As Qt 5.12 do not support markdown export yet, I changed it to output
  * HTML, this needs to be corrected in the future.
  */
-bool ProcessOutputWindow::saveMarkdwonOutputToFile(const QString &filePath)
+bool ProcessOutputWindow::saveMarkdwonOutputToFile(const QString& filePath)
 {
-    return saveToFile(_textOutput->toHtml(), filePath);
+  return saveToFile(_textOutput->toHtml(), filePath);
 }
 
 /**
@@ -324,7 +308,7 @@ bool ProcessOutputWindow::saveMarkdwonOutputToFile(const QString &filePath)
  */
 QString ProcessOutputWindow::output() const
 {
-    return _textOutput->toPlainText();
+  return _textOutput->toPlainText();
 }
 
 /**
@@ -333,7 +317,7 @@ QString ProcessOutputWindow::output() const
  */
 QString ProcessOutputWindow::outputHtml() const
 {
-    return _textOutput->toHtml();
+  return _textOutput->toHtml();
 }
 
 /**
@@ -344,7 +328,7 @@ QString ProcessOutputWindow::outputHtml() const
  */
 QString ProcessOutputWindow::outputMarkdown() const
 {
-    return _textOutput->toHtml();
+  return _textOutput->toHtml();
 }
 
 /**
@@ -356,7 +340,7 @@ QString ProcessOutputWindow::outputMarkdown() const
  */
 void ProcessOutputWindow::readStandardOutFromProcess()
 {
-    addText(QString(_process->readAllStandardOutput()), normalOutputColor);
+  addText(QString(_process->readAllStandardOutput()), normalOutputColor);
 }
 
 /**
@@ -368,7 +352,7 @@ void ProcessOutputWindow::readStandardOutFromProcess()
  */
 void ProcessOutputWindow::readStandardErrorFromProcess()
 {
-    addText(QString(_process->readAllStandardError()), errorOutputColor);
+  addText(QString(_process->readAllStandardError()), errorOutputColor);
 }
 
 /**
@@ -381,39 +365,38 @@ void ProcessOutputWindow::readStandardErrorFromProcess()
  */
 void ProcessOutputWindow::onProcessStart()
 {
-    // Updates the button text to Stop
-    ui->pushButton->setText(tr("Stop"));
+  // Updates the button text to Stop
+  ui->pushButton->setText(tr("Stop"));
 
-    // Logs the action
-    qInfo() << "Starting the " << _processName << " process with program "
-            << _process->program() << " and parameters "
-            << _process->arguments() << ".";
+  // Logs the action
+  qInfo() << "Starting the " << _processName << " process with program "
+          << _process->program() << " and parameters " << _process->arguments()
+          << ".";
 
-    QString args = "";
-    for(QStringList::const_iterator i = _process->arguments().constBegin();
-        i != _process->arguments().constEnd();
-        i++)
-    {
-        args += ", " + *i;
-    }
-    args.replace(0, 1, "(");
-    args += ")";
+  QString args = "";
+  for (QStringList::const_iterator i = _process->arguments().constBegin();
+       i != _process->arguments().constEnd(); i++)
+  {
+    args += ", " + *i;
+  }
+  args.replace(0, 1, "(");
+  args += ")";
 
-    addText(tr("Starting the %1 process execution with the following "
-               "parameters: \n"
-               "Program: \t%2\n"
-               "Arguments: \t%3\n"
-               "Working directory: \t%4\n"
-               "Process PID: \t%5\n")
-            .arg(_processName)
-            .arg(_process->program())
-            .arg(args)
-            .arg(_process->workingDirectory())
-            .arg(_process->processId()),
-            applicationOutputColor);
+  addText(tr("Starting the %1 process execution with the following "
+             "parameters: \n"
+             "Program: \t%2\n"
+             "Arguments: \t%3\n"
+             "Working directory: \t%4\n"
+             "Process PID: \t%5\n")
+              .arg(_processName)
+              .arg(_process->program())
+              .arg(args)
+              .arg(_process->workingDirectory())
+              .arg(_process->processId()),
+          applicationOutputColor);
 
-    _pid = _process->processId();
-    emit processStarted();
+  _pid = _process->processId();
+  emit processStarted();
 }
 
 /**
@@ -427,25 +410,25 @@ void ProcessOutputWindow::onProcessStart()
 void ProcessOutputWindow::onProcessFinish(int exitCode,
                                           QProcess::ExitStatus status)
 {
-    switch(status)
-    {
+  switch (status)
+  {
     case QProcess::NormalExit:
-        addText(tr("The %1 process finished execution with return code %2")
-                .arg(_processName)
-                .arg(exitCode),
-                applicationOutputColor);
-        break;
+      addText(tr("The %1 process finished execution with return code %2")
+                  .arg(_processName)
+                  .arg(exitCode),
+              applicationOutputColor);
+      break;
     case QProcess::CrashExit:
-        addText(tr("The %1 process finished execution with an error.")
-                .arg(_processName),
-                applicationOutputColor);
-        break;
-    }
+      addText(tr("The %1 process finished execution with an error.")
+                  .arg(_processName),
+              applicationOutputColor);
+      break;
+  }
 
-    ui->pushButton->setText(tr("Close"));
+  ui->pushButton->setText(tr("Close"));
 
-    emit processFinished(exitCode, status);
-    _textOutput->enableInteraction();
+  emit processFinished(exitCode, status);
+  _textOutput->enableInteraction();
 }
 
 /**
@@ -463,53 +446,52 @@ void ProcessOutputWindow::onProcessFinish(int exitCode,
  */
 void ProcessOutputWindow::onProcessError(QProcess::ProcessError error)
 {
-    QString errorMsg;
-    qCritical() << "A process error of code " << error
-                << " ocurred when trying to execute the process with program "
-                << _process->program() << " and parameters ("
-                << _process->arguments() << ").";
-    switch(error)
-    {
+  QString errorMsg;
+  qCritical() << "A process error of code " << error
+              << " ocurred when trying to execute the process with program "
+              << _process->program() << " and parameters ("
+              << _process->arguments() << ").";
+  switch (error)
+  {
     case QProcess::FailedToStart:
-        errorMsg = tr("The process failed to start. Either the invoked "
-                      "program is missing, or you may have insufficient "
-                      "permissions to invoke the program.");
-        break;
+      errorMsg = tr("The process failed to start. Either the invoked "
+                    "program is missing, or you may have insufficient "
+                    "permissions to invoke the program.");
+      break;
     case QProcess::Crashed:
-        errorMsg = tr("An error ocurred after the process started.");
-        break;
+      errorMsg = tr("An error ocurred after the process started.");
+      break;
     case QProcess::Timedout:
-        errorMsg = tr("The process has exausted the time limit for its "
-                      "execution without finishing");
-        break;
+      errorMsg = tr("The process has exausted the time limit for its "
+                    "execution without finishing");
+      break;
     case QProcess::WriteError:
-        errorMsg = tr("An error ocurred when attempting to write data to the "
-                      "process.");
-        break;
+      errorMsg = tr("An error ocurred when attempting to write data to the "
+                    "process.");
+      break;
     case QProcess::ReadError:
-        errorMsg = tr("An error ocurred when attempting to read data from the "
-                      "process.");
-        break;
+      errorMsg = tr("An error ocurred when attempting to read data from the "
+                    "process.");
+      break;
     case QProcess::UnknownError:
-        errorMsg = tr("An unknowed error has ocurred during the process "
-                      "execution.");
-        break;
-    }
+      errorMsg = tr("An unknowed error has ocurred during the process "
+                    "execution.");
+      break;
+  }
 
-    // Creates a message box informing the user
-    if(showErrorMessageBox) {
-        QMessageBox::critical(
-                    this,
-                    tr("An error ocurred during process execution"),
-                    errorMsg);
-    }
+  // Creates a message box informing the user
+  if (showErrorMessageBox)
+  {
+    QMessageBox::critical(this, tr("An error ocurred during process execution"),
+                          errorMsg);
+  }
 
-    // Adds data to the window
-    QString details = "\n" + tr("An error ocurred during process execution.") +
-            "\n" + errorMsg;
-    addText(details, errorOutputColor);
+  // Adds data to the window
+  QString details =
+      "\n" + tr("An error ocurred during process execution.") + "\n" + errorMsg;
+  addText(details, errorOutputColor);
 
-    emit processErrorOcurred(error);
+  emit processErrorOcurred(error);
 }
 
 /**
@@ -533,46 +515,41 @@ void ProcessOutputWindow::onProcessError(QProcess::ProcessError error)
  */
 void ProcessOutputWindow::saveOutputAction()
 {
-    QString path = QFileDialog::getSaveFileName(
-                this,
-                tr("Export the %1 process output to").arg(_processName),
-                _prevSaveOutputDir,
-                tr("HTML File") + "(*.html);;" +
-                tr("Markdown File") + "(*.md);;" +
-                tr("Text File") + "(*.txt);;" +
-                tr("All Files") + ("*.*"),
-                &_prevSelectedFilter);
-    if(!path.isEmpty())
+  QString path = QFileDialog::getSaveFileName(
+      this, tr("Export the %1 process output to").arg(_processName),
+      _prevSaveOutputDir,
+      tr("HTML File") + "(*.html);;" + tr("Markdown File") + "(*.md);;" +
+          tr("Text File") + "(*.txt);;" + tr("All Files") + ("*.*"),
+      &_prevSelectedFilter);
+  if (!path.isEmpty())
+  {
+    bool res;
+    QFileInfo info(path);
+    if (info.suffix() == "html")
     {
-        bool res;
-        QFileInfo info(path);
-        if(info.suffix() == "html")
-        {
-            _prevSelectedFilter = tr("HTML File") + "(*.html);;";
-            res = saveHtmlOutputToFile(path);
-        }
-        else if(info.suffix() == "md")
-        {
-            _prevSelectedFilter = tr("Markdown File") + "(*.md);;";
-            res = saveMarkdwonOutputToFile(path);
-        }
-        else
-        {
-            _prevSaveOutputDir = tr("Text File") + "(*.txt);;";
-            res = savePlaintextOutputToFile(path);
-        }
-        // Checks if an errour ocurred or the content was saved succesfully.
-        if(!res)
-        {
-            QMessageBox::critical(
-                        this,
-                        tr("Error when saving file."),
-                        tr("An error ocurred while trying the write the "
-                           "contents of the ouput window to a file."));
-        }
-        // Updates the previous directory location
-        _prevSaveOutputDir = info.path();
+      _prevSelectedFilter = tr("HTML File") + "(*.html);;";
+      res = saveHtmlOutputToFile(path);
     }
+    else if (info.suffix() == "md")
+    {
+      _prevSelectedFilter = tr("Markdown File") + "(*.md);;";
+      res = saveMarkdwonOutputToFile(path);
+    }
+    else
+    {
+      _prevSaveOutputDir = tr("Text File") + "(*.txt);;";
+      res = savePlaintextOutputToFile(path);
+    }
+    // Checks if an errour ocurred or the content was saved succesfully.
+    if (!res)
+    {
+      QMessageBox::critical(this, tr("Error when saving file."),
+                            tr("An error ocurred while trying the write the "
+                               "contents of the ouput window to a file."));
+    }
+    // Updates the previous directory location
+    _prevSaveOutputDir = info.path();
+  }
 }
 
 /**
@@ -582,17 +559,17 @@ void ProcessOutputWindow::saveOutputAction()
  */
 void ProcessOutputWindow::copyOutpuAction()
 {
-    QTextCursor prevCursor = _textOutput->textCursor();
-    // Select everythin and copy to clipboard
-    _textOutput->selectAll();
-    _textOutput->copy();
-    // Restore previous cursor
-    _textOutput->setTextCursor(prevCursor);
+  QTextCursor prevCursor = _textOutput->textCursor();
+  // Select everythin and copy to clipboard
+  _textOutput->selectAll();
+  _textOutput->copy();
+  // Restore previous cursor
+  _textOutput->setTextCursor(prevCursor);
 }
 
 void ProcessOutputWindow::onPushButtonClicked()
 {
-    close();
+  close();
 }
 
 /**
@@ -606,15 +583,15 @@ void ProcessOutputWindow::onPushButtonClicked()
  *
  * After outputting the text, the color is restored to the previous value.
  */
-void ProcessOutputWindow::addText(const QString &text, const QColor &color)
+void ProcessOutputWindow::addText(const QString& text, const QColor& color)
 {
-    // Stores the previous color and sets the new color
-    QColor prevColor = _textOutput->textColor();
-    _textOutput->setTextColor(color);
-    // Adds the text
-    addData(text);
-    // Restore previous value
-    _textOutput->setTextColor(prevColor);
+  // Stores the previous color and sets the new color
+  QColor prevColor = _textOutput->textColor();
+  _textOutput->setTextColor(color);
+  // Adds the text
+  addData(text);
+  // Restore previous value
+  _textOutput->setTextColor(prevColor);
 }
 
 /**
@@ -633,39 +610,30 @@ void ProcessOutputWindow::addText(const QString &text, const QColor &color)
  */
 void ProcessOutputWindow::populateToolbar()
 {
-    ui->toolBar->setFloatable(false);
-    ui->toolBar->setMovable(false);
+  ui->toolBar->setFloatable(false);
+  ui->toolBar->setMovable(false);
 
-    // An action to export the text
-    QAction *exportOutputAction = new QAction(
-                QIcon(":/themify-icons/resources/icons/save.svg"),
-                tr("Export output to a text file"),
-                this);
-    QObject::connect(exportOutputAction,
-                     &QAction::triggered,
-                     this,
-                     &ProcessOutputWindow::saveOutputAction);
-    ui->toolBar->addAction(exportOutputAction);
+  // An action to export the text
+  QAction* exportOutputAction =
+      new QAction(QIcon(":/themify-icons/resources/icons/save.svg"),
+                  tr("Export output to a text file"), this);
+  QObject::connect(exportOutputAction, &QAction::triggered, this,
+                   &ProcessOutputWindow::saveOutputAction);
+  ui->toolBar->addAction(exportOutputAction);
 
-    QAction *copyAction = new QAction(
-                QIcon(":/themify-icons/resources/icons/share.svg"),
-                tr("Copy output to clipboard"),
-                this);
-    QObject::connect(copyAction,
-                     &QAction::triggered,
-                     this,
-                     &ProcessOutputWindow::copyOutpuAction);
-    ui->toolBar->addAction(copyAction);
+  QAction* copyAction = new QAction(QIcon(":/themify-icons/resources/icons/"
+                                          "share.svg"),
+                                    tr("Copy output to clipboard"), this);
+  QObject::connect(copyAction, &QAction::triggered, this,
+                   &ProcessOutputWindow::copyOutpuAction);
+  ui->toolBar->addAction(copyAction);
 
-    QAction *clearWindowAction = new QAction(
-                QIcon(":/themify-icons/resources/icons/eraser.svg"),
-                tr("Clear window"),
-                this);
-    QObject::connect(clearWindowAction,
-                     &QAction::triggered,
-                     this,
-                     &ProcessOutputWindow::clearOutput);
-    ui->toolBar->addAction(clearWindowAction);
+  QAction* clearWindowAction = new QAction(QIcon(":/themify-icons/resources/"
+                                                 "icons/eraser.svg"),
+                                           tr("Clear window"), this);
+  QObject::connect(clearWindowAction, &QAction::triggered, this,
+                   &ProcessOutputWindow::clearOutput);
+  ui->toolBar->addAction(clearWindowAction);
 }
 
 /**
@@ -687,91 +655,82 @@ void ProcessOutputWindow::populateToolbar()
  */
 bool ProcessOutputWindow::actionOnClosingWhithProcessRunning()
 {
-    bool proceed = false;
-    QMessageBox confirmationBox;
-    confirmationBox.setText(tr("The %1 is still running, do you want to "
-                               "kill this process?").arg(_processName));
+  bool proceed = false;
+  QMessageBox confirmationBox;
+  confirmationBox.setText(tr("The %1 is still running, do you want to "
+                             "kill this process?")
+                              .arg(_processName));
 
-    QPushButton *waitButton = new QPushButton(
-                tr("Wait for the process to finish"),
-                this);
-    waitButton->setToolTip(
-                tr("Wait until the process finishes normally."));
-    confirmationBox.addButton(waitButton,
-                              QMessageBox::ButtonRole::YesRole);
+  QPushButton* waitButton =
+      new QPushButton(tr("Wait for the process to finish"), this);
+  waitButton->setToolTip(tr("Wait until the process finishes normally."));
+  confirmationBox.addButton(waitButton, QMessageBox::ButtonRole::YesRole);
 
-    QPushButton *killButton = new QPushButton(
-                tr("Kill the process"),
-                this);
-    killButton->setToolTip(tr("Finishes the process instantly without giving "
-                              "it time to properly close the used resources."));
-    confirmationBox.addButton(killButton,
-                              QMessageBox::ButtonRole::DestructiveRole);
+  QPushButton* killButton = new QPushButton(tr("Kill the process"), this);
+  killButton->setToolTip(tr("Finishes the process instantly without giving "
+                            "it time to properly close the used resources."));
+  confirmationBox.addButton(killButton,
+                            QMessageBox::ButtonRole::DestructiveRole);
 
-    QPushButton *terminateButton = new QPushButton(
-                tr("Terminate the process"),
-                this);
-    terminateButton->setToolTip(
-                tr("Signal the process the stop now."));
-    confirmationBox.addButton(terminateButton,
-                              QMessageBox::ButtonRole::ActionRole);
+  QPushButton* terminateButton =
+      new QPushButton(tr("Terminate the process"), this);
+  terminateButton->setToolTip(tr("Signal the process the stop now."));
+  confirmationBox.addButton(terminateButton,
+                            QMessageBox::ButtonRole::ActionRole);
 
+  QPushButton* cancelButton = new QPushButton(tr("Cancel"), this);
+  confirmationBox.addButton(cancelButton, QMessageBox::ButtonRole::RejectRole);
 
-    QPushButton *cancelButton = new QPushButton(
-                tr("Cancel"),
-                this);
-    confirmationBox.addButton(cancelButton,
-                              QMessageBox::ButtonRole::RejectRole);
+  confirmationBox.addButton(tr("No"), QMessageBox::NoRole);
 
-    confirmationBox.addButton(tr("No"), QMessageBox::NoRole);
+  // Shows the message box and wait user interaction
+  confirmationBox.exec();
 
-    // Shows the message box and wait user interaction
-    confirmationBox.exec();
+  if (confirmationBox.clickedButton() == waitButton)
+  {
+    const int timeout = 5 * 60 * 1000;
+    _process->waitForFinished(timeout);
+    proceed = true;
+  }
+  else if (confirmationBox.clickedButton() == cancelButton)
+  {
+    proceed = false;
+  }
+  else
+  {
+    // Stops the error messages
+    showErrorMessageBox = false;
 
-    if(confirmationBox.clickedButton() == waitButton)
+    // Store the set of child process ids
+    _idsToKill = getChildProcessPID(_pid);
+
+    // Kill all of the ROS Nodes
+    QStringList args;
+    args << "kill"
+         << "-a";
+    QProcess rosNodeKillProcess;
+    qDebug() << "Finishing ROS Nodes";
+    rosNodeKillProcess.start("rosnode", args);
+    rosNodeKillProcess.waitForFinished(60000);
+    qDebug() << "Nodes finished with result "
+             << rosNodeKillProcess.readAllStandardOutput();
+
+    if (confirmationBox.clickedButton() == terminateButton)
     {
-        const int timeout = 5 * 60 * 1000;
-        _process->waitForFinished(timeout);
-        proceed = true;
+      _process->terminate();
+      proceed = true;
     }
-    else if(confirmationBox.clickedButton() == cancelButton)
+    else if (confirmationBox.clickedButton() == killButton)
     {
-        proceed = false;
+      _process->kill();
+      proceed = true;
     }
-    else
-    {
-        // Stops the error messages
-        showErrorMessageBox = false;
+  }
 
-        // Store the set of child process ids
-        _idsToKill = getChildProcessPID(_pid);
-
-        // Kill all of the ROS Nodes
-        QStringList args;
-        args << "kill" << "-a";
-        QProcess rosNodeKillProcess;
-        qDebug() << "Finishing ROS Nodes";
-        rosNodeKillProcess.start("rosnode", args);
-        rosNodeKillProcess.waitForFinished(60000);
-        qDebug() << "Nodes finished with result "
-                 << rosNodeKillProcess.readAllStandardOutput();
-
-        if(confirmationBox.clickedButton() == terminateButton)
-        {
-            _process->terminate();
-            proceed = true;
-        }
-        else if(confirmationBox.clickedButton() == killButton)
-        {
-            _process->kill();
-            proceed = true;
-        }
-    }
-
-    delete waitButton;
-    delete killButton;
-    delete terminateButton;
-    return proceed;
+  delete waitButton;
+  delete killButton;
+  delete terminateButton;
+  return proceed;
 }
 
 /**
@@ -788,38 +747,35 @@ bool ProcessOutputWindow::actionOnClosingWhithProcessRunning()
 QSet<QString> ProcessOutputWindow::getChildProcessPID(int pid,
                                                       QSet<QString> ids)
 {
-    // Result
-    QProcess getChildProcess;
-    QStringList getChildCmds;
-    getChildCmds << "--ppid"
-                 << QString::number(pid)
-                 << "-o"
-                 << "pid"
-                 << "--no-heading";
-    getChildProcess.start("ps", getChildCmds);
-    getChildProcess.waitForFinished();
-    QString processOutput(getChildProcess.readAllStandardOutput());
+  // Result
+  QProcess getChildProcess;
+  QStringList getChildCmds;
+  getChildCmds << "--ppid" << QString::number(pid) << "-o"
+               << "pid"
+               << "--no-heading";
+  getChildProcess.start("ps", getChildCmds);
+  getChildProcess.waitForFinished();
+  QString processOutput(getChildProcess.readAllStandardOutput());
 
-    // Check if any pid was returned by the ps process
-    if(processOutput.length() != 0)
+  // Check if any pid was returned by the ps process
+  if (processOutput.length() != 0)
+  {
+    QStringList returnedPids = processOutput.split("\n");
+
+    foreach (const QString& id, returnedPids)
     {
-        QStringList returnedPids = processOutput.split("\n");
-
-        foreach(const QString &id, returnedPids)
-        {
-            // For each pid that is not in the ids set, run the process again
-            if(id.length() != 0 && !ids.contains(id))
-            {
-                ids.insert(id);
-                QSet<QString> resSet = getChildProcessPID(id.toInt(), ids);
-                ids.unite(resSet);
-            }
-        }
+      // For each pid that is not in the ids set, run the process again
+      if (id.length() != 0 && !ids.contains(id))
+      {
+        ids.insert(id);
+        QSet<QString> resSet = getChildProcessPID(id.toInt(), ids);
+        ids.unite(resSet);
+      }
     }
+  }
 
-    return ids;
+  return ids;
 }
-
 
 /**
  * @brief ProcessOutputWindow::closeEvent
@@ -842,16 +798,17 @@ QSet<QString> ProcessOutputWindow::getChildProcessPID(int pid,
  * If the process is not running, the base class implementation is called and
  * the window is closed normally.
  */
-void ProcessOutputWindow::closeEvent(QCloseEvent *event)
+void ProcessOutputWindow::closeEvent(QCloseEvent* event)
 {
-    if(_process->state() != QProcess::NotRunning)
-    {
-        actionOnClosingWhithProcessRunning();
-        event->ignore();
-    }
-    else {
-        QMainWindow::closeEvent(event);
-    }
+  if (_process->state() != QProcess::NotRunning)
+  {
+    actionOnClosingWhithProcessRunning();
+    event->ignore();
+  }
+  else
+  {
+    QMainWindow::closeEvent(event);
+  }
 }
 
 /**
@@ -868,23 +825,25 @@ void ProcessOutputWindow::closeEvent(QCloseEvent *event)
  * In the case of an error during the process, the file will be closed,
  * the error logged and the function returns false.
  */
-bool ProcessOutputWindow::saveToFile(const QString &content,
-                                     const QString &filePath)
+bool ProcessOutputWindow::saveToFile(const QString& content,
+                                     const QString& filePath)
 {
-    QFile file(filePath);
-    if(file.open(QIODevice::ReadWrite | QIODevice::Text)) {
-        QTextStream stream(&file);
+  QFile file(filePath);
+  if (file.open(QIODevice::ReadWrite | QIODevice::Text))
+  {
+    QTextStream stream(&file);
 
-        stream << content;
+    stream << content;
 
-        stream.flush();
-        file.close();
-        return true;
-    }
-    else {
-        qCritical("An error ocurred when trying to export the output of "
-                  "a process to a text file with path %s.",
-                  qUtf8Printable(filePath));
-        return false;
-    }
+    stream.flush();
+    file.close();
+    return true;
+  }
+  else
+  {
+    qCritical("An error ocurred when trying to export the output of "
+              "a process to a text file with path %s.",
+              qUtf8Printable(filePath));
+    return false;
+  }
 }

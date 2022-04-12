@@ -12,11 +12,10 @@
  * Performs the initialization of QWidget and constructs the user interface
  * using the parameteres defined in the form.
  */
-FileBrowserWidget::FileBrowserWidget(QWidget *parent) :
-    QWidget(parent),
-    ui(new Ui::FileBrowserWidget)
+FileBrowserWidget::FileBrowserWidget(QWidget* parent)
+  : QWidget(parent), ui(new Ui::FileBrowserWidget)
 {
-    ui->setupUi(this);
+  ui->setupUi(this);
 }
 
 /*!
@@ -26,7 +25,7 @@ FileBrowserWidget::FileBrowserWidget(QWidget *parent) :
  */
 FileBrowserWidget::~FileBrowserWidget()
 {
-    delete ui;
+  delete ui;
 }
 
 /*!
@@ -35,7 +34,7 @@ FileBrowserWidget::~FileBrowserWidget()
  */
 FileBrowserWidget::BrowserType FileBrowserWidget::browserType() const
 {
-    return _browserType;
+  return _browserType;
 }
 
 /*!
@@ -44,9 +43,9 @@ FileBrowserWidget::BrowserType FileBrowserWidget::browserType() const
  * user.
  */
 void FileBrowserWidget::setBrowserType(
-        FileBrowserWidget::BrowserType browserType)
+    FileBrowserWidget::BrowserType browserType)
 {
-    _browserType = browserType;
+  _browserType = browserType;
 }
 
 /*!
@@ -55,43 +54,43 @@ void FileBrowserWidget::setBrowserType(
  */
 const QString FileBrowserWidget::filePath() const
 {
-    return ui->filePath->text();
+  return ui->filePath->text();
 }
 
 /*!
  * \brief FileBrowserWidget::browserDialogCaption
  * \return The text displayed in the title of the browser dialog.
  */
-const QString &FileBrowserWidget::browserDialogCaption() const
+const QString& FileBrowserWidget::browserDialogCaption() const
 {
-    return _browserDialogCaption;
+  return _browserDialogCaption;
 }
 
 /*!
  * \brief FileBrowserWidget::setBrowserDialogCaption
  * \param caption The text displayed in the title of the browser dialog.
  */
-void FileBrowserWidget::setBrowserDialogCaption(const QString &caption)
+void FileBrowserWidget::setBrowserDialogCaption(const QString& caption)
 {
-    _browserDialogCaption = caption;
+  _browserDialogCaption = caption;
 }
 
 /*!
  * \brief FileBrowserWidget::browserDir
  * \return The starting directory of the file browser dialog.
  */
-const QString &FileBrowserWidget::browserDir() const
+const QString& FileBrowserWidget::browserDir() const
 {
-    return _browserDir;
+  return _browserDir;
 }
 
 /*!
  * \brief FileBrowserWidget::setBrowserDir
  * \param path The starting directory of the file browser dialog.
  */
-void FileBrowserWidget::setBrowserDir(const QString &path)
+void FileBrowserWidget::setBrowserDir(const QString& path)
 {
-    _browserDir = path;
+  _browserDir = path;
 }
 
 /*!
@@ -101,9 +100,9 @@ void FileBrowserWidget::setBrowserDir(const QString &path)
  * This option is only used when the type of the of the browser is not
  * directory.
  */
-const QString &FileBrowserWidget::fileFilter() const
+const QString& FileBrowserWidget::fileFilter() const
 {
-    return _fileFilter;
+  return _fileFilter;
 }
 
 /*!
@@ -112,9 +111,9 @@ const QString &FileBrowserWidget::fileFilter() const
  *
  * See also @link fileFilter @endlink.
  */
-void FileBrowserWidget::setFileFilter(const QString &filter)
+void FileBrowserWidget::setFileFilter(const QString& filter)
 {
-    _fileFilter = filter;
+  _fileFilter = filter;
 }
 
 /*!
@@ -122,9 +121,9 @@ void FileBrowserWidget::setFileFilter(const QString &filter)
  * \return The text displayed in the tooltip of the tool button used to show
  * the file browser dialog.
  */
-const QString &FileBrowserWidget::browserButtonTooltip() const
+const QString& FileBrowserWidget::browserButtonTooltip() const
 {
-    return _browserButtonToolTip;
+  return _browserButtonToolTip;
 }
 
 /*!
@@ -132,10 +131,10 @@ const QString &FileBrowserWidget::browserButtonTooltip() const
  * \param tooltip The text that will be displayed in the tool tip of the
  * button used to show the browser dialog.
  */
-void FileBrowserWidget::setBrowserButtonTooltip(const QString &tooltip)
+void FileBrowserWidget::setBrowserButtonTooltip(const QString& tooltip)
 {
-    _browserButtonToolTip = tooltip;
-    ui->browserButton->setToolTip(tooltip);
+  _browserButtonToolTip = tooltip;
+  ui->browserButton->setToolTip(tooltip);
 }
 
 /**
@@ -149,21 +148,24 @@ void FileBrowserWidget::setBrowserButtonTooltip(const QString &tooltip)
  * also updated, and if an invalid path is passed, the directory is the home
  * directory of the user.
  */
-void FileBrowserWidget::setFilePath(const QString &path)
+void FileBrowserWidget::setFilePath(const QString& path)
 {
-    if(path != ui->filePath->text()) {
-        ui->filePath->setText(path);
+  if (path != ui->filePath->text())
+  {
+    ui->filePath->setText(path);
 
-        QFileInfo finfo(path);
-        if(finfo.dir().exists()) {
-            _browserDir = finfo.absoluteDir().path();
-        }
-        else {
-            _browserDir = QDir::homePath();
-        }
-
-        emit filePathChanged(path);
+    QFileInfo finfo(path);
+    if (finfo.dir().exists())
+    {
+      _browserDir = finfo.absoluteDir().path();
     }
+    else
+    {
+      _browserDir = QDir::homePath();
+    }
+
+    emit filePathChanged(path);
+  }
 }
 
 /*!
@@ -188,33 +190,27 @@ void FileBrowserWidget::setFilePath(const QString &path)
  */
 void FileBrowserWidget::on_browserButton_clicked()
 {
-    QString path;
-    const QString dir;
+  QString path;
+  const QString dir;
 
-    switch(_browserType) {
-        case BrowserType::OpenFile:
-            path = QFileDialog::getOpenFileName(
-                        this,
-                        _browserDialogCaption,
-                        _browserDir,
-                        _fileFilter);
-            break;
-        case BrowserType::SaveFile:
-            path = QFileDialog::getSaveFileName(
-                        this,
-                        _browserDialogCaption,
-                        _browserDir,
-                        _fileFilter);
-            break;
-        case BrowserType::Directory:
-            path = QFileDialog::getExistingDirectory(
-                        this,
-                        tr("Caption"),
-                        _browserDir);
-            break;
-    }
+  switch (_browserType)
+  {
+    case BrowserType::OpenFile:
+      path = QFileDialog::getOpenFileName(this, _browserDialogCaption,
+                                          _browserDir, _fileFilter);
+      break;
+    case BrowserType::SaveFile:
+      path = QFileDialog::getSaveFileName(this, _browserDialogCaption,
+                                          _browserDir, _fileFilter);
+      break;
+    case BrowserType::Directory:
+      path =
+          QFileDialog::getExistingDirectory(this, tr("Caption"), _browserDir);
+      break;
+  }
 
-    if(path != "") {
-        setFilePath(path);
-    }
+  if (path != "")
+  {
+    setFilePath(path);
+  }
 }

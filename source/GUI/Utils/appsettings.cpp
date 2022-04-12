@@ -16,9 +16,8 @@
  * Initializes the AppSettings class and pass the parent parameter to the
  * base class for correct initialization.
  */
-AppSettings::AppSettings(QObject *parent) : QObject(parent)
+AppSettings::AppSettings(QObject* parent) : QObject(parent)
 {
-
 }
 
 /**
@@ -32,8 +31,7 @@ AppSettings::AppSettings(QObject *parent) : QObject(parent)
  */
 const QString AppSettings::getGazeboModelPathUncheked() const
 {
-    return getDirectoryPath(GAZEBO_MODEL_PATH_KEY,
-                            getGazeboModelPathDefault());
+  return getDirectoryPath(GAZEBO_MODEL_PATH_KEY, getGazeboModelPathDefault());
 }
 
 /**
@@ -46,8 +44,7 @@ const QString AppSettings::getGazeboModelPathUncheked() const
  */
 const QString AppSettings::getGazeboModelPath() const
 {
-    return checkDirectoryPath(GAZEBO_MODEL_PATH_KEY,
-                            getGazeboModelPathDefault(),
+  return checkDirectoryPath(GAZEBO_MODEL_PATH_KEY, getGazeboModelPathDefault(),
                             tr("The directory containing the models used in "
                                "the simulator could not be opened."));
 }
@@ -58,9 +55,9 @@ const QString AppSettings::getGazeboModelPath() const
  */
 const QString AppSettings::getGazeboModelPathDefault() const
 {
-    return QDir::home().absoluteFilePath("catkin_ws/src/"
-                                         "ProVANT-Simulator_Developer/"
-                                         "source/Database/models");
+  return QDir::home().absoluteFilePath("catkin_ws/src/"
+                                       "ProVANT-Simulator_Developer/"
+                                       "source/Database/models");
 }
 
 /**
@@ -71,9 +68,9 @@ const QString AppSettings::getGazeboModelPathDefault() const
  *
  *
  */
-bool AppSettings::setGazeboModelPath(const QString &path)
+bool AppSettings::setGazeboModelPath(const QString& path)
 {
-    return setDirectoryPath(GAZEBO_MODEL_PATH_KEY, path, true);
+  return setDirectoryPath(GAZEBO_MODEL_PATH_KEY, path, true);
 }
 
 /**
@@ -87,8 +84,7 @@ bool AppSettings::setGazeboModelPath(const QString &path)
  */
 const QString AppSettings::getProvantRosPathUnchecked() const
 {
-    return getDirectoryPath(PROVANT_ROS_KEY,
-                            getProvantRosPathDefault());
+  return getDirectoryPath(PROVANT_ROS_KEY, getProvantRosPathDefault());
 }
 
 /**
@@ -101,8 +97,7 @@ const QString AppSettings::getProvantRosPathUnchecked() const
  */
 const QString AppSettings::getProvantRosPath() const
 {
-    return checkDirectoryPath(PROVANT_ROS_KEY,
-                            getProvantRosPathDefault(),
+  return checkDirectoryPath(PROVANT_ROS_KEY, getProvantRosPathDefault(),
                             tr("The path to the src directory of the catkin "
                                "workspace could not be opened."));
 }
@@ -113,7 +108,7 @@ const QString AppSettings::getProvantRosPath() const
  */
 const QString AppSettings::getProvantRosPathDefault() const
 {
-    return QDir::home().absoluteFilePath("catkin_ws/src");
+  return QDir::home().absoluteFilePath("catkin_ws/src");
 }
 
 /**
@@ -122,9 +117,9 @@ const QString AppSettings::getProvantRosPathDefault() const
  * @return True if the informed value points to a valid system path and false
  * if the path is invalid.
  */
-bool AppSettings::setProvantRosPath(const QString &path)
+bool AppSettings::setProvantRosPath(const QString& path)
 {
-    return setDirectoryPath(PROVANT_ROS_KEY, path, true);
+  return setDirectoryPath(PROVANT_ROS_KEY, path, true);
 }
 
 /**
@@ -138,8 +133,7 @@ bool AppSettings::setProvantRosPath(const QString &path)
  */
 const QString AppSettings::getTiltStrategiesPathUnchecked() const
 {
-    return getDirectoryPath(TILT_STRATEGIES_KEY,
-                            getTiltStrategiesPathDefault());
+  return getDirectoryPath(TILT_STRATEGIES_KEY, getTiltStrategiesPathDefault());
 }
 
 /**
@@ -152,8 +146,7 @@ const QString AppSettings::getTiltStrategiesPathUnchecked() const
  */
 const QString AppSettings::getTiltStrategiesPath() const
 {
-    return checkDirectoryPath(TILT_STRATEGIES_KEY,
-                            getTiltStrategiesPathDefault(),
+  return checkDirectoryPath(TILT_STRATEGIES_KEY, getTiltStrategiesPathDefault(),
                             tr("The path to the folder containing the compiled "
                                "binaries of the control strategies could not "
                                "be opened."));
@@ -165,7 +158,7 @@ const QString AppSettings::getTiltStrategiesPath() const
  */
 const QString AppSettings::getTiltStrategiesPathDefault() const
 {
-    return QDir::home().absoluteFilePath("catkin_ws/devel/lib");
+  return QDir::home().absoluteFilePath("catkin_ws/devel/lib");
 }
 
 /**
@@ -174,9 +167,9 @@ const QString AppSettings::getTiltStrategiesPathDefault() const
  * @return True if the informed value points to a valid system path and false
  * if the path is invalid.
  */
-bool AppSettings::setTiltStrategiesPath(const QString &path)
+bool AppSettings::setTiltStrategiesPath(const QString& path)
 {
-    return setDirectoryPath(TILT_STRATEGIES_KEY, path, true);
+  return setDirectoryPath(TILT_STRATEGIES_KEY, path, true);
 }
 
 /**
@@ -190,8 +183,7 @@ bool AppSettings::setTiltStrategiesPath(const QString &path)
  */
 const QString AppSettings::getTiltMatlabPathUnchecked() const
 {
-    return getDirectoryPath(TILT_MATLAB_KEY,
-                            getTiltMatlabPathDefault());
+  return getDirectoryPath(TILT_MATLAB_KEY, getTiltMatlabPathDefault());
 }
 
 /**
@@ -204,8 +196,7 @@ const QString AppSettings::getTiltMatlabPathUnchecked() const
  */
 const QString AppSettings::getTiltMatlabPath() const
 {
-    return checkDirectoryPath(TILT_MATLAB_KEY,
-                            getTiltMatlabPathDefault(),
+  return checkDirectoryPath(TILT_MATLAB_KEY, getTiltMatlabPathDefault(),
                             tr("The path to the folder containing the files "
                                "necessary to the Matlab logging of the files "
                                "could not be opened."));
@@ -217,9 +208,9 @@ const QString AppSettings::getTiltMatlabPath() const
  */
 const QString AppSettings::getTiltMatlabPathDefault() const
 {
-    return QDir::home().absoluteFilePath("catkin_ws/src/"
-                                         "ProVANT-Simulator_Developer/"
-                                         "source/Structure/Matlab/");
+  return QDir::home().absoluteFilePath("catkin_ws/src/"
+                                       "ProVANT-Simulator_Developer/"
+                                       "source/Structure/Matlab/");
 }
 
 /**
@@ -228,9 +219,9 @@ const QString AppSettings::getTiltMatlabPathDefault() const
  * @return True if the informed value points to a valid system path and false
  * if the path is invalid.
  */
-bool AppSettings::setTiltMatlabPath(const QString &path)
+bool AppSettings::setTiltMatlabPath(const QString& path)
 {
-    return setDirectoryPath(TILT_MATLAB_KEY, path, true);
+  return setDirectoryPath(TILT_MATLAB_KEY, path, true);
 }
 
 /**
@@ -244,8 +235,7 @@ bool AppSettings::setTiltMatlabPath(const QString &path)
  */
 const QString AppSettings::getTiltProjectPathUnchecked() const
 {
-    return getDirectoryPath(TILT_PROJECT_KEY,
-                            getTiltProjectPathDefault());
+  return getDirectoryPath(TILT_PROJECT_KEY, getTiltProjectPathDefault());
 }
 
 /**
@@ -258,8 +248,7 @@ const QString AppSettings::getTiltProjectPathUnchecked() const
  */
 const QString AppSettings::getTiltProjectPath() const
 {
-    return checkDirectoryPath(TILT_PROJECT_KEY,
-                            getTiltProjectPathDefault(),
+  return checkDirectoryPath(TILT_PROJECT_KEY, getTiltProjectPathDefault(),
                             tr("The path to the root of the ProVANT source "
                                "files could not be opened."));
 }
@@ -270,8 +259,8 @@ const QString AppSettings::getTiltProjectPath() const
  */
 const QString AppSettings::getTiltProjectPathDefault() const
 {
-    return QDir::home().absoluteFilePath("catkin_ws/src/"
-                                         "ProVANT-Simulator_Developer");
+  return QDir::home().absoluteFilePath("catkin_ws/src/"
+                                       "ProVANT-Simulator_Developer");
 }
 
 /**
@@ -280,9 +269,9 @@ const QString AppSettings::getTiltProjectPathDefault() const
  * @return True if the informed value points to a valid system path and false
  * if the path is invalid.
  */
-bool AppSettings::setTiltProjectPath(const QString &path)
+bool AppSettings::setTiltProjectPath(const QString& path)
 {
-    return setDirectoryPath(TILT_PROJECT_KEY, path, true);
+  return setDirectoryPath(TILT_PROJECT_KEY, path, true);
 }
 
 /**
@@ -296,8 +285,8 @@ bool AppSettings::setTiltProjectPath(const QString &path)
  */
 const QString AppSettings::getProvantDatabasePathUnchecked() const
 {
-    return getDirectoryPath(PROVANT_DATABASE_KEY,
-                            getProvantDatabasePathDefault());
+  return getDirectoryPath(PROVANT_DATABASE_KEY,
+                          getProvantDatabasePathDefault());
 }
 
 /**
@@ -310,7 +299,7 @@ const QString AppSettings::getProvantDatabasePathUnchecked() const
  */
 const QString AppSettings::getProvantDatabasePath() const
 {
-    return checkDirectoryPath(PROVANT_DATABASE_KEY,
+  return checkDirectoryPath(PROVANT_DATABASE_KEY,
                             getProvantDatabasePathDefault(),
                             tr("The path to the Database ROS package of the "
                                "ProVANT simulator could not be opened."));
@@ -322,9 +311,9 @@ const QString AppSettings::getProvantDatabasePath() const
  */
 const QString AppSettings::getProvantDatabasePathDefault() const
 {
-    return QDir::home().absoluteFilePath("catkin_ws/src/"
-                                         "ProVANT-Simulator_Developer/"
-                                         "source/Database");
+  return QDir::home().absoluteFilePath("catkin_ws/src/"
+                                       "ProVANT-Simulator_Developer/"
+                                       "source/Database");
 }
 
 /**
@@ -333,9 +322,9 @@ const QString AppSettings::getProvantDatabasePathDefault() const
  * @return True if the informed value points to a valid system path and false
  * if the path is invalid.
  */
-bool AppSettings::setProvantDatabasePath(const QString &path)
+bool AppSettings::setProvantDatabasePath(const QString& path)
 {
-    return setDirectoryPath(PROVANT_DATABASE_KEY, path, true);
+  return setDirectoryPath(PROVANT_DATABASE_KEY, path, true);
 }
 
 /**
@@ -349,8 +338,7 @@ bool AppSettings::setProvantDatabasePath(const QString &path)
  */
 const QString AppSettings::getCatkinWorkspacePathUncheked() const
 {
-    return getDirectoryPath(DIR_ROS_KEY,
-                            getCatkinWorkspacePathDefault());
+  return getDirectoryPath(DIR_ROS_KEY, getCatkinWorkspacePathDefault());
 }
 
 /**
@@ -363,8 +351,7 @@ const QString AppSettings::getCatkinWorkspacePathUncheked() const
  */
 const QString AppSettings::getCatkinWorkspacePath() const
 {
-    return checkDirectoryPath(DIR_ROS_KEY,
-                            getCatkinWorkspacePathDefault(),
+  return checkDirectoryPath(DIR_ROS_KEY, getCatkinWorkspacePathDefault(),
                             tr("The path to the root of your catkin workspace "
                                "could not be opened."));
 }
@@ -375,7 +362,7 @@ const QString AppSettings::getCatkinWorkspacePath() const
  */
 const QString AppSettings::getCatkinWorkspacePathDefault() const
 {
-    return QDir::home().absoluteFilePath("catkin_ws");
+  return QDir::home().absoluteFilePath("catkin_ws");
 }
 
 /**
@@ -384,9 +371,9 @@ const QString AppSettings::getCatkinWorkspacePathDefault() const
  * @return True if the informed value points to a valid system path and false
  * if the path is invalid.
  */
-bool AppSettings::setCatkinWorkspacePath(const QString &path)
+bool AppSettings::setCatkinWorkspacePath(const QString& path)
 {
-    return setDirectoryPath(DIR_ROS_KEY, path, true);
+  return setDirectoryPath(DIR_ROS_KEY, path, true);
 }
 
 /**
@@ -400,8 +387,8 @@ bool AppSettings::setCatkinWorkspacePath(const QString &path)
  */
 const QString AppSettings::getControlStrategiesPathUnchecked() const
 {
-    return getDirectoryPath(CONTROL_STRATEGIES_SOURCE_KEY,
-                            getControlStrategiesPathDefault());
+  return getDirectoryPath(CONTROL_STRATEGIES_SOURCE_KEY,
+                          getControlStrategiesPathDefault());
 }
 
 /**
@@ -421,11 +408,11 @@ const QString AppSettings::getControlStrategiesPathUnchecked() const
  */
 const QString AppSettings::getControlStrategiesPath() const
 {
-    return checkDirectoryPath(CONTROL_STRATEGIES_SOURCE_KEY,
-                              getControlStrategiesPathDefault(),
-                              tr("The path to the directory containing the "
-                                 "source files for the control strategies "
-                                 "used in the simulator could not be opened."));
+  return checkDirectoryPath(CONTROL_STRATEGIES_SOURCE_KEY,
+                            getControlStrategiesPathDefault(),
+                            tr("The path to the directory containing the "
+                               "source files for the control strategies "
+                               "used in the simulator could not be opened."));
 }
 
 /**
@@ -436,8 +423,8 @@ const QString AppSettings::getControlStrategiesPath() const
  */
 const QString AppSettings::getControlStrategiesPathDefault() const
 {
-    return QDir::cleanPath(getTiltProjectPathDefault() + QDir::separator() +
-                           "/source/Structure/control_strategies");
+  return QDir::cleanPath(getTiltProjectPathDefault() + QDir::separator() +
+                         "/source/Structure/control_strategies");
 }
 
 /**
@@ -449,9 +436,9 @@ const QString AppSettings::getControlStrategiesPathDefault() const
  *
  * See also: getControlStrategiesPath().
  */
-bool AppSettings::setControlStrategiesPath(const QString &path)
+bool AppSettings::setControlStrategiesPath(const QString& path)
 {
-    return setDirectoryPath(CONTROL_STRATEGIES_SOURCE_KEY, path);
+  return setDirectoryPath(CONTROL_STRATEGIES_SOURCE_KEY, path);
 }
 
 /**
@@ -460,7 +447,7 @@ bool AppSettings::setControlStrategiesPath(const QString &path)
  */
 const QString AppSettings::getRosVersionUnchecked() const
 {
-    return settings.value(ROS_VERSION_KEY, getRosVersionDefault()).toString();
+  return settings.value(ROS_VERSION_KEY, getRosVersionDefault()).toString();
 }
 
 /**
@@ -480,13 +467,14 @@ const QString AppSettings::getRosVersionUnchecked() const
  */
 const QString AppSettings::getRosVersion() const
 {
-    if(!settings.contains(ROS_VERSION_KEY)) {
-        qWarning("The value of the %s setting is not configured, returning "
-                 "default value.",
-                 qUtf8Printable(ROS_VERSION_KEY));
-        return getRosVersionDefault();
-    }
-    return settings.value(ROS_VERSION_KEY).toString();
+  if (!settings.contains(ROS_VERSION_KEY))
+  {
+    qWarning("The value of the %s setting is not configured, returning "
+             "default value.",
+             qUtf8Printable(ROS_VERSION_KEY));
+    return getRosVersionDefault();
+  }
+  return settings.value(ROS_VERSION_KEY).toString();
 }
 
 /**
@@ -495,7 +483,7 @@ const QString AppSettings::getRosVersion() const
  */
 const QString AppSettings::getRosVersionDefault() const
 {
-    return "melodic";
+  return "noetic";
 }
 
 /**
@@ -506,23 +494,23 @@ const QString AppSettings::getRosVersionDefault() const
  *
  * See getRosVersion() to check the allowed values.
  */
-bool AppSettings::setRosVersion(const QString &version)
+bool AppSettings::setRosVersion(const QString& version)
 {
-    if(version == "melodic" || version == "kinetic")
-    {
-        settings.setValue(ROS_VERSION_KEY, version);
-        qInfo("Updated the value of %s to %s.",
-              qUtf8Printable(ROS_VERSION_KEY),
-              qUtf8Printable(version));
-        return true;
-    }
-    else {
-        qWarning("Trying to update the value of %s to %s. This operation is "
-                 "not permited and no modification has been made.",
-                 qUtf8Printable(ROS_VERSION_KEY),
-                 qUtf8Printable(version));
-        return false;
-    }
+  const QString verLow = version.toLower();
+  if (verLow == "melodic" || verLow == "kinetic" || verLow == "noetic")
+  {
+    settings.setValue(ROS_VERSION_KEY, verLow);
+    qInfo("Updated the value of %s to %s.", qUtf8Printable(ROS_VERSION_KEY),
+          qUtf8Printable(version));
+    return true;
+  }
+  else
+  {
+    qWarning("Trying to update the value of %s to %s. This operation is "
+             "not permited and no modification has been made.",
+             qUtf8Printable(ROS_VERSION_KEY), qUtf8Printable(version));
+    return false;
+  }
 }
 
 /**
@@ -536,8 +524,7 @@ bool AppSettings::setRosVersion(const QString &version)
  */
 const QString AppSettings::getRosPathUnchecked() const
 {
-    return getDirectoryPath(ROS_PATH_KEY,
-                            getRosPathDefault());
+  return getDirectoryPath(ROS_PATH_KEY, getRosPathDefault());
 }
 
 /**
@@ -552,9 +539,7 @@ const QString AppSettings::getRosPathUnchecked() const
  */
 const QString AppSettings::getRosPath() const
 {
-    return checkDirectoryPath(ROS_PATH_KEY,
-                              getRosPathDefault(),
-                              tr(""));
+  return checkDirectoryPath(ROS_PATH_KEY, getRosPathDefault(), tr(""));
 }
 
 /**
@@ -563,7 +548,34 @@ const QString AppSettings::getRosPath() const
  */
 const QString AppSettings::getRosPathDefault() const
 {
-    return QString("/opt/ros/%1/").arg(getRosVersionDefault());
+  QDir rosBaseDir("/opt/ros/");
+
+  // Check if the ROS noetic version is installed
+  QDir noeticDir(rosBaseDir);
+  noeticDir.cd("noetic");
+
+  if (noeticDir.exists())
+  {
+    return noeticDir.absolutePath();
+  }
+
+  // Check if the ROS melodic version is installed
+  QDir melodicDir(rosBaseDir);
+  melodicDir.cd("melodic");
+  if (melodicDir.exists())
+  {
+    return melodicDir.absolutePath();
+  }
+
+  // Check if the ROS kinetic version is installed
+  QDir kineticDir(rosBaseDir);
+  kineticDir.cd("kinetic");
+  if (kineticDir.exists())
+  {
+    return kineticDir.absolutePath();
+  }
+
+  return QString("/opt/ros/%1/").arg(getRosVersionDefault());
 }
 
 /**
@@ -573,65 +585,45 @@ const QString AppSettings::getRosPathDefault() const
  * @return True if the value points to a valid directory and the configuration
  * was updated, and false otherwise.
  */
-bool AppSettings::setRosPath(const QString &path)
+bool AppSettings::setRosPath(const QString& path)
 {
-    return setDirectoryPath(ROS_PATH_KEY, path);
+  return setDirectoryPath(ROS_PATH_KEY, path);
 }
 
 const QString AppSettings::getWorldsPackagePathUnchecked() const
 {
-    QString databasePath = getProvantDatabasePathUnchecked();
-    return QDir::cleanPath(databasePath
-                           +
-                           QDir::separator()
-                           +
-                           "worlds"
-                           +
-                           QDir::separator()
-                           +
-                           "worlds");
+  QString databasePath = getProvantDatabasePathUnchecked();
+  return QDir::cleanPath(databasePath + QDir::separator() + "worlds" +
+                         QDir::separator() + "worlds");
 }
 
 const QString AppSettings::getWorldsPackagePath() const
 {
-    // Get ProVANT database path
-    QString databasePath = getProvantDatabasePath();
-    QString worldsPackagePath = QDir::cleanPath(databasePath
-                                                +
-                                                QDir::separator()
-                                                +
-                                                "worlds"
-                                                +
-                                                QDir::separator()
-                                                +
-                                                "worlds");
+  // Get ProVANT database path
+  QString databasePath = getProvantDatabasePath();
+  QString worldsPackagePath =
+      QDir::cleanPath(databasePath + QDir::separator() + "worlds" +
+                      QDir::separator() + "worlds");
 
-    QDir worldsDir(worldsPackagePath);
-    if(!worldsDir.exists())
-    {
-        return QString();
-    }
+  QDir worldsDir(worldsPackagePath);
+  if (!worldsDir.exists())
+  {
+    return QString();
+  }
 
-    return worldsDir.absolutePath();
+  return worldsDir.absolutePath();
 }
 
 const QString AppSettings::getWorldsPackagePathDefault() const
 {
-    QString databasePath = getProvantDatabasePathDefault();
-    return QDir::cleanPath(databasePath
-                           +
-                           QDir::separator()
-                           +
-                           "worlds"
-                           +
-                           QDir::separator()
-                           +
-                           "worlds");
+  QString databasePath = getProvantDatabasePathDefault();
+  return QDir::cleanPath(databasePath + QDir::separator() + "worlds" +
+                         QDir::separator() + "worlds");
 }
 
-bool AppSettings::setWorldsPackagePath(const QString &path)
+bool AppSettings::setWorldsPackagePath(const QString& path)
 {
-    return setDirectoryPath(WORLDS_PACKAGE_KEY, path);
+  return setDirectoryPath(WORLDS_PACKAGE_KEY, path);
 }
 
 /**
@@ -644,47 +636,47 @@ bool AppSettings::setWorldsPackagePath(const QString &path)
  */
 bool AppSettings::checkAllParametersSet() const
 {
-    if(getProvantRosPath().isEmpty())
-    {
-        return false;
-    }
-    if(getTiltStrategiesPath().isEmpty())
-    {
-        return false;
-    }
-    if(getTiltProjectPath().isEmpty())
-    {
-        return false;
-    }
-    if(getTiltMatlabPath().isEmpty())
-    {
-        return false;
-    }
-    if(getProvantDatabasePath().isEmpty())
-    {
-        return false;
-    }
-    if(getGazeboModelPath().isEmpty())
-    {
-        return false;
-    }
-    if(getCatkinWorkspacePath().isEmpty())
-    {
-        return false;
-    }
-    if(getControlStrategiesPath().isEmpty())
-    {
-        return false;
-    }
-    if(getRosVersion().isEmpty())
-    {
-        return false;
-    }
-    if(getRosPath().isEmpty())
-    {
-        return false;
-    }
-    return true;
+  if (getProvantRosPath().isEmpty())
+  {
+    return false;
+  }
+  if (getTiltStrategiesPath().isEmpty())
+  {
+    return false;
+  }
+  if (getTiltProjectPath().isEmpty())
+  {
+    return false;
+  }
+  if (getTiltMatlabPath().isEmpty())
+  {
+    return false;
+  }
+  if (getProvantDatabasePath().isEmpty())
+  {
+    return false;
+  }
+  if (getGazeboModelPath().isEmpty())
+  {
+    return false;
+  }
+  if (getCatkinWorkspacePath().isEmpty())
+  {
+    return false;
+  }
+  if (getControlStrategiesPath().isEmpty())
+  {
+    return false;
+  }
+  if (getRosVersion().isEmpty())
+  {
+    return false;
+  }
+  if (getRosPath().isEmpty())
+  {
+    return false;
+  }
+  return true;
 }
 
 /**
@@ -705,16 +697,14 @@ bool AppSettings::checkAllParametersSet() const
  */
 void AppSettings::applyValuesToEnvironmentVariables()
 {
-    setEnvironmentVariable(PROVANT_ROS_KEY, getProvantRosPathUnchecked());
-    setEnvironmentVariable(TILT_STRATEGIES_KEY,
-                           getTiltStrategiesPathUnchecked());
-    setEnvironmentVariable(TILT_PROJECT_KEY, getTiltProjectPathUnchecked());
-    setEnvironmentVariable(TILT_MATLAB_KEY, getTiltMatlabPathUnchecked());
-    setEnvironmentVariable(PROVANT_DATABASE_KEY,
-                           getProvantDatabasePathUnchecked());
-    setEnvironmentVariable(GAZEBO_MODEL_PATH_KEY,
-                           getGazeboModelPathUncheked());
-    setEnvironmentVariable(DIR_ROS_KEY, getCatkinWorkspacePath());
+  setEnvironmentVariable(PROVANT_ROS_KEY, getProvantRosPathUnchecked());
+  setEnvironmentVariable(TILT_STRATEGIES_KEY, getTiltStrategiesPathUnchecked());
+  setEnvironmentVariable(TILT_PROJECT_KEY, getTiltProjectPathUnchecked());
+  setEnvironmentVariable(TILT_MATLAB_KEY, getTiltMatlabPathUnchecked());
+  setEnvironmentVariable(PROVANT_DATABASE_KEY,
+                         getProvantDatabasePathUnchecked());
+  setEnvironmentVariable(GAZEBO_MODEL_PATH_KEY, getGazeboModelPathUncheked());
+  setEnvironmentVariable(DIR_ROS_KEY, getCatkinWorkspacePath());
 }
 
 /**
@@ -728,46 +718,46 @@ void AppSettings::applyValuesToEnvironmentVariables()
  */
 void AppSettings::applyDefaultsToUndefinedParameters()
 {
-    if(!settings.contains(PROVANT_ROS_KEY))
-    {
-        setProvantRosPath(getProvantRosPathDefault());
-    }
-    if(!settings.contains(TILT_STRATEGIES_KEY))
-    {
-        setTiltStrategiesPath(getTiltStrategiesPathDefault());
-    }
-    if(!settings.contains(TILT_PROJECT_KEY))
-    {
-        setTiltProjectPath(getTiltProjectPathDefault());
-    }
-    if(!settings.contains(TILT_MATLAB_KEY))
-    {
-        setTiltMatlabPath(getTiltMatlabPathDefault());
-    }
-    if(!settings.contains(PROVANT_DATABASE_KEY))
-    {
-        setProvantDatabasePath(getProvantDatabasePathDefault());
-    }
-    if(!settings.contains(GAZEBO_MODEL_PATH_KEY))
-    {
-        setGazeboModelPath(getGazeboModelPathDefault());
-    }
-    if(!settings.contains(DIR_ROS_KEY))
-    {
-        setCatkinWorkspacePath(getCatkinWorkspacePathDefault());
-    }
-    if(!settings.contains(CONTROL_STRATEGIES_SOURCE_KEY))
-    {
-        setControlStrategiesPath(getControlStrategiesPathDefault());
-    }
-    if(!settings.contains(ROS_VERSION_KEY))
-    {
-        setRosVersion(getRosVersionDefault());
-    }
-    if(!settings.contains(ROS_PATH_KEY))
-    {
-        setRosPath(getRosPathDefault());
-    }
+  if (!settings.contains(PROVANT_ROS_KEY))
+  {
+    setProvantRosPath(getProvantRosPathDefault());
+  }
+  if (!settings.contains(TILT_STRATEGIES_KEY))
+  {
+    setTiltStrategiesPath(getTiltStrategiesPathDefault());
+  }
+  if (!settings.contains(TILT_PROJECT_KEY))
+  {
+    setTiltProjectPath(getTiltProjectPathDefault());
+  }
+  if (!settings.contains(TILT_MATLAB_KEY))
+  {
+    setTiltMatlabPath(getTiltMatlabPathDefault());
+  }
+  if (!settings.contains(PROVANT_DATABASE_KEY))
+  {
+    setProvantDatabasePath(getProvantDatabasePathDefault());
+  }
+  if (!settings.contains(GAZEBO_MODEL_PATH_KEY))
+  {
+    setGazeboModelPath(getGazeboModelPathDefault());
+  }
+  if (!settings.contains(DIR_ROS_KEY))
+  {
+    setCatkinWorkspacePath(getCatkinWorkspacePathDefault());
+  }
+  if (!settings.contains(CONTROL_STRATEGIES_SOURCE_KEY))
+  {
+    setControlStrategiesPath(getControlStrategiesPathDefault());
+  }
+  if (!settings.contains(ROS_VERSION_KEY))
+  {
+    setRosVersion(getRosVersionDefault());
+  }
+  if (!settings.contains(ROS_PATH_KEY))
+  {
+    setRosPath(getRosPathDefault());
+  }
 }
 
 /**
@@ -783,17 +773,17 @@ void AppSettings::applyDefaultsToUndefinedParameters()
  */
 void AppSettings::restoreDefaults()
 {
-    qWarning("Restoring all configuration to default values");
-    setProvantRosPath(getProvantRosPathDefault());
-    setTiltStrategiesPath(getTiltStrategiesPathDefault());
-    setTiltProjectPath(getTiltProjectPathDefault());
-    setTiltMatlabPath(getTiltMatlabPathDefault());
-    setProvantDatabasePath(getProvantDatabasePathDefault());
-    setGazeboModelPath(getGazeboModelPathDefault());
-    setCatkinWorkspacePath(getCatkinWorkspacePathDefault());
-    setControlStrategiesPath(getControlStrategiesPathDefault());
-    setRosVersion(getRosVersionDefault());
-    setRosPath(getRosPathDefault());
+  qWarning("Restoring all configuration to default values");
+  setProvantRosPath(getProvantRosPathDefault());
+  setTiltStrategiesPath(getTiltStrategiesPathDefault());
+  setTiltProjectPath(getTiltProjectPathDefault());
+  setTiltMatlabPath(getTiltMatlabPathDefault());
+  setProvantDatabasePath(getProvantDatabasePathDefault());
+  setGazeboModelPath(getGazeboModelPathDefault());
+  setCatkinWorkspacePath(getCatkinWorkspacePathDefault());
+  setControlStrategiesPath(getControlStrategiesPathDefault());
+  setRosVersion(getRosVersionDefault());
+  setRosPath(getRosPathDefault());
 }
 
 /**
@@ -805,14 +795,14 @@ void AppSettings::restoreDefaults()
  */
 QProcessEnvironment AppSettings::getEnvironmentVariables() const
 {
-    QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
-    env.insert(PROVANT_ROS_KEY, getProvantRosPath());
-    env.insert(TILT_STRATEGIES_KEY, getTiltStrategiesPath());
-    env.insert(TILT_PROJECT_KEY, getTiltProjectPath());
-    env.insert(PROVANT_DATABASE_KEY, getProvantDatabasePath());
-    env.insert(GAZEBO_MODEL_PATH_KEY, getGazeboModelPath());
-    env.insert(DIR_ROS_KEY, getCatkinWorkspacePath());
-    return env;
+  QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
+  env.insert(PROVANT_ROS_KEY, getProvantRosPath());
+  env.insert(TILT_STRATEGIES_KEY, getTiltStrategiesPath());
+  env.insert(TILT_PROJECT_KEY, getTiltProjectPath());
+  env.insert(PROVANT_DATABASE_KEY, getProvantDatabasePath());
+  env.insert(GAZEBO_MODEL_PATH_KEY, getGazeboModelPath());
+  env.insert(DIR_ROS_KEY, getCatkinWorkspacePath());
+  return env;
 }
 
 /**
@@ -824,12 +814,12 @@ QProcessEnvironment AppSettings::getEnvironmentVariables() const
  * @return The value contained in the envionment variable or the default value
  * if the variable isn't set or can't be accessed.
  */
-QString AppSettings::getEnvironmentVariable(const QString &key,
-                                            const QString &default_) const
+QString AppSettings::getEnvironmentVariable(const QString& key,
+                                            const QString& default_) const
 {
-    QString env = QString::fromUtf8(qgetenv(key.toStdString().c_str()));
+  QString env = QString::fromUtf8(qgetenv(key.toStdString().c_str()));
 
-    return env.isEmpty() ? default_ : env;
+  return env.isEmpty() ? default_ : env;
 }
 
 /**
@@ -839,11 +829,11 @@ QString AppSettings::getEnvironmentVariable(const QString &key,
  * @return An string containing the configured value in QSettings or the
  * default value if the desired paramter isn't set.
  */
-QString AppSettings::getValueFromKey(const QString &key,
-                                     const QString &default_) const
+QString AppSettings::getValueFromKey(const QString& key,
+                                     const QString& default_) const
 {
-    QString def = getEnvironmentVariable(key, default_);
-    return settings.value(key, def).toString();
+  QString def = getEnvironmentVariable(key, default_);
+  return settings.value(key, def).toString();
 }
 
 /**
@@ -852,11 +842,12 @@ QString AppSettings::getValueFromKey(const QString &key,
  * @return A message informing the user about the steps needed to correct
  * the error.
  */
-QString AppSettings::getErrorCorrectionMessage(const QString &key) const
+QString AppSettings::getErrorCorrectionMessage(const QString& key) const
 {
-    return tr("\n\nTo correct this issue, go to Tools -> Options in the main "
-              "application menu bar and set the correct value under the option "
-              "%1.").arg(key);
+  return tr("\n\nTo correct this issue, go to Tools -> Options in the main "
+            "application menu bar and set the correct value under the option "
+            "%1.")
+      .arg(key);
 }
 
 /**
@@ -866,10 +857,10 @@ QString AppSettings::getErrorCorrectionMessage(const QString &key) const
  * @return The value of the configured parameter or an empty string if no value
  * is set.
  */
-const QString AppSettings::getDirectoryPath(const QString &key,
-                                            const QString &defaultValue) const
+const QString AppSettings::getDirectoryPath(const QString& key,
+                                            const QString& defaultValue) const
 {
-    return getValueFromKey(key, defaultValue);
+  return getValueFromKey(key, defaultValue);
 }
 
 /**
@@ -892,22 +883,20 @@ const QString AppSettings::getDirectoryPath(const QString &key,
  * Otherwise, an empty string is returned and a dialog box informing the user
  * about this error is shown on screen.
  */
-const QString AppSettings::checkDirectoryPath(const QString &key,
-                                              const QString &defaultValue,
-                                              const QString &errorMessage) const
+const QString AppSettings::checkDirectoryPath(const QString& key,
+                                              const QString& defaultValue,
+                                              const QString& errorMessage) const
 {
-    QDir dir(getValueFromKey(key, defaultValue));
+  QDir dir(getValueFromKey(key, defaultValue));
 
-    if(!dir.exists()) {
-        QMessageBox::critical(
-                    nullptr,
-                    _criticalMsgTitle,
-                    errorMessage +
-                    getErrorCorrectionMessage(key));
-        return QString();
-    }
+  if (!dir.exists())
+  {
+    QMessageBox::critical(nullptr, _criticalMsgTitle,
+                          errorMessage + getErrorCorrectionMessage(key));
+    return QString();
+  }
 
-    return dir.absolutePath();
+  return dir.absolutePath();
 }
 
 /**
@@ -925,20 +914,21 @@ const QString AppSettings::checkDirectoryPath(const QString &key,
  * If the path is valid, the QSettings value is updated along with the value
  * in the environment variables.
  */
-bool AppSettings::setDirectoryPath(const QString &key, const QString &value,
+bool AppSettings::setDirectoryPath(const QString& key, const QString& value,
                                    bool setEnrionmentVariable_)
 {
-    QDir dir(value);
+  QDir dir(value);
 
-    if(dir.exists()) {
-        settings.setValue(key, value);
-        if(setEnrionmentVariable_)
-        {
-            setEnvironmentVariable(key, value);
-        }
-        return true;
+  if (dir.exists())
+  {
+    settings.setValue(key, value);
+    if (setEnrionmentVariable_)
+    {
+      setEnvironmentVariable(key, value);
     }
-    return false;
+    return true;
+  }
+  return false;
 }
 
 /**
@@ -947,8 +937,8 @@ bool AppSettings::setDirectoryPath(const QString &key, const QString &value,
  * @param value The new value to the environment variable.
  * @return True if the variable is set, and false otherwise.
  */
-bool AppSettings::setEnvironmentVariable(const QString &key,
-                                         const QString &value)
+bool AppSettings::setEnvironmentVariable(const QString& key,
+                                         const QString& value)
 {
-    return qputenv(key.toStdString().c_str(), value.toStdString().c_str());
+  return qputenv(key.toStdString().c_str(), value.toStdString().c_str());
 }

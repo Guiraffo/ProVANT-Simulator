@@ -4,25 +4,26 @@
 #include <QDialog>
 #include "QTreeWidgetItem"
 
-namespace Ui {
+namespace Ui
+{
 class JointsDialog;
 }
 
 class JointsDialog : public QDialog
 {
-    Q_OBJECT
+  Q_OBJECT
 
 public:
-    explicit JointsDialog(QWidget *parent = 0);
-    ~JointsDialog();
+  explicit JointsDialog(QWidget* parent = 0);
+  ~JointsDialog();
 
 private slots:
-    void on_buttonBox_accepted();
+  void on_buttonBox_accepted();
 
-    void on_treeWidget_itemDoubleClicked(QTreeWidgetItem *item, int column);
+  void on_treeWidget_itemDoubleClicked(QTreeWidgetItem* item, int column);
 
 private:
-    Ui::JointsDialog *ui;
+  Ui::JointsDialog* ui;
 };
 
-#endif // JOINTSDIALOG_H
+#endif  // JOINTSDIALOG_H

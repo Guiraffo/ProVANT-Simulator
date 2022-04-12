@@ -3,11 +3,20 @@
     <topicdata>data</topicdata>
     <TopicoStep>Step</TopicoStep>
     <Sampletime>12</Sampletime>
-    <Strategy>libvant3_adaptiveMixCtrl2.so</Strategy>
+    <Duration>0</Duration>
+    <ShutdownWhenFinished>false</ShutdownWhenFinished>
+    <StartPaused>false</StartPaused>
+    <Strategy>libvant3_adaptive_mix_ctrl.so</Strategy>
+    <Turbulance></Turbulance>
     <RefPath>ref.txt</RefPath>
     <Outputfile>out.txt</Outputfile>
     <InputPath>in.txt</InputPath>
     <ErroPath>erro.txt</ErroPath>
+    <HilFlagSynchronous>false</HilFlagSynchronous>
+    <HilFlagAsynchronous>false</HilFlagAsynchronous>
+    <usart1></usart1>
+    <usart2></usart2>
+    <baudRate>50</baudRate>
     <Sensors>
         <Device>Estados</Device>
     </Sensors>

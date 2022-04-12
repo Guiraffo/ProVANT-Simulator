@@ -1,21 +1,40 @@
 #ifndef MULTIPLEPLUGINS_H
 #define MULTIPLEPLUGINS_H
 
-#include "DataAccess/GazeboElements/Items/plugin_da.h"
+#include <QDomElement>
+#include <QList>
+#include <QXmlStreamWriter>
 
-class multipleplugins
+#include <vector>
+
+#include "plugin_da.h"
+
+class MultiplePlugins
 {
 public:
-    std::vector<plugin_DA> multipleItens;
-    multipleplugins();
-    void NewPlugin(plugin_DA);
-    void Read(QDomNode);
-    void Clear();
-    void print();
+  MultiplePlugins();
+
+  void NewPlugin(PluginDA) __attribute__((deprecated));
+  void Read(QDomNode) __attribute__((deprecated));
+  void Clear() __attribute__((deprecated));
+  void print() const;
+
+  bool read(const QDomElement& element);
+  void write(QXmlStreamWriter* xml) const;
+
+  bool isEmpty() const;
+  int numElements() const;
+
+  const QList<PluginDA> getPlugins() const;
+  void addPlugin(const PluginDA& plugin);
+  void setPlugins(const QList<PluginDA>& plugins);
+  void setPlugins(const std::vector<PluginDA>& pluginVector)
+      __attribute__((deprecated));
+  void clearPlugins();
+  std::vector<PluginDA> getPluginsAsVector() const __attribute__((deprecated));
+
+private:
+  QList<PluginDA> _plugins;
 };
 
-#endif // MULTIPLEPLUGINS_H
-
-
-
-
+#endif  // MULTIPLEPLUGINS_H

@@ -7,13 +7,12 @@
         <file>logos/insac.jpeg</file>
         <file>logos/logotipo_small.png</file>
         <file>logos/Macro_logo_3.png</file>
-        <file>logos/provant_ufmg_ufsc_fundoalpha.png</file>
-        <file>logos/provant_ufmg_ufsc.jpg</file>
-        <file>logos/provant_ufmg_ufsc.xcf</file>
         <file>logos/sevilla.png</file>
         <file>logos/tiltrotor2.png</file>
         <file>logos/ufmg.png</file>
         <file>logos/ufsc.svg</file>
         <file>logos/insac.png</file>
+        <file>logos/provant_simulator.png</file>
+        <file>logos/logo_provant.svg</file>
     </qresource>
 </RCC>

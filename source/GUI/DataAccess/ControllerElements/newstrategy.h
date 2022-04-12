@@ -14,9 +14,8 @@
 class NewStrategy
 {
 public:
-    NewStrategy();
-    static void createProject(const QString &name);
-
+  NewStrategy();
+  static void createProject(const QString& name);
 };
 
 /**
@@ -32,6 +31,6 @@ public:
  * @param name class name.
  * @return CamelCased class name.
  */
-QString capitalizeClassName(const QString &name);
+QString capitalizeClassName(const QString& name);
 
-#endif // NEWSTRATEGY_H
+#endif  // NEWSTRATEGY_H

@@ -1,27 +1,57 @@
 #include "gravity_da.h"
 
-gravity_DA::gravity_DA()
-{
+#include <QDebug>
 
+GravityDA::GravityDA()
+{
 }
 
-void gravity_DA::Read(QDomNode document)
+void GravityDA::Read(QDomNode document)
 {
-    gravity = document.firstChildElement("gravity").text().toStdString();
+  read(document.toElement());
 }
 
-void gravity_DA::Write(QXmlStreamWriter xml)
+void GravityDA::Write(QXmlStreamWriter xml)
 {
-    xml.writeTextElement("gravity",gravity.c_str());
+  write(&xml);
 }
 
-std::string gravity_DA::GetGravity(){return gravity;}
-
-void gravity_DA::SetGravity(std::string value){ gravity = value;}
-
-void gravity_DA::print()
+std::string GravityDA::getGravity()
 {
-    qDebug() << "Gravity " << gravity.c_str();
+  return gravity().toStdString();
 }
 
+const QString& GravityDA::gravity() const
+{
+  return _gravity;
+}
 
+void GravityDA::setGravity(std::string value)
+{
+  setGravity(QString::fromStdString(value));
+}
+
+void GravityDA::setGravity(const QString& value)
+{
+  _gravity = value;
+}
+
+bool GravityDA::read(const QDomElement& worldElement)
+{
+  QDomElement gravityElement = worldElement.firstChildElement(gravityTag);
+  if (gravityElement.isNull())
+    return false;
+
+  _gravity = gravityElement.text();
+  return true;
+}
+
+void GravityDA::write(QXmlStreamWriter* xml) const
+{
+  xml->writeTextElement(gravityTag, _gravity);
+}
+
+void GravityDA::print()
+{
+  qDebug() << "Gravity " << qUtf8Printable(_gravity);
+}

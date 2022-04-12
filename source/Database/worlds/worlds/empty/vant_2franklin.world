@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+This file is part of the ProVANT simulator project.
+Licensed under the terms of the MIT open source license. More details at
+https://github.com/Guiraffo/ProVANT-Simulator/blob/master/LICENSE.md
+-->
+<sdf version="1.6">
+  <world name="vant_2franklin">
+    <gui>
+      <plugin name="provant_gui_plugin" filename="libprovant_auto_stepping_plugin.so"/>
+    </gui>
+    <gravity>0 0 -9.81</gravity>
+    <physics type="ode">
+      <max_step_size>0.001000</max_step_size>
+      <real_time_factor>0</real_time_factor>
+      <real_time_update_rate>0</real_time_update_rate>
+    </physics>
+    <plugin name="gazebo_tutorials" filename="libgazebo_ros_world_plugin.so"/>
+    <include>
+      <uri>model://sun</uri>
+      <static>true</static>
+      <pose>0 0 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://vant_2franklin</uri>
+      <name>newmodel</name>
+      <static>false</static>
+      <pose>2 0 1.619 0 0 0</pose>
+    </include>
+    <scene>
+      <sky>
+        <time>18</time>
+        <clouds>
+          <speed>0</speed>
+        </clouds>
+      </sky>
+    </scene>
+  </world>
+</sdf>

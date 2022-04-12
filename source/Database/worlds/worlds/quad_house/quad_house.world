@@ -1,41 +1,49 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+This file is part of the ProVANT simulator project.
+Licensed under the terms of the MIT open source license. More details at
+https://github.com/Guiraffo/ProVANT-Simulator/blob/master/LICENSE.md
+-->
 <sdf version="1.6">
-    <world name="quad_house">
-        <gravity>0 0 -9.8</gravity>
-        <physics type="ode">
-            <max_step_size>0.001</max_step_size>
-            <real_time_factor>0</real_time_factor>
-        </physics>
-        <plugin name="gazebo_tutorials" filename="libgazebo_ros_world_plugin.so">
-            <ok>nothil</ok>
-        </plugin>
-        <include>
-            <uri>model://ground_plane</uri>
-            <static>true</static>
-        </include>
-        <include>
-            <uri>model://sun</uri>
-            <static>true</static>
-        </include>
-        <include>
-            <uri>model://quadcopter</uri>
-            <name>newmodel</name>
-            <static>false</static>
-            <pose>0 0 0 0 0 0</pose>
-        </include>
-        <include>
-            <uri>model://cenario_quad</uri>
-            <name>cenario_quad</name>
-            <static>true</static>
-            <pose>0 0 0 0 0 0</pose>
-        </include>
-        <scene>
-            <sky>
-                <time>18</time>
-                <clouds>
-                    <speed>0</speed>
-                </clouds>
-            </sky>
-        </scene>
-    </world>
+  <world name="quad_house">
+    <gui>
+      <plugin name="provant_gui_plugin" filename="libprovant_auto_stepping_plugin.so"/>
+    </gui>
+    <gravity>0 0 -9.8</gravity>
+    <physics type="ode">
+      <max_step_size>0.001</max_step_size>
+      <real_time_factor>0</real_time_factor>
+    </physics>
+    <plugin name="gazebo_tutorials" filename="libgazebo_ros_world_plugin.so">
+      <ok>nothil</ok>
+    </plugin>
+    <include>
+      <uri>model://ground_plane</uri>
+      <static>true</static>
+    </include>
+    <include>
+      <uri>model://sun</uri>
+      <static>true</static>
+    </include>
+    <include>
+      <uri>model://quadcopter</uri>
+      <name>newmodel</name>
+      <static>false</static>
+      <pose>0 0 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://cenario_quad</uri>
+      <name>cenario_quad</name>
+      <static>true</static>
+      <pose>0 0 0 0 0 0</pose>
+    </include>
+    <scene>
+      <sky>
+        <time>18</time>
+        <clouds>
+          <speed>0</speed>
+        </clouds>
+      </sky>
+    </scene>
+  </world>
 </sdf>

@@ -6,18 +6,18 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>605</width>
-    <height>487</height>
+    <width>747</width>
+    <height>432</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Dialog</string>
+   <string>Model Configuration</string>
   </property>
   <layout class="QHBoxLayout" name="mainLayout">
    <item>
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
-      <number>4</number>
+      <number>6</number>
      </property>
      <widget class="QWidget" name="parametersTab">
       <attribute name="title">
@@ -40,18 +40,96 @@
        </item>
       </layout>
      </widget>
+     <widget class="QWidget" name="simulationTab">
+      <attribute name="title">
+       <string>Simulation</string>
+      </attribute>
+      <layout class="QVBoxLayout" name="verticalLayout_3">
+       <item>
+        <widget class="QCheckBox" name="startPausedCheckbox">
+         <property name="toolTip">
+          <string>Indicates if the simulation must start in a paused state or not</string>
+         </property>
+         <property name="text">
+          <string>Start Paused</string>
+         </property>
+         <property name="checked">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="durationGroupBox">
+         <property name="title">
+          <string>Simulation Duration</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_2">
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout">
+            <item>
+             <widget class="QCheckBox" name="limitedDurationCheckBox">
+              <property name="text">
+               <string>Limited Duration</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QTimeEdit" name="simulationDuration">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
+              <property name="accelerated">
+               <bool>true</bool>
+              </property>
+              <property name="currentSection">
+               <enum>QDateTimeEdit::HourSection</enum>
+              </property>
+              <property name="displayFormat">
+               <string>HH:mm:ss.zzz</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="shutdownWhenFinishedCheckBox">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
+            <property name="toolTip">
+             <string>If enabled, this option will cause the simulation to close as soon as the simulation reaches the specified duration. This option is usefull for automated simulations.</string>
+            </property>
+            <property name="text">
+             <string>Shutdown simulation when finished</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <spacer name="verticalSpacer">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </widget>
      <widget class="QWidget" name="controllerTab">
       <attribute name="title">
        <string>Controller</string>
       </attribute>
       <layout class="QVBoxLayout" name="controllerTabLayout">
-       <item>
-        <widget class="QCheckBox" name="hilCheckBox">
-         <property name="text">
-          <string>Hardware-in-the-loop</string>
-         </property>
-        </widget>
-       </item>
        <item>
         <layout class="QHBoxLayout" name="controllerLayout">
          <item>
@@ -122,16 +200,6 @@
          <item row="1" column="1">
           <widget class="QLineEdit" name="ErrorEdit"/>
          </item>
-         <item row="2" column="0">
-          <widget class="QLabel" name="referenceFileLabel">
-           <property name="text">
-            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Reference file&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-           </property>
-           <property name="buddy">
-            <cstring>ReferenceEdit</cstring>
-           </property>
-          </widget>
-         </item>
          <item row="2" column="1">
           <widget class="QLineEdit" name="ReferenceEdit"/>
          </item>
@@ -161,6 +229,16 @@
          <item row="4" column="1">
           <widget class="QLineEdit" name="ActuatorEdit"/>
          </item>
+         <item row="2" column="0">
+          <widget class="QLabel" name="referenceFileLabel">
+           <property name="text">
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Reference file&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           </property>
+           <property name="buddy">
+            <cstring>ReferenceEdit</cstring>
+           </property>
+          </widget>
+         </item>
         </layout>
        </item>
       </layout>
@@ -184,34 +262,6 @@
          </item>
          <item>
           <widget class="QPushButton" name="removeSensorButton">
-           <property name="text">
-            <string>Remove</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-      </layout>
-     </widget>
-     <widget class="QWidget" name="actuatorsTab">
-      <attribute name="title">
-       <string>Actuators</string>
-      </attribute>
-      <layout class="QVBoxLayout" name="verticalLayout_4">
-       <item>
-        <widget class="QListWidget" name="actuatorsListWidget"/>
-       </item>
-       <item>
-        <layout class="QHBoxLayout" name="actuatorsButtonsLayout">
-         <item>
-          <widget class="QPushButton" name="addActuatorButton">
-           <property name="text">
-            <string>Add</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QPushButton" name="removeActuatorButton">
            <property name="text">
             <string>Remove</string>
            </property>
@@ -265,6 +315,190 @@
        </item>
       </layout>
      </widget>
+     <widget class="QWidget" name="actuatorsTab">
+      <attribute name="title">
+       <string>Actuators</string>
+      </attribute>
+      <layout class="QVBoxLayout" name="verticalLayout_4">
+       <item>
+        <widget class="QListWidget" name="actuatorsListWidget"/>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="actuatorsButtonsLayout">
+         <item>
+          <widget class="QPushButton" name="addActuatorButton">
+           <property name="text">
+            <string>Add</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="removeActuatorButton">
+           <property name="text">
+            <string>Remove</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="hilTab">
+      <attribute name="title">
+       <string>HIL</string>
+      </attribute>
+      <layout class="QVBoxLayout" name="verticalLayout_5">
+       <item>
+        <layout class="QGridLayout" name="hilLayout">
+         <item row="4" column="1">
+          <widget class="QCheckBox" name="hilCheckBoxAsync">
+           <property name="text">
+            <string>Asynchronous</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="1">
+          <widget class="QCheckBox" name="hilCheckBoxSync">
+           <property name="text">
+            <string>Synchronous</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="0">
+          <widget class="QLabel" name="hilLabel">
+           <property name="text">
+            <string>Hardware-in-the-loop</string>
+           </property>
+           <property name="buddy">
+            <cstring>hilCheckBoxSync</cstring>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QGridLayout" name="Usb_Config">
+         <item row="2" column="1">
+          <widget class="QComboBox" name="selectUSB2"/>
+         </item>
+         <item row="1" column="1">
+          <widget class="QComboBox" name="selectUSB1"/>
+         </item>
+         <item row="1" column="0">
+          <widget class="QLabel" name="USART1">
+           <property name="text">
+            <string>USART1</string>
+           </property>
+           <property name="buddy">
+            <cstring>hilCheckBoxSync</cstring>
+           </property>
+          </widget>
+         </item>
+         <item row="3" column="1">
+          <widget class="QPushButton" name="refreshUSB">
+           <property name="text">
+            <string>Refresh</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="0">
+          <widget class="QLabel" name="USBConfig">
+           <property name="text">
+            <string>USB Config</string>
+           </property>
+           <property name="buddy">
+            <cstring>hilCheckBoxSync</cstring>
+           </property>
+          </widget>
+         </item>
+         <item row="4" column="1">
+          <widget class="QComboBox" name="selectBaudRate">
+           <item>
+            <property name="text">
+             <string/>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>19200</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>38400</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>57600</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>115200</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>230400</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>460800</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>921600</string>
+            </property>
+           </item>
+          </widget>
+         </item>
+         <item row="2" column="0">
+          <widget class="QLabel" name="USART2">
+           <property name="text">
+            <string>USART2</string>
+           </property>
+           <property name="buddy">
+            <cstring>hilCheckBoxSync</cstring>
+           </property>
+          </widget>
+         </item>
+         <item row="4" column="0">
+          <widget class="QLabel" name="BaudRate">
+           <property name="text">
+            <string>Baud rate</string>
+           </property>
+           <property name="buddy">
+            <cstring>hilCheckBoxSync</cstring>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <widget class="QPushButton" name="compileHilButton">
+         <property name="text">
+          <string>Compile HIL</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="verticalSpacer_2">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>92</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </widget>
     </widget>
    </item>
    <item>
@@ -305,8 +539,8 @@
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>569</x>
-     <y>27</y>
+     <x>640</x>
+     <y>34</y>
     </hint>
     <hint type="destinationlabel">
      <x>589</x>
@@ -321,12 +555,44 @@
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>541</x>
-     <y>222</y>
+     <x>640</x>
+     <y>209</y>
     </hint>
     <hint type="destinationlabel">
      <x>541</x>
      <y>336</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>limitedDurationCheckBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>simulationDuration</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>132</x>
+     <y>132</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>392</x>
+     <y>134</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>limitedDurationCheckBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>shutdownWhenFinishedCheckBox</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>117</x>
+     <y>132</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>121</x>
+     <y>164</y>
     </hint>
    </hints>
   </connection>

@@ -3,7 +3,10 @@
     <topicdata>data</topicdata>
     <TopicoStep>Step</TopicoStep>
     <Sampletime>3</Sampletime>
-    <Strategy>liblqr_quadcopter.so</Strategy>
+    <Duration>0</Duration>
+    <ShutdownWhenFinished>false</ShutdownWhenFinished>
+    <StartPaused>true</StartPaused>
+    <Strategy>liblqr_provant_alpha_quadcopter.so</Strategy>
     <Turbulance></Turbulance>
     <RefPath>ref.txt</RefPath>
     <Outputfile>out.txt</Outputfile>

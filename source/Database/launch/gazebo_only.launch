@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+This file is part of the ProVANT simulator project.
+Licensed under the terms of the MIT open source license. More details at
+https://github.com/Guiraffo/ProVANT-Simulator/blob/master/LICENSE.md
+-->
+<launch>
+	<arg name="paused" default="true" />
+	<arg name="use_sim_time" default="true" />
+	<arg name="debug" default="false" />
+	<arg name="verbose" default="true" />
+	<arg name="lockstep" default="true" />
+	<arg name="world" default="$(find Database)/worlds/worlds/empty/quad.world" doc="Path to the world file used to load the model on Gazebo" />
+	<arg name="config" default="$(find Database)/models/quadcopter/config/config.xml" />
+
+	<include file="$(find Database)/launch/empty_world.launch">
+		<arg name="world_name" value="$(arg world)" />
+		<arg name="debug" value="$(arg debug)" />
+		<arg name="gui" value="true" />
+		<arg name="paused" value="$(arg paused)" />
+		<arg name="use_sim_time" value="$(arg use_sim_time)" />
+		<arg name="verbose" value="$(arg verbose)" />
+		<arg name="extra_gazebo_args" value="--provant_config=$(arg config)" />
+		<arg name="lockstep" value="$(arg lockstep)" />
+	</include>
+</launch>

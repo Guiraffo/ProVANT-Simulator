@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <topicdata>data</topicdata>
+    <TopicoStep>Step</TopicoStep>
+    <Sampletime>3</Sampletime>
+    <Duration>0</Duration>
+    <ShutdownWhenFinished>false</ShutdownWhenFinished>
+    <StartPaused>true</StartPaused>
+    <Strategy>libvant4_2_winfnonlinear.so</Strategy>
+    <Turbulance>Von_Karman</Turbulance>
+    <RefPath>ref.txt</RefPath>
+    <Outputfile>out.txt</Outputfile>
+    <InputPath>in.txt</InputPath>
+    <ErroPath>erro.txt</ErroPath>
+    <Sensors>
+        <Device>Estados</Device>
+    </Sensors>
+    <Actuators>
+        <Device>ThrustR</Device>
+        <Device>ThrustL</Device>
+        <Device>RefRotorR</Device>
+        <Device>RefRotorL</Device>
+        <Device>AileronR</Device>
+        <Device>AileronL</Device>
+        <Device>Elevator</Device>
+        <Device>Rudder</Device>
+    </Actuators>
+</config>

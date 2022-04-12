@@ -1,37 +1,152 @@
 #include "include_da.h"
 
-Include_DA::Include_DA()
-{
+#include <QDebug>
 
+IncludeDA::IncludeDA()
+{
 }
 
-std::string Include_DA::GetUri(){return uri;}
-void Include_DA::SetUri(std::string value){uri = value;}
-std::string Include_DA::GetName(){return name;}
-void Include_DA::SetName(std::string value){name = value;}
-std::string Include_DA::GetIsStatic(){return isStatic;}
-void Include_DA::SetIsStatic(std::string value){isStatic = value;}
-std::string Include_DA::GetPose(){return pose;}
-void Include_DA::SetPose(std::string value){pose = value;}
-
-void Include_DA::Write(QXmlStreamWriter xml)
+std::string IncludeDA::GetUri()
 {
-    xml.writeStartElement("include");
-    if(uri!="")xml.writeTextElement("uri",uri.c_str());
-    if(name!="")xml.writeTextElement("name",name.c_str());
-    if(isStatic!="")xml.writeTextElement("static",isStatic.c_str());
-    if(pose!="")xml.writeTextElement("pose",pose.c_str());
-    xml.writeEndElement();
+  return getURI().toStdString();
 }
 
-
-
-void Include_DA::print()
+void IncludeDA::SetUri(std::string value)
 {
-    qDebug() << "include";
-    qDebug() << "Uri " << uri.c_str();
-    qDebug() << "Name" << name.c_str();
-    qDebug() << "Static " << isStatic.c_str();
-    qDebug() << "Pose " << pose.c_str();
+  setURI(QString::fromStdString(value));
 }
 
+const QString& IncludeDA::getURI() const
+{
+  return _uri;
+}
+
+void IncludeDA::setURI(const QString& value)
+{
+  _uri = value;
+}
+
+std::string IncludeDA::GetName()
+{
+  return getName().toStdString();
+}
+
+void IncludeDA::SetName(std::string value)
+{
+  setName(QString::fromStdString(value));
+}
+
+const QString& IncludeDA::getName() const
+{
+  return _name;
+}
+
+void IncludeDA::setName(const QString& value)
+{
+  _name = value;
+}
+
+std::string IncludeDA::GetIsStatic()
+{
+  return isStatic().toStdString();
+}
+
+void IncludeDA::SetIsStatic(std::string value)
+{
+  setStatic(QString::fromStdString(value));
+}
+
+const QString& IncludeDA::isStatic() const
+{
+  return _isStatic;
+}
+
+void IncludeDA::setStatic(const QString& value)
+{
+  _isStatic = value;
+}
+
+std::string IncludeDA::GetPose()
+{
+  return getPose().toStdString();
+}
+
+void IncludeDA::SetPose(std::string value)
+{
+  setPose(QString::fromStdString(value));
+}
+
+const QString& IncludeDA::getPose() const
+{
+  return _pose;
+}
+
+void IncludeDA::setPose(const QString& value)
+{
+  _pose = value;
+}
+
+bool IncludeDA::read(const QDomElement& includeElement)
+{
+  if (includeElement.isNull())
+    return false;
+
+  QDomElement uriElement = includeElement.firstChildElement("uri");
+  if (uriElement.isNull())
+    return false;
+  setURI(uriElement.text());
+
+  QDomElement nameElement = includeElement.firstChildElement("name");
+  if (!nameElement.isNull())
+    setName(nameElement.text());
+
+  QDomElement staticElement = includeElement.firstChildElement("static");
+  if (staticElement.isNull())
+  {
+    setStatic("0");
+  }
+  else
+  {
+    setStatic(staticElement.text());
+  }
+
+  QDomElement poseElement = includeElement.firstChildElement("pose");
+  if (poseElement.isNull())
+  {
+    setPose("0 0 0 0 0 0");
+  }
+  else
+  {
+    setPose(poseElement.text());
+  }
+
+  return true;
+}
+
+void IncludeDA::write(QXmlStreamWriter* xml) const
+{
+  xml->writeStartElement("include");
+  if (!_uri.isEmpty())
+    xml->writeTextElement("uri", _uri);
+  if (!_name.isEmpty())
+    xml->writeTextElement("name", _name);
+  if (!_isStatic.isEmpty())
+    xml->writeTextElement("static", _isStatic);
+  if (!_pose.isEmpty())
+    xml->writeTextElement("pose", _pose);
+  xml->writeEndElement();  // </include>
+}
+
+void IncludeDA::Write(QXmlStreamWriter xml)
+{
+  write(&xml);
+}
+
+void IncludeDA::print()
+{
+  qDebug() << "include"
+           << " Uri: " << qUtf8Printable(_uri)
+           << " Name: " << qUtf8Printable(_name)
+           << " Static: " << qUtf8Printable(_isStatic)
+           << " Pose: " << qUtf8Printable(_pose);
+}

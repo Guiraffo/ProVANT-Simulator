@@ -3,11 +3,20 @@
     <topicdata>data</topicdata>
     <TopicoStep>Step</TopicoStep>
     <Sampletime>12</Sampletime>
+    <Duration>0</Duration>
+    <ShutdownWhenFinished>false</ShutdownWhenFinished>
+    <StartPaused>true</StartPaused>
     <Strategy>libvant2load_hinfinity.so</Strategy>
+    <Turbulance></Turbulance>
     <RefPath>ref.txt</RefPath>
     <Outputfile>out.txt</Outputfile>
     <InputPath>in.txt</InputPath>
     <ErroPath>erro.txt</ErroPath>
+    <HilFlagSynchronous>false</HilFlagSynchronous>
+    <HilFlagAsynchronous>false</HilFlagAsynchronous>
+    <usart1></usart1>
+    <usart2></usart2>
+    <baudRate>50</baudRate>
     <Sensors>
         <Device>loadperspective_states</Device>
     </Sensors>

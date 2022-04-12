@@ -1,0 +1,262 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+This file is part of the ProVANT simulator project.
+Licensed under the terms of the MIT open source license. More details at
+https://github.com/Guiraffo/ProVANT-Simulator/blob/master/LICENSE.md
+-->
+<robot name="vant4">
+  <link name="mainbody">
+    <inertial>
+      <origin xyz="-0.66416 0.00056107 0.085926" rpy="0 0 0" />
+      <mass value="8.4589" />
+      <inertia ixx="0.12378" ixy="-1.0283E-05" ixz="0.0014863" iyy="0.034571" iyz="-5.2042E-06" izz="0.13577" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://vant4/meshes/mainbody.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="0.79216 0.81961 0.93333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://vant4/meshes/mainbody.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <link name="RotorR">
+    <inertial>
+      <origin xyz="0.0043782 -0.0018844 -0.0072816" rpy="0 0 0" />
+      <mass value="0.73962" />
+      <inertia ixx="0.0013848" ixy="9.436E-06" ixz="5.8634E-08" iyy="0.0014698" iyz="-4.6609E-05" izz="0.00088418" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://vant4/meshes/RotorR.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="0.79216 0.81961 0.93333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://vant4/meshes/RotorR.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="rotR" type="revolute">
+    <origin xyz="-0.6298 -1.0181 0.16308" rpy="0 0 0" />
+    <parent link="mainbody" />
+    <child link="RotorR" />
+    <axis xyz="0 1 0" />
+    <limit lower="-1.57" upper="1.57" effort="0" velocity="0" />
+  </joint>
+  <link name="HelR">
+    <inertial>
+      <origin xyz="-0.00014256 0.0018676 -0.01288" rpy="0 0 0" />
+      <mass value="0.12823" />
+      <inertia ixx="0.00028989" ixy="0.00055012" ixz="7.8549E-05" iyy="0.0011639" iyz="-3.7319E-05" izz="0.0014358" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://vant4/meshes/HelR.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="0.79216 0.81961 0.93333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://vant4/meshes/HelR.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="Hr" type="revolute">
+    <origin xyz="0.0043832 -0.00027566 0.11308" rpy="0 0 0" />
+    <parent link="RotorR" />
+    <child link="HelR" />
+    <axis xyz="0 0 1" />
+    <limit lower="-1.57" upper="1.57" effort="0" velocity="0" />
+  </joint>
+  <link name="RotorL">
+    <inertial>
+      <origin xyz="-0.0043782 0.0018844 -0.0072816" rpy="0 0 0" />
+      <mass value="0.73962" />
+      <inertia ixx="0.0013848" ixy="9.4367E-06" ixz="-5.9349E-08" iyy="0.0014698" iyz="4.661E-05" izz="0.00088418" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://vant4/meshes/RotorL.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="0.79216 0.81961 0.93333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://vant4/meshes/RotorL.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="rotL" type="revolute">
+    <origin xyz="-0.62106 1.0248 0.16369" rpy="0 0 0" />
+    <parent link="mainbody" />
+    <child link="RotorL" />
+    <axis xyz="0 1 0" />
+    <limit lower="-1.57" upper="1.57" effort="0" velocity="0" />
+  </joint>
+  <link name="HelL">
+    <inertial>
+      <origin xyz="-5.0975E-05 -0.0020058 -0.01286" rpy="0 0 0" />
+      <mass value="0.12823" />
+      <inertia ixx="3.2838E-05" ixy="0.00013904" ixz="1.5083E-08" iyy="0.0014156" iyz="-1.9717E-07" izz="0.0014411" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://vant4/meshes/HelL.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="0.79216 0.81961 0.93333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://vant4/meshes/HelL.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="Hl" type="revolute">
+    <origin xyz="-0.0043832 0.00027566 0.11308" rpy="0 0 0" />
+    <parent link="RotorL" />
+    <child link="HelL" />
+    <axis xyz="0 0 1" />
+    <limit lower="-1.57" upper="1.57" effort="0" velocity="0" />
+  </joint>
+  <link name="AileronR">
+    <inertial>
+      <origin xyz="-0.016469 -0.018278 0.0037403" rpy="0 0 0" />
+      <mass value="0.099417" />
+      <inertia ixx="0.0017447" ixy="2.7404E-05" ixz="1.8133E-06" iyy="1.0486E-05" iyz="-6.4746E-06" izz="0.0017537" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://vant4/meshes/AileronR.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="0.79216 0.81961 0.93333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://vant4/meshes/AileronR.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="Ar" type="revolute">
+    <origin xyz="-0.68926 -0.68209 0.13708" rpy="0 0 0" />
+    <parent link="mainbody" />
+    <child link="AileronR" />
+    <axis xyz="0 1 0" />
+    <limit lower="-1.57" upper="1.57" effort="0" velocity="0" />
+  </joint>
+  <link name="AileronL">
+    <inertial>
+      <origin xyz="-0.016824 0.018274 -0.0014503" rpy="0 0 0" />
+      <mass value="0.099406" />
+      <inertia ixx="0.0017443" ixy="-2.8036E-05" ixz="-5.2961E-07" iyy="1.0484E-05" iyz="-2.6598E-06" izz="0.0017539" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://vant4/meshes/AileronL.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="0.79216 0.81961 0.93333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://vant4/meshes/AileronL.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="Al" type="revolute">
+    <origin xyz="-0.68676 0.68294 0.13709" rpy="0 0 0" />
+    <parent link="mainbody" />
+    <child link="AileronL" />
+    <axis xyz="0 1 0" />
+    <limit lower="-1.57" upper="1.57" effort="0" velocity="0" />
+  </joint>
+  <link name="RudderR">
+    <inertial>
+      <origin xyz="-0.01475 -0.00018368 -0.00051242" rpy="0 0 0" />
+      <mass value="0.07609" />
+      <inertia ixx="0.0010372" ixy="6.0471E-08" ixz="-1.688E-07" iyy="5.6251E-06" iyz="1.3794E-07" izz="0.0010424" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://vant4/meshes/RudderR.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="0.79216 0.81961 0.93333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://vant4/meshes/RudderR.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="Rr" type="revolute">
+    <origin xyz="-1.1609 -0.28425 0.2141" rpy="0 0 0" />
+    <parent link="mainbody" />
+    <child link="RudderR" />
+    <axis xyz="0 1 0" />
+    <limit lower="-1.57" upper="1.57" effort="0" velocity="0" />
+  </joint>
+  <link name="RudderL">
+    <inertial>
+      <origin xyz="-0.014758 0.00018369 -0.00016734" rpy="0 0 0" />
+      <mass value="0.07609" />
+      <inertia ixx="0.0010372" ixy="6.367E-08" ixz="-4.6017E-08" iyy="5.6251E-06" iyz="1.3644E-07" izz="0.0010424" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://vant4/meshes/RudderL.STL" />
+      </geometry>
+      <material name="">
+        <color rgba="0.79216 0.81961 0.93333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://vant4/meshes/RudderL.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="Rl" type="revolute">
+    <origin xyz="-1.1615 0.28643 0.21038" rpy="0 0 0" />
+    <parent link="mainbody" />
+    <child link="RudderL" />
+    <axis xyz="0 1 0" />
+    <limit lower="-1.57" upper="1.57" effort="0" velocity="0" />
+  </joint>
+</robot>

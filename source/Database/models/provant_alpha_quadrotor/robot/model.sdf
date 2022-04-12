@@ -1,3 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+This file is part of the ProVANT simulator project.
+Licensed under the terms of the MIT open source license. More details at
+https://github.com/Guiraffo/ProVANT-Simulator/blob/master/LICENSE.md
+-->
 <sdf version='1.6'>
   <model name='provant_alpha_quadrotor'>
     <link name='base_link'>
@@ -24,12 +30,13 @@
         </geometry>
         <surface>
           <contact>
-            <ode/>
+            <ode />
           </contact>
           <friction>
-            <ode/>
+            <ode />
           </friction>
         </surface>
+        base_link
       </collision>
       <collision name='base_link_fixed_joint_lump__legs_collision_1'>
         <pose frame=''>0 0 0 0 -0 0</pose>
@@ -41,10 +48,10 @@
         </geometry>
         <surface>
           <contact>
-            <ode/>
+            <ode />
           </contact>
           <friction>
-            <ode/>
+            <ode />
           </friction>
         </surface>
       </collision>
@@ -78,9 +85,9 @@
           </script>
         </material>
       </visual>
-      <velocity_decay/>
+      <velocity_decay />
       <gravity>1</gravity>
-      <velocity_decay/>
+      <velocity_decay />
     </link>
     <link name='prop1'>
       <pose frame=''>0.3 0 0.2005 0 -0 0</pose>
@@ -106,10 +113,10 @@
         </geometry>
         <surface>
           <contact>
-            <ode/>
+            <ode />
           </contact>
           <friction>
-            <ode/>
+            <ode />
           </friction>
         </surface>
       </collision>
@@ -129,13 +136,13 @@
         </material>
       </visual>
       <gravity>1</gravity>
-      <velocity_decay/>
+      <velocity_decay />
     </link>
     <joint name='f1' type='revolute'>
       <child>prop1</child>
       <parent>base_link</parent>
       <axis>
-        <xyz>0 0 -1</xyz>
+        <xyz>0 0 1</xyz>
         <limit>
           <lower>-1e+16</lower>
           <upper>1e+16</upper>
@@ -171,10 +178,10 @@
         </geometry>
         <surface>
           <contact>
-            <ode/>
+            <ode />
           </contact>
           <friction>
-            <ode/>
+            <ode />
           </friction>
         </surface>
       </collision>
@@ -194,13 +201,13 @@
         </material>
       </visual>
       <gravity>1</gravity>
-      <velocity_decay/>
+      <velocity_decay />
     </link>
     <joint name='f2' type='revolute'>
       <child>prop2</child>
       <parent>base_link</parent>
       <axis>
-        <xyz>0 0 -1</xyz>
+        <xyz>0 0 1</xyz>
         <limit>
           <lower>-1e+16</lower>
           <upper>1e+16</upper>
@@ -236,10 +243,10 @@
         </geometry>
         <surface>
           <contact>
-            <ode/>
+            <ode />
           </contact>
           <friction>
-            <ode/>
+            <ode />
           </friction>
         </surface>
       </collision>
@@ -259,13 +266,13 @@
         </material>
       </visual>
       <gravity>1</gravity>
-      <velocity_decay/>
+      <velocity_decay />
     </link>
     <joint name='f3' type='revolute'>
       <child>prop3</child>
       <parent>base_link</parent>
       <axis>
-        <xyz>0 0 -1</xyz>
+        <xyz>0 0 1</xyz>
         <limit>
           <lower>-1e+16</lower>
           <upper>1e+16</upper>
@@ -301,10 +308,10 @@
         </geometry>
         <surface>
           <contact>
-            <ode/>
+            <ode />
           </contact>
           <friction>
-            <ode/>
+            <ode />
           </friction>
         </surface>
       </collision>
@@ -324,13 +331,13 @@
         </material>
       </visual>
       <gravity>1</gravity>
-      <velocity_decay/>
+      <velocity_decay />
     </link>
     <joint name='f4' type='revolute'>
       <child>prop4</child>
       <parent>base_link</parent>
       <axis>
-        <xyz>0 0 -1</xyz>
+        <xyz>0 0 1</xyz>
         <limit>
           <lower>-1e+16</lower>
           <upper>1e+16</upper>
@@ -343,17 +350,30 @@
       </axis>
     </joint>
     <static>0</static>
-    <plugin name='empuxo' filename='libgazebo_ros_QuadForces.so'>
+    <plugin name="VetorEstados" filename="libgazebo_ros_QuadData.so">
+      <NameOfTopic>Estados</NameOfTopic>
+      <bodyName>base_link</bodyName>
+    </plugin>
+    <plugin name="empuxo" filename="libgazebo_ros_QuadForces.so">
       <topic_F1>Empuxoh1</topic_F1>
       <topic_F2>Empuxoh2</topic_F2>
       <topic_F3>Empuxoh3</topic_F3>
       <topic_F4>Empuxoh4</topic_F4>
       <body>base_link</body>
-      <Motor1>prop1</Motor1>
-      <Motor2>prop2</Motor2>
-      <Motor3>prop3</Motor3>
-      <Motor4>prop4</Motor4>
       <DragCte>0.0179</DragCte>
+      <alpha>0.087</alpha>
+      <length>0.3</length>
+      <saturate>false</saturate>
+    </plugin>
+    <plugin name="vs_propeller_1_3" filename="libgazebo_ros_VisualPropellers.so">
+      <Propeller1>f1</Propeller1>
+      <Propeller2>f3</Propeller2>
+      <Propellers_Velocity>30</Propellers_Velocity>
+    </plugin>
+    <plugin name="vs_propeller_2_4" filename="libgazebo_ros_VisualPropellers.so">
+      <Propeller1>f2</Propeller1>
+      <Propeller2>f4</Propeller2>
+      <Propellers_Velocity>-30</Propellers_Velocity>
     </plugin>
   </model>
 </sdf>

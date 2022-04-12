@@ -1,31 +1,20 @@
 #include "scene.h"
 
-scene::scene()
+Scene::Scene()
 {
-
 }
 
-
-void scene::Write(QXmlStreamWriter xml)
+void Scene::write(QXmlStreamWriter* xml) const
 {
-    /*xml->writeStartElement("scene");
-    xml->writeStartElement("sky");
-    xml->writeTextElement("time","18");
-    xml->writeStartElement("clouds");
-    xml->writeTextElement("speed","0");
-    xml->writeEndElement();
-    xml->writeEndElement();
-    xml->writeEndElement();*/
+  Q_UNUSED(xml);
 }
 
-void scene::Read(QDomNode document)
+bool Scene::read(const QDomElement& world)
 {
-     document = document.firstChildElement("scene");
+  Q_UNUSED(world);
+  return true;
 }
 
-void scene::print()
+void Scene::print() const
 {
-
 }
-
-

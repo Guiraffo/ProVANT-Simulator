@@ -6,19 +6,18 @@
 class joint_DA
 {
 public:
-    joint_DA();
-    bool Read(QDomNode*);
-    void Write(QXmlStreamWriter*);
-    void print();
+  joint_DA();
+  bool Read(QDomNode*);
+  void Write(QXmlStreamWriter*);
+  void print();
 
-    std::string type;
-    std::string name;
-    std::string pose;
-    std::string parent;
-    std::string child;
-    Axis* one;
-    Axis* two;
-
+  std::string type;
+  std::string name;
+  std::string pose;
+  std::string parent;
+  std::string child;
+  Axis* one;
+  Axis* two;
 };
 
-#endif // JOINT_DA_H
+#endif  // JOINT_DA_H

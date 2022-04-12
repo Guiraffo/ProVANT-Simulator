@@ -1,269 +1,823 @@
 #include "world.h"
 #include "QMessageBox"
 
+#include <QDebug>
+
 #include "Utils/appsettings.h"
+#include "treeitens.h"
 
-world::world()
+World::World()
 {
-
 }
 
-void world::getFirst(std::string first_filename, QTreeWidget*root)
+void World::loadWorld(std::string first_filename, QTreeWidget* root)
 {
-    getFirst(QString::fromStdString(first_filename), root);
+  loadWorld(QString::fromStdString(first_filename), root);
 }
 
-void world::getFirst(const QString &filename, QTreeWidget *root)
+void World::loadWorld(const QString& filename, QTreeWidget* root)
 {
-    word = new WorldFile(filename.toStdString());
-    if(word->Read()) ToTreeWidget(root);
+  _world = WorldFile(filename);
+  if (_world.read())
+    toTreeWidget(root);
 }
 
-void world::Write(QTreeWidget* root)
+bool World::write(QTreeWidget* root)
 {
-    Include_DA* include;
-    plugin_DA* plugin;
-    WorldFile* newMundo;
-    newMundo = new WorldFile(this->word->Filename);
-    newMundo->sdfVersion = word->sdfVersion;
-    for(int i = 0; i< root->topLevelItemCount();i++)
+  WorldFile newMundo(_world.filename());
+  newMundo.setSdfVersion(_world.sdfVersion());
+
+  for (int i = 0; i < root->topLevelItemCount(); i++)
+  {
+    QTreeWidgetItem* item = root->topLevelItem(i);
+
+    if (item->text(0).toLower() == "physics")
     {
-        QTreeWidgetItem* item = root->topLevelItem(i);
-        if(item->text(0)=="Physics")
-        {
-             physics_DA physics;
-            if (item->child(0)->text(1).toStdString()!="ode"
-                &&item->child(0)->text(1).toStdString()!="bullet"
-                &&item->child(0)->text(1).toStdString()!="simbody"
-                &&item->child(0)->text(1).toStdString()!="dart")
-            {
-                    QMessageBox messageBox;
-                    messageBox.about(0,"Error","The type of Engine is wrong!");
-                    messageBox.setFixedSize(500,200);
-                    return;
-            }
-
-            physics.SetType(item->child(0)->text(1).toStdString());
-            physics.SetStep(item->child(1)->text(1).toStdString());
-            bool ok;
-            item->child(2)->text(1).toFloat(&ok);
-            if(!ok){
-                QMessageBox messageBox;
-                messageBox.about(0,"Error","An error has occured verify the parameters of the World!");
-                messageBox.setFixedSize(500,200);
-                return;
-            }
-            physics.SetRealTimeFactor(item->child(2)->text(1).toStdString());
-            physics.SetRealTimeUpdaterate(item->child(3)->text(1).toStdString());
-            newMundo->SetPhysics(physics);
-        }
-        if(item->text(0)=="Gravity")
-        {
-            gravity_DA gravity;
-            bool ok,ok2,ok3;
-            std::string gravString = item->child(0)->text(1).toStdString()
-                                    +" "+
-                                     item->child(1)->text(1).toStdString()
-                                    +" "+
-                                     item->child(2)->text(1).toStdString();
-
-            item->child(0)->text(1).toFloat(&ok);
-            item->child(1)->text(1).toFloat(&ok2);
-            item->child(2)->text(1).toFloat(&ok3);
-            if(!ok||!ok2||!ok3){
-                 QMessageBox messageBox;
-                 messageBox.about(0,"Error","An error has occured verify the parameters of the World!");
-                 messageBox.setFixedSize(500,200);
-                 return;
-            }
-            gravity.SetGravity(gravString);
-            newMundo->SetGravity(gravity);
-        }
-        if(item->text(0)=="Plugin")
-        {
-             plugin = new plugin_DA();
-            plugin->SetFilename(item->child(1)->text(1).toStdString());
-            plugin->SetName(item->child(0)->text(1).toStdString());
-            plugin->parameters.push_back(item->child(2)->text(0).toStdString());
-            plugin->values.push_back(item->child(2)->text(1).toStdString());
-            newMundo->listPlugins.multipleItens.push_back(*plugin);
-        }
-
-        if(item->text(0)=="Include")
-        {
-            include = new Include_DA;
-            include->SetName(item->child(0)->text(1).toStdString());
-            if(item->child(1)->childCount()!=0)
-            {
-                bool ok,ok2,ok3,ok4,ok5,ok6;
-               item->child(1)->child(0)->text(1).toFloat(&ok);
-               item->child(1)->child(1)->text(1).toFloat(&ok2);
-               item->child(1)->child(2)->text(1).toFloat(&ok3);
-               item->child(1)->child(3)->text(1).toFloat(&ok4);
-               item->child(1)->child(4)->text(1).toFloat(&ok5);
-               item->child(1)->child(5)->text(1).toFloat(&ok6);
-
-               if(!ok||!ok2||!ok3||!ok4||!ok5||!ok6)
-               {
-                   QMessageBox messageBox;
-                   messageBox.about(0,"Error","An error has occured verify the parameters of the World!");
-                   messageBox.setFixedSize(500,200);
-                   return;
-               }
-
-            std::string includeString = item->child(1)->child(0)->text(1).toStdString()+" "+
-                                        item->child(1)->child(1)->text(1).toStdString()+" "+
-                                        item->child(1)->child(2)->text(1).toStdString()+" "+
-                                        item->child(1)->child(3)->text(1).toStdString()+" "+
-                                        item->child(1)->child(4)->text(1).toStdString()+" "+
-                                        item->child(1)->child(5)->text(1).toStdString();
-            include->SetPose(includeString);
-
-            }
-            include->SetIsStatic(item->child(2)->text(1).toStdString());
-            include->SetUri(item->child(3)->text(1).toStdString());
-
-            newMundo->listIncludes.NewInclude(*include);
-        }
+      PhysicsDA _physics;
+      if (!parsePhysics(item, &_physics))
+        return false;
+      newMundo.setPhysics(_physics);
     }
-    newMundo->Filename = this->word->Filename;
-    this->word = newMundo;
-    this->word->Write();
-}
-void world::ToTreeWidget(QTreeWidget* root)
-{
-    QTreeWidgetItem* elementPose;
-    QTreeWidgetItem* edit;
-
-    root->clear();
-    QTreeWidgetItem* element;
-    //
-    element = TreeItens::AddRoot("Gravity","",root);
-    QStringList splitvector;
-    QString vector;
-    vector = QString::fromStdString(word->GetGravity().GetGravity());
-    QRegExp rx("(\\ |\\  |\\   |\\    |\\     |\\        |\\         |\\          |\\           |\\n|\\t)");
-    splitvector = vector.split(rx);
-    QStringList result;
-    foreach (const QString &str, splitvector)
+    else if (item->text(0).toLower() == "gravity")
     {
-        if (str.contains(" ")||str.size()==0)
+      GravityDA gravity;
+      if (!parseGravity(item, &gravity))
+        return false;
+      newMundo.setGravity(gravity);
+    }
+    else if (item->text(0).toLower() == "gui")
+    {
+      GuiDA _gui;
+      if (!parseGui(item, &_gui))
+        return false;
+      newMundo.setGui(_gui);
+    }
+    else if (item->text(0).toLower() == "plugin")
+    {
+      PluginDA newPlugin;
+      if (!parsePlugin(item, &newPlugin))
+        return false;
+
+      MultiplePlugins plugins = newMundo.getPlugins();
+      plugins.addPlugin(newPlugin);
+      newMundo.setPlugins(plugins);
+    }
+    else if (item->text(0).toLower() == "include")
+    {
+      IncludeDA include;
+      if (!parseInclude(item, &include))
+        return false;
+
+      MultipleIncludes includes = newMundo.getIncludeElements();
+      includes.addIncludeElement(include);
+      newMundo.setIncludeElements(includes);
+    }
+    else
+    {
+      QMessageBox::critical(nullptr, QObject::tr("Error"),
+                            QObject::tr("Error while saving the world file. A "
+                                        "tag "
+                                        "with an invalid name was found. Plase "
+                                        "check the tag values and try again."));
+      qCritical() << "Error while parsing the World elements. An element"
+                     " with the tag name "
+                  << qUtf8Printable(item->text(0))
+                  << "was found. But this tag is not recognized by the "
+                     "parser.";
+      return false;
+    }
+  }
+  newMundo.setFilename(_world.filename());
+  _world = newMundo;
+  _world.write();
+
+  return true;
+}
+
+void World::toTreeWidget(QTreeWidget* root)
+{
+  // Clear tree before inserting new elements
+  root->clear();
+
+  if (!_world.gui().isEmpty())
+  {
+    QTreeWidgetItem* guiItem = addRoot("GUI", "", root);
+    GuiDA gui = _world.gui();
+
+    QString fullscreenVal = gui.fullscreen();
+    if (fullscreenVal.isEmpty())
+    {
+      fullscreenVal = "false";
+    }
+    addChild(guiItem, "Fullscreen", fullscreenVal);
+
+    for (auto it = gui.getPlugins().getPlugins().cbegin();
+         it != gui.getPlugins().getPlugins().cend(); it++)
+    {
+      QTreeWidgetItem* guiPlugin = addChild(guiItem, "Plugin", "", false);
+      readPlugin(guiPlugin, *it);
+    }
+  }
+
+  // Add elements related to the world's gravity
+  QTreeWidgetItem* gravityElement = addRoot("Gravity", "", root);
+
+  QString gravityStr = _world.gravity().gravity();
+  QStringList gravityElements = gravityStr.split(" ");
+
+  addChild(gravityElement, "X", gravityElements.at(0), true);
+  addChild(gravityElement, "Y", gravityElements.at(1), true);
+  addChild(gravityElement, "Z", gravityElements.at(2), true);
+
+  // Add physics elements
+  QTreeWidgetItem* physicsElement = addRoot("Physics", "", root);
+
+  addChild(physicsElement, "Type", _world.physics().getType(), true);
+  addChild(physicsElement, "Step time", _world.physics().getStep(), true);
+  addChild(physicsElement, "Real time factor",
+           _world.physics().getRealTimeFactor());
+  addChild(physicsElement, "Real time update rate",
+           _world.physics().getRealTimeUpdateRate());
+
+  // Add the plugin elements
+  readPlugins(root, _world.getPlugins());
+
+  // Add the include elements
+  QList<IncludeDA> includes = _world.getIncludeElements().getIncludes();
+  for (auto it = includes.cbegin(); it != includes.cend(); it++)
+  {
+    QTreeWidgetItem* includeElement = addRoot("Include", "", root, false);
+
+    addChild(includeElement, "Name", it->getName(), true);
+    QTreeWidgetItem* poseItem = addChild(includeElement, "Pose", "", false);
+    splitPose(it->getPose(), poseItem);
+
+    addChild(includeElement, "isStatic", it->isStatic());
+    addChild(includeElement, "URI", it->getURI());
+  }
+}
+
+void World::readPlugin(QTreeWidgetItem* root, const PluginDA& plugin)
+{
+  addChild(root, "Name", plugin.getName(), true);
+  addChild(root, "Filename", plugin.getFilename(), true);
+
+  QMap<QString, QString> paramMap = plugin.getParameters();
+  for (auto i = paramMap.cbegin(); i != paramMap.cend(); ++i)
+  {
+    addChild(root, i.key(), i.value(), true);
+  }
+}
+
+void World::readPlugins(QTreeWidget* root, const MultiplePlugins& plugins)
+{
+  for (auto it = plugins.getPlugins().cbegin();
+       it != plugins.getPlugins().cend(); it++)
+  {
+    QTreeWidgetItem* pluginElement = addRoot("Plugin", "", root, false);
+    readPlugin(pluginElement, *it);
+  }
+}
+
+bool World::parsePhysics(const QTreeWidgetItem* item, PhysicsDA* physics)
+{
+  if (item->childCount() < 3)
+  {
+    QMessageBox::critical(nullptr, QObject::tr("Error"),
+                          QObject::tr("Error while parsing the physics "
+                                      "element. The physics elements must "
+                                      "have four child elements. Plase check "
+                                      "the values and try again."));
+    qCritical() << "Error while parsing the Physics element. An "
+                   "object with "
+                << item->childCount()
+                << " child itens was found. But 4 were expected.";
+    return false;
+  }
+
+  bool typeFound = false;
+  bool stepTimeFound = false;
+  bool realTimeFactorFound = false;
+  bool realTimeUpdateRateFound = false;
+
+  for (int i = 0; i < item->childCount(); i++)
+  {
+    QTreeWidgetItem* childItem = item->child(i);
+
+    if (childItem->text(0).toLower() == "type")
+    {
+      QString value = childItem->text(1);
+
+      if (value != "ode" && value != "bullet" && value != "simbody" &&
+          value != "dart")
+      {
+        QMessageBox messageBox;
+        messageBox.critical(nullptr, QObject::tr("Error"),
+                            QObject::tr("Invalid physics type. "
+                                        "Plase check this parameter "
+                                        "value and try again."));
+        qCritical() << "Error while parsing the Physics->Type "
+                       "element. The value "
+                    << qUtf8Printable(value)
+                    << " was found. But the valid optins are ("
+                       "ode, bullet, simbody, dart).";
+
+        return false;
+      }
+
+      physics->setType(childItem->text(1));
+      typeFound = true;
+    }
+    else if (childItem->text(0).toLower() == "step time")
+    {
+      bool ok;
+      double value = childItem->text(1).toDouble(&ok);
+
+      if (!ok || value < 0)
+      {
+        QMessageBox::critical(nullptr, QObject::tr("Error"),
+                              QObject::tr("Invalid step time. Plase check"
+                                          " the value and try again."));
+        qCritical() << "Error while parsing the Physics -> "
+                       "Step time element. The value "
+                    << qUtf8Printable(childItem->text(1))
+                    << " was found, but a positive numeric "
+                       " value was expected.";
+        return false;
+      }
+
+      physics->setStep(childItem->text(1));
+      stepTimeFound = true;
+    }
+    else if (childItem->text(0).toLower() == "real time factor")
+    {
+      // Check the real time factor value
+      bool ok;
+      double value = childItem->text(1).toDouble(&ok);
+
+      if (!ok || value < 0)
+      {
+        QMessageBox::critical(nullptr, QObject::tr("Error"),
+                              QObject::tr("Invalid real time factor. "
+                                          "Plase check the value and try "
+                                          "again."));
+        qCritical() << "Error while parsing the Physics -> Real"
+                       " time factor value. The value "
+                    << qUtf8Printable(childItem->text(1))
+                    << " was found. But a positive numeric "
+                       " value was expected.";
+        return false;
+      }
+
+      physics->setRealTimeFactor(childItem->text(1));
+      realTimeFactorFound = true;
+    }
+    else if (childItem->text(0).toLower() == "real time update rate")
+    {
+      bool ok;
+      double value = childItem->text(1).toDouble(&ok);
+
+      if (!ok || value < 0)
+      {
+        QMessageBox::critical(nullptr, QObject::tr("Error"),
+                              QObject::tr("Invalid real time update rate."
+                                          "Plase check the value and try "
+                                          "again."));
+        qCritical() << "Error while parsing the Physics -> Real"
+                       " time update rate element. The value "
+                    << qUtf8Printable(childItem->text(1))
+                    << " was found, but a positive numeric "
+                       "value was expected.";
+        return false;
+      }
+
+      physics->setRealTimeUpdateRate(childItem->text(1));
+      realTimeUpdateRateFound = true;
+    }
+    else
+    {
+      QMessageBox::critical(nullptr, QObject::tr("Error"),
+                            QObject::tr("Unrecognized child element under "
+                                        "the physics element. "
+                                        "Plase check the values and try "
+                                        "again."));
+      qCritical() << "Error while parsing the Physics element. "
+                     "A child element with the name \""
+                  << qUtf8Printable(childItem->text(0)) << "\" and value \""
+                  << qUtf8Printable(childItem->text(1))
+                  << "\" was found. But this tag is not "
+                     "recognized by the parser.";
+      return false;
+    }
+  }
+
+  if (!typeFound || !stepTimeFound || !realTimeFactorFound ||
+      !realTimeUpdateRateFound)
+  {
+    QMessageBox::critical(nullptr, QObject::tr("Error"),
+                          QObject::tr("The physics object must have a Type, "
+                                      "Step time, Real time factor, and "
+                                      "Real time update rate elements."
+                                      "Plase check these values and try "
+                                      "again."));
+    qCritical() << "Error while parsing the Physics element. "
+                   "The physics element must have a Type, Step "
+                   "time, Real time factor, and Real time update "
+                   "rate elements. But at least one of those was "
+                   "not found by the parser.";
+    return false;
+  }
+
+  return true;
+}
+
+bool World::parseGravity(const QTreeWidgetItem* item, GravityDA* gravity)
+{
+  if (item->childCount() != 3)
+  {
+    QMessageBox::critical(nullptr, QObject::tr("Error"),
+                          QObject::tr("Invalid gravity element. The gravity "
+                                      "element must have tree child itens."
+                                      "Plase check the element values and try"
+                                      "again."));
+    qCritical() << "Error while parsing the Gravity element. An "
+                   "element with "
+                << item->childCount()
+                << " was found. But the Gravity element must have "
+                   "three child itens.";
+    return false;
+  }
+
+  QString x, y, z;
+  for (int i = 0; i < 3; i++)
+  {
+    QTreeWidgetItem* childItem = item->child(i);
+
+    bool ok;
+    childItem->text(1).toDouble(&ok);
+    if (!ok)
+    {
+      QMessageBox::critical(nullptr, QObject::tr("Error"),
+                            QObject::tr("Error while parsing a Gravity "
+                                        "value. The gravity values must "
+                                        "be numeric. Plase check the "
+                                        "values and try again."));
+      qCritical() << "Error while parsing the Gravity -> "
+                  << qUtf8Printable(childItem->text(0))
+                  << " element. The value "
+                  << qUtf8Printable(childItem->text(1))
+                  << " was found. But a numeric value was "
+                     "expceted.";
+      return false;
+    }
+
+    if (childItem->text(0).toLower() == "x")
+    {
+      x = childItem->text(1);
+    }
+    else if (childItem->text(0).toLower() == "y")
+    {
+      y = childItem->text(1);
+    }
+    else if (childItem->text(0).toLower() == "z")
+    {
+      z = childItem->text(1);
+    }
+    else
+    {
+      QMessageBox::critical(nullptr, QObject::tr("Error"),
+                            QObject::tr("Invalid child element under the "
+                                        "gravity element. The gravity "
+                                        "element must have X, Y and Z "
+                                        "values. Plase check these values "
+                                        "and try again."));
+      qCritical() << "Error while parsing the Gravity element. "
+                     "A tag with name \""
+                  << qUtf8Printable(childItem->text(0)) << "\" and value \""
+                  << qUtf8Printable(childItem->text(1))
+                  << "\" was found. But this tag is not "
+                     "recognized by the parser.";
+      return false;
+    }
+  }
+
+  if (x.isEmpty() || y.isEmpty() || z.isEmpty())
+  {
+    QMessageBox::critical(nullptr, QObject::tr("Error"),
+                          QObject::tr("Invalid child element under the "
+                                      "gravity element. The gravity "
+                                      "element must have X, Y and Z "
+                                      "values. Plase check these values "
+                                      "and try again."));
+    qCritical() << "Error while parsing the Gravity element. "
+                   "The Gravity element must have a X, Y and Z "
+                   "child elements but at least one of these was "
+                   "not found.";
+    return false;
+  }
+
+  QString gravStr = QString("%1 %2 %3").arg(x).arg(y).arg(z);
+
+  gravity->setGravity(gravStr);
+
+  return true;
+}
+
+bool World::parsePlugin(const QTreeWidgetItem* item, PluginDA* plugin)
+{
+  if (item->childCount() < 2)
+  {
+    QMessageBox::critical(nullptr, QObject::tr("Error"),
+                          QObject::tr("Eror while trying to parse "
+                                      "a plugin element. Each plugin"
+                                      "element must have at least "
+                                      "a name and filename tags."
+                                      "Please verify the world "
+                                      "plugins and try again."));
+    qCritical() << "Error while parsing a plugin element. A plugin "
+                   "with "
+                << item->childCount()
+                << " was found. But each plugin element must have "
+                   "at least two child elements.";
+    return false;
+  }
+
+  bool nameFound = false;
+  bool filenameFound = false;
+
+  for (int i = 0; i < item->childCount(); i++)
+  {
+    QTreeWidgetItem* childItem = item->child(i);
+    if (childItem->text(0).toLower() == "name")
+    {
+      plugin->setName(childItem->text(1));
+
+      nameFound = true;
+    }
+    else if (childItem->text(0).toLower() == "filename")
+    {
+      plugin->setFilename(childItem->text(1));
+
+      filenameFound = true;
+    }
+    else
+    {
+      // If it is not a name nor a filename element, it must be
+      // a parameter
+      plugin->setParameter(childItem->text(0), childItem->text(1));
+    }
+  }
+
+  if (!nameFound || !filenameFound)
+  {
+    QMessageBox::critical(nullptr, QObject::tr("Error"),
+                          QObject::tr("Error while parsing a "
+                                      "plugin element. Every "
+                                      "plugin must have a name and"
+                                      " a filename tag. Plase "
+                                      "check the world plugins and"
+                                      " try again."));
+    qCritical() << "Error while parsing a plugin element. Each "
+                   "plugin must have at least name and filename "
+                   "child elements, but at leat one of those was "
+                   "not found.";
+    return false;
+  }
+
+  return true;
+}
+
+bool World::parseInclude(const QTreeWidgetItem* item, IncludeDA* include)
+{
+  if (item->childCount() < 4)
+  {
+    QMessageBox::critical(nullptr, QObject::tr("Error"),
+                          QObject::tr("Error while parsing a Include "
+                                      "element. Each include element must "
+                                      "have 4 child elements. Plase check "
+                                      "this tag value and try again."));
+    qCritical() << "Error while parsing an Include element. An "
+                   "element with "
+                << item->childCount()
+                << " was found. But an element with 4 children was"
+                   "expected.";
+    return false;
+  }
+
+  bool nameFound = false;
+  bool staticFound = false;
+  bool poseFound = false;
+  bool uriFound = false;
+
+  for (int i = 0; i < item->childCount(); i++)
+  {
+    QTreeWidgetItem* childItem = item->child(i);
+
+    if (childItem->text(0).toLower() == "name")
+    {
+      include->setName(childItem->text(1));
+      nameFound = true;
+    }
+    else if (childItem->text(0).toLower() == "pose")
+    {
+      if (childItem->childCount() != 6)
+      {
+        QMessageBox::critical(nullptr, QObject::tr("Error"),
+                              QObject::tr("Invalid pose element found. The "
+                                          "Pose "
+                                          "element must have six numeric "
+                                          "elements"
+                                          ". Plase check the pose values and "
+                                          "try "
+                                          "again."));
+        qCritical() << "Error while parsing an Include -> Pose "
+                       "element. A Pose with "
+                    << childItem->childCount()
+                    << " child itens was found. But a pose "
+                       "element must have 6 child elements.";
+        return false;
+      }
+
+      QString x, y, z, roll, pitch, yaw;
+
+      for (int i = 0; i < childItem->childCount(); i++)
+      {
+        QTreeWidgetItem* poseItem = childItem->child(i);
+
+        bool ok;
+        poseItem->text(1).toDouble(&ok);
+
+        if (!ok)
         {
-            //faz nada
+          QMessageBox::critical(nullptr, QObject::tr("Error"),
+                                QObject::tr("Invalid value found "
+                                            "when parsing a Pose "
+                                            "element. All pose "
+                                            "elements "
+                                            "must have a numeric value."
+                                            ""));
+          qCritical() << "Error while parsing an Include"
+                         " -> Pose element. The "
+                      << qUtf8Printable(poseItem->text(0))
+                      << " was found with a value "
+                      << qUtf8Printable(poseItem->text(1))
+                      << " but a numric value was expected.";
+          return false;
+        }
+
+        if (poseItem->text(0).toLower() == "x")
+        {
+          x = poseItem->text(1);
+        }
+        else if (poseItem->text(0).toLower() == "y")
+        {
+          y = poseItem->text(1);
+        }
+        else if (poseItem->text(0).toLower() == "z")
+        {
+          z = poseItem->text(1);
+        }
+        else if (poseItem->text(0).toLower() == "roll")
+        {
+          roll = poseItem->text(1);
+        }
+        else if (poseItem->text(0).toLower() == "pitch")
+        {
+          pitch = poseItem->text(1);
+        }
+        else if (poseItem->text(0).toLower() == "yaw")
+        {
+          yaw = poseItem->text(1);
         }
         else
         {
-            result += str;
+          QMessageBox::critical(nullptr, QObject::tr("Error"),
+                                QObject::tr("An invalid tag was found while "
+                                            "parsing a Pose element. Please "
+                                            "check the values and try again."));
+          qCritical() << "Error while parsing an Include -> "
+                         "Pose element. A tag with name \""
+                      << qUtf8Printable(poseItem->text(0)) << "\" and value \""
+                      << qUtf8Printable(poseItem->text(1))
+                      << "\" was found. But this tag is not "
+                         "recognized by the parser.";
+          return false;
         }
+      }
+
+      if (x.isEmpty() || y.isEmpty() || z.isEmpty() || roll.isEmpty() ||
+          pitch.isEmpty() || yaw.isEmpty())
+      {
+        QMessageBox::critical(nullptr, QObject::tr("Error"),
+                              QObject::tr("Invalid Pose element found. "
+                                          "A Pose element must have X, Y"
+                                          ", Z, Roll, Pitch and Yaw "
+                                          "values. Please check these "
+                                          "values and try again."));
+        qCritical() << "Error while parsing an Include -> Pose "
+                       "element. A Pose element must have X, Y,"
+                       " Z, Roll, Pitch and Yaw child elements,"
+                       " but at least one of those was not "
+                       "found";
+        return false;
+      }
+
+      QString poseStr = QString("%1 %2 %3 %4 %5 %6")
+                            .arg(x)
+                            .arg(y)
+                            .arg(z)
+                            .arg(roll)
+                            .arg(pitch)
+                            .arg(yaw);
+
+      include->setPose(poseStr);
+      poseFound = true;
     }
-    edit = TreeItens::AddChild(element,"X",result.at(0).toStdString());
-    edit->setFlags(Qt::ItemIsEditable|Qt::ItemIsEnabled);
-    edit = TreeItens::AddChild(element,"Y",result.at(1).toStdString());
-    edit->setFlags(Qt::ItemIsEditable|Qt::ItemIsEnabled);
-    edit = TreeItens::AddChild(element,"Z",result.at(2).toStdString());
-    edit->setFlags(Qt::ItemIsEditable|Qt::ItemIsEnabled);
-    //
-    element = TreeItens::AddRoot("Physics","",root);
-    edit = TreeItens::AddChild(element,"Type",word->GetPhysics().GetType());
-    edit->setFlags(Qt::ItemIsEditable|Qt::ItemIsEnabled);
-    TreeItens::AddChild(element,"Step time",word->GetPhysics().GetStep());
-    edit = TreeItens::AddChild(element,"Real time factor",word->GetPhysics().GetRealTimeFactor());
-    edit = TreeItens::AddChild(element,"Real time update rate",word->GetPhysics().GetRealTimeUpdaterate());
-    //
-
-
-
-    std::vector<plugin_DA> listplugins = word->listPlugins.multipleItens;
-    for(uint i = 0; i< listplugins.size();i++)
+    else if (childItem->text(0).toLower() == "isstatic")
     {
-
-        element = TreeItens::AddRoot("Plugin","",root);
-
-        for(uint i = 0; i< listplugins.size();i++)
-        {
-            TreeItens::AddChild(element,"name",listplugins.at(i).GetName());
-            TreeItens::AddChild(element,"filename",listplugins.at(i).GetFilename());
-            std::vector<std::string> listpluginsparameters = listplugins.at(i).parameters;
-            std::vector<std::string> listpluginsvalues = listplugins.at(i).values;
-            for(uint j = 0; j< listpluginsparameters.size();j++)
-            {
-                TreeItens::AddChild(element,listpluginsparameters.at(j),
-                                            listpluginsvalues.at(j));
-            }
-        }
+      include->setStatic(childItem->text(1));
+      staticFound = true;
     }
-    //
-    std::vector<Include_DA> list = word->listIncludes.multipleItens;
-    for(uint i = 0; i< list.size();i++)
+    else if (childItem->text(0).toLower() == "uri")
     {
-
-        element = TreeItens::AddRoot("Include","",root);
-        edit = TreeItens::AddChild(element,"name",list.at(i).GetName());
-        edit->setFlags(Qt::ItemIsEditable|Qt::ItemIsEnabled);
-        elementPose = TreeItens::AddChild(element,"pose","");
-        this->splitvector(list.at(i).GetPose(),elementPose);
-        TreeItens::AddChild(element,"isStatic",list.at(i).GetIsStatic());
-        TreeItens::AddChild(element,"uri",list.at(i).GetUri());
-
-        AppSettings settings;
-        char const *tmp = settings.getGazeboModelPath().toStdString().c_str();
-        if ( tmp == NULL )
-        {
-                qDebug() << "Problemas com variavel de ambiente ";
-        }
-        else
-        {
-                std::string env(tmp);
-                QDir dir(env.c_str());
-                QStringList resultlist;
-                resultlist  = QString::fromStdString(list.at(i).GetUri()).split("//");
-
-                if (dir.cd(QString::fromStdString(resultlist.at(1).toStdString()))) // "/tmp"
-                {
-                       QString command(QString::fromStdString(env)
-                                          +"/"
-                                           +resultlist.at(1)
-                                           +"/config/config.xml");
-                       setenv("TILT_CONFIG",command.toStdString().c_str(),1);
-                }
-
-          }
+      ///@todo Add URI validation
+      include->setURI(childItem->text(1));
+      uriFound = true;
     }
+    else
+    {
+      QMessageBox::critical(nullptr, QObject::tr("Error"),
+                            QObject::tr("An invalid child item was found "
+                                        "under an Include item. Please "
+                                        "check values and try again."));
+      qCritical() << "Error while parsing an Include element. A "
+                     "tag with name \""
+                  << qUtf8Printable(childItem->text(0)) << "\" and value \""
+                  << qUtf8Printable(childItem->text(1))
+                  << "\" was found. But this tag is not "
+                     "recognized by the parser.";
+      return false;
+    }
+  }
+
+  if (!nameFound || !poseFound || !staticFound || !uriFound)
+  {
+    QMessageBox::critical(nullptr, QObject::tr("Error"),
+                          QObject::tr("Error wihle parsing an Include "
+                                      "element. Each include element must "
+                                      "have a Name, Pose, isStatic and URI "
+                                      "elements. Please check these values "
+                                      "and try again."));
+    qCritical() << "Error while parsing an Include element. An "
+                   "include element must have a Name, Pose, "
+                   "isStatic and URI elements. But at least one of"
+                   " those was not found.";
+    return false;
+  }
+
+  return true;
 }
 
-void world::splitvector(std::string data,QTreeWidgetItem* Element)
+bool World::parseGui(const QTreeWidgetItem* item, GuiDA* gui)
 {
-    if(data != "")
+  MultiplePlugins plugins;
+
+  for (int i = 0; i < item->childCount(); i++)
+  {
+    QTreeWidgetItem* childItem = item->child(i);
+
+    if (childItem->text(0).toLower() == "fullscreen")
     {
-        QStringList splitvector;
-        QString vector;
-        vector = QString::fromStdString(data);
-        QRegExp rx("(\\ |\\  |\\   |\\    |\\     |\\        |\\         |\\          |\\           |\\n|\\t)");
-        splitvector = vector.split(rx);
-        QStringList result;
-        foreach (const QString &str, splitvector)
-        {
-            if (str.contains(" ")||str.size()==0)
-            {
-                //faz nada
-            }
-            else
-            {
-                result += str;
-            }
-        }
-        QTreeWidgetItem* edit;
-        edit = TreeItens::AddChild(Element,"X",result.at(0).toStdString());
-        edit->setFlags(Qt::ItemIsEditable|Qt::ItemIsEnabled);
-        edit = TreeItens::AddChild(Element,"Y",result.at(1).toStdString());
-        edit->setFlags(Qt::ItemIsEditable|Qt::ItemIsEnabled);
-        edit = TreeItens::AddChild(Element,"Z",result.at(2).toStdString());
-        edit->setFlags(Qt::ItemIsEditable|Qt::ItemIsEnabled);
-        edit = TreeItens::AddChild(Element,"Roll",result.at(3).toStdString());
-        edit->setFlags(Qt::ItemIsEditable|Qt::ItemIsEnabled);
-        edit = TreeItens::AddChild(Element,"Pitch",result.at(4).toStdString());
-        edit->setFlags(Qt::ItemIsEditable|Qt::ItemIsEnabled);
-        edit = TreeItens::AddChild(Element,"Yaw",result.at(5).toStdString());
-        edit->setFlags(Qt::ItemIsEditable|Qt::ItemIsEnabled);
+      gui->setFullscreen(childItem->text(1));
     }
+    else if (childItem->text(0).toLower() == "plugin")
+    {
+      PluginDA plugin;
+      if (!parsePlugin(childItem, &plugin))
+        return false;
+      plugins.addPlugin(plugin);
+    }
+    else
+    {
+      QMessageBox::critical(nullptr, QObject::tr("Error"),
+                            QObject::tr("An invalid child item was found "
+                                        "under a GUI item. Please "
+                                        "check these values and try again."));
+      qCritical() << "Error while parsing a GUI element. An element with "
+                     "tag name \""
+                  << qUtf8Printable(childItem->text(0)) << "\" and value \""
+                  << qUtf8Printable(childItem->text(1))
+                  << "\" was found. But this tag is not "
+                     "recognized by the parser.";
+      return false;
+    }
+  }
+
+  gui->setPlugins(plugins);
+  return true;
+}
+
+bool parsePlugin(const QTreeWidgetItem* item, PluginDA* plugin)
+{
+  if (item->childCount() < 2)
+  {
+    QMessageBox::critical(nullptr, QObject::tr("Error"),
+                          QObject::tr("Eror while trying to parse "
+                                      "a plugin element. Each plugin"
+                                      "element must have at least "
+                                      "a name and filename tags."
+                                      "Please verify the world "
+                                      "plugins and try again."));
+    qCritical() << "Error while parsing a plugin element. A plugin "
+                   "with "
+                << item->childCount()
+                << " was found. But each plugin element must have "
+                   "at least two child elements.";
+    return false;
+  }
+
+  bool nameFound = false;
+  bool filenameFound = false;
+
+  for (int i = 0; i < item->childCount(); i++)
+  {
+    QTreeWidgetItem* childItem = item->child(i);
+    if (childItem->text(0).toLower() == "name")
+    {
+      plugin->setName(childItem->text(1));
+
+      nameFound = true;
+    }
+    else if (childItem->text(0).toLower() == "filename")
+    {
+      plugin->setFilename(childItem->text(1));
+
+      filenameFound = true;
+    }
+    else
+    {
+      // If it is not a name nor a filename element, it must be
+      // a parameter
+      plugin->setParameter(childItem->text(0), childItem->text(1));
+    }
+  }
+
+  if (!nameFound || !filenameFound)
+  {
+    QMessageBox::critical(nullptr, QObject::tr("Error"),
+                          QObject::tr("Error while parsing a "
+                                      "plugin element. Every "
+                                      "plugin must have a name and"
+                                      " a filename tag. Plase "
+                                      "check the world plugins and"
+                                      " try again."));
+    qCritical() << "Error while parsing a plugin element. Each "
+                   "plugin must have at least name and filename "
+                   "child elements, but at leat one of those was "
+                   "not found.";
+    return false;
+  }
+
+  return true;
+}
+
+WorldFile World::getWorld() const
+{
+  return _world;
+}
+
+void World::setWorld(const WorldFile& world)
+{
+  _world = world;
+}
+
+void World::splitPose(const QString& pose, QTreeWidgetItem* element)
+{
+  QString x, y, z, roll, pitch, yaw;
+  x = "0";
+  y = "0";
+  z = "0";
+  roll = "0";
+  pitch = "0";
+  yaw = "0";
+  if (!pose.isEmpty())
+  {
+    QStringList splitedPose = pose.split(" ");
+    if (splitedPose.size() == 6)
+    {
+      x = splitedPose.at(0);
+      y = splitedPose.at(1);
+      z = splitedPose.at(2);
+      roll = splitedPose.at(3);
+      pitch = splitedPose.at(4);
+      yaw = splitedPose.at(5);
+    }
+  }
+
+  addChild(element, "X", x, true);
+  addChild(element, "Y", y, true);
+  addChild(element, "Z", z, true);
+  addChild(element, "Roll", roll, true);
+  addChild(element, "Pitch", pitch, true);
+  addChild(element, "Yaw", yaw, true);
 }

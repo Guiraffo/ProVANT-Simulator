@@ -3,7 +3,8 @@
 
 #include <QDialog>
 
-namespace Ui {
+namespace Ui
+{
 class ApplicationSettingsDialog;
 }
 
@@ -32,20 +33,20 @@ class ApplicationSettingsDialog;
  */
 class ApplicationSettingsDialog : public QDialog
 {
-    Q_OBJECT
+  Q_OBJECT
 
 public:
-    explicit ApplicationSettingsDialog(QWidget *parent = nullptr);
-    ~ApplicationSettingsDialog();
+  explicit ApplicationSettingsDialog(QWidget* parent = nullptr);
+  ~ApplicationSettingsDialog();
 
 private:
-    //! The pointer to objects contained in the user interface of this class.
-    Ui::ApplicationSettingsDialog *ui;
+  //! The pointer to objects contained in the user interface of this class.
+  Ui::ApplicationSettingsDialog* ui;
 
-    void showErrorOnSettingMessage(const QString &key) const;
+  void showErrorOnSettingMessage(const QString& key) const;
 public slots:
-    void accept();
-    void reject();
+  void accept();
+  void reject();
 };
 
-#endif // APPLICATIONSETTINGSDIALOG_H
+#endif  // APPLICATIONSETTINGSDIALOG_H

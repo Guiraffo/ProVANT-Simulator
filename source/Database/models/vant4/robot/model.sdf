@@ -1,0 +1,451 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+This file is part of the ProVANT simulator project.
+Licensed under the terms of the MIT open source license. More details at
+https://github.com/Guiraffo/ProVANT-Simulator/blob/master/LICENSE.md
+--> 
+<sdf version='1.6'>
+  <model name='vant4'>
+    <link name='mainbody'>
+      <pose frame=''>0 0 0 0 -0 0</pose>
+      <inertial>
+        <pose frame=''>-0.66416 0.000561 0.085926 0 -0 0</pose>
+        <mass>8.4589</mass>
+        <inertia>
+          <ixx>0.12378</ixx>
+          <ixy>-1.0283e-05</ixy>
+          <ixz>0.0014863</ixz>
+          <iyy>0.034571</iyy>
+          <iyz>-5.2042e-06</iyz>
+          <izz>0.13577</izz>
+        </inertia>
+      </inertial>
+      <collision name='mainbody_collision'>
+        <pose frame=''>0 0 0 0 -0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://vant4/meshes/mainbody.STL</uri>
+          </mesh>
+        </geometry>
+      </collision>
+      <visual name='mainbody_visual'>
+        <pose frame=''>0 0 0 0 -0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://vant4/meshes/mainbody.STL</uri>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+    <link name='AileronL'>
+      <pose frame=''>-0.68676 0.68294 0.13709 0 -0 0</pose>
+      <inertial>
+        <pose frame=''>-0.016824 0.018274 -0.00145 0 -0 0</pose>
+        <mass>0.099406</mass>
+        <inertia>
+          <ixx>0.0017443</ixx>
+          <ixy>-2.8036e-05</ixy>
+          <ixz>-5.2961e-07</ixz>
+          <iyy>1.0484e-05</iyy>
+          <iyz>-2.6598e-06</iyz>
+          <izz>0.0017539</izz>
+        </inertia>
+      </inertial>
+      <collision name='AileronL_collision'>
+        <pose frame=''>0 0 0 0 -0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://vant4/meshes/AileronL.STL</uri>
+          </mesh>
+        </geometry>
+      </collision>
+      <visual name='AileronL_visual'>
+        <pose frame=''>0 0 0 0 -0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://vant4/meshes/AileronL.STL</uri>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+    <joint name='Al' type='revolute'>
+      <child>AileronL</child>
+      <parent>mainbody</parent>
+      <axis>
+        <xyz>0 1 0</xyz>
+        <limit>
+          <lower>-1.57</lower>
+          <upper>1.57</upper>
+          <effort>0</effort>
+          <velocity>0</velocity>
+        </limit>
+        <dynamics>
+          <spring_reference>0</spring_reference>
+          <spring_stiffness>0</spring_stiffness>
+        </dynamics>
+        <use_parent_model_frame>1</use_parent_model_frame>
+      </axis>
+    </joint>
+    <link name='AileronR'>
+      <pose frame=''>-0.68926 -0.68209 0.13708 0 -0 0</pose>
+      <inertial>
+        <pose frame=''>-0.016469 -0.018278 0.00374 0 -0 0</pose>
+        <mass>0.099417</mass>
+        <inertia>
+          <ixx>0.0017447</ixx>
+          <ixy>2.7404e-05</ixy>
+          <ixz>1.8133e-06</ixz>
+          <iyy>1.0486e-05</iyy>
+          <iyz>-6.4746e-06</iyz>
+          <izz>0.0017537</izz>
+        </inertia>
+      </inertial>
+      <collision name='AileronR_collision'>
+        <pose frame=''>0 0 0 0 -0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://vant4/meshes/AileronR.STL</uri>
+          </mesh>
+        </geometry>
+      </collision>
+      <visual name='AileronR_visual'>
+        <pose frame=''>0 0 0 0 -0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://vant4/meshes/AileronR.STL</uri>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+    <joint name='Ar' type='revolute'>
+      <child>AileronR</child>
+      <parent>mainbody</parent>
+      <axis>
+        <xyz>0 1 0</xyz>
+        <limit>
+          <lower>-1.57</lower>
+          <upper>1.57</upper>
+          <effort>0</effort>
+          <velocity>0</velocity>
+        </limit>
+        <dynamics>
+          <spring_reference>0</spring_reference>
+          <spring_stiffness>0</spring_stiffness>
+        </dynamics>
+        <use_parent_model_frame>1</use_parent_model_frame>
+      </axis>
+    </joint>
+    <link name='RudderL'>
+      <pose frame=''>-1.1615 0.28643 0.21038 0 -0 0</pose>
+      <inertial>
+        <pose frame=''>-0.014758 0.000184 -0.000167 0 -0 0</pose>
+        <mass>0.07609</mass>
+        <inertia>
+          <ixx>0.0010372</ixx>
+          <ixy>6.367e-08</ixy>
+          <ixz>-4.6017e-08</ixz>
+          <iyy>5.6251e-06</iyy>
+          <iyz>1.3644e-07</iyz>
+          <izz>0.0010424</izz>
+        </inertia>
+      </inertial>
+      <collision name='RudderL_collision'>
+        <pose frame=''>0 0 0 0 -0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://vant4/meshes/RudderL.STL</uri>
+          </mesh>
+        </geometry>
+      </collision>
+      <visual name='RudderL_visual'>
+        <pose frame=''>0 0 0 0 -0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://vant4/meshes/RudderL.STL</uri>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+    <joint name='Rl' type='revolute'>
+      <child>RudderL</child>
+      <parent>mainbody</parent>
+      <axis>
+        <xyz>0 1 0</xyz>
+        <limit>
+          <lower>-1.57</lower>
+          <upper>1.57</upper>
+          <effort>0</effort>
+          <velocity>0</velocity>
+        </limit>
+        <dynamics>
+          <spring_reference>0</spring_reference>
+          <spring_stiffness>0</spring_stiffness>
+        </dynamics>
+        <use_parent_model_frame>1</use_parent_model_frame>
+      </axis>
+    </joint>
+    <link name='RudderR'>
+      <pose frame=''>-1.1609 -0.28425 0.2141 0 -0 0</pose>
+      <inertial>
+        <pose frame=''>-0.01475 -0.000184 -0.000512 0 -0 0</pose>
+        <mass>0.07609</mass>
+        <inertia>
+          <ixx>0.0010372</ixx>
+          <ixy>6.0471e-08</ixy>
+          <ixz>-1.688e-07</ixz>
+          <iyy>5.6251e-06</iyy>
+          <iyz>1.3794e-07</iyz>
+          <izz>0.0010424</izz>
+        </inertia>
+      </inertial>
+      <collision name='RudderR_collision'>
+        <pose frame=''>0 0 0 0 -0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://vant4/meshes/RudderR.STL</uri>
+          </mesh>
+        </geometry>
+      </collision>
+      <visual name='RudderR_visual'>
+        <pose frame=''>0 0 0 0 -0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://vant4/meshes/RudderR.STL</uri>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+    <joint name='Rr' type='revolute'>
+      <child>RudderR</child>
+      <parent>mainbody</parent>
+      <axis>
+        <xyz>0 1 0</xyz>
+        <limit>
+          <lower>-1.57</lower>
+          <upper>1.57</upper>
+          <effort>0</effort>
+          <velocity>0</velocity>
+        </limit>
+        <dynamics>
+          <spring_reference>0</spring_reference>
+          <spring_stiffness>0</spring_stiffness>
+        </dynamics>
+        <use_parent_model_frame>1</use_parent_model_frame>
+      </axis>
+    </joint>
+    <link name='RotorL'>
+      <pose frame=''>-0.62106 1.0248 0.16369 0 -0 0</pose>
+      <inertial>
+        <pose frame=''>-0.004378 0.001884 -0.007282 0 -0 0</pose>
+        <mass>0.73962</mass>
+        <inertia>
+          <ixx>0.0013848</ixx>
+          <ixy>9.4367e-06</ixy>
+          <ixz>-5.9349e-08</ixz>
+          <iyy>0.0014698</iyy>
+          <iyz>4.661e-05</iyz>
+          <izz>0.00088418</izz>
+        </inertia>
+      </inertial>
+      <collision name='RotorL_collision'>
+        <pose frame=''>0 0 0 0 -0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://vant4/meshes/RotorL.STL</uri>
+          </mesh>
+        </geometry>
+      </collision>
+      <visual name='RotorL_visual'>
+        <pose frame=''>0 0 0 0 -0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://vant4/meshes/RotorL.STL</uri>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+    <joint name='rotL' type='revolute'>
+      <child>RotorL</child>
+      <parent>mainbody</parent>
+      <axis>
+        <xyz>0 1 0</xyz>
+        <limit>
+          <lower>-1.57</lower>
+          <upper>1.57</upper>
+          <effort>0</effort>
+          <velocity>0</velocity>
+        </limit>
+        <dynamics>
+          <spring_reference>0</spring_reference>
+          <spring_stiffness>0</spring_stiffness>
+        </dynamics>
+        <use_parent_model_frame>1</use_parent_model_frame>
+      </axis>
+    </joint>
+    <link name='HelL'>
+      <pose frame=''>-0.625443 1.02508 0.27677 0 -0 0</pose>
+      <inertial>
+        <pose frame=''>-5.1e-05 -0.002006 -0.01286 0 -0 0</pose>
+        <mass>0.12823</mass>
+        <inertia>
+          <ixx>3.2838e-05</ixx>
+          <ixy>0.00013904</ixy>
+          <ixz>1.5083e-08</ixz>
+          <iyy>0.0014156</iyy>
+          <iyz>-1.9717e-07</iyz>
+          <izz>0.0014411</izz>
+        </inertia>
+      </inertial>
+      <collision name='HelL_collision'>
+        <pose frame=''>0 0 0 0 -0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://vant4/meshes/HelL.STL</uri>
+          </mesh>
+        </geometry>
+      </collision>
+      <visual name='HelL_visual'>
+        <pose frame=''>0 0 0 0 -0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://vant4/meshes/HelL.STL</uri>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+    <joint name='Hl' type='revolute'>
+      <child>HelL</child>
+      <parent>RotorL</parent>
+      <axis>
+        <xyz>0 0 1</xyz>
+        <limit>
+          <lower>-1.57</lower>
+          <upper>1.57</upper>
+          <effort>0</effort>
+          <velocity>0</velocity>
+        </limit>
+        <dynamics>
+          <spring_reference>0</spring_reference>
+          <spring_stiffness>0</spring_stiffness>
+        </dynamics>
+        <use_parent_model_frame>1</use_parent_model_frame>
+      </axis>
+    </joint>
+    <link name='RotorR'>
+      <pose frame=''>-0.6298 -1.0181 0.16308 0 -0 0</pose>
+      <inertial>
+        <pose frame=''>0.004378 -0.001884 -0.007282 0 -0 0</pose>
+        <mass>0.73962</mass>
+        <inertia>
+          <ixx>0.0013848</ixx>
+          <ixy>9.436e-06</ixy>
+          <ixz>5.8634e-08</ixz>
+          <iyy>0.0014698</iyy>
+          <iyz>-4.6609e-05</iyz>
+          <izz>0.00088418</izz>
+        </inertia>
+      </inertial>
+      <collision name='RotorR_collision'>
+        <pose frame=''>0 0 0 0 -0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://vant4/meshes/RotorR.STL</uri>
+          </mesh>
+        </geometry>
+      </collision>
+      <visual name='RotorR_visual'>
+        <pose frame=''>0 0 0 0 -0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://vant4/meshes/RotorR.STL</uri>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+    <joint name='rotR' type='revolute'>
+      <child>RotorR</child>
+      <parent>mainbody</parent>
+      <axis>
+        <xyz>0 1 0</xyz>
+        <limit>
+          <lower>-1.57</lower>
+          <upper>1.57</upper>
+          <effort>0</effort>
+          <velocity>0</velocity>
+        </limit>
+        <dynamics>
+          <spring_reference>0</spring_reference>
+          <spring_stiffness>0</spring_stiffness>
+        </dynamics>
+        <use_parent_model_frame>1</use_parent_model_frame>
+      </axis>
+    </joint>
+    <link name='HelR'>
+      <pose frame=''>-0.625417 -1.01838 0.27616 0 -0 0</pose>
+      <inertial>
+        <pose frame=''>-0.000143 0.001868 -0.01288 0 -0 0</pose>
+        <mass>0.12823</mass>
+        <inertia>
+          <ixx>0.00028989</ixx>
+          <ixy>0.00055012</ixy>
+          <ixz>7.8549e-05</ixz>
+          <iyy>0.0011639</iyy>
+          <iyz>-3.7319e-05</iyz>
+          <izz>0.0014358</izz>
+        </inertia>
+      </inertial>
+      <collision name='HelR_collision'>
+        <pose frame=''>0 0 0 0 -0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://vant4/meshes/HelR.STL</uri>
+          </mesh>
+        </geometry>
+      </collision>
+      <visual name='HelR_visual'>
+        <pose frame=''>0 0 0 0 -0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://vant4/meshes/HelR.STL</uri>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+    <joint name='Hr' type='revolute'>
+      <child>HelR</child>
+      <parent>RotorR</parent>
+      <axis>
+        <xyz>0 0 1</xyz>
+        <limit>
+          <lower>-1.57</lower>
+          <upper>1.57</upper>
+          <effort>0</effort>
+          <velocity>0</velocity>
+        </limit>
+        <dynamics>
+          <spring_reference>0</spring_reference>
+          <spring_stiffness>0</spring_stiffness>
+        </dynamics>
+        <use_parent_model_frame>1</use_parent_model_frame>
+      </axis>
+    </joint>
+  </model>
+</sdf>
