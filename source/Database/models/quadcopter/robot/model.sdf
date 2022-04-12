@@ -414,12 +414,12 @@ https://github.com/Guiraffo/ProVANT-Simulator/blob/master/LICENSE.md
     <plugin name="VisualPropellersQuad_13" filename="libgazebo_ros_VisualPropellers.so">
       <Propeller1>prp1</Propeller1>
       <Propeller2>prp3</Propeller2>
-      <Propellers_Velocity>0</Propellers_Velocity>
+      <Propellers_Velocity>-30</Propellers_Velocity>
     </plugin>
     <plugin name="VisualPropellersQuad_24" filename="libgazebo_ros_VisualPropellers.so">
       <Propeller1>prp2</Propeller1>
       <Propeller2>prp4</Propeller2>
-      <Propellers_Velocity>0</Propellers_Velocity>
+      <Propellers_Velocity>30</Propellers_Velocity>
     </plugin>
     <!-- <plugin name="force_sensor" filename="libprovant_external_forces_sensor_plugin.so">
       <topic>quadforces</topic>
