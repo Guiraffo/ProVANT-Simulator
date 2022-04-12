@@ -41,7 +41,7 @@ Follow the steps on the graphical installation assistant. Please note that a Qt 
 The source code for ProVANT Simulator is located in this GitHub repository. To finish the installation process, please clone this repository under the catkin workspace configured during the ROS installation step.
 
 ```bash
-cd src
+cd $HOME/catkin_ws/src
 git clone https://github.com/Guiraffo/ProVANT-Simulator.git
 ```
 
