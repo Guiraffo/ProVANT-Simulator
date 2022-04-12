@@ -90,7 +90,24 @@ const QString AppSettings::getGazeboModelPathDefault() const
  */
 bool AppSettings::setGazeboModelPath(const QString& path)
 {
-  return setDirectoryPath(GAZEBO_MODEL_PATH_KEY, path, true);
+  auto const paths = path.split(":");
+  for (auto const& path : paths)
+  {
+      if(!path.isEmpty())
+      {
+          QDir dir(path);
+
+          if(!dir.exists())
+          {
+              return false;
+          }
+      }
+  }
+
+  settings.setValue(GAZEBO_MODEL_PATH_KEY, path);
+  setEnvironmentVariable(GAZEBO_MODEL_PATH_KEY, path);
+
+  return true;
 }
 
 /**
