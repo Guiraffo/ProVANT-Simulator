@@ -4,7 +4,7 @@
  * https://github.com/Guiraffo/ProVANT-Simulator/blob/master/LICENSE.md
  */
 /**
- * \file This file contains the declaration of the Controller2 class.
+ * \file This file contains the declaration of the ControllerNode class.
  *
  * @author Arthur Viana Lara
  * @author Júnio Eduardo de Morais Aquino
@@ -22,10 +22,11 @@
 #include "std_msgs/Float64.h"
 #include "std_msgs/String.h"
 #include "controller/MatlabData.h"
-#include "controller/XMLRead.h"
 #include "simulator_msgs/Sensor.h"
 #include "simulator_msgs/SensorArray.h"
-#include "Icontroller.hpp"
+#include "std_srvs/SetBool.h"
+#include "control_strategies_base/icontroller.hpp"
+#include <provant_simulator_xml_reader/config_reader.h>
 
 class ControllerNode
 {
@@ -49,14 +50,6 @@ public:
    */
   virtual ~ControllerNode();
 
-  /**
-   * @brief Start the simulation.
-   *
-   * This method emits the first step message, and thus allows the start of the
-   * simulation.
-   */
-  void startSimulation();
-
 private:
   /**
    * @brief Stores the path to the configuration file for this simulation.
@@ -70,7 +63,7 @@ private:
    * desired parameters for the simulation, such as the control law execution
    * ratio, path to the log files, and the desired control strategy.
    */
-  XMLRead configFile;
+  ConfigReader configFile;
 
   /**
    * @brief Handle for the ROS node.
@@ -180,6 +173,11 @@ private:
   ros::Publisher stepPublisher;
 
   /**
+   * @brief ROS publisher to the /provant_simulator/simulation_state topic.
+   */
+  ros::Publisher simulationStatePublisher;
+
+  /**
    * @brief Handle to the instance of the dynamicly loaded library that contains
    * the instance of the control strategy.
    */
@@ -189,6 +187,68 @@ private:
    * @brief Instance of the control strategy executed by this node.
    */
   Icontroller* controller = NULL;
+
+  /**
+   * @brief Indicates if the controller must automatically advance another step
+   * at the end of the calculation of the control law for the current step.
+   */
+  bool autoStepEnabled = false;
+
+  /**
+   * @brief ROS Service that allows enabling or disabling the auto stepping
+   * mode.
+   * @sa autoStepEnabled
+   */
+  ros::ServiceServer autoSteppingServer;
+
+  /**
+   * @brief Number of steps the simulation must be executed for.
+   * A zero value indicates that the simulation is user controlled, and must not
+   * be automattically terminated by the controller node.
+   */
+  uint64_t _simulationDuration;
+
+  /**
+   * @brief Indicates if the node must shutdown when the simulation is finished.
+   */
+  bool _closeWhenFinished;
+
+  /**
+   * @brief Message used to identify this node in log messages printed to the
+   * output screen.
+   */
+  std::string _logMsg = "[ControllerNode] ";
+
+  /**
+   * @brief Counter the number of simulation steps.
+   */
+  unsigned int _totalStepCounter = 0;
+
+  /**
+   * @brief Indicates if the simulation must be started in a paused state or
+   * not.
+   */
+  bool _startPaused = true;
+
+  /**
+   * @brief Indicates if the simulation was already started or not.
+   */
+  bool _started = false;
+ 
+ /** 
+  *@brief Indicates if the simulation is hil synchronous or not.
+  */
+  bool _hilSync = false;
+
+ /** 
+  *@brief Indicates if the simulation is hil asynchronous or not.
+  */
+  bool _hilAsync = false;
+
+  /**
+   * @brief Mutex used to update the value of the _started variable.
+   */
+  std::mutex _startedMutex;
 
   /**
    * @brief Advance one step in the simulation.
@@ -264,6 +324,46 @@ private:
    * strategy is, and what is the value for the controlLawExecutionRatio.
    */
   void setupNode();
+
+  /**
+   * @brief Service handler for the ROS enable_autostepping service.
+   *
+   * This service allows enabling or disabling the autostepping mode, i.e.
+   * it determines if the next should be initiated at the end of the current
+   * control law calculation.
+   *
+   * @param req Request data for the service.
+   * @param res Response data from the service.
+   * @return True if the service call was handled successfully and false
+   * otherwise.
+   */
+  bool setAutostepping(std_srvs::SetBool::Request& req, std_srvs::SetBool::Response& res);
+
+  /**
+   * @brief Called when the simulation finishes.
+   * 
+   * Close all the files, and closes this node.
+   */
+  void shutdown();
+
+  /**
+   * @brief Method called when a subscriber connects to the the step topic.
+   * 
+   * If the simulation must be automatically started by the controller node
+   * this method will be called when the first subscriber connects to the 
+   * /Step topic.
+   * 
+   * In this first call the method must then send an initial step to start the
+   * simulation. 
+   */
+  void onStepSubscriberConnect();
+
+  /**
+   * @brief Helper method to publish the simulation state.
+   * 
+   * @param state Simulation state to publish.
+   */
+  void publishSimulationState(const std::string& state);
 };
 
 #endif  // CONTROLLER_H

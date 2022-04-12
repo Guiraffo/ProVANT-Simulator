@@ -1,4 +1,4 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!--
 This file is part of the ProVANT simulator project.
 Licensed under the terms of the MIT open source license. More details at
@@ -11,7 +11,7 @@ https://github.com/Guiraffo/ProVANT-Simulator/blob/master/LICENSE.md
   the ProVANT simulator project.</description>
 
   <maintainer email="jeduardo@ufmg.br">Júnio Eduardo de Morais Aquino</maintainer>
-  
+
   <license>MIT</license>
 
   <url type="website">http://provant.eng.ufmg.br/provantsimulator</url>
@@ -30,6 +30,6 @@ https://github.com/Guiraffo/ProVANT-Simulator/blob/master/LICENSE.md
   <exec_depend>std_msgs</exec_depend>
 
   <export>
-    
+    <architecture_independent />
   </export>
 </package>

@@ -4,7 +4,7 @@
  * https://github.com/Guiraffo/ProVANT-Simulator/blob/master/LICENSE.md
  */
 /**
- * @file This file contains the implementation of the Controller2 class.
+ * @file This file contains the implementation of the ControllerNode class.
  *
  * @author Arthur Viana Lara
  * @author Júnio Eduardo de Morais Aquino
@@ -22,7 +22,7 @@ void ControllerNode::init(int argc, char** argv)
 ControllerNode::ControllerNode(std::string configFilePath)
   : _configFilePath(configFilePath), sensorCounter(0), stepCounter(0)
 {
-  ROS_DEBUG_STREAM("ControllerNode instance constructed, starting node configuration");
+  ROS_DEBUG_STREAM(_logMsg << "ControllerNode instance constructed, starting node configuration");
   setupNode();
 }
 
@@ -40,28 +40,43 @@ ControllerNode::~ControllerNode()
 
 void ControllerNode::setupNode()
 {
-  // Create a XML file handle for the configuration file
-  XMLRead xmlDoc(_configFilePath);
-  configFile = xmlDoc;
-  /// @todo Add verification for the XML file.
+  // Open and parse the config.xml file
+  if (!configFile.open(_configFilePath))
+  {
+    ROS_FATAL_STREAM(_logMsg << "Error while opening the config.xml file with path \"" << _configFilePath
+                             << "\". Parsing the file resulting in the following error message: "
+                             << configFile.getErrorMsg());
+  }
 
   // Stores the name of the control strategy
-  controlStrategy = configFile.GetItem("Strategy");
-  ROS_DEBUG_STREAM("Verifying the control strategy name: " << controlStrategy);
-  if (controlStrategy.empty())
+  bool controlStrategyFound = false;
+  controlStrategy = configFile.getControlStrategy(&controlStrategyFound);
+  if (!controlStrategyFound)
   {
-    ROS_FATAL("Error while reading the control strategy for the selected model. Please check the value of the "
-              "\"Strategy\" tag on the config.xml file and try again.");
+    ROS_FATAL_STREAM(_logMsg << "Error. The \"<Strategy>\" element was not found in the config.xml file. Please add "
+                                "this tag and "
+                                "set its content to the name of the desired control strategy dynamic library and try "
+                                "again.");
+  }
+
+  ROS_INFO_STREAM(_logMsg << "Verifying the control strategy name: " << controlStrategy);
+  if (!controlStrategyFound || controlStrategy.empty())
+  {
+    ROS_FATAL("%sError while reading the control strategy for the selected model. Please check the value of the "
+              "\"Strategy\" tag on the config.xml file and try again.",
+              _logMsg.c_str());
     exit(-1);
   }
 
   // Read the values of the configured sensors in the config file
-  std::vector<std::string> listOfSensors = xmlDoc.GetAllItems("Sensors");
-  ROS_DEBUG("Configuring the simulation sensors");
-  if (listOfSensors.empty())
+  bool sensorsFound = false;
+  ConfigReader::stringlist listOfSensors = configFile.getSensors(&sensorsFound);
+  ROS_DEBUG("%sConfiguring the simulation sensors", _logMsg.c_str());
+  if (!sensorsFound || listOfSensors.empty())
   {
-    ROS_FATAL("At least one sensor is necessary in order to run the simulation. Please the value of the \"Sensors\" "
-              "tag in the config.xml file of the selected model and try again.");
+    ROS_FATAL("%sAt least one sensor is necessary in order to run the simulation. Please the value of the \"Sensors\" "
+              "tag in the config.xml file of the selected model and try again.",
+              _logMsg.c_str());
     exit(-1);
   }
 
@@ -72,36 +87,41 @@ void ControllerNode::setupNode()
   simulator_msgs::Sensor emptySensor;
   sensorData.values.resize(listOfSensors.size());
 
-  for (int i = 0; i < listOfSensors.size(); i++)
+  int listPos = 0;
+  for (ConfigReader::stringlist::const_iterator i = listOfSensors.cbegin(); i != listOfSensors.cend(); ++i)
   {
     // Store the index of the sensor in order to guarantee that the sensor
     // array passed to the control law alwas has the same order.
-    sensorIndexMap.insert(std::make_pair(listOfSensors.at(i), i));
+    sensorIndexMap.insert(std::make_pair(*i, listPos));
     // Subscribe to the ROS node relative to the sensor and configure the
     // sensor update callback.
-    ROS_DEBUG_STREAM("Subscribing to the " << listOfSensors.at(i) << " topic.");
-    ros::Subscriber sub = nh.subscribe(listOfSensors.at(i), 1, &ControllerNode::stateUpdateCallback, this);
+    ROS_DEBUG_STREAM(_logMsg << "Subscribing to the " << *i << " topic.");
+    ros::Subscriber sub = nh.subscribe(*i, 1, &ControllerNode::stateUpdateCallback, this);
     sensorSubscribers.push_back(sub);
 
     // Reserve the value on the sensorData array
     sensorData.values.push_back(emptySensor);
+
+    listPos++;
   }
 
   // Read the list of actuators from the config file and setup a ROS publisher
   // for the topic relative to each actuator.
-  std::vector<std::string> listOfActuators = configFile.GetAllItems("Actuators");
-  ROS_DEBUG("Configuring the actuators for the simulation");
+  bool actuatorsFound = false;
+  ConfigReader::stringlist listOfActuators = configFile.getActuators(&actuatorsFound);
+  ROS_DEBUG("%sConfiguring the actuators for the simulation", _logMsg.c_str());
   if (listOfActuators.empty())
   {
-    ROS_FATAL("At least one actuator is necessary in order to run the simulation. Please check the value of the "
-              "\"Actuators\" tag of the config.xml file of the selected model and try again.");
+    ROS_FATAL("%sAt least one actuator is necessary in order to run the simulation. Please check the value of the "
+              "\"Actuators\" tag of the config.xml file of the selected model and try again.",
+              _logMsg.c_str());
     exit(-1);
   }
 
-  for (int i = 0; i < listOfActuators.size(); i++)
+  for (ConfigReader::stringlist::const_iterator i = listOfActuators.cbegin(); i != listOfActuators.cend(); ++i)
   {
-    ROS_DEBUG_STREAM("Advertising the " << listOfActuators.at(i) << " topic");
-    ros::Publisher pub = nh.advertise<std_msgs::Float64>(listOfActuators.at(i), 1);
+    ROS_DEBUG_STREAM(_logMsg << "Advertising the " << *i << " topic");
+    ros::Publisher pub = nh.advertise<std_msgs::Float64>(*i, 1);
     actuatorPublishersArray.push_back(pub);
   }
 
@@ -116,27 +136,115 @@ void ControllerNode::setupNode()
   sensorData.header.frame_id = "1";
 
   // Read the value of the controlLawExectuionRatio
-  controlLawExecutionRatio = atoi(configFile.GetItem("Sampletime").c_str());
-  ROS_DEBUG("Checking the value of the control law execution ratio: %d", controlLawExecutionRatio);
-  if (controlLawExecutionRatio < 1)
+  bool sampleTimeFound = false;
+  controlLawExecutionRatio = configFile.getSampleTime(&sampleTimeFound);
+  ROS_DEBUG("%sChecking the value of the control law execution ratio: %d", _logMsg.c_str(), controlLawExecutionRatio);
+  if (!sampleTimeFound || controlLawExecutionRatio < 1)
   {
-    ROS_FATAL_STREAM("The value for the control law exectuion ratio (" << controlLawExecutionRatio
-                                                                       << ") is invalid. Please check the value of the "
-                                                                          "Sampletime parameter on the config file for "
-                                                                          "the model used in this simulation and try "
-                                                                          "again.");
+    ROS_FATAL_STREAM(_logMsg << "The value for the control law exectuion ratio (" << controlLawExecutionRatio
+                             << ") is invalid. Please check the value of the "
+                                "Sampletime parameter on the config file for "
+                                "the model used in this simulation and try "
+                                "again.");
     exit(-1);
   }
 
+  // Read the start paused value from the config file.
+  ROS_DEBUG_STREAM(_logMsg << "Reading the start paused parameter.");
+  bool startPausedFound = false;
+  _startPaused = configFile.getStartPaused(&startPausedFound);
+  if (!startPausedFound)
+  {
+    ROS_WARN_STREAM(_logMsg << "The StartPaused element was not found or has an illegal value. The simulation will "
+                               "start in paused mode as is the default behavior. If this is the intended behavior, "
+                               "please define the StartPaused element with a true value in the config.xml file to "
+                               "silence this warning.");
+  }
+  if (_startPaused)
+  {
+    ROS_INFO_STREAM(_logMsg << "The simulation will start in paused mode.");
+    autoStepEnabled = false;
+  }
+  else
+  {
+    ROS_INFO_STREAM(_logMsg << "The controller node will automatically start the simulation.");
+    autoStepEnabled = true;
+  }
+
   // Initialize the ROS topic to advance the simulation step.
-  ROS_DEBUG("Advertising the Step topic");
-  stepPublisher = nh.advertise<std_msgs::String>("Step", 1);
+  ROS_DEBUG("%sAdvertising the Step topic", _logMsg.c_str());
+  if (_startPaused)
+  {
+    stepPublisher = nh.advertise<std_msgs::String>("Step", 1);
+  }
+  else
+  {
+    stepPublisher =
+        nh.advertise<std_msgs::String>("Step", 1, std::bind(&ControllerNode::onStepSubscriberConnect, this));
+  }
+
+  // Initialize the ROS service to control the auto stepping mode.
+  ROS_INFO("%sAdvertising the enable_autostepping service", _logMsg.c_str());
+  autoSteppingServer = nh.advertiseService("enable_autostepping", &ControllerNode::setAutostepping, this);
+
+  // Advertising the /provant_simulator/simulation_state topic.
+  ROS_INFO_STREAM(_logMsg << "Advertisign the /provant_simulator/simulation_state topic.");
+  simulationStatePublisher = nh.advertise<std_msgs::String>("provant_simulator/simulation_state", 1, true);
+
+  // Read the simulation mode, if hil or not
+  bool hilSyncFound = false;
+  hilSyncFound = configFile.getHilFlagSynchronous(&hilSyncFound);
+  _hilSync = configFile.getHilFlagSynchronous();
+
+  bool hilAsyncFound = false;
+  hilAsyncFound = configFile.getHilFlagSynchronous(&hilAsyncFound);
+  _hilAsync = configFile.getHilFlagAsynchronous();
+
+  if(!hilSyncFound & !hilAsyncFound){
+      ROS_INFO_STREAM(_logMsg << "The simulation is not Hardware In the Loop");
+  }
+  else if(_hilSync){
+     ROS_INFO_STREAM(_logMsg << "The simulation is Hardware In the Loop Synchrounous");
+  }
+  else if(_hilAsync){
+     ROS_INFO_STREAM(_logMsg << "The simulation is Hardware In the Loop Asynchrounous");
+  }
+
+  // Read the simulation duration from the config file.
+  ROS_DEBUG_STREAM(_logMsg << "Reading the simulation duration");
+  _simulationDuration = configFile.getSimulationDuration();
+  if (_simulationDuration == 0)
+  {
+    _closeWhenFinished = false;
+    ROS_INFO_STREAM(_logMsg << "The simulation will be manually controlled");
+  }
+  else
+  {
+    ROS_INFO_STREAM(_logMsg << "The simulation will last " << _simulationDuration << " steps.");
+    ROS_DEBUG_STREAM(_logMsg << "Reading the value of the ShutdownWhenFinished element.");
+    bool found = false;
+    _closeWhenFinished = configFile.getShutdownWhenFinished(&found);
+    if (!found)
+    {
+      ROS_WARN_STREAM(_logMsg << "The simulation has a specified duration, but the ShutdownWhenFinished element is "
+                                 "not defined. This simulation will not close when it finishes. If this is the "
+                                 "intended behavior, please define this element in the config.xml file with a false "
+                                 "value to silence this warning.");
+    }
+    if (_closeWhenFinished)
+    {
+      ROS_INFO_STREAM(_logMsg << "The simulation will automatically shutdown after it finishes.");
+    }
+  }
 
   // Setup the control law DLL
   setupControlStrategy();
 
   // Setup the simulation log files
   setupLogging();
+
+  // Update the simulation state
+  publishSimulationState("ready");
 }
 
 // Sensor Callback
@@ -169,11 +277,11 @@ void ControllerNode::stateUpdateCallback(simulator_msgs::Sensor msg)
   // a warn log message reporting the error.
   catch (const std::out_of_range& e)
   {
-    ROS_WARN_STREAM_ONCE("The controller node received a sensor with name " << msg.name
-                                                                            << ", but a sensor with this name was not "
-                                                                               "configured under the"
-                                                                               " sensors list of the model "
-                                                                               "config.xml.");
+    ROS_WARN_STREAM_ONCE(_logMsg << "The controller node received a sensor with name " << msg.name
+                                 << ", but a sensor with this name was not "
+                                    "configured under the"
+                                    " sensors list of the model "
+                                    "config.xml.");
   }
 }
 
@@ -190,8 +298,9 @@ void openAndVerifyFile(MatlabData* file, std::string dir, std::string filePath, 
 {
   if (!file->startFile(dir + filePath, fileName))
   {
-    ROS_FATAL_STREAM("Error while trying to create the "
-                     << fileName << " log file for the simulation. Please check that the configured " << fileName
+    ROS_FATAL_STREAM("[ControllerNode] "
+                     << "Error while trying to create the " << fileName
+                     << " log file for the simulation. Please check that the configured " << fileName
                      << " tag on the model config.xml file and the TILT_MATLAB environemtn variable"
                      << " both point to valid locations.");
     exit(-1);
@@ -202,12 +311,13 @@ void openAndVerifyFile(MatlabData* file, std::string dir, std::string filePath, 
 void ControllerNode::setupLogging()
 {
   const char* TILT_MATLAB = std::getenv("TILT_MATLAB");
-  ROS_DEBUG("Checking the value of the TILT_MATLAB environment variable: %s", TILT_MATLAB);
+  ROS_DEBUG("%sChecking the value of the TILT_MATLAB environment variable: %s", _logMsg.c_str(), TILT_MATLAB);
   if (TILT_MATLAB == NULL)
   {
-    ROS_FATAL("Error while trying to read the value of the TILT_MATLAB environment variable, this environament "
+    ROS_FATAL("%sError while trying to read the value of the TILT_MATLAB environment variable, this environament "
               "variable has null value or does not exist, but should point to the a valid folder to write "
-              "to simulation logs. Please correct the TILT_MATLAB value and try again.");
+              "to simulation logs. Please correct the TILT_MATLAB value and try again.",
+              _logMsg.c_str());
     exit(-1);
   }
 
@@ -219,10 +329,10 @@ void ControllerNode::setupLogging()
   }
 
   // Start the file
-  openAndVerifyFile(&referenceLog, logOutputFolder, configFile.GetItem("RefPath"), "reference log");
-  openAndVerifyFile(&stateLog, logOutputFolder, configFile.GetItem("InputPath"), "states log");
-  openAndVerifyFile(&trackingErrorLog, logOutputFolder, configFile.GetItem("ErroPath"), "tracking error log");
-  openAndVerifyFile(&controlInputsLog, logOutputFolder, configFile.GetItem("Outputfile"), "control inputs log");
+  openAndVerifyFile(&referenceLog, logOutputFolder, configFile.getReferenceFilePath(), "reference log");
+  openAndVerifyFile(&stateLog, logOutputFolder, configFile.getInputFilePath(), "states log");
+  openAndVerifyFile(&trackingErrorLog, logOutputFolder, configFile.getErrorFilePath(), "tracking error log");
+  openAndVerifyFile(&controlInputsLog, logOutputFolder, configFile.getOutputFilePath(), "control inputs log");
 }
 
 void ControllerNode::controlLaw()
@@ -249,15 +359,17 @@ void ControllerNode::controlLaw()
       stepCounter = 0;
     }
     stepCounter++;
+    _totalStepCounter++;
 
     // Check if the returned number of control inputs is equal to the number of
     // configured actuators
     if (actuatorPublishersArray.size() != controlInputs.size())
     {
-      ROS_FATAL_STREAM("The number of generated control inputs ("
-                       << controlInputs.size() << ") is different from the number of configured actuators ("
-                       << actuatorPublishersArray.size()
-                       << "). Please verify the configuration of your model and the selected control strategy.");
+      ROS_FATAL_STREAM(_logMsg << "The number of generated control inputs (" << controlInputs.size()
+                               << ") is different from the number of configured actuators ("
+                               << actuatorPublishersArray.size()
+                               << "). Please verify the configuration of your model and the selected control "
+                                  "strategy.");
       exit(-1);
     }
 
@@ -269,13 +381,30 @@ void ControllerNode::controlLaw()
       actuatorPublishersArray.at(i).publish(msgout);
     }
 
+    // Check if the simulation finished
+    if (_simulationDuration != 0 && _totalStepCounter >= _simulationDuration)
+    {
+      ROS_INFO_STREAM(_logMsg << "The simulation finished successfully.");
+      if (_closeWhenFinished)
+      {
+        ROS_INFO_STREAM(_logMsg << "Shuting-down the controller node.");
+        shutdown();
+      }
+    }
+
     // Advance the simulation step
-    step();
+    if (autoStepEnabled)
+    {
+      if ((_simulationDuration == 0) || (_totalStepCounter < _simulationDuration))
+      {
+        step();
+      }
+    }
   }
   // In case any exception is thrown by the control strategy.
   catch (std::exception& e)
   {
-    ROS_ERROR_STREAM("Exception thrown by the control strategy instance: " << e.what());
+    ROS_ERROR_STREAM(_logMsg << "Exception thrown by the control strategy instance: " << e.what());
   }
 }
 
@@ -287,16 +416,17 @@ void ControllerNode::step()
 
 void ControllerNode::setupControlStrategy()
 {
-  ROS_DEBUG("Initializing the control strategy DLL");
+  ROS_DEBUG("%sInitializing the control strategy DLL", _logMsg.c_str());
   create_t* create_obj = NULL;
 
   const char* TILT_STRATEGIES = std::getenv("TILT_STRATEGIES");
-  ROS_DEBUG("Checking the value of TILT_STRATEGIES environment variable: %s", TILT_STRATEGIES);
+  ROS_DEBUG("%sChecking the value of TILT_STRATEGIES environment variable: %s", _logMsg.c_str(), TILT_STRATEGIES);
   if (TILT_STRATEGIES == NULL)
   {
-    ROS_FATAL("Error while trying to read the value of the TILT_STRATEGIES environment variable, this environament "
+    ROS_FATAL("%sError while trying to read the value of the TILT_STRATEGIES environment variable, this environament "
               "variable has null value or does not exist, but should point to the lib folder under "
-              "your catkin workspace build destination. Please correct the TILT_STRATEGIES value and try again.");
+              "your catkin workspace build destination. Please correct the TILT_STRATEGIES value and try again.",
+              _logMsg.c_str());
     exit(-1);
   }
 
@@ -306,11 +436,12 @@ void ControllerNode::setupControlStrategy()
     strategiesLibFolder += "/";
 
   std::string file = strategiesLibFolder + controlStrategy;
-  ROS_DEBUG_STREAM("Creating a handle for the " << file << " DLL");
+  ROS_DEBUG_STREAM(_logMsg << "Creating a handle for the " << file << " DLL");
   dllHandle = dlopen(file.c_str(), RTLD_LAZY);
   if (dllHandle == NULL)
   {
-    ROS_FATAL_STREAM("Error while trying to open the " << controlStrategy << " control strategy: " << dlerror());
+    ROS_FATAL_STREAM(_logMsg << "Error while trying to open the " << controlStrategy
+                             << " control strategy: " << dlerror());
     exit(-1);
   }
   // Clear any existing errors
@@ -318,24 +449,73 @@ void ControllerNode::setupControlStrategy()
 
   // Loads the create function from the control strategy library
   create_obj = (create_t*)dlsym(dllHandle, "create");
-  ROS_DEBUG_STREAM("Creating a handle for the create function");
+  ROS_DEBUG_STREAM(_logMsg << "Creating a handle for the create function");
   // Check if any error was returned while trying to locate the create function.
   const char* err = dlerror();
   if (err != NULL)
   {
-    ROS_FATAL_STREAM("Error while trying to open the create function in the "
-                     << controlStrategy << ". The control node cannot be loaded. dlerror response = " << err);
+    ROS_FATAL_STREAM(_logMsg << "Error while trying to open the create function in the " << controlStrategy
+                             << ". The control node cannot be loaded. dlerror response = " << err);
     exit(-1);
   }
 
   // Call the create function to create an instance of the control strategy
   // and configures the instance.
-  ROS_DEBUG("Initializing the control strategy instance");
+  ROS_DEBUG("%sInitializing the control strategy instance", _logMsg.c_str());
   controller = create_obj();
   controller->config();
 }
 
-void ControllerNode::startSimulation()
+bool ControllerNode::setAutostepping(std_srvs::SetBool::Request& req, std_srvs::SetBool::Response& res)
 {
-  step();
+  bool reqData = static_cast<bool>(req.data);
+  autoStepEnabled = reqData;
+
+  ROS_DEBUG_STREAM(_logMsg << "Setting the autoStepEnabled variable to " << std::boolalpha << reqData);
+
+  res.success = true;
+  res.message = std::string("");
+
+  if(autoStepEnabled)
+  {
+    publishSimulationState("running");
+  }
+  else
+  {
+    publishSimulationState("paused");
+  }
+
+  return true;
+}
+
+void ControllerNode::shutdown()
+{
+  controlInputsLog.endFile();
+  stateLog.endFile();
+  referenceLog.endFile();
+  trackingErrorLog.endFile();
+  nh.shutdown();
+  ros::shutdown();
+}
+
+void ControllerNode::onStepSubscriberConnect()
+{
+  std::unique_lock<std::mutex> _updateLock(_startedMutex);
+  if (!_started)
+  {
+    ROS_INFO_STREAM(_logMsg << "A subscriber connected to the Step node, starting the simulation in 5s.");
+    // Sleep for 5s to give gazebo a chance to finish loading.
+    ros::WallDuration(5.0).sleep();
+    // Start the simulation.
+    _started = true;
+    publishSimulationState("running");
+    step();
+  }
+}
+
+void ControllerNode::publishSimulationState(const std::string& state)
+{
+  std_msgs::String msg;
+  msg.data = state;
+  simulationStatePublisher.publish(msg);
 }

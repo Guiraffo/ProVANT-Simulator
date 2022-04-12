@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+This file is part of the ProVANT simulator project.
+Licensed under the terms of the MIT open source license. More details at
+https://github.com/Guiraffo/ProVANT-Simulator/blob/master/LICENSE.md
+-->
+<package format="2">
+  <name>control_strategies_base</name>
+  <version>1.0.0</version>
+  <description>The control_strategies_base package provides the interface
+  definitions for the implementation of control strategies in the ProVANT 
+  Simulator project.</description>
+
+	<maintainer email="jeduardo@ufmg.br">Júnio Eduardo de Morais Aquino</maintainer>
+
+	<license>MIT</license>
+
+	<url type="website">http://provant.eng.ufmg.br/provantsimulator</url>
+	<url type="repository">https://github.com/Guiraffo/ProVANT-Simulator.git</url>
+	<url type="bugtracker">https://github.com/Guiraffo/ProVANT-Simulator/issues</url>
+
+  <author email="avlara@hotmail.com">Arthur Viana Lara</author>
+  <author email="jeduardo@ufmg.br">Júnio Eduardo de Morais Aquino</author>
+  
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <build_depend>simulator_msgs</build_depend>
+  
+  <exec_depend>simulator_msgs</exec_depend>
+
+  <export>
+
+  </export>
+</package>
