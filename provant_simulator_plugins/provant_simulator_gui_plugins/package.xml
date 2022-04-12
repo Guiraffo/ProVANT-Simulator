@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>provant_simulator_gui_plugins</name>
+  <version>0.1.0</version>
+  <description>
+    <p>The provant_simulator_gui_plugins provides plugins to extend the Gazebo
+    simulator functionality</p>
+    <p>
+      <strong>Note: </strong>
+      This package is separated to isolate the remaining plugins
+      of the ProVANT Simulator project from needing to include the Qt files
+      necessary from compling GUI plugins.
+    </p>
+  </description>
+
+  <maintainer email="jeduardo@ufmg.br">Júnio Eduardo de Morais Aquino</maintainer>
+
+  <license>MIT</license>
+
+  <url type="website">http://provant.eng.ufmg.br/provantsimulator</url>
+  <url type="repository">https://github.com/Guiraffo/ProVANT-Simulator.git</url>
+  <url type="bugtracker">https://github.com/Guiraffo/ProVANT-Simulator/issues</url>
+
+  <author email="jeduardo@ufmg.br">Júnio Eduardo de Morais Aquino</author>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <depend>roscpp</depend>
+  <depend>gazebo_ros</depend>
+  <depend>std_srvs</depend>
+  <depend>std_msgs</depend>
+  <depend>provant_simulator_sdf_parser</depend>
+
+  <export>
+    <!-- From the gazebo ROS Plugins tutorial http://gazebosim.org/tutorials/?tut=ros_plugins -->
+    <gazebo_ros plugin_path="${prefix}/../../../../devel/lib" />
+  </export>
+</package>

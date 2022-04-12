@@ -1,0 +1,10 @@
+# This file is part of the ProVANT simulator project.
+# Licensed under the terms of the MIT open source license. More details at
+# https://github.com/Guiraffo/ProVANT-Simulator/blob/master/LICENSE.md
+
+- builder: doxygen
+  file_patterns: '*.cpp *.h *.dox *.md'
+  homepage: http://provant.eng.ufmg.br/provant-simulator/
+  output_dir: doc
+  exclude_patterns: '*/tests/*'
+  use_mdfile_as_mainpage: README.md

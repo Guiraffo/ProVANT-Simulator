@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+This file is part of the ProVANT simulator project.
+Licensed under the terms of the MIT open source license. More details at
+https: //github.com/Guiraffo/ProVANT-Simulator/blob/master/LICENSE.md
+-->
+<package format="2">
+  <name>provant_simulator_test_models</name>
+  <version>0.1.0</version>
+  <description>
+    <p>The provant_simulator_test_models package contains a series of URDF and SDF models used for testing of a few ProVANT Simulator features, mainly plugins.</p>
+  </description>
+
+  <maintainer email="jeduardo@ufmg.br">Júnio Eduardo de Morais Aquino</maintainer>
+
+  <license>MIT</license>
+
+  <url type="website">http://provant.eng.ufmg.br/provantsimulator</url>
+  <url type="repository">https://github.com/Guiraffo/ProVANT-Simulator.git</url>
+  <url type="bugtracker">https://github.com/Guiraffo/ProVANT-Simulator/issues</url>
+
+  <author email="jeduardo@ufmg.br">Júnio Eduardo de Morais Aquino</author>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <export></export>
+</package>

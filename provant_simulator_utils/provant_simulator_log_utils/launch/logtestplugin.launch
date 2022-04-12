@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+This file is part of the ProVANT simulator project.
+Licensed under the terms of the MIT open source license. More details at
+https://github.com/Guiraffo/ProVANT-Simulator/blob/master/LICENSE.md
+-->
+<launch>
+  <include file="$(find Database)/launch/gazebo_only.launch">
+    <arg name="world" value="$(find provant_simulator_log_utils)/worlds/logtest.world" />
+  </include>
+</launch>

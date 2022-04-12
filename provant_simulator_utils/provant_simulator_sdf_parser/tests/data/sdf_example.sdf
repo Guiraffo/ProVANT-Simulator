@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+This file is part of the ProVANT simulator project.
+Licensed under the terms of the MIT open source license. More details at
+https://github.com/Guiraffo/ProVANT-Simulator/blob/master/LICENSE.md
+-->
+<sdf version="1.6">
+  <model name="box">
+    <pose>0 0 0.5 0 0 0</pose>
+    <static>false</static>
+
+    <plugin filename="test_plugin.so" name="test_plugin">
+      <testElement1 name="nameAttr">
+        <name>nameElement</name>
+      </testElement1>
+      <testElement2 name="attrTest">
+      </testElement2>
+      <testElement3>
+        <name>elementTest</name>
+      </testElement3>
+      <boolTestElement>
+        <test1>true</test1>
+        <test2>TRUE</test2>
+        <test3>True</test3>
+        <test4>TrUE</test4>
+        <test5>1</test5>
+        <test6>TrUE</test6>
+        <test7>false</test7>
+        <test8>FALSE</test8>
+        <test9>False</test9>
+        <test10>FaLsE</test10>
+        <test11>0</test11>
+        <test12> 0 </test12>
+        <test13> true</test13>
+        <test14> false </test14>
+        <test15>true </test15>
+        <test16>25</test16>
+        <test17>-1</test17>
+      </boolTestElement>
+      <intTestElement test1="10">
+        <trivial1>1</trivial1>
+        <trivial2>100</trivial2>
+        <trivial3>5</trivial3>
+        <trivial4>-5</trivial4>
+        <trivial5>-500</trivial5>
+        <trivial6>-1000</trivial6>
+        <zero1>0</zero1>
+        <zero2>-0</zero2>
+        <minTest>-2147483648</minTest>
+        <maxTest>2147483647</maxTest>
+        <minOverFlowTest>-2147483649</minOverFlowTest>
+        <maxOverFlowTest>2147483648</maxOverFlowTest>
+        <binaryTest>0b1111</binaryTest>
+        <boolTest>true</boolTest>
+        <doubleTest>3.14</doubleTest>
+        <stringTest>string</stringTest>
+        <exprTest>2+5</exprTest>
+      </intTestElement>
+      <longIntTestElement test1="10">
+        <trivial1>1</trivial1>
+        <trivial2>100</trivial2>
+        <trivial3>5</trivial3>
+        <trivial4>-5</trivial4>
+        <trivial5>-500</trivial5>
+        <trivial6>-1000</trivial6>
+        <zero1>0</zero1>
+        <zero2>-0</zero2>
+        <minTest>-9223372036854775808</minTest>
+        <maxTest>9223372036854775807</maxTest>
+        <minOverFlowTest>-2147483649</minOverFlowTest>
+        <maxOverFlowTest>2147483648</maxOverFlowTest>
+        <boolTest>true</boolTest>
+        <doubleTest>3.14</doubleTest>
+        <stringTest>string</stringTest>
+      </longIntTestElement>
+    </plugin>
+  </model>
+</sdf>

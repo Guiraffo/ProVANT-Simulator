@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+This file is part of the ProVANT simulator project.
+Licensed under the terms of the MIT open source license. More details at
+https: //github.com/Guiraffo/ProVANT-Simulator/blob/master/LICENSE.md
+-->
+<package format="2">
+  <name>provant_gz_sphere_tests</name>
+  <version>1.0.0</version>
+  <description>
+    <p>The provant_gz_sphere_tests package provides a test for force application in Gazebo.</p>
+  </description>
+
+  <maintainer email="jeduardo@ufmg.br">Júnio Eduardo de Morais Aquino</maintainer>
+
+  <license>MIT</license>
+
+  <url type="website">http://provant.eng.ufmg.br/provantsimulator</url>
+  <url type="repository">https://github.com/Guiraffo/ProVANT-Simulator.git</url>
+  <url type="bugtracker">https://github.com/Guiraffo/ProVANT-Simulator/issues</url>
+
+  <author email="jeduardo@ufmg.br">Júnio Eduardo de Morais Aquino</author>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <build_depend>provant_simulator_cmake</build_depend>
+  <build_export_depend>provant_simulator_cmake</build_export_depend>
+
+  <depend>gazebo</depend>
+  <depend>gazebo_ros</depend>
+  <depend>provant_simulator_log_utils</depend>
+  <depend>provant_simulator_sdf_parser</depend>
+  <depend>roscpp</depend>
+  <depend>fmt</depend>
+  <depend>spdlog</depend>
+
+  <exec_depend>Database</exec_depend>
+  <exec_depend>xacro</exec_depend>
+
+  <export>
+    <gazebo_ros plugin_path="${prefix}/../../../../devel/lib" />
+  </export>
+</package>

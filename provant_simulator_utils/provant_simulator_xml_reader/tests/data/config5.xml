@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+This file is part of the ProVANT simulator project.
+Licensed under the terms of the MIT open source license. More details at
+https://github.com/Guiraffo/ProVANT-Simulator/blob/master/LICENSE.md
+-->
+<config>
+  <topicdata>data</topicdata>
+  <TopicoStep>Step</TopicoStep>
+  <Sampletime>12</Sampletime>
+  <Sampletime2></Sampletime2>
+  <Strategy>liblqr_quadcopter.so</Strategy>
+  <RefPath>ref.txt</RefPath>
+  <Outputfile>out.txt</Outputfile>
+  <InputPath>in.txt</InputPath>
+  <ErroPath>erro.txt</ErroPath>
+  <Duration>1.15</Duration>
+  <baudRate>921600</baudRate>
+  <HilFlagSynchronous>true</HilFlagSynchronous>
+  <HilFlagAsynchronous>1</HilFlagAsynchronous>
+  <usart1>/dev/ttyUSB0</usart1>
+  <usart2>/dev/ttyUSB1</usart2>
+  <ShutdownWhenFinished>error</ShutdownWhenFinished>
+  <StartPaused>false</StartPaused>
+  <Sensors></Sensors>
+  <Actuators>
+    <Device>Empuxoh1</Device>
+  </Actuators>
+</config>

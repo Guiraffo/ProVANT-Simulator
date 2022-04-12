@@ -1,0 +1,8 @@
+[requires]
+spdlog/1.9.2
+gtest/cci.20210126
+
+[generators]
+cmake_find_package
+
+[options]

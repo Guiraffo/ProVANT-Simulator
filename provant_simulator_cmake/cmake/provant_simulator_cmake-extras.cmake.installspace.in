@@ -1,0 +1,7 @@
+# This file is part of the ProVANT simulator project. Licensed under the terms of the MIT open source license. More
+# details at https: //github.com/Guiraffo/ProVANT-Simulator/blob/master/LICENSE.md
+
+# Append the installed cmake modules to the cmake module path
+list(APPEND CMAKE_MODULE_PATH
+     "${provant_simulator_cmake_DIR}/../../../@CATKIN_PACKAGE_SHARE_DESTINATION@/cmake/Modules"
+)

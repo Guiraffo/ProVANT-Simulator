@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+This file is part of the ProVANT simulator project.
+Licensed under the terms of the MIT open source license. More details at
+https://github.com/Guiraffo/ProVANT-Simulator/blob/master/LICENSE.md
+-->
+<package format="2">
+  <name>provant_simulator_log_utils</name>
+  <version>0.1.0</version>
+  <description>
+    <p>The provant_simulator_log_utils package provides a standard logging class for usage in the ProVANT Simulator project.</p>
+    <p>The package also provides loggers for use with Gazebo, ROS and stand alone.</p>
+  </description>
+
+  <maintainer email="jeduardo@ufmg.br">Júnio Eduardo de Morais Aquino</maintainer>
+
+  <license>MIT</license>
+
+  <url type="website">http://provant.eng.ufmg.br/provantsimulator</url>
+  <url type="repository">https://github.com/Guiraffo/ProVANT-Simulator.git</url>
+  <url type="bugtracker">https://github.com/Guiraffo/ProVANT-Simulator/issues</url>
+
+  <author email="jeduardo@ufmg.br">Júnio Eduardo de Morais Aquino</author>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <build_depend>gazebo_ros</build_depend>
+  <build_depend>roscpp</build_depend>
+  <build_depend>provant_simulator_cmake</build_depend>
+
+  <build_export_depend>gazebo_ros</build_export_depend>
+  <build_export_depend>roscpp</build_export_depend>
+
+  <exec_depend>gazebo_ros</exec_depend>
+  <exec_depend>roscpp</exec_depend>
+
+  <depend>fmt</depend>
+  <depend>gazebo</depend>
+  <depend>spdlog</depend>
+
+  <doc_depend>doxygen</doc_depend>
+  <doc_depend>rosdoc_lite</doc_depend>
+
+  <test_depend>rosunit</test_depend>
+
+  <export>
+    <rosdoc config="rosdoc.yaml" />
+    <gazebo_ros plugin_path="${prefix}/../../../../devel/lib" />
+  </export>
+</package>
