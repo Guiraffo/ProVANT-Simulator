@@ -44,9 +44,29 @@ const QString AppSettings::getGazeboModelPathUncheked() const
  */
 const QString AppSettings::getGazeboModelPath() const
 {
-  return checkDirectoryPath(GAZEBO_MODEL_PATH_KEY, getGazeboModelPathDefault(),
-                            tr("The directory containing the models used in "
-                               "the simulator could not be opened."));
+  auto const gzPaths = getGazeboModelPathUncheked();
+  auto const paths = gzPaths.split(":");
+
+  auto const errorMessage = tr("The directory containing the models used in "
+                               "the simulator could not be opened.");
+
+  for (auto const& path : paths)
+  {
+    if (!path.isEmpty())
+    {
+      QDir dir(path);
+
+      if (!dir.exists())
+      {
+        QMessageBox::critical(
+            nullptr, _criticalMsgTitle,
+            errorMessage + getErrorCorrectionMessage(GAZEBO_MODEL_PATH_KEY));
+        return QString();
+      }
+    }
+  }
+
+  return gzPaths;
 }
 
 /**
@@ -56,7 +76,7 @@ const QString AppSettings::getGazeboModelPath() const
 const QString AppSettings::getGazeboModelPathDefault() const
 {
   return QDir::home().absoluteFilePath("catkin_ws/src/"
-                                       "ProVANT-Simulator_Developer/"
+                                       "ProVANT-Simulator/"
                                        "source/Database/models");
 }
 
@@ -209,7 +229,7 @@ const QString AppSettings::getTiltMatlabPath() const
 const QString AppSettings::getTiltMatlabPathDefault() const
 {
   return QDir::home().absoluteFilePath("catkin_ws/src/"
-                                       "ProVANT-Simulator_Developer/"
+                                       "ProVANT-Simulator/"
                                        "source/Structure/Matlab/");
 }
 
@@ -260,7 +280,7 @@ const QString AppSettings::getTiltProjectPath() const
 const QString AppSettings::getTiltProjectPathDefault() const
 {
   return QDir::home().absoluteFilePath("catkin_ws/src/"
-                                       "ProVANT-Simulator_Developer");
+                                       "ProVANT-Simulator");
 }
 
 /**
@@ -312,7 +332,7 @@ const QString AppSettings::getProvantDatabasePath() const
 const QString AppSettings::getProvantDatabasePathDefault() const
 {
   return QDir::home().absoluteFilePath("catkin_ws/src/"
-                                       "ProVANT-Simulator_Developer/"
+                                       "ProVANT-Simulator/"
                                        "source/Database");
 }
 

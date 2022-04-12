@@ -750,7 +750,6 @@ void MainWindow::checkROSEnvironment()
 
     ui->actionNew->setEnabled(false);
     ui->actionOpen->setEnabled(false);
-    ui->actionOptions->setEnabled(false);
   }
 }
 
