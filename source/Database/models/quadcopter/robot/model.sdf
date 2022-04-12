@@ -40,6 +40,7 @@ https://github.com/Guiraffo/ProVANT-Simulator/blob/master/LICENSE.md
       </visual>
     </link>
     <link name='motor3'>
+      <pose frame=''>-0.332 0 0.0 0 0 0</pose>
       <inertial>
         <pose frame=''>0 0 0 0 0 0</pose>
         <mass>0.00007333</mass>
