@@ -1,0 +1,487 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+This file is part of the ProVANT simulator project.
+Licensed under the terms of the MIT open source license. More details at
+https://github.com/Guiraffo/ProVANT-Simulator/blob/master/LICENSE.md
+-->
+<sdf version='1.6'>
+  <model name='vant_5_aerod'>
+    <link name='main_body'>
+      <self_collide>false</self_collide>
+      <pose frame=''>0 0 0 0 0 0</pose>
+      <inertial>
+        <pose frame=''>-0.13 0 -0.15 0 0 0</pose>
+        <mass>19.067</mass>
+        <inertia>
+          <ixx>0.44425</ixx>
+          <ixy>0</ixy>
+          <ixz>-0.14291</ixz>
+          <iyy>1.2557</iyy>
+          <iyz>0</iyz>
+          <izz>1.6146</izz>
+        </inertia>
+      </inertial>
+      <collision name='main_body_collision'>
+        <pose frame=''>0 0 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <!--    <uri>model://vant_5_aerod/meshes/main_body.STL</uri> -->
+            <uri>model://vant_5_aerod/meshes/body.dae</uri>
+          </mesh>
+        </geometry>
+      </collision>
+      <visual name='main_body_visual'>
+        <pose frame=''>0 0 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://vant_5_aerod/meshes/body.dae</uri>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+    <link name='rotorCm2'>
+      <pose frame=''>0.273975 -0.375 -0.101765 -0.0872 0 0</pose>
+      <inertial>
+        <pose frame=''>0 0 -0.00457 0 0 0</pose>
+        <mass>0.519</mass>
+        <inertia>
+          <ixx>0.002265</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>0.002265</iyy>
+          <iyz>0</iyz>
+          <izz>0.000411</izz>
+        </inertia>
+      </inertial>
+      <collision name='rotorCm2_collision'>
+        <pose frame=''>0 0 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://vant_5_aerod/meshes/rotor_frontal.dae</uri>
+          </mesh>
+        </geometry>
+      </collision>
+      <visual name='rotorCm2_visual'>
+        <pose frame=''>0 0 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://vant_5_aerod/meshes/rotor_frontal.dae</uri>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+    <joint name='rotationCm2' type='revolute'>
+      <child>rotorCm2</child>
+      <parent>main_body</parent>
+      <axis>
+        <xyz>0 1 0</xyz>
+        <limit>
+          <lower>-2</lower>
+          <upper>2</upper>
+        </limit>
+        <use_parent_model_frame>1</use_parent_model_frame>
+      </axis>
+    </joint>
+    <link name='proppeller2'>
+      <pose frame=''>0.27527 -0.375 -0.031924 0  0 0</pose>
+      <inertial>
+        <pose frame=''>0 0 0 0 0 0</pose>
+        <mass>0.0000001</mass>
+        <inertia>
+          <ixx>1e-8</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>1e-8</iyy>
+          <iyz>0</iyz>
+          <izz>1e-8</izz>
+        </inertia>
+      </inertial>
+      <collision name='proppeller2_collision'>
+        <pose frame=''>0 0 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://vant_5_aerod/meshes/propp.dae</uri>
+          </mesh>
+        </geometry>
+      </collision>
+      <visual name='proppeller2_visual'>
+        <pose frame=''>0 0 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://vant_5_aerod/meshes/propp.dae</uri>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+    <joint name='joint_rotor2prop2' type='revolute'>
+      <child>proppeller2</child>
+      <parent>rotorCm2</parent>
+      <axis>
+        <xyz>0 0 1</xyz>
+        <dynamics>
+          <spring_reference>0</spring_reference>
+          <spring_stiffness>0</spring_stiffness>
+        </dynamics>
+        <use_parent_model_frame>1</use_parent_model_frame>
+      </axis>
+    </joint>
+    <link name='rotorCm3'>
+      <pose frame=''>0.273975 0.375 -0.101765 0.0872 0 0</pose>
+      <inertial>
+        <pose frame=''>0 0 -0.00457 0 0 0</pose>
+        <mass>0.519</mass>
+        <inertia>
+          <ixx>0.002265</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>0.002265</iyy>
+          <iyz>0</iyz>
+          <izz>0.000411</izz>
+        </inertia>
+      </inertial>
+      <collision name='rotorCm3_collision'>
+        <pose frame=''>0 0 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://vant_5_aerod/meshes/rotor_frontal.dae</uri>
+          </mesh>
+        </geometry>
+      </collision>
+      <visual name='rotorCm3_visual'>
+        <pose frame=''>0 0 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://vant_5_aerod/meshes/rotor_frontal.dae</uri>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+    <joint name='rotationCm3' type='revolute'>
+      <child>rotorCm3</child>
+      <parent>main_body</parent>
+      <axis>
+        <xyz>0 1 0</xyz>
+        <limit>
+          <lower>-2</lower>
+          <upper>2</upper>
+        </limit>
+        <use_parent_model_frame>1</use_parent_model_frame>
+      </axis>
+    </joint>
+    <link name='proppeler3'>
+      <pose frame=''>0.27527 0.375 -0.031924 0  0 0</pose>
+      <inertial>
+        <pose frame=''>0 0 0 0 0 0</pose>
+        <mass>0.0000001</mass>
+        <inertia>
+          <ixx>1e-8</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>1e-8</iyy>
+          <iyz>0</iyz>
+          <izz>1e-8</izz>
+        </inertia>
+      </inertial>
+      <collision name='proppeler3_collision'>
+        <pose frame=''>0 0 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://vant_5_aerod/meshes/propp.dae</uri>
+          </mesh>
+        </geometry>
+      </collision>
+      <visual name='proppeler3_visual'>
+        <pose frame=''>0 0 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://vant_5_aerod/meshes/propp.dae</uri>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+    <joint name='joint_rotor3prop3' type='revolute'>
+      <child>proppeler3</child>
+      <parent>rotorCm3</parent>
+      <axis>
+        <xyz>0 0 1</xyz>
+        <dynamics>
+          <spring_reference>0</spring_reference>
+          <spring_stiffness>0</spring_stiffness>
+        </dynamics>
+        <use_parent_model_frame>1</use_parent_model_frame>
+      </axis>
+    </joint>
+    <link name='rotorCm4'>
+      <pose frame=''>-0.312133 -0.57 0.010512 -0.0872 0 0</pose>
+      <inertial>
+        <pose frame=''>-0.01769 0 -0.08356 0 0 0</pose>
+        <mass>1.076</mass>
+        <inertia>
+          <ixx>0.009361</ixx>
+          <ixy>0</ixy>
+          <ixz>0.001203</ixz>
+          <iyy>0.012027</iyy>
+          <iyz>0</iyz>
+          <izz>0.003206</izz>
+        </inertia>
+      </inertial>
+      <collision name='rotorCm4_collision'>
+        <pose frame=''>0 0 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://vant_5_aerod/meshes/rotor_traseiro.dae</uri>
+          </mesh>
+        </geometry>
+      </collision>
+      <visual name='rotorCm4_visual'>
+        <pose frame=''>0 0 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://vant_5_aerod/meshes/rotor_traseiro.dae</uri>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+    <joint name='rotationCm4' type='revolute'>
+      <child>rotorCm4</child>
+      <parent>main_body</parent>
+      <axis>
+        <xyz>0 1 0</xyz>
+        <limit>
+          <lower>-2</lower>
+          <upper>2</upper>
+        </limit>
+        <use_parent_model_frame>1</use_parent_model_frame>
+      </axis>
+    </joint>
+    <link name='proppeller4'>
+      <pose frame=''>-0.31213 -0.57 0.080512 -0.0872  0 0</pose>
+      <inertial>
+        <pose frame=''>0 0 0 0 0 0</pose>
+        <mass>0.0000001</mass>
+        <inertia>
+          <ixx>1e-8</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>1e-8</iyy>
+          <iyz>0</iyz>
+          <izz>1e-8</izz>
+        </inertia>
+      </inertial>
+      <collision name='proppeller4_collision'>
+        <pose frame=''>0 0 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://vant_5_aerod/meshes/propp.dae</uri>
+          </mesh>
+        </geometry>
+      </collision>
+      <visual name='proppeller4_visual'>
+        <pose frame=''>0 0 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://vant_5_aerod/meshes/propp.dae</uri>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+    <joint name='joint_rotor4prop4' type='revolute'>
+      <child>proppeller4</child>
+      <parent>rotorCm4</parent>
+      <axis>
+        <xyz>0 0 1</xyz>
+        <dynamics>
+          <spring_reference>0</spring_reference>
+          <spring_stiffness>0</spring_stiffness>
+        </dynamics>
+        <use_parent_model_frame>1</use_parent_model_frame>
+      </axis>
+    </joint>
+    <link name='rotorCm5'>
+      <pose frame=''>-0.312133 0.57 0.010512 0.0872 0 0</pose>
+      <inertial>
+        <pose frame=''>-0.01769 0 -0.08356 0 0 0</pose>
+        <mass>1.076</mass>
+        <inertia>
+          <ixx>0.009361</ixx>
+          <ixy>0</ixy>
+          <ixz>0.001203</ixz>
+          <iyy>0.012027</iyy>
+          <iyz>0</iyz>
+          <izz>0.003206</izz>
+        </inertia>
+      </inertial>
+      <collision name='rotorCm5_collision'>
+        <pose frame=''>0 0 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://vant_5_aerod/meshes/rotor_traseiro.dae</uri>
+          </mesh>
+        </geometry>
+      </collision>
+      <visual name='rotorCm5_visual'>
+        <pose frame=''>0 0 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://vant_5_aerod/meshes/rotor_traseiro.dae</uri>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+    <joint name='rotationCm5' type='revolute'>
+      <child>rotorCm5</child>
+      <parent>main_body</parent>
+      <axis>
+        <xyz>0 1 0</xyz>
+        <limit>
+          <lower>-2</lower>
+          <upper>2</upper>
+        </limit>
+        <use_parent_model_frame>1</use_parent_model_frame>
+      </axis>
+    </joint>
+    <link name='proppeller5'>
+      <pose frame=''>-0.31213 0.57 0.080512 0.0872  0 0</pose>
+      <inertial>
+        <pose frame=''>0 0 0 0 0 0</pose>
+        <mass>0.0000001</mass>
+        <inertia>
+          <ixx>1e-8</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>1e-8</iyy>
+          <iyz>0</iyz>
+          <izz>1e-8</izz>
+        </inertia>
+      </inertial>
+      <collision name='proppeller5_collision'>
+        <pose frame=''>0 0 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://vant_5_aerod/meshes/propp.dae</uri>
+          </mesh>
+        </geometry>
+      </collision>
+      <visual name='proppeller5_visual'>
+        <pose frame=''>0 0 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://vant_5_aerod/meshes/propp.dae</uri>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+    <joint name='joint_rotor5prop5' type='revolute'>
+      <child>proppeller5</child>
+      <parent>rotorCm5</parent>
+      <axis>
+        <xyz>0 0 1</xyz>
+        <dynamics>
+          <spring_reference>0</spring_reference>
+          <spring_stiffness>0</spring_stiffness>
+        </dynamics>
+        <use_parent_model_frame>1</use_parent_model_frame>
+      </axis>
+    </joint>
+    <plugin name="Estados" filename="libgazebo_ros_vant5Data.so">
+      <NameOfTopic>Estados</NameOfTopic>
+      <NameOfJointR_2>rotationCm2</NameOfJointR_2>
+      <NameOfJointL_3>rotationCm3</NameOfJointL_3>
+      <NameOfJointR_4>rotationCm4</NameOfJointR_4>
+      <NameOfJointL_5>rotationCm5</NameOfJointL_5>
+      <bodyName>main_body</bodyName>
+    </plugin>
+    <plugin name="AerodynamicsPlugin" filename="libgazebo_ros_FullAerodV5.so">
+      <topic_FR2>grp2</topic_FR2>
+      <topic_FL3>grp3</topic_FL3>
+      <topic_FR4>grp4</topic_FR4>
+      <topic_FL5>grp5</topic_FL5>
+      <topic_Ar>refAileronR</topic_Ar>
+      <topic_Al>refAileronL</topic_Al>
+      <topic_Hr>refHstabR</topic_Hr>
+      <topic_Hl>refHstabL</topic_Hl>
+      <topic_Rr>refRudderR</topic_Rr>
+      <topic_Rl>refRudderL</topic_Rl>
+      <Rotor2>rotorCm2</Rotor2>
+      <Rotor3>rotorCm3</Rotor3>
+      <Rotor4>rotorCm4</Rotor4>
+      <Rotor5>rotorCm5</Rotor5>
+      <DragCte>0.0178947368</DragCte>
+      <MainBody>main_body</MainBody>
+      <RotorCm4joint>rotationCm4</RotorCm4joint>
+      <RotorCm5joint>rotationCm5</RotorCm5joint>
+    </plugin>
+    <plugin name="RotorR2plugin" filename="libgazebo_ros_servo_motor_plugin.so">
+      <NameOfJoint>rotationCm2</NameOfJoint>
+      <TopicPublisher>RotorR2pub</TopicPublisher>
+      <TopicDrag>dragR2</TopicDrag>
+      <TopicSubscriber>RefRotorR2</TopicSubscriber>
+      <Modo>Torque</Modo>
+      <enable_saturation>true</enable_saturation>
+      <Force_Saturation>200</Force_Saturation>
+      <Angle_Saturation>100</Angle_Saturation>
+      <friction_coeff>0.05</friction_coeff>
+    </plugin>
+    <plugin name="RotorL3plugin" filename="libgazebo_ros_servo_motor_plugin.so">
+      <NameOfJoint>rotationCm3</NameOfJoint>
+      <TopicPublisher>RotorL3pub</TopicPublisher>
+      <TopicDrag>dragL3</TopicDrag>
+      <TopicSubscriber>RefRotorL3</TopicSubscriber>
+      <Modo>Torque</Modo>
+      <enable_saturation>true</enable_saturation>
+      <Force_Saturation>200</Force_Saturation>
+      <Angle_Saturation>100</Angle_Saturation>
+      <friction_coeff>0.05</friction_coeff>
+    </plugin>
+    <plugin name="RotorR4plugin" filename="libgazebo_ros_servo_motor_plugin.so">
+      <NameOfJoint>rotationCm4</NameOfJoint>
+      <TopicPublisher>RotorR4pub</TopicPublisher>
+      <TopicDrag>dragR4</TopicDrag>
+      <TopicSubscriber>RefRotorR4</TopicSubscriber>
+      <Modo>Torque</Modo>
+      <enable_saturation>true</enable_saturation>
+      <Force_Saturation>200</Force_Saturation>
+      <Angle_Saturation>100</Angle_Saturation>
+      <friction_coeff>0.05</friction_coeff>
+    </plugin>
+    <plugin name="RotorL5plugin" filename="libgazebo_ros_servo_motor_plugin.so">
+      <NameOfJoint>rotationCm5</NameOfJoint>
+      <TopicPublisher>RotorL5pub</TopicPublisher>
+      <TopicDrag>dragL5</TopicDrag>
+      <TopicSubscriber>RefRotorL5</TopicSubscriber>
+      <Modo>Torque</Modo>
+      <enable_saturation>true</enable_saturation>
+      <Force_Saturation>200</Force_Saturation>
+      <Angle_Saturation>100</Angle_Saturation>
+      <friction_coeff>0.05</friction_coeff>
+    </plugin>
+    <plugin name="VisualPropellers" filename="libgazebo_ros_VisualPropellers.so">
+      <Propeller1>joint_rotor2prop2</Propeller1>
+      <Propeller2>joint_rotor3prop3</Propeller2>
+      <Propellers_Velocity>30</Propellers_Velocity>
+    </plugin>
+    <plugin name="VisualPropellers" filename="libgazebo_ros_VisualPropellers.so">
+      <Propeller1>joint_rotor4prop4</Propeller1>
+      <Propeller2>joint_rotor5prop5</Propeller2>
+      <Propellers_Velocity>30</Propellers_Velocity>
+    </plugin>
+  </model>
+</sdf>

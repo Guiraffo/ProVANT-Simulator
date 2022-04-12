@@ -2,6 +2,4 @@
 
 simulation::simulation()
 {
-
 }
-

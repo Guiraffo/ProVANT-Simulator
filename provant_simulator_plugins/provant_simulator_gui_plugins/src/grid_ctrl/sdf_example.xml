@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+This file is part of the ProVANT simulator project.
+Licensed under the terms of the MIT open source license. More details at
+https: //github.com/Guiraffo/ProVANT-Simulator/blob/master/LICENSE.md
+-->
+<gui>
+  ...
+  <plugin name="grid_ctrl" filename="libprovant_grid_ctrl_plugin.so">
+    <!-- Optional - Boolean: Indicates if the grid must be enabled or disabled. The default value is true. -->
+    <enabled>true</enabled>
+    <!-- Optional - Float: The length, in meters, of each grid cell. The default value is 1.0.-->
+    <cell_length>1</cell_length>
+    <!-- Optional - Unsigned Integer: Number of cells in the X and Y directions. The default value is 20. -->
+    <cell_count>20</cell_count>
+    <!-- Optional - Unsigned Integer: Number of cells in the Z direction (height). The default value is 1. -->
+    <grid_height>1</grid_height>
+    <!-- Optional - Float: Distance in meters from the origin to the first cell in the z direction. The default value is 0.-->
+    <height_offset>0</height_offset>
+    <!-- Optional - Vector of Unsigned Integers: The color of the grid. The default value is (77,77,77,128). -->
+    <color>
+      <!-- Unsigned Integer: Value from 0 to 255 indicating the color intensity in the red channel.-->
+      <r>255</r>
+      <!-- Unsigned Integer: Value from 0 to 255 indicating the color intensity in the green channel.-->
+      <g>255</g>
+      <!-- Unsigned Integer: Value from 0 to 255 indicating the color intensity in the blue channel.-->
+      <b>255</b>
+      <!-- Optional - Unsigned Integer: Value from 0 to 255 indicating the opacity of the color. Zero indicates a completely transparent color and 255 a completely opaque color. The default value is 255. -->
+      <a>255</a>
+    </color>
+  </plugin>
+  ...
+</gui>

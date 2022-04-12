@@ -1,48 +1,150 @@
 #include "plugin_da.h"
 
-plugin_DA::plugin_DA()
-{
+#include <QDebug>
 
+PluginDA::PluginDA()
+{
 }
 
-std::string plugin_DA::GetName(){return name;}
-void plugin_DA::SetName(std::string value){name = value;}
-std::string plugin_DA::GetFilename(){return filename;}
-void plugin_DA::SetFilename(std::string value){filename = value;}
-
-void plugin_DA::Write(QXmlStreamWriter* xml)
+std::string PluginDA::GetName()
 {
-    /*xml->writeStartElement("plugin");
-    xml->writeAttribute("name",name.c_str());
-    xml->writeAttribute("filename",filename.c_str());
-    xml->writeEndElement();*/
-    /*xml->writeStartElement("plugin");
-    xml->writeAttribute("name",name.c_str());
-    xml->writeAttribute("filename",filename.c_str());
-    for(uint i = 0;i<parameters.size();i++)
+  return getName().toStdString();
+}
+
+void PluginDA::SetName(std::string value)
+{
+  setName(QString::fromStdString(value));
+}
+
+const QString& PluginDA::getName() const
+{
+  return _name;
+}
+
+void PluginDA::setName(const QString& value)
+{
+  _name = value;
+}
+
+std::string PluginDA::GetFilename()
+{
+  return getFilename().toStdString();
+}
+
+void PluginDA::SetFilename(std::string value)
+{
+  setFilename(QString::fromStdString(value));
+}
+
+const QString& PluginDA::getFilename() const
+{
+  return _filename;
+}
+
+void PluginDA::setFilename(const QString& value)
+{
+  _filename = value;
+}
+
+void PluginDA::Write(QXmlStreamWriter* xml)
+{
+  write(xml);
+}
+
+void PluginDA::print()
+{
+  qDebug() << "plugin";
+  qDebug() << "name " << qUtf8Printable(_name);
+  qDebug() << "filename " << qUtf8Printable(_filename);
+  for (QMap<QString, QString>::const_iterator i = _parameterMap.cbegin();
+       i != _parameterMap.cend(); ++i)
+  {
+    qDebug() << qUtf8Printable(i.key()) << ": " << qUtf8Printable(i.value())
+             << " ";
+  }
+}
+
+int PluginDA::getNumberOfParameters() const
+{
+  return _parameterMap.size();
+}
+
+const QString PluginDA::getParameter(const QString& name) const
+{
+  return _parameterMap.value(name);
+}
+
+void PluginDA::setParameter(const QString& name, const QString& value)
+{
+  _parameterMap[name] = value;
+}
+
+const QMap<QString, QString>& PluginDA::getParameters() const
+{
+  return _parameterMap;
+}
+
+void PluginDA::setParameters(const QMap<QString, QString>& params)
+{
+  _parameterMap.clear();
+  _parameterMap = params;
+}
+
+bool PluginDA::read(const QDomElement& pluginElement)
+{
+  if (pluginElement.isNull())
+    return false;
+
+  if (pluginElement.hasAttribute("name"))
+  {
+    setName(pluginElement.attribute("name"));
+  }
+  else
+  {
+    QDomElement nameElement = pluginElement.firstChildElement("name");
+    if (nameElement.isNull())
+      return false;
+    setName(nameElement.text());
+  }
+
+  if (pluginElement.hasAttribute("filename"))
+  {
+    setFilename(pluginElement.attribute("filename"));
+  }
+  else
+  {
+    QDomElement fileNameElement = pluginElement.firstChildElement("filename");
+    if (fileNameElement.isNull())
+      return false;
+    setName(fileNameElement.text());
+  }
+
+  QDomElement childElement = pluginElement.firstChildElement();
+  while (!childElement.isNull())
+  {
+    if (childElement.tagName() != "name" && childElement.tagName() != "filenam"
+                                                                      "e")
     {
-        xml->writeTextElement(parameters.at(i).c_str(),values.at(i).c_str());
+      setParameter(childElement.tagName(), childElement.text());
     }
-    xml->writeEndElement();*/
+
+    childElement = childElement.nextSiblingElement();
+  }
+
+  return true;
 }
-void plugin_DA::print()
+
+void PluginDA::write(QXmlStreamWriter* xml) const
 {
-    qDebug() << "plugin";
-    qDebug() << "name " << name.c_str();
-    qDebug() << "filename " << filename.c_str();
-    for(uint i = 0;i<parameters.size();i++)
-    {
-        qDebug() << parameters.at(i).c_str() << "  " << values.at(i).c_str();
-    }
+  xml->writeStartElement("plugin");
+
+  xml->writeAttribute("name", _name);
+  xml->writeAttribute("filename", _filename);
+
+  for (auto it = _parameterMap.cbegin(); it != _parameterMap.cend(); it++)
+  {
+    xml->writeTextElement(it.key(), it.value());
+  }
+
+  xml->writeEndElement();  // </plugin>
 }
-
-
-
-
-
-
-
-
-
-
-

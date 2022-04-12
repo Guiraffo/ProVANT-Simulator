@@ -5,10 +5,13 @@
 cmake_minimum_required(VERSION 3.0.2)
 project(lqr_quadcopter)
 
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
 find_package(catkin REQUIRED COMPONENTS
-    roscpp
-    std_msgs
-    simulator_msgs
+	roscpp
+	simulator_msgs
+	control_strategies_base
 )
 find_package(Eigen3 3.3 REQUIRED NO_MODULE)
 
@@ -18,13 +21,11 @@ catkin_package(
 		${PROJECT_NAME}
 	CATKIN_DEPENDS
 		roscpp
-		std_msgs
 		simulator_msgs
+		control_strategies_base
 	# DEPENDS
 )
-include_directories(include/${PROJECT_NAME})
 include_directories(${catkin_INCLUDE_DIRS})
-include_directories($ENV{TILT_PROJECT}/source/Structure/control_strategies/)
 
 add_library(${PROJECT_NAME} src/main.cpp)
 add_dependencies(${PROJECT_NAME} ${catkin_EXPORTED_TARGETS})

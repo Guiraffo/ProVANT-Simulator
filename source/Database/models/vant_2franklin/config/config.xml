@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <topicdata>data</topicdata>
+    <TopicoStep>Step</TopicoStep>
+    <Sampletime>12</Sampletime>
+    <Duration>0</Duration>
+    <ShutdownWhenFinished>false</ShutdownWhenFinished>
+    <StartPaused>true</StartPaused>
+    <Strategy>libvant2load_franklin_czl.so</Strategy>
+    <Turbulance></Turbulance>
+    <RefPath>ref.txt</RefPath>
+    <Outputfile>out.txt</Outputfile>
+    <InputPath>in.txt</InputPath>
+    <ErroPath>erro.txt</ErroPath>
+    <Sensors>
+        <Device>loadperspective_states</Device>
+        <Device>mainbody</Device>
+        <Device>servodir</Device>
+        <Device>servoesq</Device>
+        <Device>carga</Device>
+        <Device>angR</Device>
+        <Device>angL</Device>
+        <Device>haste_x</Device>
+        <Device>haste_y</Device>
+    </Sensors>
+    <Actuators>
+        <Device>Thrustdir</Device>
+        <Device>Thrustesq</Device>
+        <Device>RefaR</Device>
+        <Device>RefaL</Device>
+        <Device>dtrbx</Device>
+        <Device>dtrby</Device>
+        <Device>dtrbz</Device>
+    </Actuators>
+</config>

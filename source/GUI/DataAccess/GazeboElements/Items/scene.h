@@ -1,14 +1,22 @@
 #ifndef SCENE_H
 #define SCENE_H
-#include "QtXml/QtXml"
 
-class scene
+#include <QDomElement>
+#include <QString>
+#include <QXmlStreamWriter>
+
+/**
+ * @brief The Scene class
+ * @todo This is an incomplete class. A full refactor is needed.
+ */
+class Scene
 {
 public:
-    scene();
-    void Write(QXmlStreamWriter);
-    void Read(QDomNode);
-    void print();
+  Scene();
+
+  void write(QXmlStreamWriter* xml) const;
+  bool read(const QDomElement& world);
+  void print() const;
 };
 
-#endif // SCENE_H
+#endif  // SCENE_H

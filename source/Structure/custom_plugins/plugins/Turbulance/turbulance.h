@@ -1,59 +1,61 @@
+/*
+ * This file is part of the ProVANT simulator project.
+ * Licensed under the terms of the MIT open source license. More details at
+ * https://github.com/Guiraffo/ProVANT-Simulator/blob/master/LICENSE.md
+ */
+/**
+ * @file This file contains the declaration of the turbulance class.
+ *
+ * @author Jonatan Campos
+ */
+
+#ifndef TURBULENCE_H
+#define TURBULENCE_H
+
 #include <ros/ros.h>
+
 #include <gazebo/physics/physics.hh>
-#include <gazebo/transport/TransportTypes.hh>
-#include <gazebo/common/Time.hh>
 #include <gazebo/common/Plugin.hh>
 #include <gazebo/common/Events.hh>
-#include <update_timer.h>
-#include "std_msgs/Float64.h"
-//#include <gazebo/math/Vector3.hh>
-#include <ros/package.h>
-#include <log4cxx/logger.h>
-#include <log4cxx/xml/domconfigurator.h>
-#include "XMLRead.h"
-#include "/usr/include/eigen3/Eigen/Eigen"
-#include "/usr/include/eigen3/Eigen/Dense"
-#include <vector>
-#include <MatlabData.h>
-#include "simulator_msgs/Sensor.h"
-#include <XMLRead2.h>
 
-using namespace log4cxx;
-using namespace log4cxx::xml;
-using namespace log4cxx::helpers;
+#include <eigen3/Eigen/Eigen>
 
 namespace gazebo
 {
-	LoggerPtr loggerMyMain(Logger::getLogger( "main"));
+class turbulance : public ModelPlugin
+{
+public:
+  turbulance();
+  virtual ~turbulance() = default;
+  // initial setup
+  void Load(physics::ModelPtr _model, sdf::ElementPtr _sdf) override;
+  
+  std::string TurbTag;
+protected:
+	// for each step time
+  virtual void Update();
 
-	class turbulance : public ModelPlugin{
-        public: turbulance();
-  		// destructor
-    		public:virtual ~turbulance();
-  		// initial setup
-  		  public:virtual void Load(physics::ModelPtr _model, sdf::ElementPtr _sdf);
-  		// reset
-    		public: virtual void Reset();
-  		// for each step time
-    		protected: virtual void Update();
-        public:
-        			std::string TurbTag;
+private:
+  std::string NameOfTopic_;               // nme of node
+  physics::WorldPtr world;                // pointer to the world
+  //! Connection to the WorldUpdateBegin event used to call the Update method at every step time.
+  event::ConnectionPtr updateConnection;
+  ros::NodeHandle node_handle_;           // ROS's node handle
+  boost::mutex lock;                      // mutex
+  ros::Publisher publisher_;              // ROS publisher
+  double delT;
+  // Turbulance Model Matrices - Von Karman
+  Eigen::VectorXd v;
+  Eigen::MatrixXd Ad;
+  Eigen::MatrixXd Bd;
+  Eigen::MatrixXd Cd;
+  Eigen::VectorXd dp;
+  Eigen::VectorXd EnvWind;
+  //! Message used to identify the log messages of this plugin in the output screen.
+  std::string _logMsg;
+  //! Name of this plugin child logger.
+  const std::string PLUGIN_ID = "turbulence_plugin";
+};
+}  // namespace gazebo
 
-        private:
-             std::string NameOfTopic_; // nme of node
-             physics::WorldPtr world; // pointer to the world
-			       UpdateTimer updateTimer;  // update time
-  			     event::ConnectionPtr updateConnection; // update connection
-			       ros::NodeHandle node_handle_; // ROS's node handle
-			       boost::mutex lock; // mutex
-			       ros::Publisher publisher_;  // ROS publisher
-             double delT;
-             //Turbulance Model Matrices - Von Karman
-             Eigen::VectorXd v;
-             Eigen::MatrixXd Ad;
-           	 Eigen::MatrixXd Bd;
-             Eigen::MatrixXd Cd;
-             Eigen::VectorXd dp;
-             Eigen::VectorXd EnvWind;
-  };
-}
+#endif // TURBULENCE_H

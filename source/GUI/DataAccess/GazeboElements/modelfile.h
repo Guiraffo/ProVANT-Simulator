@@ -14,16 +14,16 @@
 class ModelFile
 {
 public:
-    ModelFile(const QString &modelFilePath);
-    void Read();
-    void Write();
-    void print();
+  ModelFile(const QString& modelFilePath);
+  void Read();
+  void Write();
+  void print();
 
-    QString filename;
-    Model_DA model;
-    QDomDocument doc;
-    QFile file;
-    QString sdfVersion;
+  QString filename;
+  Model_DA model;
+  QDomDocument doc;
+  QFile file;
+  QString sdfVersion;
 };
 
-#endif // MODELFILE_H
+#endif  // MODELFILE_H

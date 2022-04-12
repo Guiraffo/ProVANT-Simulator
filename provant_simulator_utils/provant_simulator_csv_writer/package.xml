@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+This file is part of the ProVANT simulator project.
+Licensed under the terms of the MIT open source license. More details at
+https://github.com/Guiraffo/ProVANT-Simulator/blob/master/LICENSE.md
+-->
+<package format="2">
+  <name>provant_simulator_csv_writer</name>
+  <version>0.1.0</version>
+  <description>
+    <p>The provant_simulator_csv_writer package provides a library to write Comma Separated Values (CSV) files.</p>
+    <p>This library is intended to be used as the logger for the results of a given simulation.</p>
+  </description>
+
+  <maintainer email="jeduardo@ufmg.br">Júnio Eduardo de Morais Aquino</maintainer>
+
+  <license>MIT</license>
+
+  <url type="website">http://provant.eng.ufmg.br/provantsimulator</url>
+  <url type="repository">https://github.com/Guiraffo/ProVANT-Simulator.git</url>
+  <url type="bugtracker">https://github.com/Guiraffo/ProVANT-Simulator/issues</url>
+
+  <author email="jeduardo@ufmg.br">Júnio Eduardo de Morais Aquino</author>
+  <author email="jonatan29campo@gmail.com">Jonatan Campos</author>
+  <author email="avlara@hotmail.com">Arthur Viana Lara</author>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <test_depend>rosunit</test_depend>
+
+  <export>
+  </export>
+</package>

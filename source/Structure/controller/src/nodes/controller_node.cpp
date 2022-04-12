@@ -39,7 +39,6 @@ int main(int argc, char** argv)
   ControllerNode Instance(argv[1]);
 
   ROS_DEBUG_STREAM("Starting first step");
-  Instance.startSimulation();
 
   ROS_INFO_STREAM("Control strategy instance setup finalized, spinning.");
   // Keep this node running until ROS finishes execution.

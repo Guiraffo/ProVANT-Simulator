@@ -1,604 +1,333 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- This URDF was automatically created by SolidWorks to URDF Exporter! Originally created by Stephen Brawner (brawner@gmail.com) 
-     Commit Version: 1.5.1-0-g916b5db  Build Version: 1.5.7152.31018
-     For more information, please see http://wiki.ros.org/sw_urdf_exporter -->
-<robot
-  name="uam3axis">
-  
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+This file is part of the ProVANT simulator project.
+Licensed under the terms of the MIT open source license. More details at
+https://github.com/Guiraffo/ProVANT-Simulator/blob/master/LICENSE.md
+-->
+<robot name="uam3axis">
+
   <!-- Use with <material>Gazebo/Black</material>-->
   <material name="black">
-    <color rgba="0.0 0.0 0.0 1.0"/>
+    <color rgba="0.0 0.0 0.0 1.0" />
   </material>
 
   <material name="blue">
-    <color rgba="0.0 0.0 0.8 1.0"/>
+    <color rgba="0.0 0.0 0.8 1.0" />
   </material>
 
   <material name="green">
-    <color rgba="0.0 0.8 0.0 1.0"/>
+    <color rgba="0.0 0.8 0.0 1.0" />
   </material>
 
   <material name="grey">
-    <color rgba="0.2 0.2 0.2 1.0"/>
+    <color rgba="0.2 0.2 0.2 1.0" />
   </material>
-  
+
   <!-- Use with <material>Gazebo/Orange</material>-->
   <material name="orange">
-    <color rgba="1 0.42353 0.03922 1.0"/>
+    <color rgba="1 0.42353 0.03922 1.0" />
   </material>
 
   <material name="brown">
-    <color rgba="1.0 0.81177 0.76471 1.0"/>
+    <color rgba="1.0 0.81177 0.76471 1.0" />
   </material>
 
   <!-- Use with <material>Gazebo/Red</material>-->
   <material name="red">
-    <color rgba="0.8 0.0 0.0 1.0"/>
+    <color rgba="0.8 0.0 0.0 1.0" />
   </material>
 
   <material name="white">
-    <color rgba="1.0 1.0 1.0 1.0"/>
+    <color rgba="1.0 1.0 1.0 1.0" />
   </material>
 
-  <link name="inertial_frame"/>
-  <link
-    name="base_link">
+  <link name="inertial_frame" />
+  <link name="base_link">
     <inertial>
-      <origin
-        xyz="-7.7716E-16 -1.4433E-15 0.18101"
-        rpy="0 0 0" />
-      <mass
-        value="2.2" />
-      <inertia
-        ixx="0.0363"
-        ixy="0"
-        ixz="0"
-        iyy="0.0363"
-        iyz="0"
-        izz="0.0685" />
+      <origin xyz="-7.7716E-16 -1.4433E-15 0.18101" rpy="0 0 0" />
+      <mass value="2.2" />
+      <inertia ixx="0.0363" ixy="0" ixz="0" iyy="0.0363" iyz="0" izz="0.0685" />
     </inertial>
     <visual>
-      <origin
-        xyz="0 0 0"
-        rpy="0 0 0" />
+      <origin xyz="0 0 0" rpy="0 0 0" />
       <geometry>
-        <mesh
-          filename="package://uam3axis/meshes/base_link.STL" />
-        <material name="red"/>
+        <mesh filename="package://uam3axis/meshes/base_link.STL" />
+        <material name="red" />
       </geometry>
     </visual>
     <collision>
-      <origin
-        xyz="0 0 0"
-        rpy="0 0 0" />
+      <origin xyz="0 0 0" rpy="0 0 0" />
       <geometry>
-        <mesh
-          filename="package://uam3axis/meshes/base_link.STL" />
+        <mesh filename="package://uam3axis/meshes/base_link.STL" />
       </geometry>
     </collision>
   </link>
   <joint name="dummy_joint" type="fixed">
-    <parent link="inertial_frame"/>
-    <child link="base_link"/>
+    <parent link="inertial_frame" />
+    <child link="base_link" />
   </joint>
-  <link
-    name="legs">
+  <link name="legs">
     <inertial>
-      <origin
-        xyz="3.33066907387547E-16 9.43689570931383E-16 0.0621262276194156"
-        rpy="0 0 0" />
-      <mass
-        value="0.14623345246629" />
-      <inertia
-        ixx="0.000237434770940027"
-        ixy="2.68509444279613E-19"
-        ixz="-1.08873598996886E-18"
-        iyy="0.000237434770940027"
-        iyz="6.77626357804862E-21"
-        izz="5.41386422243988E-05" />
+      <origin xyz="3.33066907387547E-16 9.43689570931383E-16 0.0621262276194156" rpy="0 0 0" />
+      <mass value="0.14623345246629" />
+      <inertia ixx="0.000237434770940027" ixy="2.68509444279613E-19" ixz="-1.08873598996886E-18" iyy="0.000237434770940027" iyz="6.77626357804862E-21" izz="5.41386422243988E-05" />
     </inertial>
     <visual>
-      <origin
-        xyz="0 0 0"
-        rpy="0 0 0" />
+      <origin xyz="0 0 0" rpy="0 0 0" />
       <geometry>
-        <mesh
-          filename="package://uam4axis/meshes/legs.STL" />
+        <mesh filename="package://uam4axis/meshes/legs.STL" />
       </geometry>
-      <material
-        name="black">
-      </material>
+      <material name="black"></material>
     </visual>
     <collision>
-      <origin
-        xyz="0 0 0"
-        rpy="0 0 0" />
+      <origin xyz="0 0 0" rpy="0 0 0" />
       <geometry>
-        <mesh
-          filename="package://uam4axis/meshes/legs.STL" />
+        <mesh filename="package://uam4axis/meshes/legs.STL" />
       </geometry>
     </collision>
   </link>
-  <joint
-    name="joint1"
-    type="fixed">
-    <origin
-      xyz="0 0 0"
-      rpy="0 0 0" />
-    <parent
-      link="base_link" />
-    <child
-      link="legs" />
-    <axis
-      xyz="0 0 0" />
+  <joint name="joint1" type="fixed">
+    <origin xyz="0 0 0" rpy="0 0 0" />
+    <parent link="base_link" />
+    <child link="legs" />
+    <axis xyz="0 0 0" />
   </joint>
-  <link
-    name="prop1">
+  <link name="prop1">
     <inertial>
-      <origin
-        xyz="0.299999999999999 -1.27675647831893E-15 0.222524388262462"
-        rpy="0 0 0" />
-      <mass
-        value="0.090031" />
-      <inertia
-        ixx="4.8766E-05"
-        ixy="1.8261E-05"
-        ixz="9.1445E-22"
-        iyy="2.1239E-05"
-        iyz="-4.6226E-21"
-        izz="5.7816E-05" />
+      <origin xyz="0.299999999999999 -1.27675647831893E-15 0.222524388262462" rpy="0 0 0" />
+      <mass value="0.090031" />
+      <inertia ixx="4.8766E-05" ixy="1.8261E-05" ixz="9.1445E-22" iyy="2.1239E-05" iyz="-4.6226E-21" izz="5.7816E-05" />
     </inertial>
     <visual>
-      <origin
-        xyz="0 0 0"
-        rpy="0 0 0" />
+      <origin xyz="0 0 0" rpy="0 0 0" />
       <geometry>
-        <mesh
-          filename="package://uam3axis/meshes/prop1.STL" />
+        <mesh filename="package://uam3axis/meshes/prop1.STL" />
         <material name="white" />
       </geometry>
     </visual>
     <collision>
-      <origin
-        xyz="0 0 0"
-        rpy="0 0 0" />
+      <origin xyz="0 0 0" rpy="0 0 0" />
       <geometry>
-        <mesh
-          filename="package://uam3axis/meshes/prop1.STL" />
+        <mesh filename="package://uam3axis/meshes/prop1.STL" />
       </geometry>
     </collision>
   </link>
-  <joint
-    name="f1"
-    type="fixed">
-    <origin
-      xyz="0 0 0"
-      rpy="0 0 0" />
-    <parent
-      link="base_link" />
-    <child
-      link="prop1" />
-    <axis
-      xyz="0 0 0" />
+  <joint name="f1" type="fixed">
+    <origin xyz="0 0 0" rpy="0 0 0" />
+    <parent link="base_link" />
+    <child link="prop1" />
+    <axis xyz="0 0 0" />
   </joint>
-  <link
-    name="prop2">
+  <link name="prop2">
     <inertial>
-      <origin
-        xyz="2.22044604925031E-15 0.299999999999999 0.222524388262462"
-        rpy="0 0 0" />
-      <mass
-        value="0.090031" />
-      <inertia
-        ixx="2.1239E-05"
-        ixy="1.8261E-05"
-        ixz="1.3944E-21"
-        iyy="4.8766E-05"
-        iyz="-1.9049E-21"
-        izz="5.7816E-05" />
+      <origin xyz="2.22044604925031E-15 0.299999999999999 0.222524388262462" rpy="0 0 0" />
+      <mass value="0.090031" />
+      <inertia ixx="2.1239E-05" ixy="1.8261E-05" ixz="1.3944E-21" iyy="4.8766E-05" iyz="-1.9049E-21" izz="5.7816E-05" />
     </inertial>
     <visual>
-      <origin
-        xyz="0 0 0"
-        rpy="0 0 0" />
+      <origin xyz="0 0 0" rpy="0 0 0" />
       <geometry>
-        <mesh
-          filename="package://uam3axis/meshes/prop2.STL" />
+        <mesh filename="package://uam3axis/meshes/prop2.STL" />
       </geometry>
-      <material name="white">
-      </material>
+      <material name="white"></material>
     </visual>
     <collision>
-      <origin
-        xyz="0 0 0"
-        rpy="0 0 0" />
+      <origin xyz="0 0 0" rpy="0 0 0" />
       <geometry>
-        <mesh
-          filename="package://uam3axis/meshes/prop2.STL" />
+        <mesh filename="package://uam3axis/meshes/prop2.STL" />
       </geometry>
     </collision>
   </link>
-  <joint
-    name="f2"
-    type="fixed">
-    <origin
-      xyz="0 0 0"
-      rpy="0 0 0" />
-    <parent
-      link="base_link" />
-    <child
-      link="prop2" />
-    <axis
-      xyz="0 0 0" />
+  <joint name="f2" type="fixed">
+    <origin xyz="0 0 0" rpy="0 0 0" />
+    <parent link="base_link" />
+    <child link="prop2" />
+    <axis xyz="0 0 0" />
   </joint>
-  <link
-    name="prop3">
+  <link name="prop3">
     <inertial>
-      <origin
-        xyz="-0.300000000000001 8.88178419700125E-16 0.222524388262461"
-        rpy="0 0 0" />
-      <mass
-        value="0.0900308275627488" />
-      <inertia
-        ixx="4.87661687107451E-05"
-        ixy="1.82614354934851E-05"
-        ixz="2.55856997707046E-21"
-        iyy="2.12389453291995E-05"
-        iyz="-3.17825375738451E-21"
-        izz="5.78162740600787E-05" />
+      <origin xyz="-0.300000000000001 8.88178419700125E-16 0.222524388262461" rpy="0 0 0" />
+      <mass value="0.0900308275627488" />
+      <inertia ixx="4.87661687107451E-05" ixy="1.82614354934851E-05" ixz="2.55856997707046E-21" iyy="2.12389453291995E-05" iyz="-3.17825375738451E-21" izz="5.78162740600787E-05" />
     </inertial>
     <visual>
-      <origin
-        xyz="0 0 0"
-        rpy="0 0 0" />
+      <origin xyz="0 0 0" rpy="0 0 0" />
       <geometry>
-        <mesh
-          filename="package://uam3axis/meshes/prop3.STL" />
+        <mesh filename="package://uam3axis/meshes/prop3.STL" />
       </geometry>
-      <material name="white">
-      </material>
+      <material name="white"></material>
     </visual>
     <collision>
-      <origin
-        xyz="0 0 0"
-        rpy="0 0 0" />
+      <origin xyz="0 0 0" rpy="0 0 0" />
       <geometry>
-        <mesh
-          filename="package://uam3axis/meshes/prop3.STL" />
+        <mesh filename="package://uam3axis/meshes/prop3.STL" />
       </geometry>
     </collision>
   </link>
-  <joint
-    name="f3"
-    type="fixed">
-    <origin
-      xyz="0 0 0"
-      rpy="0 0 0" />
-    <parent
-      link="base_link" />
-    <child
-      link="prop3" />
-    <axis
-      xyz="0 0 0" />
+  <joint name="f3" type="fixed">
+    <origin xyz="0 0 0" rpy="0 0 0" />
+    <parent link="base_link" />
+    <child link="prop3" />
+    <axis xyz="0 0 0" />
   </joint>
-  <link
-    name="prop4">
+  <link name="prop4">
     <inertial>
-      <origin
-        xyz="-4.10782519111308E-15 -0.300000000000001 0.221524388262461"
-        rpy="0 0 0" />
-      <mass
-        value="0.0900308275627489" />
-      <inertia
-        ixx="2.12389453291997E-05"
-        ixy="1.82614354934853E-05"
-        ixz="3.97255054421955E-21"
-        iyy="4.87661687107451E-05"
-        iyz="-1.48065016987757E-21"
-        izz="5.7816274060079E-05" />
+      <origin xyz="-4.10782519111308E-15 -0.300000000000001 0.221524388262461" rpy="0 0 0" />
+      <mass value="0.0900308275627489" />
+      <inertia ixx="2.12389453291997E-05" ixy="1.82614354934853E-05" ixz="3.97255054421955E-21" iyy="4.87661687107451E-05" iyz="-1.48065016987757E-21" izz="5.7816274060079E-05" />
     </inertial>
     <visual>
-      <origin
-        xyz="0 0 0"
-        rpy="0 0 0" />
+      <origin xyz="0 0 0" rpy="0 0 0" />
       <geometry>
-        <mesh
-          filename="package://uam3axis/meshes/prop4.STL" />
+        <mesh filename="package://uam3axis/meshes/prop4.STL" />
       </geometry>
-      <material name="white">
-      </material>
+      <material name="white"></material>
     </visual>
     <collision>
-      <origin
-        xyz="0 0 0"
-        rpy="0 0 0" />
+      <origin xyz="0 0 0" rpy="0 0 0" />
       <geometry>
-        <mesh
-          filename="package://uam3axis/meshes/prop4.STL" />
+        <mesh filename="package://uam3axis/meshes/prop4.STL" />
       </geometry>
     </collision>
   </link>
-  <joint
-    name="f4"
-    type="fixed">
-    <origin
-      xyz="0 0 0"
-      rpy="0 0 0" />
-    <parent
-      link="base_link" />
-    <child
-      link="prop4" />
-    <axis
-      xyz="0 0 0" />
+  <joint name="f4" type="fixed">
+    <origin xyz="0 0 0" rpy="0 0 0" />
+    <parent link="base_link" />
+    <child link="prop4" />
+    <axis xyz="0 0 0" />
   </joint>
-  <link
-    name="link0">
+  <link name="link0">
     <inertial>
-      <origin
-        xyz="1.15969279720352E-05 0.0187238082752779 0.109188902778117"
-        rpy="0 0 0" />
-      <mass
-        value="0.0526286499766864" />
-      <inertia
-        ixx="1.50205816632991E-05"
-        ixy="-2.90307799312509E-10"
-        ixz="1.02308359331817E-09"
-        iyy="1.98080340894428E-05"
-        iyz="1.31657495603885E-07"
-        izz="2.51123052674678E-05" />
+      <origin xyz="1.15969279720352E-05 0.0187238082752779 0.109188902778117" rpy="0 0 0" />
+      <mass value="0.0526286499766864" />
+      <inertia ixx="1.50205816632991E-05" ixy="-2.90307799312509E-10" ixz="1.02308359331817E-09" iyy="1.98080340894428E-05" iyz="1.31657495603885E-07" izz="2.51123052674678E-05" />
     </inertial>
     <visual>
-      <origin
-        xyz="0 0 0"
-        rpy="0 0 0" />
+      <origin xyz="0 0 0" rpy="0 0 0" />
       <geometry>
-        <mesh
-          filename="package://uam3axis/meshes/link0.STL" />
+        <mesh filename="package://uam3axis/meshes/link0.STL" />
       </geometry>
-      <material
-        name="blue">
-      </material>
+      <material name="blue"></material>
     </visual>
     <collision>
-      <origin
-        xyz="0 0 0"
-        rpy="0 0 0" />
+      <origin xyz="0 0 0" rpy="0 0 0" />
       <geometry>
-        <mesh
-          filename="package://uam3axis/meshes/link0.STL" />
+        <mesh filename="package://uam3axis/meshes/link0.STL" />
       </geometry>
     </collision>
   </link>
-  <joint
-    name="beta0"
-    type="fixed">
-    <origin
-      xyz="0 0 0"
-      rpy="0 0 0" />
-    <parent
-      link="base_link" />
-    <child
-      link="link0" />
-    <axis
-      xyz="0 0 0" />
+  <joint name="beta0" type="fixed">
+    <origin xyz="0 0 0" rpy="0 0 0" />
+    <parent link="base_link" />
+    <child link="link0" />
+    <axis xyz="0 0 0" />
   </joint>
-  <link
-    name="link1">
+  <link name="link1">
     <inertial>
-      <origin
-        xyz="0.064032 -0.010237 -0.0080526"
-        rpy="0 0 0" />
-      <mass
-        value="0.053062" />
-      <inertia
-        ixx="1.0295E-05"
-        ixy="0"
-        ixz="0"
-        iyy="1.0276E-05"
-        iyz="0"
-        izz="1.1302E-05" />
+      <origin xyz="0.064032 -0.010237 -0.0080526" rpy="0 0 0" />
+      <mass value="0.053062" />
+      <inertia ixx="1.0295E-05" ixy="0" ixz="0" iyy="1.0276E-05" iyz="0" izz="1.1302E-05" />
     </inertial>
     <visual>
-      <origin
-        xyz="0 0 0"
-        rpy="0 0 0" />
+      <origin xyz="0 0 0" rpy="0 0 0" />
       <geometry>
-        <mesh
-          filename="package://uam3axis/meshes/link1.STL" />
+        <mesh filename="package://uam3axis/meshes/link1.STL" />
       </geometry>
-      <material
-        name="white">
-      </material>
+      <material name="white"></material>
     </visual>
     <collision>
-      <origin
-        xyz="0 0 0"
-        rpy="0 0 0" />
+      <origin xyz="0 0 0" rpy="0 0 0" />
       <geometry>
-        <mesh
-          filename="package://uam3axis/meshes/link1.STL" />
+        <mesh filename="package://uam3axis/meshes/link1.STL" />
       </geometry>
     </collision>
   </link>
-  <joint
-    name="beta1"
-    type="revolute">
-    <origin
-      xyz="0 0.01015 0.08695"
-      rpy="1.5708 0 0" />
-    <parent
-      link="link0" />
-    <child
-      link="link1" />
-    <axis
-      xyz="0 0 -1" />
-    <limit
-      lower="-2.909"
-      upper="2.909"
-      effort="2.4"
-      velocity="7.12" />
+  <joint name="beta1" type="revolute">
+    <origin xyz="0 0.01015 0.08695" rpy="1.5708 0 0" />
+    <parent link="link0" />
+    <child link="link1" />
+    <axis xyz="0 0 -1" />
+    <limit lower="-2.909" upper="2.909" effort="2.4" velocity="7.12" />
   </joint>
-  <link
-    name="link2">
+  <link name="link2">
     <inertial>
-      <origin
-        xyz="0.124444480032825 0.00903325123686954 0.0289681823396252"
-        rpy="0 0 0" />
-      <mass
-        value="0.06013" />
-      <inertia
-        ixx="1.0694E-05"
-        ixy="0"
-        ixz="0"
-        iyy="3.3669E-05"
-        iyz="0"
-        izz="3.4696E-05" />
+      <origin xyz="0.124444480032825 0.00903325123686954 0.0289681823396252" rpy="0 0 0" />
+      <mass value="0.06013" />
+      <inertia ixx="1.0694E-05" ixy="0" ixz="0" iyy="3.3669E-05" iyz="0" izz="3.4696E-05" />
     </inertial>
     <visual>
-      <origin
-        xyz="0 0 0"
-        rpy="0 0 0" />
+      <origin xyz="0 0 0" rpy="0 0 0" />
       <geometry>
-        <mesh
-          filename="package://uam3axis/meshes/link2.STL" />
+        <mesh filename="package://uam3axis/meshes/link2.STL" />
       </geometry>
-      <material
-        name="blue">
-      </material>
+      <material name="blue"></material>
     </visual>
     <collision>
-      <origin
-        xyz="0 0 0"
-        rpy="0 0 0" />
+      <origin xyz="0 0 0" rpy="0 0 0" />
       <geometry>
-        <mesh
-          filename="package://uam3axis/meshes/link2.STL" />
+        <mesh filename="package://uam3axis/meshes/link2.STL" />
       </geometry>
     </collision>
   </link>
-  <joint
-    name="beta2"
-    type="revolute">
-    <origin
-      xyz="0.0705 -0.0298 0.00185"
-      rpy="0 0 3.1416" />
-    <parent
-      link="link1" />
-    <child
-      link="link2" />
-    <axis
-      xyz="0 0 -1" />
-    <limit
-      lower="-2.909"
-      upper="2.909"
-      effort="2.4"
-      velocity="7.12" />
+  <joint name="beta2" type="revolute">
+    <origin xyz="0.0705 -0.0298 0.00185" rpy="0 0 3.1416" />
+    <parent link="link1" />
+    <child link="link2" />
+    <axis xyz="0 0 -1" />
+    <limit lower="-2.909" upper="2.909" effort="2.4" velocity="7.12" />
   </joint>
-  <link
-    name="link3">
+  <link name="link3">
     <inertial>
-      <origin
-        xyz="0.0721149188722384 -2.67385835694967E-10 0.0107328596698658"
-        rpy="0 0 0" />
-      <mass
-        value="0.017253" />
-      <inertia
-        ixx="1.0844E-06"
-        ixy="0"
-        ixz="0"
-        iyy="2.7238E-05"
-        iyz="0"
-        izz="2.7217E-05" />
+      <origin xyz="0.0721149188722384 -2.67385835694967E-10 0.0107328596698658" rpy="0 0 0" />
+      <mass value="0.017253" />
+      <inertia ixx="1.0844E-06" ixy="0" ixz="0" iyy="2.7238E-05" iyz="0" izz="2.7217E-05" />
     </inertial>
     <visual>
-      <origin
-        xyz="0 0 0"
-        rpy="0 0 0" />
+      <origin xyz="0 0 0" rpy="0 0 0" />
       <geometry>
-        <mesh
-          filename="package://uam3axis/meshes/link3.STL" />
+        <mesh filename="package://uam3axis/meshes/link3.STL" />
       </geometry>
-      <material
-        name="white">
-      </material>
+      <material name="white"></material>
     </visual>
     <collision>
-      <origin
-        xyz="0 0 0"
-        rpy="0 0 0" />
+      <origin xyz="0 0 0" rpy="0 0 0" />
       <geometry>
-        <mesh
-          filename="package://uam3axis/meshes/link3.STL" />
+        <mesh filename="package://uam3axis/meshes/link3.STL" />
       </geometry>
     </collision>
   </link>
-  <joint
-    name="beta3"
-    type="revolute">
-    <origin
-      xyz="0.1455 0.0298 0.02215"
-      rpy="3.1416 0 -3.1416" />
-    <parent
-      link="link2" />
-    <child
-      link="link3" />
-    <axis
-      xyz="0 0 -1" />
-    <limit
-      lower="-2.909"
-      upper="2.909"
-      effort="2.4"
-      velocity="7.12" />
+  <joint name="beta3" type="revolute">
+    <origin xyz="0.1455 0.0298 0.02215" rpy="3.1416 0 -3.1416" />
+    <parent link="link2" />
+    <child link="link3" />
+    <axis xyz="0 0 -1" />
+    <limit lower="-2.909" upper="2.909" effort="2.4" velocity="7.12" />
   </joint>
-  <link
-    name="end_effector">
+  <link name="end_effector">
     <inertial>
-      <origin
-        xyz="0.0851283414016333 -0.00185000000211605 0.0273500013282273"
-        rpy="0 0 0" />
-      <mass
-        value="0.0026235" />
-      <inertia
-        ixx="1.5013E-07"
-        ixy="0"
-        ixz="0"
-        iyy="1.5517E-07"
-        iyz="0"
-        izz="2.6388E-07" />
+      <origin xyz="0.0851283414016333 -0.00185000000211605 0.0273500013282273" rpy="0 0 0" />
+      <mass value="0.0026235" />
+      <inertia ixx="1.5013E-07" ixy="0" ixz="0" iyy="1.5517E-07" iyz="0" izz="2.6388E-07" />
     </inertial>
     <visual>
-      <origin
-        xyz="0 0 0"
-        rpy="0 0 0" />
+      <origin xyz="0 0 0" rpy="0 0 0" />
       <geometry>
         <mesh filename="package://uam3axis/meshes/end_effector.STL" />
       </geometry>
-      <material
-        name="blue">
-      </material>
+      <material name="blue"></material>
     </visual>
     <collision>
-      <origin
-        xyz="0 0 0"
-        rpy="0 0 0" />
+      <origin xyz="0 0 0" rpy="0 0 0" />
       <geometry>
-        <mesh
-          filename="package://uam3axis/meshes/end_effector.STL" />
+        <mesh filename="package://uam3axis/meshes/end_effector.STL" />
       </geometry>
     </collision>
   </link>
-  <joint
-    name="beta4"
-    type="fixed">
-    <origin
-      xyz="0.075 0.02735 0.01385"
-      rpy="1.5708 0 0" />
-    <parent
-      link="link3" />
-    <child
-      link="end_effector" />
-    <axis
-      xyz="0 0 0" />
+  <joint name="beta4" type="fixed">
+    <origin xyz="0.075 0.02735 0.01385" rpy="1.5708 0 0" />
+    <parent link="link3" />
+    <child link="end_effector" />
+    <axis xyz="0 0 0" />
   </joint>
 
   <gazebo reference="base_link">

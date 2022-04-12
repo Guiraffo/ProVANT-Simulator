@@ -2,8 +2,9 @@
 #define CONTROLLER_H
 
 #include <QListWidget>
+#include <QScopedPointer>
 
-#include"DataAccess/ControllerElements/configfile.h"
+#include "DataAccess/ControllerElements/configfile.h"
 
 /**
  * @brief The Controller class handles the reading and writing of the
@@ -13,15 +14,11 @@
 class Controller
 {
 public:
-    Controller();
-    ~Controller();
-    void open(const QString &filename,
-             QListWidget *sensors,
-             QListWidget *actuators);
-    void toListWidget(QListWidget*, const QStringList &items);
-
-public:
-    ConfigFile* config = nullptr;
+  Controller();
+  void open(const QString& filename, QListWidget* sensors,
+            QListWidget* actuators);
+  void toListWidget(QListWidget*, const QStringList& items);
+  QScopedPointer<ConfigFile> config;
 };
 
-#endif // CONTROLLER_H
+#endif  // CONTROLLER_H

@@ -11,9 +11,9 @@ https://github.com/Guiraffo/ProVANT-Simulator/blob/master/LICENSE.md
   of the ProVANT simulator, such as the stepping plugin, plugins for simulation
   a servo motor, brushless motors and plugins that allow the publication of the
   UAV states.</description>
-  
+
   <maintainer email="jeduardo@ufmg.br">Júnio Eduardo de Morais Aquino</maintainer>
-  
+
   <license>MIT</license>
 
   <url type="website">http://provant.eng.ufmg.br/provantsimulator</url>
@@ -21,12 +21,16 @@ https://github.com/Guiraffo/ProVANT-Simulator/blob/master/LICENSE.md
   <url type="bugtracker">https://github.com/Guiraffo/ProVANT-Simulator/issues</url>
 
   <author email="avlara@hotmail.com">Arthur Viana Lara</author>
-  <author email="jonatan@todo.com">Jonatan Campos</author>
+  <author email="jonatan29campo@gmail.com">Jonatan Campos</author>
   <author email="jeduardo@ufmg.br">Júnio Eduardo de Morais Aquino</author>
 
   <buildtool_depend>catkin</buildtool_depend>
+
+  <depend>provant_simulator_sdf_parser</depend>
+
   <build_depend>roscpp</build_depend>
   <build_depend>gazebo_ros</build_depend>
+  <build_depend>provant_simulator_xml_reader</build_depend>
   <build_depend>std_msgs</build_depend>
   <build_depend>geometry_msgs</build_depend>
   <build_depend>nav_msgs</build_depend>
@@ -37,6 +41,7 @@ https://github.com/Guiraffo/ProVANT-Simulator/blob/master/LICENSE.md
 
   <exec_depend>roscpp</exec_depend>
   <exec_depend>gazebo_ros</exec_depend>
+  <exec_depend>provant_simulator_xml_reader</exec_depend>
   <exec_depend>std_msgs</exec_depend>
   <exec_depend>geometry_msgs</exec_depend>
   <exec_depend>nav_msgs</exec_depend>
@@ -47,6 +52,6 @@ https://github.com/Guiraffo/ProVANT-Simulator/blob/master/LICENSE.md
 
   <export>
     <!-- From gazebo documentation http://gazebosim.org/tutorials/?tut=ros_plugins-->
-    <gazebo_ros plugin_path="${prefix}/../../lib" gazebo_media_path="${prefix}"/>
+    <gazebo_ros plugin_path="${prefix}/../../../../../devel/lib" />
   </export>
 </package>

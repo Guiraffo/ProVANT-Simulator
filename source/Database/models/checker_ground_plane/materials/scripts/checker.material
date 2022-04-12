@@ -1,0 +1,16 @@
+material CheckerTexture
+{
+  technique
+  { 
+    pass
+    {
+      specular 0.1 0.1 0.1 1
+      texture_unit
+      {
+        texture checker_texture.png
+        // Repeat the texture over the surface (100 per face)
+        scale 0.01 0.01
+      }
+    }
+  }
+}

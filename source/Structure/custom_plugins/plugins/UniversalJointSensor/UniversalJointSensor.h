@@ -1,55 +1,53 @@
 /*
-* File: UniversalJointSensor.h
-* Author: Arthur Viana Lara
-* Project: ProVANT
-* Company: Federal University of Minas Gerais
-* Version: 1.0
-* Date: 29/01/18
-* Description:  This library is responsable to implement a sensor the returns all kind of data enabled in the simulation of a specific joint
-*/
+ * This file is part of the ProVANT simulator project.
+ * Licensed under the terms of the MIT open source license. More details at
+ * https://github.com/Guiraffo/ProVANT-Simulator/blob/master/LICENSE.md
+ */
+/**
+ * @file UniversalJointSensor.h
+ * @brief This file contains the declaration of a Gazebo model plugin that
+ * reads all of the data for a specific joint.
+ *
+ * @author Arthur Viana Lara
+ * @author Júnio Eduardo de Morais Aquino
+ */
 
-#include <ros/ros.h>
-#include <gazebo/physics/physics.hh>
-#include <gazebo/transport/TransportTypes.hh>
-#include <gazebo/common/Time.hh>
+#ifndef PROVANT_UNIVERSAL_JOINT_SENSOR_H
+#define PROVANT_UNIVERSAL_JOINT_SENSOR_H
+
 #include <gazebo/common/Plugin.hh>
 #include <gazebo/common/Events.hh>
-#include <update_timer.h>
-#include <iostream>
+#include <gazebo/physics/physics.hh>
+
+#include <ros/ros.h>
+
 #include <boost/thread.hpp>
-#include <ros/callback_queue.h>
-#include <random>
-#include "XMLRead.h"
-#include "simulator_msgs/Sensor.h"
 
 namespace gazebo
 {
+class UniversalJointSensor : public ModelPlugin
+{
+  // constructor
+public:
+  UniversalJointSensor() = default;
+  virtual ~UniversalJointSensor() = default;
+  // initial setup
+  void Load(physics::ModelPtr _model, sdf::ElementPtr _sdf) override;
 
-	
-	class UniversalJointSensor : public ModelPlugin
-	{
-		// constructor
-		public: UniversalJointSensor(); 
-		// destructor
-  		public:virtual ~UniversalJointSensor(); 
-		// initial setup
-		public:virtual void Load(physics::ModelPtr _model, sdf::ElementPtr _sdf); 
-		// reset
-  		public: virtual void Reset();  
-		// for each step time
-  		protected: virtual void Update(); 
-		
+protected:
+  virtual void Update();
 
-		private:  
-			std::string axis; // kind of axis
-			std::string NameOfJoint_; // name of joint
-			std::string NameOfNode_; // name of node
-			physics::WorldPtr world; // pointer to the world
-			physics::JointPtr junta; // pointer the joint  
-			UpdateTimer updateTimer; 
-  			event::ConnectionPtr updateConnection; 
-			ros::NodeHandle node_handle_; // ROS's node handle
-			boost::mutex lock; // mutex
-			ros::Publisher publisher_; // publisher	
-	};
-}
+private:
+  std::string axis;          // kind of axis
+  std::string NameOfJoint_;  // name of joint
+  std::string NameOfNode_;   // name of node
+  physics::WorldPtr world;   // pointer to the world
+  physics::JointPtr junta;   // pointer the joint
+  event::ConnectionPtr updateConnection;
+  ros::NodeHandle node_handle_;  // ROS's node handle
+  boost::mutex lock;             // mutex
+  ros::Publisher publisher_;     // publisher
+};
+}  // namespace gazebo
+
+#endif  // PROVANT_UNIVERSAL_JOINT_SENSOR_H

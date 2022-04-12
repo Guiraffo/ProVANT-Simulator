@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+This file is part of the ProVANT simulator project.
+Licensed under the terms of the MIT open source license. More details at
+https://github.com/Guiraffo/ProVANT-Simulator/blob/master/LICENSE.md
+-->
+<package format="2">
+  <name>provant_simulator_plugins</name>
+  <version>0.1.0</version>
+  <description>
+    <p>The provant_simulator_plugins package provides plugins to
+  extend the functionality of the Gazebo simulator and allow usage of the
+  ProVANT Simulator.</p>
+  </description>
+
+  <maintainer email="jeduardo@ufmg.br">Júnio Eduardo de Morais Aquino</maintainer>
+
+  <license>MIT</license>
+
+  <url type="website">http://provant.eng.ufmg.br/provantsimulator</url>
+  <url type="repository">https://github.com/Guiraffo/ProVANT-Simulator.git</url>
+  <url type="bugtracker">https://github.com/Guiraffo/ProVANT-Simulator/issues</url>
+
+  <author email="avlara@hotmail.com">Arthur Viana Lara</author>
+  <author email="jonatan29campo@gmail.com">Jonatan Campos</author>
+  <author email="jeduardo@ufmg.br">Júnio Eduardo de Morais Aquino</author>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <build_depend>provant_simulator_cmake</build_depend>
+
+  <depend>roscpp</depend>
+  <depend>gazebo</depend>
+  <depend>gazebo_ros</depend>
+  <depend>std_msgs</depend>
+  <depend>std_srvs</depend>
+  <depend>geometry_msgs</depend>
+  <depend>simulator_msgs</depend>
+  <depend>provant_simulator_csv_writer</depend>
+  <depend>provant_simulator_log_utils</depend>
+  <depend>provant_simulator_sdf_parser</depend>
+  <depend>provant_simulator_xml_reader</depend>
+  <depend>fmt</depend>
+  <depend>spdlog</depend>
+
+  <export>
+    <!-- From the gazebo ROS plugin tutorial -->
+    <gazebo_ros plugin_path="${prefix}/../../../../devel/lib" />
+  </export>
+</package>

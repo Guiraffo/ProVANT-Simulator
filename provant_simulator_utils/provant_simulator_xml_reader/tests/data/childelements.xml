@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+This file is part of the ProVANT simulator project.
+Licensed under the terms of the MIT open source license. More details at
+https://github.com/Guiraffo/ProVANT-Simulator/blob/master/LICENSE.md
+-->
+<config>
+  <empty>
+  </empty>
+  <oneChild>
+    <child>value</child>
+  </oneChild>
+  <twoChild>
+    <child>value1</child>
+    <child>value2</child>
+  </twoChild>
+  <twoChildDifferent>
+    <child1>value1</child1>
+    <child2>value2</child2>
+  </twoChildDifferent>
+</config>

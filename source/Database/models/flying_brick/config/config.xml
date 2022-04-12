@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <topicdata>data</topicdata>
+    <TopicoStep>Step</TopicoStep>
+    <Sampletime>3</Sampletime>
+    <Duration>630</Duration>
+    <ShutdownWhenFinished>true</ShutdownWhenFinished>
+    <StartPaused>false</StartPaused>
+    <Strategy>liblqr_quadcopter.so</Strategy>
+    <Turbulance>Turbulance Model 1</Turbulance>
+    <RefPath>ref.txt</RefPath>
+    <Outputfile>out.txt</Outputfile>
+    <InputPath>in.txt</InputPath>
+    <ErroPath>erro.txt</ErroPath>
+    <Sensors>
+        <Device>Estados</Device>
+    </Sensors>
+    <Actuators>
+        <Device>Empuxoh1</Device>
+        <Device>Empuxoh2</Device>
+        <Device>Empuxoh3</Device>
+        <Device>Empuxoh4</Device>
+    </Actuators>
+</config>

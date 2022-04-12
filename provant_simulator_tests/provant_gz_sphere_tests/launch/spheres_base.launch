@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+This file is part of the ProVANT simulator project.
+Licensed under the terms of the MIT open source license. More details at
+https: //github.com/Guiraffo/ProVANT-Simulator/blob/master/LICENSE.md
+-->
+<launch>
+  <arg name="engine" default="ode" />
+  <arg name="world" default="$(arg engine)_world" />
+
+  <include file="$(find Database)/launch/empty_world.launch">
+    <arg name="world_name" value="$(find provant_gz_sphere_tests)/worlds/$(arg world).world" />
+    <arg name="verbose" value="true" />
+    <arg name="gui" value="true" />
+    <arg name="use_sim_time" value="true" />
+  </include>
+
+  <param name="control_sphere_description" command="$(find xacro)/xacro '$(find Database)/models/sphere/robot/model.xacro' filename:=$(arg engine)_reference_sphere.csv color:=Green" />
+  <node name="spawn_control_sphere" pkg="gazebo_ros" type="spawn_model" args="-x 0 -z 2 -urdf -param control_sphere_description -model reference_sphere" />
+
+  <param name="constant_rel_force_once_sphere" command="$(find xacro)/xacro '$(find Database)/models/sphere/robot/model.xacro' filename:=$(arg engine)_const_rel_force_once_sphere.csv rel_force_once:=true force:=10" />
+  <node name="spawn_const_rel_force_once" pkg="gazebo_ros" type="spawn_model" args="-x 1 -z 2 -urdf -param constant_rel_force_once_sphere -model const_rel_force_once" />
+
+  <param name="constant_set_force_once_sphere" command="$(find xacro)/xacro '$(find Database)/models/sphere/robot/model.xacro' filename:=$(arg engine)_const_set_force_once_sphere.csv set_force_once:=true force:=10 color:=Blue" />
+  <node name="spawn_const_set_force_once" pkg="gazebo_ros" type="spawn_model" args="-x 2 -z 2 -urdf -param constant_set_force_once_sphere -model const_set_force_once" />
+
+  <param name="constant_add_force_sphere" command="$(find xacro)/xacro '$(find Database)/models/sphere/robot/model.xacro' filename:=$(arg engine)_const_add_force_sphere.csv add_rel_force_mul:=true force:=10 add_rel_force_mul_n_steps:=1 color:=Yellow" />
+  <node name="spawn_const_add_force" pkg="gazebo_ros" type="spawn_model" args="-x 3 -z 2 -urdf -param constant_add_force_sphere -model const_add_force" />
+
+  <param name="constant_set_force_sphere" command="$(find xacro)/xacro '$(find Database)/models/sphere/robot/model.xacro' filename:=$(arg engine)_const_set_force_sphere.csv set_force_mul:=true force:=10 set_force_mul_n_steps:=1 color:=Gray" />
+  <node name="spawn_const_set_force" pkg="gazebo_ros" type="spawn_model" args="-x 4 -z 2 -urdf -param constant_set_force_sphere -model const_set_force" />
+
+  <param name="constant_add_force_sphere_n_3" command="$(find xacro)/xacro '$(find Database)/models/sphere/robot/model.xacro' filename:=$(arg engine)_const_add_force_sphere_every_3.csv add_rel_force_mul:=true force:=10 add_rel_force_mul_n_steps:=3 color:=Purple" />
+  <node name="spawn_const_add_force_n_3" pkg="gazebo_ros" type="spawn_model" args="-x 5 -z 2 -urdf -param constant_add_force_sphere_n_3 -model const_add_force_n_3" />
+
+  <param name="constant_set_force_sphere_n_3" command="$(find xacro)/xacro '$(find Database)/models/sphere/robot/model.xacro' filename:=$(arg engine)_const_set_force_sphere_every_3.csv set_force_mul:=true force:=10 set_force_mul_n_steps:=3 color:=White" />
+  <node name="spawn_const_set_force_n_3" pkg="gazebo_ros" type="spawn_model" args="-x 6 -z 2 -urdf -param constant_set_force_sphere_n_3 -model const_set_force_n_3" />
+
+</launch>

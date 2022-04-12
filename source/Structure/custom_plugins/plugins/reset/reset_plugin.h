@@ -26,8 +26,8 @@
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //=================================================================================================
 
-#ifndef HECTOR_GAZEBO_PLUGINS_RESET_PLUGIN_H
-#define HECTOR_GAZEBO_PLUGINS_RESET_PLUGIN_H
+#ifndef PROVANT_RESET_PLUGIN_H
+#define PROVANT_RESET_PLUGIN_H
 
 #include <gazebo/common/Plugin.hh>
 #include <ros/ros.h>
@@ -40,10 +40,8 @@ class GazeboResetPlugin : public ModelPlugin
 public:
   GazeboResetPlugin();
   virtual ~GazeboResetPlugin();
-
-protected:
-  virtual void Load(physics::ModelPtr _model, sdf::ElementPtr _sdf);
-  virtual void Reset();
+   void Load(physics::ModelPtr _model, sdf::ElementPtr _sdf) override;
+   void Reset() override;
 
 private:
   ros::NodeHandle* node_handle_;
@@ -52,4 +50,4 @@ private:
 
 } // namespace gazebo
 
-#endif // HECTOR_GAZEBO_PLUGINS_RESET_PLUGIN_H
+#endif // PROVANT_RESET_PLUGIN_H

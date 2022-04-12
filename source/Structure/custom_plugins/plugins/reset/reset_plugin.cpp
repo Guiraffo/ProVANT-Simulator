@@ -31,19 +31,8 @@
 
 #include <std_msgs/String.h>
 
-namespace gazebo {
-
-GazeboResetPlugin::GazeboResetPlugin()
+namespace gazebo
 {
-}
-
-////////////////////////////////////////////////////////////////////////////////
-// Destructor
-GazeboResetPlugin::~GazeboResetPlugin()
-{
-  node_handle_->shutdown();
-  delete node_handle_;
-}
 
 ////////////////////////////////////////////////////////////////////////////////
 // Load the controller
@@ -53,7 +42,7 @@ void GazeboResetPlugin::Load(physics::ModelPtr _model, sdf::ElementPtr _sdf)
   if (!ros::isInitialized())
   {
     ROS_FATAL_STREAM("A ROS node for Gazebo has not been initialized, unable to load plugin. "
-      << "Load the Gazebo system plugin 'libgazebo_ros_api_plugin.so' in the gazebo_ros package)");
+                     << "Load the Gazebo system plugin 'libgazebo_ros_api_plugin.so' in the gazebo_ros package)");
     return;
   }
 
@@ -73,4 +62,4 @@ void GazeboResetPlugin::Reset()
 // Register this plugin with the simulator
 GZ_REGISTER_MODEL_PLUGIN(GazeboResetPlugin)
 
-} // namespace gazebo
+}  // namespace gazebo

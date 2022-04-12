@@ -1,4 +1,4 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!--
 This file is part of the ProVANT simulator project.
 Licensed under the terms of the MIT open source license. More details at
@@ -6,11 +6,14 @@ https://github.com/Guiraffo/ProVANT-Simulator/blob/master/LICENSE.md
 -->
 <package format="2">
   <name>controller</name>
-  <version>1.0.0</version>
-  <description>The Tilt_controller package</description>
-  
+  <version>1.1.0</version>
+  <description>
+    <p>The controller package provides a node that allows the execution
+  of the control strategies in the ProVANT Simulator.</p>
+  </description>
+
   <maintainer email="jeduardo@ufmg.br">Júnio Eduardo de Morais Aquino</maintainer>
-  
+
   <license>MIT</license>
 
   <url type="website">http://provant.eng.ufmg.br/provantsimulator</url>
@@ -24,16 +27,19 @@ https://github.com/Guiraffo/ProVANT-Simulator/blob/master/LICENSE.md
 
   <build_depend>cmake_modules</build_depend>
   <build_depend>roscpp</build_depend>
-  <build_depend>tinyxml</build_depend>
   <build_depend>eigen</build_depend>
   <build_depend>simulator_msgs</build_depend>
-  
+  <build_depend>control_strategies_base</build_depend>
+  <build_depend>provant_simulator_xml_reader</build_depend>
+
   <exec_depend>roscpp</exec_depend>
-  <exec_depend>tinyxml</exec_depend>
   <exec_depend>eigen</exec_depend>
   <exec_depend>simulator_msgs</exec_depend>
+  <exec_depend>control_strategies_base</exec_depend>
+  <exec_depend>provant_simulator_xml_reader</exec_depend>
+
+  <depend>std_srvs</depend>
 
   <export>
-    
   </export>
 </package>

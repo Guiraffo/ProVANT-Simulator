@@ -6,14 +6,14 @@
 class Collision
 {
 public:
-    Collision();
-    void Read(QDomNode);
-    void Write(QXmlStreamWriter*);
-    void print();
+  Collision();
+  void Read(QDomNode);
+  void Write(QXmlStreamWriter*);
+  void print();
 
-    std::string name;
-    std::string pose;
-    Geometry* geometry;
+  std::string name;
+  std::string pose;
+  Geometry* geometry;
 };
 
-#endif // COLLISION_H
+#endif  // COLLISION_H

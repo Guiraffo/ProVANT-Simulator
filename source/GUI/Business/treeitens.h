@@ -18,14 +18,12 @@
 class TreeItens
 {
 public:
-    TreeItens();
-    static QTreeWidgetItem * AddRoot(std::string name,
-                                     std::string description,
-                                     QTreeWidget*) __attribute__((deprecated));
-    static QTreeWidgetItem * AddChild(QTreeWidgetItem * item,
-                                      std::string name,
-                                      std::string description)
-    __attribute__((deprecated));
+  TreeItens();
+  static QTreeWidgetItem* AddRoot(std::string name, std::string description,
+                                  QTreeWidget*) __attribute__((deprecated));
+  static QTreeWidgetItem* AddChild(QTreeWidgetItem* item, std::string name,
+                                   std::string description)
+      __attribute__((deprecated));
 };
 
 /**
@@ -37,11 +35,12 @@ public:
  * @param description Description of the new tree widget item, this data will
  * be put in the column 1.
  * @param tree Tree to add the new widget item.
+ * @param editable Indicates if this element should be editable in the display
+ * widget or not.
  * @return Pointer to the new item element.
  */
-QTreeWidgetItem *addRoot(const QString &name,
-                         const QString &description,
-                         QTreeWidget *tree);
+QTreeWidgetItem* addRoot(const QString& name, const QString& description,
+                         QTreeWidget* tree, bool editable = false);
 /**
  * @brief addChild Create a new child tree widget item, fill its name and
  * description, add it to the parent item and return a pointer to newly created
@@ -51,11 +50,11 @@ QTreeWidgetItem *addRoot(const QString &name,
  * @param name Name of the item, this data will be put in column 0.
  * @param description Description of the item, this data will be put in column
  * 1.
+ * @param editable Indicates if this element should be editable in the display
+ * widget or not.
  * @return Pointer to the newly created item.
  */
-QTreeWidgetItem *addChild(QTreeWidgetItem *parent,
-                          const QString &name,
-                          const QString &description);
+QTreeWidgetItem* addChild(QTreeWidgetItem* parent, const QString& name,
+                          const QString& description, bool editable = true);
 
-
-#endif // TREEITENS_H
+#endif  // TREEITENS_H

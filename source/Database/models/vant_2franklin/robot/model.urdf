@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+This file is part of the ProVANT simulator project.
+Licensed under the terms of the MIT open source license. More details at
+https: //github.com/Guiraffo/ProVANT-Simulator/blob/master/LICENSE.md
+-->
+<!-- 
+PROVANT 2.0 
+Autor: Arthur Viana Lara
+Data: 24/05/2016
+Descrição: Descrição cinemática do modelo de simulação ProVant 2.0
+
+Possui 3 links ligados a duas juntas
+Nesse modelo não considera-se o giro dos motores brushless por motivo de agilizar a simulação
+O modelo de solisão considerao Um cubo de lados com tamanho 0.5 m (Para tirar o peso da engine ao verificar colisões)
+
+Exportou-se 3 corpos de forma separada:
+	1- corpo principal (em relação ao centro geométrico)
+	2- brushless direito (em relação ao eixo de rotação)
+	3- brushless esquerdo (em relação ao eixo de rotação)
+
+Campos Inertial descrevem dados do eixo de coordenadas encontrados no centro de massa em relação  eixo de coordenadas global escolhido durante a exportação
+
+Campos Visual descrevem dados de visualização dos corpos na simulação
+
+Campo Collision descreve como será tratado a colisão
+
+
+Bibliotecas dinâmicas:
+
+Vetor de Estados
+Servo motores direito e esquerdo
+
+-->
+<robot name="vant2">
+
+	<link name="corpo">
+		<inertial>
+			<origin xyz="-0.00254692194194197639 0.000137734082827298 -0.0181900814143879" rpy="0 0 0" />
+			<mass value="1.92509767079622" />
+			<inertia ixx="0.0697552757250878" ixy="4.77417385357503E-05" ixz="0.000362780890165671" iyy="0.00792827006001647" iyz="-1.07360516340487E-05" izz="0.0664000187819483" />
+		</inertial>
+		<visual>
+			<origin xyz="0 0 0" rpy="0 0 0" />
+			<geometry>
+				<mesh filename="package://vant2/meshes/corpo.STL" />
+			</geometry>
+			<material name="">
+				<color rgba="1 1 1 1" />
+			</material>
+		</visual>
+		<collision>
+			<origin xyz="0 0 0" rpy="0 0 0" />
+			<geometry>
+				<box size="0.5 0.5 0.5" />
+			</geometry>
+		</collision>
+	</link>
+
+	<link name="servodir">
+		<inertial>
+			<!--<origin xyz="-3.60859273452335E-10  -0.000226380714807978 0.0594780519701684" 
+				rpy="0 0 0"/>-->
+			<!--<origin xyz="0 0 0" 
+				rpy="0 0 0"/>-->
+			<mass value="0.0809439719362664" />
+			<inertia ixx="3.88267747087835E-06" ixy="6.03219085082653E-06" ixz="-2.78471406661236E-12" iyy="0.000104858690365283" iyz="7.0486590219062E-07" izz="8.31755564684115E-05" />
+		</inertial>
+		<visual>
+			<origin xyz="0 0 0" rpy="0 0 0" />
+			<geometry>
+				<mesh filename="package://vant2/meshes/servodir.STL" />
+			</geometry>
+			<material name="">
+				<color rgba="0 1 1 1" />
+			</material>
+		</visual>
+	</link>
+
+	<link name="servoesq">
+		<inertial>
+			<origin xyz="-1.42036961055594E-09 0.000226379941183831 0.059478050752241" rpy="0 0 0" />
+			<!--<origin xyz="0 0 0" 
+				rpy="0 0 0"/>-->
+			<mass value="0.080943968597" />
+			<inertia ixx="3.83153585987037E-05" ixy="1.31505388597772E-06" ixz="5.68869331986483E-13" iyy="0.000105370094312002" iyz="-7.048667055410379E-07" izz="8.31755504678384E-05" />
+		</inertial>
+		<visual>
+			<origin xyz="0 0 0" rpy="0 0 0" />
+			<geometry>
+				<mesh filename="package://vant2/meshes/servoesq.STL" />
+			</geometry>
+			<material name="">
+				<color rgba="1 1 1 1" />
+			</material>
+		</visual>
+	</link>
+	<!-- Juntas -->
+	<joint name="aR" type="revolute">
+		<origin xyz="0.02E-3 -277.61E-3 56.21E-3" rpy="-0.0872665 0 0" />
+		<parent link="corpo" />
+		<child link="servodir" />
+		<axis xyz="0 1 0" />
+		<limit lower="-1.5" upper="1.5" effort="200" velocity="100" />
+
+	</joint>
+	<joint name="aL" type="revolute">
+		<origin xyz="0.02E-3 277.61E-3 56.21E-3" rpy="0.0872665 0 0" />
+		<parent link="corpo" />
+		<child link="servoesq" />
+		<axis xyz="0 1 0" />
+		<limit lower="-1.5" upper="1.5" effort="2" velocity="0.5" />
+
+	</joint>
+
+	<!-- Atuadores -->
+	<gazebo>
+		<plugin name="aLteste" filename="libservo_motor_plugin.so">
+			<NameOfJoint> aL </NameOfJoint>
+			<TopicSubscriber> RefaL </TopicSubscriber>
+			<TopicPublisher>  SensoraL </TopicPublisher>
+			<Modo> Torque </Modo>
+		</plugin>
+	</gazebo>
+
+	<gazebo>
+		<plugin name="aRteste" filename="libservo_motor_plugin.so">
+			<NameOfNode> Tilt </NameOfNode>
+			<NameOfJoint> aR </NameOfJoint>
+			<TopicSubscriber> RefaR </TopicSubscriber>
+			<TopicPublisher>  SensoraR </TopicPublisher>
+			<Modo> Torque </Modo>
+		</plugin>
+	</gazebo>
+
+	<!-- sensores -->
+	<gazebo>
+		<plugin name="VetorEstados" filename="libAllData_plugin.so">
+			<NameOfNode> Estados </NameOfNode>
+			<NameOfJointR> aR </NameOfJointR>
+			<NameOfJointL> aL </NameOfJointL>
+			<bodyName> corpo </bodyName>
+		</plugin>
+	</gazebo>
+
+	<!-- Simulação de Empuxo -->
+	<gazebo>
+		<plugin name="empuxo" filename="libaerodinamica_plugin.so">
+			<topic_FR> Thrustdir </topic_FR>
+			<topic_FL> Thrustesq </topic_FL>
+			<LinkDir> servodir </LinkDir>
+			<LinkEsq> servoesq </LinkEsq>
+		</plugin>
+	</gazebo>
+</robot>

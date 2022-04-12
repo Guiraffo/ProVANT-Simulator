@@ -1,103 +1,59 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- This URDF was automatically created by SolidWorks to URDF Exporter! Originally created by Stephen Brawner (brawner@gmail.com) 
-     Commit Version: 1.5.1-0-g916b5db  Build Version: 1.5.7152.31018
-     For more information, please see http://wiki.ros.org/sw_urdf_exporter -->
-<robot
-  name="cenario">
-  <link
-    name="base_link">
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+This file is part of the ProVANT simulator project.
+Licensed under the terms of the MIT open source license. More details at
+https://github.com/Guiraffo/ProVANT-Simulator/blob/master/LICENSE.md
+-->
+<robot name="cenario">
+  <link name="base_link">
     <inertial>
-      <origin
-        xyz="1.5 1.2 1.2275390625"
-        rpy="0 0 0" />
-      <mass
-        value="5120" />
-      <inertia
-        ixx="11113.6503255208"
-        ixy="-4.22190754680529E-12"
-        ixz="1.84866839650748E-12"
-        iyy="10573.8003255208"
-        iyz="3.26664927211367E-12"
-        izz="11658.2833333333" />
+      <origin xyz="1.5 1.2 1.2275390625" rpy="0 0 0" />
+      <mass value="5120" />
+      <inertia ixx="11113.6503255208" ixy="-4.22190754680529E-12" ixz="1.84866839650748E-12" iyy="10573.8003255208" iyz="3.26664927211367E-12" izz="11658.2833333333" />
     </inertial>
     <visual>
-      <origin
-        xyz="0 0 0"
-        rpy="0 0 0" />
+      <origin xyz="0 0 0" rpy="0 0 0" />
       <geometry>
-        <mesh
-          filename="package://uam3axis/meshes/CenarioSomenteMeio.STL" 
-          scale="1 1.2 1"/>
+        <mesh filename="package://uam3axis/meshes/CenarioSomenteMeio.STL" scale="1 1.2 1" />
       </geometry>
-      <material
-        name="">
-        <color
-          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      <material name="">
+        <color rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
       </material>
     </visual>
     <collision>
-      <origin
-        xyz="0 0 0"
-        rpy="0 0 0" />
+      <origin xyz="0 0 0" rpy="0 0 0" />
       <geometry>
-        <mesh
-          filename="package://uam3axis/meshes/CenarioSomenteMeio.STL" 
-          scale="1 1.2 1"/>
+        <mesh filename="package://uam3axis/meshes/CenarioSomenteMeio.STL" scale="1 1.2 1" />
       </geometry>
     </collision>
   </link>
-  <link
-    name="table">
+  <link name="table">
     <inertial>
-      <origin
-        xyz="2.36999999999999 3.3 0.693571428571429"
-        rpy="0 0 0" />
-      <mass
-        value="28" />
-      <inertia
-        ixx="1.97630952380953"
-        ixy="1.88447890105135E-14"
-        ixz="-7.10935172609029E-17"
-        iyy="4.93630952380953"
-        iyz="-5.21170783703708E-16"
-        izz="3.98666666666667" />
+      <origin xyz="2.36999999999999 3.3 0.693571428571429" rpy="0 0 0" />
+      <mass value="28" />
+      <inertia ixx="1.97630952380953" ixy="1.88447890105135E-14" ixz="-7.10935172609029E-17" iyy="4.93630952380953" iyz="-5.21170783703708E-16" izz="3.98666666666667" />
     </inertial>
     <visual>
-      <origin
-        xyz="0 0.6 -0.01"
-        rpy="0 0 0" />
+      <origin xyz="0 0.6 -0.01" rpy="0 0 0" />
       <geometry>
-        <mesh
-          filename="package://uam3axis/meshes/table.STL" />
+        <mesh filename="package://uam3axis/meshes/table.STL" />
       </geometry>
-      <material
-        name="">
-        <color
-          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      <material name="">
+        <color rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
       </material>
     </visual>
     <collision>
-      <origin
-        xyz="0 0.6 -0.01"
-        rpy="0 0 0" />
+      <origin xyz="0 0.6 -0.01" rpy="0 0 0" />
       <geometry>
-        <mesh
-          filename="package://uam3axis/meshes/table.STL" />
+        <mesh filename="package://uam3axis/meshes/table.STL" />
       </geometry>
     </collision>
   </link>
-  <joint
-    name="table"
-    type="fixed">
-    <origin
-      xyz="0 0 -0.01"
-      rpy="0 0 0" />
-    <parent
-      link="base_link" />
-    <child
-      link="table" />
-    <axis
-      xyz="0 0 0" />
+  <joint name="table" type="fixed">
+    <origin xyz="0 0 -0.01" rpy="0 0 0" />
+    <parent link="base_link" />
+    <child link="table" />
+    <axis xyz="0 0 0" />
   </joint>
   <gazebo>
     <static>true</static>

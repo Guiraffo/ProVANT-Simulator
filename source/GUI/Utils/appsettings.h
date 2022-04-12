@@ -18,7 +18,7 @@ static const QString GAZEBO_MODEL_PATH_KEY = "GAZEBO_MODEL_PATH";
 //! The key used to access the ProvantRosPath.
 static const QString PROVANT_ROS_KEY = "PROVANT_ROS";
 //! The key used to access the TiltStrategiesPath.
-static const QString TILT_STRATEGIES_KEY =  "TILT_STRATEGIES";
+static const QString TILT_STRATEGIES_KEY = "TILT_STRATEGIES";
 //! The key used to access the TiltMatlabPath.
 static const QString TILT_MATLAB_KEY = "TILT_MATLAB";
 //! The key used to access the TiltProjectPath.
@@ -28,8 +28,8 @@ static const QString PROVANT_DATABASE_KEY = "PROVANT_DATABASE";
 //! The key used to access the DirRosPath.
 static const QString DIR_ROS_KEY = "DIR_ROS";
 //! The key used to access the parameter ControlStrategiesPath
-static const QString CONTROL_STRATEGIES_SOURCE_KEY =
-        "CONTROL_STRATEGIES_SOURCE";
+static const QString CONTROL_STRATEGIES_SOURCE_KEY = "CONTROL_STRATEGIES_"
+                                                     "SOURCE";
 //! The key used to access the ros version parameter
 static const QString ROS_VERSION_KEY = "ROS_VERSION";
 //! The path to the ros installation
@@ -84,120 +84,118 @@ static const QString WORLDS_PACKAGE_KEY = "PROVANT_SIMULATOR_WORLDS";
  */
 class AppSettings : public QObject
 {
-    Q_OBJECT
+  Q_OBJECT
 public:
-    AppSettings(QObject *parent = nullptr);
+  AppSettings(QObject* parent = nullptr);
 
-    const QString getGazeboModelPathUncheked() const;
-    const QString getGazeboModelPath() const;
-    const QString getGazeboModelPathDefault() const;
-    bool setGazeboModelPath(const QString &path);
+  const QString getGazeboModelPathUncheked() const;
+  const QString getGazeboModelPath() const;
+  const QString getGazeboModelPathDefault() const;
+  bool setGazeboModelPath(const QString& path);
 
-    const QString getProvantRosPathUnchecked() const;
-    const QString getProvantRosPath() const;
-    const QString getProvantRosPathDefault() const;
-    bool setProvantRosPath(const QString &path);
+  const QString getProvantRosPathUnchecked() const;
+  const QString getProvantRosPath() const;
+  const QString getProvantRosPathDefault() const;
+  bool setProvantRosPath(const QString& path);
 
-    const QString getTiltStrategiesPathUnchecked() const;
-    const QString getTiltStrategiesPath() const;
-    const QString getTiltStrategiesPathDefault() const;
-    bool setTiltStrategiesPath(const QString &path);
+  const QString getTiltStrategiesPathUnchecked() const;
+  const QString getTiltStrategiesPath() const;
+  const QString getTiltStrategiesPathDefault() const;
+  bool setTiltStrategiesPath(const QString& path);
 
-    const QString getTiltMatlabPathUnchecked() const;
-    const QString getTiltMatlabPath() const;
-    const QString getTiltMatlabPathDefault() const;
-    bool setTiltMatlabPath(const QString &path);
+  const QString getTiltMatlabPathUnchecked() const;
+  const QString getTiltMatlabPath() const;
+  const QString getTiltMatlabPathDefault() const;
+  bool setTiltMatlabPath(const QString& path);
 
-    const QString getTiltProjectPathUnchecked() const;
-    const QString getTiltProjectPath() const;
-    const QString getTiltProjectPathDefault() const;
-    bool setTiltProjectPath(const QString &path);
+  const QString getTiltProjectPathUnchecked() const;
+  const QString getTiltProjectPath() const;
+  const QString getTiltProjectPathDefault() const;
+  bool setTiltProjectPath(const QString& path);
 
-    const QString getProvantDatabasePathUnchecked() const;
-    const QString getProvantDatabasePath() const;
-    const QString getProvantDatabasePathDefault() const;
-    bool setProvantDatabasePath(const QString &path);
+  const QString getProvantDatabasePathUnchecked() const;
+  const QString getProvantDatabasePath() const;
+  const QString getProvantDatabasePathDefault() const;
+  bool setProvantDatabasePath(const QString& path);
 
-    const QString getCatkinWorkspacePathUncheked() const;
-    const QString getCatkinWorkspacePath() const;
-    const QString getCatkinWorkspacePathDefault() const;
-    bool setCatkinWorkspacePath(const QString &path);
+  const QString getCatkinWorkspacePathUncheked() const;
+  const QString getCatkinWorkspacePath() const;
+  const QString getCatkinWorkspacePathDefault() const;
+  bool setCatkinWorkspacePath(const QString& path);
 
-    const QString getControlStrategiesPathUnchecked() const;
-    const QString getControlStrategiesPath() const;
-    const QString getControlStrategiesPathDefault() const;
-    bool setControlStrategiesPath(const QString &path);
+  const QString getControlStrategiesPathUnchecked() const;
+  const QString getControlStrategiesPath() const;
+  const QString getControlStrategiesPathDefault() const;
+  bool setControlStrategiesPath(const QString& path);
 
-    const QString getRosVersionUnchecked() const;
-    const QString getRosVersion() const;
-    const QString getRosVersionDefault() const;
-    bool setRosVersion(const QString &version);
+  const QString getRosVersionUnchecked() const;
+  const QString getRosVersion() const;
+  const QString getRosVersionDefault() const;
+  bool setRosVersion(const QString& version);
 
-    const QString getRosPathUnchecked() const;
-    const QString getRosPath() const;
-    const QString getRosPathDefault() const;
-    bool setRosPath(const QString &path);
+  const QString getRosPathUnchecked() const;
+  const QString getRosPath() const;
+  const QString getRosPathDefault() const;
+  bool setRosPath(const QString& path);
 
+  /**
+   * @brief getWorldsPackagePathUnchecked
+   * This function doesn't check if the currently configured value is valid.
+   * Use this method only when extremamely necessary, such as in displaying
+   * the current configured value for user modification, otherwise prefer
+   * the getWorldsPackagePath() method.
+   *
+   * @return Path to the ROS package containg the Gazebo worlds
+   */
+  const QString getWorldsPackagePathUnchecked() const;
+  /**
+   * @brief getWorldsPackagePath Returns the path to the ROS package
+   * containing the gazebo worlds contained in the ProVANT simulator.
+   * @return
+   */
+  const QString getWorldsPackagePath() const;
+  /**
+   * @brief getWorldsPackagePathDefault Returns the default path to the
+   * ROS package that contains the worlds.
+   * @return Path to the ROS package containg the Gazebo worlds.
+   */
+  const QString getWorldsPackagePathDefault() const;
+  /**
+   * @brief setWorldsPackagePath Update the value for the path of the package
+   * containg the simulation worlds.
+   * @param path New path value to the worlds package.
+   * @return True if the package was succesfully updated and false otherwise.
+   */
+  bool setWorldsPackagePath(const QString& path);
 
-    /**
-     * @brief getWorldsPackagePathUnchecked
-     * This function doesn't check if the currently configured value is valid.
-     * Use this method only when extremamely necessary, such as in displaying
-     * the current configured value for user modification, otherwise prefer
-     * the getWorldsPackagePath() method.
-     *
-     * @return Path to the ROS package containg the Gazebo worlds
-     */
-    const QString getWorldsPackagePathUnchecked() const;
-    /**
-     * @brief getWorldsPackagePath Returns the path to the ROS package
-     * containing the gazebo worlds contained in the ProVANT simulator.
-     * @return
-     */
-    const QString getWorldsPackagePath() const;
-    /**
-     * @brief getWorldsPackagePathDefault Returns the default path to the
-     * ROS package that contains the worlds.
-     * @return Path to the ROS package containg the Gazebo worlds.
-     */
-    const QString getWorldsPackagePathDefault() const;
-    /**
-     * @brief setWorldsPackagePath Update the value for the path of the package
-     * containg the simulation worlds.
-     * @param path New path value to the worlds package.
-     * @return True if the package was succesfully updated and false otherwise.
-     */
-    bool setWorldsPackagePath(const QString &path);
-
-    bool checkAllParametersSet() const;
-    void applyValuesToEnvironmentVariables();
-    void applyDefaultsToUndefinedParameters();
-    void restoreDefaults();
-    QProcessEnvironment getEnvironmentVariables() const;
+  bool checkAllParametersSet() const;
+  void applyValuesToEnvironmentVariables();
+  void applyDefaultsToUndefinedParameters();
+  void restoreDefaults();
+  QProcessEnvironment getEnvironmentVariables() const;
 
 protected:
-    QString getEnvironmentVariable(const QString &key,
-                                   const QString &default_=QString("")) const;
-    QString getValueFromKey(const QString &key,
-                            const QString &default_=QString("")) const;
-    QString getErrorCorrectionMessage(const QString &key) const;
+  QString getEnvironmentVariable(const QString& key,
+                                 const QString& default_ = QString("")) const;
+  QString getValueFromKey(const QString& key,
+                          const QString& default_ = QString("")) const;
+  QString getErrorCorrectionMessage(const QString& key) const;
 
-    const QString getDirectoryPath(const QString &key,
-                                   const QString &defaultValue) const;
-    const QString checkDirectoryPath(const QString &path,
-                                     const QString &defaultValue,
-                                     const QString &errorMessage) const;
-    bool setDirectoryPath(const QString &key,
-                          const QString &value,
-                          bool setEnrionmentVariable = false);
-    bool setEnvironmentVariable(const QString &key, const QString &value);
+  const QString getDirectoryPath(const QString& key,
+                                 const QString& defaultValue) const;
+  const QString checkDirectoryPath(const QString& path,
+                                   const QString& defaultValue,
+                                   const QString& errorMessage) const;
+  bool setDirectoryPath(const QString& key, const QString& value,
+                        bool setEnrionmentVariable = false);
+  bool setEnvironmentVariable(const QString& key, const QString& value);
 
 private:
-    //! The QSettings object used to access and set the parameters.
-    QSettings settings;
+  //! The QSettings object used to access and set the parameters.
+  QSettings settings;
 
-    //! The message shown in the title of the error dialog box.
-    const QString _criticalMsgTitle = tr("Path Error");
+  //! The message shown in the title of the error dialog box.
+  const QString _criticalMsgTitle = tr("Path Error");
 };
 
-#endif // APPSETTINGS_H
+#endif  // APPSETTINGS_H

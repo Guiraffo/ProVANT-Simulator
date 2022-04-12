@@ -3,7 +3,8 @@
 
 #include <QDialog>
 
-namespace Ui {
+namespace Ui
+{
 class DialogNewController;
 }
 
@@ -13,17 +14,17 @@ class DialogNewController;
  */
 class DialogNewController : public QDialog
 {
-    Q_OBJECT
+  Q_OBJECT
 
 public:
-    explicit DialogNewController(QWidget *parent = 0);
-    ~DialogNewController();
+  explicit DialogNewController(QWidget* parent = 0);
+  ~DialogNewController();
 
 private:
-    Ui::DialogNewController *ui;
+  Ui::DialogNewController* ui;
 
 public slots:
-    void accept();
+  void accept();
 };
 
-#endif // DIALOGNEWCONTROLLER_H
+#endif  // DIALOGNEWCONTROLLER_H

@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+This file is part of the ProVANT simulator project.
+Licensed under the terms of the MIT open source license. More details at
+https://github.com/Guiraffo/ProVANT-Simulator/blob/master/LICENSE.md
+-->
+<robot name="sphere" xmlns:xacro="http://www.ros.org/wiki/xacro">
+  <xacro:property name="mass" value="1.0" />
+  <xacro:property name="radius" value="0.1" />
+  <xacro:property name="inertia" value="${2/5 * mass * radius * radius}" />
+
+
+  <link name="sphere">
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <mass value="${mass}" />
+      <inertia ixx="${inertia}" ixy="0" ixz="0" iyy="${inertia}" iyz="0" izz="${inertia}" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <sphere radius="${radius}" />
+      </geometry>
+      <material name="sphere_material">
+        <color rgba="1.0 0 0 1.0" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <sphere radius="${radius}" />
+      </geometry>
+    </collision>
+  </link>
+
+  <gazebo>
+    <static>false</static>
+    <plugin name="data_logger" filename="libprovant_position_logger_plugin.so">
+      <link>sphere</link>
+      <filename>$(arg filename)</filename>
+    </plugin>
+
+    <xacro:arg name="rel_force_once" default="false" />
+    <xacro:if value="$(arg rel_force_once)">
+      <plugin name="apply_relative_force_once" filename="libprovant_test_apply_rel_force_once_plugin.so">
+        <link>sphere</link>
+        <force>$(arg force)</force>
+      </plugin>
+    </xacro:if>
+
+    <xacro:arg name="set_force_once" default="false" />
+    <xacro:if value="$(arg set_force_once)">
+      <plugin name="set_force_once" filename="libprovant_test_set_force_once_plugin.so">
+        <link>sphere</link>
+        <force>$(arg force)</force>
+      </plugin>
+    </xacro:if>
+
+    <xacro:arg name="add_rel_force_mul" default="false" />
+    <xacro:arg name="add_rel_force_mul_n_steps" default="1" />
+    <xacro:if value="$(arg add_rel_force_mul)">
+      <plugin name="add_rel_force" filename="libprovant_test_apply_force_plugin.so">
+        <link>sphere</link>
+        <force>$(arg force)</force>
+        <apply_every_n_steps>$(arg add_rel_force_mul_n_steps)</apply_every_n_steps>
+      </plugin>
+    </xacro:if>
+
+    <xacro:arg name="set_force_mul" default="false" />
+    <xacro:arg name="set_force_mul_n_steps" default="1" />
+    <xacro:if value="$(arg set_force_mul)">
+      <plugin name="set_force" filename="libprovant_test_set_force_plugin.so">
+        <link>sphere</link>
+        <force>$(arg force)</force>
+        <apply_every_n_steps>$(arg set_force_mul_n_steps)</apply_every_n_steps>
+      </plugin>
+    </xacro:if>
+  </gazebo>
+
+  <gazebo reference="sphere">
+    <xacro:arg name="color" default="Red" />
+    <material>Gazebo/$(arg color)</material>
+    <gravity>true</gravity>
+  </gazebo>
+
+</robot>

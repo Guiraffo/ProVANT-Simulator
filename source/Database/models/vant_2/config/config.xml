@@ -3,11 +3,20 @@
     <topicdata>data</topicdata>
     <TopicoStep>Step</TopicoStep>
     <Sampletime>3</Sampletime>
+    <Duration>0</Duration>
+    <ShutdownWhenFinished>false</ShutdownWhenFinished>
+    <StartPaused>true</StartPaused>
     <Strategy>libvant2_lqr.so</Strategy>
+    <Turbulance></Turbulance>
     <RefPath>ref.txt</RefPath>
     <Outputfile>out.txt</Outputfile>
     <InputPath>in.txt</InputPath>
     <ErroPath>erro.txt</ErroPath>
+    <HilFlagSynchronous>false</HilFlagSynchronous>
+    <HilFlagAsynchronous>false</HilFlagAsynchronous>
+    <usart1></usart1>
+    <usart2></usart2>
+    <baudRate>115200</baudRate>
     <Sensors>
         <Device>Estados</Device>
     </Sensors>

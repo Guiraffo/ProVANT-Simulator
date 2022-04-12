@@ -6,16 +6,6 @@
  */
 Controller::Controller()
 {
-
-}
-
-/**
- * @brief Controller::~Controller
- * Frees the content of the config member variable.
- */
-Controller::~Controller()
-{
-    if(config != nullptr) delete config;
 }
 
 /**
@@ -28,15 +18,14 @@ Controller::~Controller()
  * @param actuators The widget that displays the actuators contained in the
  * controller.
  */
-void Controller::open(const QString &filename,
-                     QListWidget *sensors,
-                     QListWidget *actuators)
+void Controller::open(const QString& filename, QListWidget* sensors,
+                      QListWidget* actuators)
 {
-    config = new ConfigFile(filename);
-    config->readFile();
+  config.reset(new ConfigFile(filename));
+  config->readFile();
 
-    toListWidget(sensors, config->getSensors());
-    toListWidget(actuators, config->getActuators());
+  toListWidget(sensors, config->getSensors());
+  toListWidget(actuators, config->getActuators());
 }
 
 /**
@@ -45,14 +34,13 @@ void Controller::open(const QString &filename,
  * @param element The list widget in which the elements will be inserted.
  * @param items The list of items to insert.
  */
-void Controller::toListWidget(QListWidget *element, const QStringList &items)
+void Controller::toListWidget(QListWidget* element, const QStringList& items)
 {
-    for(QStringList::const_iterator i = items.constBegin();
-        i != items.constEnd();
-        i++)
-    {
-        QListWidgetItem *listItem = new QListWidgetItem(*i);
-        listItem->setFlags(Qt::ItemIsEditable | Qt::ItemIsEnabled);
-        element->addItem(listItem);
-    }
+  for (QStringList::const_iterator i = items.constBegin();
+       i != items.constEnd(); i++)
+  {
+    QListWidgetItem* listItem = new QListWidgetItem(*i);
+    listItem->setFlags(Qt::ItemIsEditable | Qt::ItemIsEnabled);
+    element->addItem(listItem);
+  }
 }

@@ -1,11 +1,10 @@
 #ifndef SIMULATION_H
 #define SIMULATION_H
 
-
 class simulation
 {
 public:
-    simulation();
+  simulation();
 };
 
-#endif // SIMULATION_H
+#endif  // SIMULATION_H

@@ -8,16 +8,18 @@ CONFIG += qt
 QT += gui
 QT += core
 QT += xml
+QT += serialport
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = GUI
 TEMPLATE = app
 
-CONFIG += c++11
+CONFIG += c++17
 
 SOURCES += main.cpp\
     Utils/appsettings.cpp \
+    Utils/modellist.cpp \
     Widgets/filebrowserwidget.cpp \
     applicationsettingsdialog.cpp \
     mainwindow.cpp \
@@ -54,7 +56,9 @@ SOURCES += main.cpp\
     jointsdialog.cpp \
     ProcessOutput/processoutputwindow.cpp \
     ProcessOutput/terminalcolortable.cpp \
-    ProcessOutput/terminaltextedit.cpp
+    ProcessOutput/terminaltextedit.cpp \
+    DataAccess/GazeboElements/Items/gui_da.cpp \
+    Utils/checkandcloseprocess.cpp
 
 HEADERS  += mainwindow.h \
     DataAccess/ControllerElements/configfile.h \
@@ -80,6 +84,7 @@ HEADERS  += mainwindow.h \
     DataAccess/GazeboElements/Items/axis.h \
     Business/treeitens.h \
     Utils/appsettings.h \
+    Utils/modellist.h \
     Widgets/filebrowserwidget.h \
     applicationsettingsdialog.h \
     dialognewcontroller.h \
@@ -94,7 +99,9 @@ HEADERS  += mainwindow.h \
     modelsetupdialog.h \
     ProcessOutput/processoutputwindow.h \
     ProcessOutput/terminalcolortable.h \
-    ProcessOutput/terminaltextedit.h
+    ProcessOutput/terminaltextedit.h \
+    DataAccess/GazeboElements/Items/gui_da.h \
+    Utils/checkandcloseprocess.h
 
 FORMS    += mainwindow.ui \
     Widgets/filebrowserwidget.ui \
