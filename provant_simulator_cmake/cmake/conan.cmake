@@ -40,7 +40,7 @@ macro(run_conan conan_txt_path)
     NAME
     conan-center
     URL
-    https://conan.bintray.com
+    https://center.conan.io
   )
 
   conan_cmake_run(
