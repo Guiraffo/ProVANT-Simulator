@@ -1,11 +1,20 @@
 /*
- * File: teste.cpp
- * Author: Arthur Viana Lara
- * Project: ProVANT
- * Company: Federal University of Minas Gerais
- * Version: 1.0
- * Date: 29/01/18
- * Description: This file is responsable to implement LQR control law to VANT2.0
+ * This file is part of the ProVANT simulator project.
+ * Licensed under the terms of the MIT open source license. More details at
+ * https://github.com/Guiraffo/ProVANT-Simulator/blob/master/LICENSE.md
+ */
+/**
+ * @file This file contains the implementation of the teste class.
+ *
+ * The mathematical background used to design this controller is presented in
+ * "Hardware-in-the-loop simulation environment for testing of tilt-rotor uav’s
+ *  control strategies" that is published in Congresso Brasileiro de
+ * Automatica-CBA, from authors: Lara, Arthur V and Nascimento,
+ * Iuro BP and Arias-Garcia, Janier and Becker, Leandro Buss and Raffo,
+ * Guilherme V, and is available at
+ * https://www.sba.org.br/open_journal_systems/index.php/cba/article/download/108/88
+ *
+ * @author Arthur Viana Lara
  */
 
 #include <control_strategies_base/icontroller.hpp>
