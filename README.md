@@ -321,14 +321,6 @@ cd ~/catkin_ws
 catkin_make
 ```
 
-After this step the ProVANT Simulator can be compiled and installed with the following command:
-
-```bash
-cd ProVANT-Simulator
-chmod +x install.sh
-./install.sh
-```
-
 **Note:** If the catkin_make command fails without an explicit compilation error, try running it again.
 
 ## Compile and Install the ProVANT Simulator GUI
