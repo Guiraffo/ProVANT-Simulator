@@ -6,7 +6,7 @@
     <Duration>630</Duration>
     <ShutdownWhenFinished>true</ShutdownWhenFinished>
     <StartPaused>false</StartPaused>
-    <Strategy>liblqr_quadcopter.so</Strategy>
+    <Strategy>libopen_mesh_test.so</Strategy>
     <Turbulance>Turbulance Model 1</Turbulance>
     <RefPath>ref.txt</RefPath>
     <Outputfile>out.txt</Outputfile>

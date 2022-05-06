@@ -9,7 +9,7 @@ https://github.com/Guiraffo/ProVANT-Simulator/blob/master/LICENSE.md
 	<version>1.0.0</version>
 	<description>The vant3_adaptiveMixCtrl2 package implments an adpative 
 	mixing control strategy designed for the UAV3.</description>
-	
+
 	<maintainer email="jeduardo@ufmg.br">Júnio Eduardo de Morais Aquino</maintainer>
 
 	<license>MIT</license>
@@ -31,8 +31,6 @@ https://github.com/Guiraffo/ProVANT-Simulator/blob/master/LICENSE.md
 	<exec_depend>simulator_msgs</exec_depend>
 	<exec_depend>control_strategies_base</exec_depend>
 	<exec_depend>eigen</exec_depend>
-	
-	<export>
-	
-	</export>
+
+	<export></export>
 </package>

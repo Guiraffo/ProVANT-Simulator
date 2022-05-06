@@ -1,4 +1,0 @@
-# This file is part of the ProVANT simulator project. Licensed under the terms of the MIT open source license. More
-# details at https://github.com/Guiraffo/ProVANT-Simulator/blob/master/LICENSE.md
-
-controller_joint_names: ['', 'rotationCm2', 'joint_rotor2prop2', 'rotationCm3', 'joint_rotor3prop3', 'rotationCm4', 'joint_rotor4prop4', 'rotationCm5', 'joint_rotor5prop5', ]

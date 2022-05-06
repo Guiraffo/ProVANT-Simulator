@@ -12,6 +12,11 @@
     <Outputfile>out.txt</Outputfile>
     <InputPath>in.txt</InputPath>
     <ErroPath>erro.txt</ErroPath>
+    <HilFlagSynchronous>false</HilFlagSynchronous>
+    <HilFlagAsynchronous>false</HilFlagAsynchronous>
+    <usart1></usart1>
+    <usart2></usart2>
+    <baudRate>50</baudRate>
     <Sensors>
         <Device>Estados</Device>
     </Sensors>
